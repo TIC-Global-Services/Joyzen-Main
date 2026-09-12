@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   return (
-    <section className="relative w-full min-h-[88vh] sm:min-h-screen flex flex-col justify-end pt-24 sm:pt-28 md:pt-32 pb-14 sm:pb-20 md:pb-24 px-6 sm:px-12 lg:px-20 overflow-hidden select-none">
+    <section className="relative w-full min-h-[88vh] sm:min-h-screen flex flex-col justify-end pt-24 sm:pt-28 md:pt-32 pb-14 sm:pb-20 md:pb-24 px-[5%] overflow-hidden select-none">
       {/* 3D Glass DNA Graphic with Floating Animation & Interactive Hotspots */}
       <div className="absolute bottom-30 sm:top-50 lg:-top-28 -right-46 sm:-right-[35%] lg:-right-[25%] w-[150%] sm:w-[95%] md:w-[150%] lg:w-[98%]  pointer-events-none z-0">
         <motion.div
