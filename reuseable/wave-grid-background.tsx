@@ -511,7 +511,7 @@ export function WaveGridBackground({
             renderer.render(scene, camera);
         });
 
-        // ── Cleanup ──────────────────────────────────────────────────────────────
+   
         return () => {
             renderer.setAnimationLoop(null);
             window.removeEventListener("mousemove", onMouseMove);
