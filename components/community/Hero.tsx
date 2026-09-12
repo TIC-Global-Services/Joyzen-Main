@@ -48,7 +48,7 @@ export default function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
-        className="w-full max-w-4xl mx-auto flex flex-col items-center text-center mt-14 sm:mt-20 md:mt-14 space-y-7 sm:space-y-9"
+        className="w-full max-w-4xl mx-auto flex flex-col items-center text-center mt-14 sm:mt-10 md:mt-1 space-y-7 sm:space-y-9"
       >
         {/* Warm Orange / Terracotta Narrative Copy */}
         <p className="text-sm sm:text-base md:text-lg lg:text-lg text-[#EB7847] font-medium leading-[1.3] max-w-3xl">
@@ -61,7 +61,7 @@ export default function Hero() {
         <div>
           <Link
             href="#contact"
-            className="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full text-xs sm:text-sm font-bold tracking-tight text-zinc-800 uppercase bg-[#AEDEE44D] hover:bg-[#bde6ed] backdrop-blur-xs border border-white/60 shadow-xs hover:shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
+            className="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full text-xs sm:text-sm font-medium tracking-tight text-black uppercase bg-[#AEDEE44D] hover:bg-[#bde6ed] backdrop-blur-xs border border-white/60 shadow-xs hover:shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
           >
             CARE FOR A CALL? STAY ANONYMOUS.
           </Link>
