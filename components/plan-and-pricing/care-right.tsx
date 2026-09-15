@@ -110,7 +110,7 @@ export default function CareRight() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-black leading-tight"
+            className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-black leading-none"
           >
             Care, Right at Your Fingertips
           </motion.h2>
@@ -138,16 +138,16 @@ export default function CareRight() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="flex flex-col items-center space-y-6 max-w-md px-4"
+            className="flex flex-col items-center space-y-6 max-w-md "
           >
             <Link
               href="#begin"
-              className="inline-flex items-center justify-center px-7 py-3 rounded-full text-xs font-bold tracking-wider text-zinc-900 bg-[#AEDEE466] hover:bg-[#95C1E266] border border-white/80 backdrop-blur-md uppercase transition-all shadow-xs"
+              className="inline-flex items-center justify-center px-7 py-3 rounded-full text-xs font-bold tracking-tight text-black bg-[#AEDEE466] hover:bg-[#95C1E266] border border-white/80 backdrop-blur-md uppercase transition-all shadow-xs"
             >
               START YOUR CARE JOURNEY
             </Link>
 
-            <p className="text-sm sm:text-base font-medium text-[#EF8F60] leading-relaxed">
+            <p className="text-base font-medium text-[#EF8F60] leading-[1.2]">
               Stay connected with your care team through direct chat.From booking consultations to receiving updates, reminders, and support, everything you need is just a message away.
             </p>
           </motion.div>

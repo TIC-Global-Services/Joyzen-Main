@@ -38,7 +38,7 @@ export default function Hero() {
           <span className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#D4B8DE] leading-none">
             Everyday Care
           </span>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] font-bold tracking-tight text-black mt-2 sm:mt-3 leading-tight">
+          <h1 className="text-3xl md:text-4xl lg:text-[40px] font-bold tracking-tight text-black mt-2 sm:mt-3 leading-tight">
             Your Doctor, Minus The Waiting Room.
           </h1>
         </motion.div>
@@ -50,7 +50,7 @@ export default function Hero() {
           transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-5 flex flex-col items-start lg:items-end justify-end"
         >
-          <p className="text-xs sm:text-sm md:text-[15px] lg:text-lg text-black leading-[1.2] font-normal text-left lg:text-right max-w-2xl">
+          <p className="text-sm md:text-base lg:text-lg text-black leading-[1.2] font-normal text-left lg:text-right max-w-2xl">
             Booking a doctor should take less effort than booking a table. No waiting
             room, no old magazines, no wondering whether the person beside you is
             contagious. You open the app, you talk to your doctor, and follow-ups

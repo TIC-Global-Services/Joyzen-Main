@@ -48,10 +48,10 @@ export default function Hero() {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.35 }}
-        className="w-full max-w-4xl mx-auto flex flex-col items-center text-center mt-14 sm:mt-10 md:mt-1 space-y-7 sm:space-y-9"
+        className="w-full max-w-4xl mx-auto flex flex-col items-center text-center mt-1 sm:mt-10 md:mt-1 mb-5 sm:space-y-9"
       >
         {/* Warm Orange / Terracotta Narrative Copy */}
-        <p className="text-sm sm:text-base md:text-lg lg:text-lg text-[#EB7847] font-medium leading-[1.3] max-w-3xl">
+        <p className="text-sm sm:text-base md:text-lg lg:text-lg text-[#EB7847] font-medium leading-[1.3] max-w-3xl mb-5">
           Meet people who are curious about life, open to new experiences and genuinely
           excited about what&apos;s ahead. Swap stories, have real conversations, borrow a new
           perspective, and find a place where you can just be yourself.

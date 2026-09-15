@@ -222,7 +222,7 @@ export default function YourPeople() {
         </div>
 
         {/* Carousel Navigation Indicators */}
-        <div className="absolute -bottom-10 lg:bottom-8 flex items-center justify-center gap-2 z-40">
+        <div className="absolute -bottom-18 md:-bottom-10 lg:bottom-8 flex items-center justify-center gap-2 z-40">
           {CARDS.map((_, dotIdx) => (
             <button
               key={dotIdx}
@@ -244,13 +244,13 @@ export default function YourPeople() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-40px' }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="text-center max-w-2xl sm:max-w-5xl mx-auto mt-20 lg:mt-2"
+        className="text-center max-w-2xl sm:max-w-5xl mx-auto mt-25 md:mt-20 lg:mt-2"
       >
         <p className="text-sm sm:text-xl lg:text-[28px] text-[#EB7847] font-medium leading-[1.2]">
           People who make you laugh. People who challenge the way you think. People
           who understand exactly what you&apos;re going through. And people you haven&apos;t even met yet.
         </p>
-        <p className="text-sm sm:text-base md:text-[28px] font-bold text-[#135836]">
+        <p className="text-base md:text-[28px] font-bold text-[#135836]">
           Maybe it&apos;s time you find them.
         </p>
       </motion.div>

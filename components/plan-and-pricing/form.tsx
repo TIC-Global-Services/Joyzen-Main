@@ -48,7 +48,7 @@ export default function PricingForms() {
           <button
             type="button"
             onClick={() => setActiveTab('reproductive')}
-            className={`px-6 sm:px-8 py-2 rounded-full text-2xl font-semibold transition-all duration-300 ${
+            className={`px-6 sm:px-8 py-2 rounded-full text-base md:text-2xl font-semibold transition-all duration-300 ${
               activeTab === 'reproductive'
                 ? 'bg-white/90 text-[#036132] shadow-[0_4px_16px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,1)] border border-white/90'
                 : 'text-zinc-500 hover:text-zinc-900'
@@ -59,7 +59,7 @@ export default function PricingForms() {
           <button
             type="button"
             onClick={() => setActiveTab('general')}
-            className={`px-6 sm:px-8 py-2 rounded-full text-2xl font-semibold transition-all duration-300 ${
+            className={`px-6 sm:px-8 py-2 rounded-full text-base md:text-2xl font-semibold transition-all duration-300 ${
               activeTab === 'general'
                 ? 'bg-white/90 text-[#036132] shadow-[0_4px_16px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,1)] border border-white/90'
                 : 'text-zinc-500 hover:text-zinc-900'
@@ -82,10 +82,10 @@ export default function PricingForms() {
             >
               {/* Heading & Subtitle */}
               <div className="text-center max-w-4xl mx-auto mb-10">
-                <h2 className="text-2xl sm:text-3xl lg:text-[40px] font-bold tracking-tight text-black leading-none mb-4">
+                <h2 className="text-2xl sm:text-3xl lg:text-[40px] font-bold tracking-tight text-black leading-[1.2] mb-4">
                   Going through reproductive health problems? view our plans here.
                 </h2>
-                <p className="text-sm sm:text-[22px] text-zinc-600 font-normal leading-[1.2]">
+                <p className="text-base sm:text-[22px] text-zinc-600 font-normal leading-[1.2]">
                   Designed personally for your reproductive health taken <br/> care by your own doctor.
                 </p>
               </div>
@@ -107,7 +107,7 @@ export default function PricingForms() {
                 <h2 className="text-2xl sm:text-3xl lg:text-[40px] font-bold tracking-tight text-black leading-[1.2]">
                   One place for your health
                 </h2>
-                <p className="text-sm sm:text-[22px] text-zinc-600 font-normal leading-[1.2]">
+                <p className="text-base sm:text-[22px] text-zinc-600 font-normal leading-[1.2]">
                   From heart, bones &amp; joints to internal health and beyond- expert care, personalized for you.
                 </p>
               </div>
@@ -474,8 +474,8 @@ function GeneralCareForm() {
                         }}
                         className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
                           selectedSpecialist === option
-                            ? 'font-bold text-zinc-900'
-                            : 'font-medium text-zinc-500 hover:text-zinc-900'
+                            ? 'font-bold text-black'
+                            : 'font-medium text-black hover:text-zinc-900'
                         }`}
                       >
                         {option}
