@@ -8,7 +8,6 @@ import { z } from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import SpecularButton from '@/reuseable/specularButton';
 
-
 export const reproductiveCareSchema = z.object({
   fullName: z.string().min(2, 'Full name must be at least 2 characters'),
   age: z
@@ -16,6 +15,7 @@ export const reproductiveCareSchema = z.object({
     .min(1, 'Age is required')
     .refine((val) => !isNaN(Number(val)) && Number(val) > 0 && Number(val) < 120, 'Please enter a valid age'),
   gender: z.string().min(1, 'Please select your gender'),
+  selectedOption: z.string().optional(),
 });
 
 export type ReproductiveCareFormData = z.infer<typeof reproductiveCareSchema>;
@@ -33,6 +33,76 @@ export const generalCareSchema = z.object({
 
 export type GeneralCareFormData = z.infer<typeof generalCareSchema>;
 
+const femaleOptions = [
+  'I am a teenager and want to understand my body and periods',
+  'I want to improve my overall health, lifestyle, and cycle',
+  'I just want a doctor and guidance for my health',
+  'I have PCOS, irregular periods, or hormone issues',
+  'I am married and want to prepare my body before pregnancy',
+  'I am getting married soon and want to prepare my body for a healthy pregnancy',
+  'We are trying to conceive',
+  'We have been trying for a while but no success',
+  'We are planning pregnancy and want to prepare together',
+];
+
+const maleOptions = [
+  'I want to improve my overall health, lifestyle, and vitality',
+  'I just want a doctor and guidance for my health',
+  'I have hormone issues, low energy, or fertility concerns',
+  'I am married and want to prepare my health before pregnancy',
+  'I am getting married soon and want to prepare for a healthy pregnancy',
+  'We are trying to conceive',
+  'We have been trying for a while but no success',
+  'We are planning pregnancy and want to prepare together',
+];
+
+/**
+ * GradientInputWrapper renders a crisp multi-color pastel gradient stroke on the border
+ * of option pills on hover, focus-within, and when selected.
+ */
+function GradientInputWrapper({
+  children,
+  className = '',
+  isSelected = false,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  isSelected?: boolean;
+}) {
+  return (
+    <div className={`relative group w-full ${className}`}>
+      {/* Soft Ambient Glow BEHIND the pill */}
+      <div
+        className={`absolute -inset-[5px] rounded-[30px] bg-gradient-to-r from-[#F6D7C6] via-[#F9E0AE] to-[#AEDEE4] blur-sm pointer-events-none transition-opacity duration-300 ${
+          isSelected
+            ? 'opacity-85'
+            : 'opacity-0 group-hover:opacity-60 group-focus-within:opacity-70'
+        }`}
+      />
+
+      {/* 1.5px Outer Wrapper forming the Gradient Border Stroke */}
+      <div
+        className={`relative p-[5px] rounded-[28px] transition-all duration-300 ${
+          isSelected
+            ? 'bg-gradient-to-r from-[#F6D7C6] via-[#F9E0AE] to-[#AEDEE4] '
+            : 'bg-white/80 group-hover:bg-gradient-to-r group-hover:from-[#F6D7C6] group-hover:via-[#F9E0AE] group-hover:to-[#AEDEE4] group-focus-within:bg-gradient-to-r group-focus-within:from-[#F6D7C6] group-focus-within:via-[#F9E0AE] group-focus-within:to-[#AEDEE4]'
+        }`}
+      >
+        {/* Inner Pill Container */}
+        <div
+          className={`w-full h-full rounded-[26px] backdrop-blur-md transition-all ${
+            isSelected
+              ? 'bg-[#FCFAF7] text-zinc-900 font-bold'
+              : 'bg-[#FCFAF7]/90 group-hover:bg-[#FCFAF7] shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_4px_16px_rgba(0,0,0,0.02)]'
+          }`}
+        >
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function PricingForms() {
   const [activeTab, setActiveTab] = useState<'reproductive' | 'general'>('reproductive');
 
@@ -42,7 +112,6 @@ export default function PricingForms() {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-radial from-[#AEDEE4]/35 via-[#F6D7C6]/20 to-transparent blur-3xl pointer-events-none -z-10" />
 
       <div className="flex flex-col items-center">
-        
         {/* Top Glass Tab Bar Switcher */}
         <div className="inline-flex items-center p-1.5 rounded-full bg-white/40 backdrop-blur-2xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] mb-6">
           <button
@@ -86,7 +155,7 @@ export default function PricingForms() {
                   Going through reproductive health problems? view our plans here.
                 </h2>
                 <p className="text-base sm:text-[22px] text-zinc-600 font-normal leading-[1.2]">
-                  Designed personally for your reproductive health taken <br/> care by your own doctor.
+                  Designed personally for your reproductive health taken <br /> care by your own doctor.
                 </p>
               </div>
 
@@ -117,7 +186,6 @@ export default function PricingForms() {
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
     </section>
   );
@@ -139,10 +207,21 @@ function ReproductiveCareForm() {
       fullName: '',
       age: '',
       gender: '',
+      selectedOption: '',
     },
   });
 
   const selectedGender = watch('gender');
+  const selectedOption = watch('selectedOption');
+
+  // Options are hidden by default and when 'Prefer not to say' is selected.
+  // Only show options when Female or Male is selected.
+  const currentOptions =
+    selectedGender === 'Female'
+      ? femaleOptions
+      : selectedGender === 'Male'
+      ? maleOptions
+      : null;
 
   const onSubmit = (data: ReproductiveCareFormData) => {
     console.log('Reproductive Care Form Submitted:', data);
@@ -150,16 +229,10 @@ function ReproductiveCareForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="relative w-full max-w-xl mt-5">
-       
+    <form onSubmit={handleSubmit(onSubmit)} className="relative w-full max-w-2xl mt-5">
       {/* Background Joyzen Orange Logo Watermark */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 h-48 sm:h-64 pointer-events-none z-0 opacity-40 select-none">
-        <Image
-          src="/joyzen-orange.png"
-          alt="Joyzen Orange Logo Watermark"
-          fill
-          className="object-contain"
-        />
+        <Image src="/joyzen-orange.png" alt="Joyzen Orange Logo Watermark" fill className="object-contain" />
       </div>
 
       {submitted ? (
@@ -229,7 +302,7 @@ function ReproductiveCareForm() {
                 </span>
               </button>
 
-              {/* Glassmorphic Dropdown List */}
+              {/* Dropdown Options */}
               <AnimatePresence>
                 {genderOpen && (
                   <motion.div
@@ -244,6 +317,7 @@ function ReproductiveCareForm() {
                         key={option}
                         onClick={() => {
                           setValue('gender', option, { shouldValidate: true });
+                          setValue('selectedOption', ''); // Reset selected option when gender changes
                           setGenderOpen(false);
                         }}
                         className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
@@ -262,12 +336,49 @@ function ReproductiveCareForm() {
             {errors.gender && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.gender.message}</p>}
           </div>
 
-          {/* Submit Specular Button */}
+          {/* Dynamic Reproductive Options List - Only shown when Female or Male is selected */}
+          <AnimatePresence mode="wait">
+            {currentOptions && currentOptions.length > 0 && (
+              <motion.div
+                key={selectedGender}
+                initial={{ opacity: 0, height: 0, y: 10 }}
+                animate={{ opacity: 1, height: 'auto', y: 0 }}
+                exit={{ opacity: 0, height: 0, y: -10 }}
+                transition={{ duration: 0.3 }}
+                className="pt-2 space-y-3 overflow-hidden"
+              >
+                <div className="flex items-center justify-between px-2 mb-1">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                    {selectedGender} Health Options
+                  </span>
+                </div>
+                {currentOptions.map((option) => {
+                  const isItemChosen = selectedOption === option;
+                  return (
+                    <GradientInputWrapper key={option} isSelected={isItemChosen}>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setValue('selectedOption', isItemChosen ? '' : option, { shouldValidate: true });
+                        }}
+                        className={`w-full text-center sm:text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] ${
+                          isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-[#6E6E6E] hover:text-zinc-900'
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    </GradientInputWrapper>
+                  );
+                })}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Submit Specular / Glass Button */}
           <div className="flex justify-end pt-4">
             <button
               type="submit"
-            
-              className="font-bold text-sm uppercase tracking-tight px-7 py-3.5 bg-[#AEDEE44D] border-[#AEDEE44D] text-black rounded-[28px] shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] hover:bg-white/70 hover:border-[#AEDEE4] transition-all duration-300"
+              className="font-bold text-sm uppercase tracking-tight px-7 py-3.5 bg-[#AEDEE44D] border border-[#AEDEE44D] text-black rounded-[28px] shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] hover:bg-white/70 hover:border-[#AEDEE4] transition-all duration-300 cursor-pointer"
             >
               SUBMIT FORM
             </button>
@@ -277,7 +388,6 @@ function ReproductiveCareForm() {
     </form>
   );
 }
-
 
 function GeneralCareForm() {
   const [genderOpen, setGenderOpen] = useState(false);
@@ -311,15 +421,9 @@ function GeneralCareForm() {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="relative w-full max-w-xl space-y-4">
-      
       {/* Background Joyzen Orange Logo Watermark */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 h-48 sm:h-64 pointer-events-none z-0 opacity-40 select-none">
-        <Image
-          src="/joyzen-orange.png"
-          alt="Joyzen Orange Logo Watermark"
-          fill
-          className="object-contain"
-        />
+        <Image src="/joyzen-orange.png" alt="Joyzen Orange Logo Watermark" fill className="object-contain" />
       </div>
 
       {submitted ? (
@@ -367,7 +471,7 @@ function GeneralCareForm() {
             {errors.age && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.age.message}</p>}
           </div>
 
-          {/* Gender Glassmorphic Custom Select Dropdown */}
+          {/* Gender Custom Dropdown */}
           <div>
             <div className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
               <button
@@ -421,7 +525,7 @@ function GeneralCareForm() {
             {errors.gender && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.gender.message}</p>}
           </div>
 
-          {/* Concern Glassmorphic Input */}
+          {/* Concern Input */}
           <div>
             <div className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:bg-white/5 focus-within:border-[#95C1E2] transition-all">
               <input
@@ -434,7 +538,7 @@ function GeneralCareForm() {
             {errors.concern && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.concern.message}</p>}
           </div>
 
-          {/* Who would you like to get in touch with? Glassmorphic Custom Select Dropdown */}
+          {/* Specialist Select Dropdown */}
           <div>
             <div className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
               <button

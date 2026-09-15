@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import Reveal from '@/reuseable/Reveal';
 
 export default function ConnectedExperienceSection() {
@@ -12,9 +13,15 @@ export default function ConnectedExperienceSection() {
             {/* One Connected */}
             <span className="text-[#036132]">One Connected</span>
 
-            {/* Pill Capsule with Joyzen badge */}
-            <span className="inline-flex items-center justify-center px-4 sm:px-6 py-1 sm:py-1.5 rounded-full bg-[#598C87] text-white text-base sm:text-2xl font-semibold shadow-inner">
-              joyzen
+            {/* Pill Capsule with /one-connected.gif */}
+            <span className="inline-flex items-center justify-center relative w-24 sm:w-36 md:w-44 h-9 sm:h-13 md:h-16 rounded-full overflow-hidden align-middle my-auto">
+              <Image
+                src="/one-connected.gif"
+                alt="Joyzen One Connected"
+                fill
+                className="object-cover"
+                unoptimized
+              />
             </span>
 
             {/* Experience */}
