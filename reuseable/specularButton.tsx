@@ -1,10 +1,16 @@
 import { useRef, useEffect, type CSSProperties, type ReactNode, type MouseEventHandler } from 'react';
+import Image from 'next/image';
 import { Renderer, Program, Mesh, Triangle, Color } from 'ogl';
 
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 export interface SpecularButtonProps {
   children?: ReactNode;
+  imageSrc?: string;
+  imageAlt?: string;
+  imageWidth?: number;
+  imageHeight?: number;
+  imageClassName?: string;
   size?: ButtonSize;
   radius?: number;
   tint?: string;
@@ -105,14 +111,20 @@ void main() {
   float edgeClamp = 1.0 - smoothstep(0.5 * uPx, 3.0 * uPx, abs(d));
   float hi = line * rim * edgeClamp * uIntensity;
 
+  float baseAlpha = base * min(length(uBaseColor), 1.0);
   vec3 col = uBaseColor * base + uLineColor * hi;
-  float a = clamp(base + hi, 0.0, 1.0);
+  float a = clamp(baseAlpha + hi, 0.0, 1.0);
   fragColor = vec4(col, a);
 }
 `;
 
 const SpecularButton = ({
-  children = 'Get Started',
+  children,
+  imageSrc,
+  imageAlt = 'Button image',
+  imageWidth,
+  imageHeight,
+  imageClassName = '',
   size = 'lg',
   radius = 18,
   tint = '#ffffff',
@@ -178,13 +190,11 @@ const SpecularButton = ({
     const mesh = new Mesh(gl, { geometry, program });
     fx.appendChild(gl.canvas);
 
-    const sizeRef = { w: 1, h: 1 };
+    const sizeRef = { w: 0, h: 0 };
     const resize = () => {
-      // Fractional size + explicit center keep the SDF pinned to the exact
-      // CSS border, instead of drifting up to a pixel from offsetWidth rounding.
-      const rect = btn.getBoundingClientRect();
-      const w = rect.width;
-      const h = rect.height;
+      const w = btn.offsetWidth;
+      const h = btn.offsetHeight;
+      if (!w || !h) return;
       sizeRef.w = w;
       sizeRef.h = h;
       renderer.setSize(w + PAD * 2, h + PAD * 2);
@@ -209,9 +219,9 @@ const SpecularButton = ({
       // Over the button itself the light settles on the diagonal (framing the
       // corners) and gently sways with the cursor position within the button.
       if (dist === 0) {
-        const nx = (e.clientX - cx) / (rect.width / 2);
-        const ny = (cy - e.clientY) / (rect.height / 2);
-        pointerAngle = Math.atan2(2 / rect.height, -2 / rect.width) + nx * 0.3 + ny * 0.15;
+        const nx = (e.clientX - cx) / (rect.width / 2 || 1);
+        const ny = (cy - e.clientY) / (rect.height / 2 || 1);
+        pointerAngle = Math.atan2(2 / (rect.height || 1), -2 / (rect.width || 1)) + nx * 0.3 + ny * 0.15;
       } else {
         pointerAngle = Math.atan2(cy - e.clientY, e.clientX - cx);
       }
@@ -231,6 +241,11 @@ const SpecularButton = ({
 
     const update = (now: number) => {
       raf = requestAnimationFrame(update);
+
+      if (btn.offsetWidth !== sizeRef.w || btn.offsetHeight !== sizeRef.h) {
+        resize();
+      }
+
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
       const p = propsRef.current;
@@ -268,6 +283,8 @@ const SpecularButton = ({
     };
   }, []);
 
+  const buttonContent = children !== undefined ? children : (imageSrc ? null : 'Get Started');
+
   return (
     <button
       ref={btnRef}
@@ -286,7 +303,18 @@ const SpecularButton = ({
       }
     >
       <span ref={fxRef} aria-hidden="true" className="pointer-events-none absolute -inset-5 z-[1] [&_canvas]:block [&_canvas]:h-full [&_canvas]:w-full" />
-      <span className="relative z-[2]">{children}</span>
+      <span className="relative z-[2] flex items-center justify-center gap-2">
+        {imageSrc && (
+          <Image
+            src={imageSrc}
+            alt={imageAlt}
+            width={imageWidth || 150}
+            height={imageHeight || 36}
+            className={imageClassName || 'h-6 sm:h-8 md:h-9 w-auto object-contain'}
+          />
+        )}
+        {buttonContent}
+      </span>
     </button>
   );
 };

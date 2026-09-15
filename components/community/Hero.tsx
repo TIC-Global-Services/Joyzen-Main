@@ -37,7 +37,7 @@ export default function Hero() {
               alt="Joyzen Robot with Appointments Calendar"
               fill
               priority
-              className="object-cover drop-shadow-sm"
+              className="object-contain drop-shadow-sm"
             />
           </div>
         </motion.div>

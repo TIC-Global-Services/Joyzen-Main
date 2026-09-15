@@ -337,7 +337,7 @@ const ReviewCard = ({ card }: { card: ReviewCardItem }) => {
       <FiveStars rating={card.rating} />
 
       {/* Review Quote Text */}
-      <p className="text-[14px] sm:text-[15px] md:text-2xl text-zinc-700 font-normal leading-[1.1] tracking-tight mt-1">
+      <p className="text-sm md:text-base lg:text-2xl text-zinc-700 font-normal leading-[1.1] tracking-tight mt-1">
         {card.quote}
       </p>
 
