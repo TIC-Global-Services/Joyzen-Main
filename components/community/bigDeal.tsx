@@ -31,7 +31,7 @@ export default function BigDeal() {
         {/* Subtitle / Description */}
         <Reveal delay={0.4} className="mt-4 sm:mt-4">
           <p className="text-sm sm:text-base lg:text-[22px] text-black leading-[1.2]">
-            Let us bring you the care you deserve, because we’re obsessed with our humans<br/> and only mildly impressed by AI.
+            Let us bring you the care you deserve, because we’re obsessed with our humans<br className='hidden lg:block'/> and only mildly impressed by AI.
           </p>
         </Reveal>
       </div>

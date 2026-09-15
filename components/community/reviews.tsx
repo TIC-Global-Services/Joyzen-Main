@@ -363,7 +363,7 @@ const Reviews = ({
   useEffect(() => {
     const ctx = gsap.context(() => {
       const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-      const staggerDelay = isMobile ? 0.8 : 0.5;
+      const staggerDelay = isMobile ? 0.6 : 0.5;
       const startY = isMobile ? '95vh' : '115vh';
       const endY = isMobile ? '-95vh' : '-115vh';
 
@@ -464,7 +464,7 @@ const Reviews = ({
             {leftReviews.map((card, i) => (
               <div
                 key={`rev-left-${card.id}-${i}`}
-                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-3 sm:pl-6 lg:pl-0 lg:pr-14 -mt-[32vh] sm:-mt-[26vh] lg:-mt-[22vh] pointer-events-none will-change-transform"
+                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-3 sm:pl-6 lg:pl-0 lg:pr-14 -mt-[16vh] sm:-mt-[26vh] lg:-mt-[22vh] pointer-events-none will-change-transform"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />

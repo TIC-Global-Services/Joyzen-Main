@@ -103,7 +103,7 @@ export default function YourPeople() {
 
       {/* 5-Card Smooth Auto-Changing Stacked Carousel */}
       <div
-        className="relative w-full  h-[280px] sm:h-[360px] md:h-[440px] lg:h-[480px] flex items-center justify-center"
+        className="relative w-full  h-[280px] sm:h-[360px] md:h-[440px] lg:h-[480px] flex items-center justify-center mt-6 lg:mt-0"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -170,7 +170,7 @@ export default function YourPeople() {
                     setCurrentIndex(index);
                   }
                 }}
-                className={`absolute w-[68%] sm:w-[58%] md:w-[50%] lg:w-[46%] aspect-[16/8] rounded-2xl sm:rounded-3xl md:rounded-[28px] overflow-hidden cursor-pointer shadow-xl transition-shadow duration-300 ${
+                className={`absolute w-[68%] sm:w-[58%] md:w-[50%] lg:w-[46%] aspect-[3/4] md:aspect-[4/5]  lg:aspect-[16/8] rounded-2xl sm:rounded-3xl md:rounded-[28px] overflow-hidden cursor-pointer shadow-xl transition-shadow duration-300 ${
                   isCenter
                     ? 'shadow-2xl ring-1 ring-black/5 hover:scale-[1.01]'
                     : 'hover:opacity-100 hover:brightness-105'
@@ -201,16 +201,16 @@ export default function YourPeople() {
                     transition={{ duration: 0.5, delay: 0.2 }}
                     className="absolute inset-0 p-5 sm:p-7 md:p-8 flex flex-col justify-start pointer-events-none"
                   >
-                    <div className="max-w-[85%] sm:max-w-[75%] space-y-1 sm:space-y-1.5 drop-shadow-md">
-                      <div className="flex items-baseline gap-2">
-                        <span className="text-sm sm:text-base md:text-2xl font-semibold text-[#DDC5DF]">
+                    <div className="max-w-[85%] lg:max-w-[75%] space-y-1 sm:space-y-1.5 drop-shadow-md">
+                      <div className="flex flex-col lg:flex-row items-baseline lg:gap-2">
+                        <span className="text-base md:text-2xl font-semibold text-[#DDC5DF]">
                           {card.tag}
                         </span>
-                        <span className="text-xs sm:text-sm md:text-lg font-normal text-white/90">
+                        <span className="text-base md:text-lg font-normal text-white/90">
                           {card.subtitle}
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm md:text-base font-light text-white leading-[1.2] drop-shadow">
+                      <p className="text-sm md:text-base font-light text-white leading-[1.2] drop-shadow">
                         {card.desc}
                       </p>
                     </div>
@@ -222,7 +222,7 @@ export default function YourPeople() {
         </div>
 
         {/* Carousel Navigation Indicators */}
-        <div className="absolute -bottom-6 sm:bottom-8 flex items-center justify-center gap-2 z-40">
+        <div className="absolute -bottom-10 lg:bottom-8 flex items-center justify-center gap-2 z-40">
           {CARDS.map((_, dotIdx) => (
             <button
               key={dotIdx}
@@ -244,9 +244,9 @@ export default function YourPeople() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-40px' }}
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        className="text-center max-w-2xl sm:max-w-5xl mx-auto mt-16 sm:mt-2 md:mt-2"
+        className="text-center max-w-2xl sm:max-w-5xl mx-auto mt-20 lg:mt-2"
       >
-        <p className="text-sm sm:text-base md:text-[28px] text-[#EB7847] font-medium leading-[1.2]">
+        <p className="text-sm sm:text-xl lg:text-[28px] text-[#EB7847] font-medium leading-[1.2]">
           People who make you laugh. People who challenge the way you think. People
           who understand exactly what you&apos;re going through. And people you haven&apos;t even met yet.
         </p>
