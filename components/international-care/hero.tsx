@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 export default function Hero() {
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-start pt-28 sm:pt-36 md:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8  overflow-hidden select-none">
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center lg:justify-start pt-28 sm:pt-36 md:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8  overflow-hidden select-none">
       {/* Honeycomb Background Overlay */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-50 mix-blend-multiply"

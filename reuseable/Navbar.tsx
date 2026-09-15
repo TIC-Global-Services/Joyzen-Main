@@ -20,7 +20,7 @@ export default function Navbar() {
       const inactiveTextColor = isHome ? 'text-black' : 'text-black [text-shadow:_0_1px_6px_rgba(0,0,0,0.35)]'
 
   return (
-    <header className="absolute top-8 z-50 w-full lg:px-[3%] transition-all">
+    <header className="absolute top-8 z-50 w-full px-[3%] transition-all">
       <div className="flex items-center justify-between px-[3%] md:px-0">
         {/* Brand Logo */}
         <Link href="/" className="flex items-center gap-2 group transition-transform hover:scale-105">
@@ -35,7 +35,7 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Nav Center Pill */}
-        <nav className="hidden md:flex items-center gap-2   px-2.5 py-1.5 ">
+        <nav className="hidden lg:flex items-center gap-2   px-2.5 py-1.5 ">
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
             return (
@@ -54,7 +54,7 @@ export default function Navbar() {
         </nav>
 
         {/* Right CTA Button: Talk to us (with icon) */}
-        <div className="hidden sm:flex items-center">
+        <div className="hidden lg:flex items-center">
           <Link
             href="#contact"
 
@@ -69,7 +69,7 @@ export default function Navbar() {
         {/* Mobile Menu Toggle Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden flex items-center p-2 rounded-xl text-zinc-700 bg-white/80 backdrop-blur-md border border-zinc-200"
+          className="lg:hidden flex items-center p-2 rounded-xl text-zinc-700 bg-white/80 backdrop-blur-md border border-zinc-200"
           aria-label="Toggle menu"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -84,7 +84,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="md:hidden mt-3 p-4 bg-white/95 backdrop-blur-xl border border-zinc-200 rounded-2xl shadow-xl space-y-2">
+        <div className="lg:hidden mt-3 p-4 bg-white/95 backdrop-blur-xl border border-zinc-200 rounded-2xl shadow-xl space-y-2">
           {NAV_LINKS.map((link) => {
             const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
             return (

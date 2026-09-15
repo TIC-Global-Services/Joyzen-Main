@@ -118,6 +118,22 @@ void main() {
 }
 `;
 
+const parseColor = (color: string, targetColor: Color) => {
+  if (!color || color === 'transparent') {
+    targetColor.set(0, 0, 0);
+    return;
+  }
+  let str = color.trim();
+  if (str.startsWith('#') && str.length === 9) {
+    str = str.slice(0, 7);
+  }
+  try {
+    targetColor.set(str);
+  } catch {
+    targetColor.set(0, 0, 0);
+  }
+};
+
 const SpecularButton = ({
   children,
   imageSrc,
@@ -260,8 +276,8 @@ const SpecularButton = ({
       const brightTarget = p.autoAnimate ? 1 : proximityT;
       bright += (brightTarget - bright) * (1 - Math.exp(-dt * 8));
 
-      lineC.set(p.lineColor);
-      baseC.set(p.baseColor);
+      parseColor(p.lineColor, lineC);
+      parseColor(p.baseColor, baseC);
       program.uniforms.uAngle.value = angle;
       program.uniforms.uRadius.value = Math.min(p.radius, Math.min(sizeRef.w, sizeRef.h) / 2) * dpr;
       program.uniforms.uLineColor.value = [lineC.r, lineC.g, lineC.b];

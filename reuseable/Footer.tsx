@@ -15,7 +15,7 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="relative w-full h-[50svh] sm:h-[60svh] lg:h-[90svh] bg-gradient-to-r from-transparent via-[#D1E0EC] to-[#A9BFCF] flex flex-col justify-between p-8 sm:p-10 lg:p-[4rem] overflow-hidden text-black select-none font-epilogue">
+    <footer className="relative w-full h-[50svh] sm:h-[60svh] md:h-[40dvh] lg:h-[90svh] bg-gradient-to-r from-transparent via-[#D1E0EC] to-[#A9BFCF] flex flex-col justify-between p-8 sm:p-10 lg:p-[4rem] overflow-hidden text-black select-none font-epilogue">
       {/* Background Video — single stream, source chosen by device at mount */}
       <div
         className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
@@ -67,7 +67,7 @@ export default function Footer() {
       />
 
       {/* Bottom Tagline & Credits Bar */}
-      <div className="flex px-[10%] md:px-[5%] text-xs md:text-sm text-black flex-col sm:flex-row justify-center sm:justify-between items-center gap-2 relative z-50 w-full">
+      <div className="flex px-[10%] md:px-[5%] text-xs lg:text-sm text-black flex-col sm:flex-row justify-center sm:justify-between items-center gap-2 relative z-50 w-full">
         <span className="text-center sm:text-left">2026 Joyzen. Built for life. Designed for longevity.</span>
         <span className="text-center sm:text-right">Designed and Developed by TIC Global Services</span>
       </div>

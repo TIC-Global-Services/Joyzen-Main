@@ -102,7 +102,7 @@ export default function Appointment() {
         onMouseLeave={() => setIsPaused(false)}
       >
         {/* Main Slider Card Container */}
-        <div className="relative w-full aspect-[16/9] sm:aspect-[16/9] md:aspect-[16/9] rounded-[24px] sm:rounded-[30px] overflow-hidden shadow-2xl">
+        <div className="relative w-full aspect-[9/16] md:aspect-[16/12] lg:aspect-[16/9] rounded-[24px] sm:rounded-[30px] overflow-hidden shadow-2xl">
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={currentSlide.id}
@@ -136,10 +136,10 @@ export default function Appointment() {
                   transition={{ duration: 0.5, delay: 0.2 }}
                   className="flex flex-wrap justify-center items-start items-baseline gap-x-3 sm:gap-x-4 gap-y-1 max-w-5xl my-auto"
                 >
-                  <span className="text-2xl sm:text-4xl md:text-5xl lg:text-[40px] font-bold text-white tracking-tight drop-shadow-md">
+                  <span className="text-2xl sm:text-4xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight drop-shadow-md">
                     {currentSlide.prefixText}
                   </span>
-                  <span className={`text-4xl sm:text-6xl md:text-7xl lg:text-[80px] font-bold ${currentSlide.highlightColor} tracking-tight drop-shadow-lg`}>
+                  <span className={`text-4xl sm:text-6xl md:text-6xl lg:text-[80px] font-bold ${currentSlide.highlightColor} tracking-tight drop-shadow-lg`}>
                     {currentSlide.highlightText}
                   </span>
                 </motion.div>

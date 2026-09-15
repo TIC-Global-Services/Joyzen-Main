@@ -25,13 +25,13 @@ export default function StartYourHealth() {
         <Reveal delay={0.25}>
           <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-[#036132]">
             Start your healthcare journey with
-            <br /> India's trusted specialists.
+            <br className='hidden lg:block'/> India's trusted specialists.
           </h2>
         </Reveal>
 
         {/* Subtitle / Description */}
         <Reveal delay={0.4} className="mt-4 sm:mt-6">
-          <p className="text-sm sm:text-base lg:text-[22px] text-black leading-[1.2]">
+          <p className="text-base lg:text-[22px] text-black leading-[1.2]">
             Book an online consultation and receive expert guidance from wherever you are.
           </p>
         </Reveal>

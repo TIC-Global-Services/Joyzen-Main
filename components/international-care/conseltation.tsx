@@ -50,20 +50,56 @@ const consultationCards: CardItem[] = [
     },
 ];
 
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.12,
+        },
+    },
+};
+
+const cardVariants = {
+    hidden: { opacity: 0, y: 35 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
+    },
+};
+
 export default function Consultation() {
+    const [activeIndex, setActiveIndex] = React.useState(0);
+    const scrollRef = React.useRef<HTMLDivElement>(null);
+
+    const handleScroll = () => {
+        if (!scrollRef.current) return;
+        const { scrollLeft, clientWidth } = scrollRef.current;
+        if (clientWidth > 0) {
+            const index = Math.round(scrollLeft / (clientWidth * 0.82));
+            setActiveIndex(Math.min(Math.max(index, 0), consultationCards.length - 1));
+        }
+    };
+
     return (
         <section className="relative w-full py-16 sm:py-24 md:py-28 px-4 sm:px-6 lg:px-8 bg-transparent overflow-hidden select-none">
-            {/* Cards Container Grid */}
+            {/* Cards Container Grid / Mobile Slider */}
             <div className="w-full">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-6 items-start">
+                <motion.div
+                    ref={scrollRef}
+                    onScroll={handleScroll}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-50px' }}
+                    variants={containerVariants}
+                    className="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-6 items-start overflow-x-auto sm:overflow-visible snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-2 -mx-4 px-4 sm:mx-0 sm:px-0"
+                >
                     {consultationCards.map((card, index) => (
                         <motion.div
                             key={card.id}
-                            initial={{ opacity: 0, y: 35 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: '-50px' }}
-                            transition={{ duration: 0.7, delay: index * 0.15, ease: [0.16, 1, 0.3, 1] }}
-                            className={`group relative w-full h-[460px] sm:h-[480px] lg:h-[510px] rounded-[28px] sm:rounded-[24px] overflow-hidden shadow-xl bg-zinc-900 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 ${card.isOffset ? 'lg:mt-14' : 'lg:mt-0'
+                            variants={cardVariants}
+                            className={`group relative shrink-0 w-[84vw] sm:w-full h-[460px] sm:h-[480px] lg:h-[510px] rounded-[28px] sm:rounded-[24px] overflow-hidden shadow-xl bg-zinc-900 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1 snap-center ${card.isOffset ? 'lg:mt-14' : 'lg:mt-0'
                                 }`}
                         >
                             {/* Card Image */}
@@ -89,9 +125,26 @@ export default function Consultation() {
                             </div>
                         </motion.div>
                     ))}
+                </motion.div>
+
+                {/* Mobile Pagination Dots */}
+                <div className="flex sm:hidden items-center justify-center gap-2 mt-6">
+                    {consultationCards.map((_, index) => (
+                        <button
+                            key={index}
+                            onClick={() => {
+                                if (scrollRef.current) {
+                                    const cardWidth = scrollRef.current.clientWidth * 0.84;
+                                    scrollRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+                                }
+                            }}
+                            aria-label={`Go to slide ${index + 1}`}
+                            className={`h-2 rounded-full transition-all duration-300 ${
+                                index === activeIndex ? 'w-6 bg-[#EF8F60]' : 'w-2 bg-black/20'
+                            }`}
+                        />
+                    ))}
                 </div>
-
-
             </div>
         </section>
     );
