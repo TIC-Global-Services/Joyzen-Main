@@ -7,15 +7,15 @@ import { motion } from 'framer-motion';
 
 export default function AboutHeroSection() {
   return (
-    <section className="relative w-full min-h-[90vh] lg:min-h-screen flex flex-col justify-end px-[5%] pt-32 sm:pt-40 pb-24 sm:pb-32 select-none">
+    <section className="relative w-full min-h-screen flex flex-col justify-end px-[5%]  sm:pt-40 pb-24 sm:pb-32 select-none">
       {/* Top-Right: Mechanical Robot Hand with Sweet Pea Flowers */}
       <motion.div
         initial={{ opacity: 0, x: 60, y: -40 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute -top-10 sm:-top-12 md:top-[10%] lg:top-10 -right-[50%] sm:right-2 md:-right-[30%] lg:-right-50 -rotate-50  pointer-events-none select-none z-10"
+        className="absolute -top-2 sm:-top-12 md:top-[10%] lg:top-10 -right-[70%] sm:right-2 md:-right-[30%] lg:-right-50 -rotate-50  pointer-events-none select-none z-10"
       >
-        <div className="relative w-[460px] sm:w-[480px] md:w-[480px] lg:w-[560px] xl:w-[720px] h-[600px] md:aspect-[436/1024]">
+        <div className="relative w-[560px] sm:w-[480px] md:w-[480px] lg:w-[560px] xl:w-[720px] h-[600px] md:aspect-[436/1024]">
           <Image
             src="/robot-hand-1.png"
             alt="Joyzen Robot Hand with Wild Flowers"
@@ -31,7 +31,7 @@ export default function AboutHeroSection() {
         initial={{ opacity: 0, x: -50, y: 50 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-        className="absolute -bottom-6 sm:-bottom-10 md:-bottom-14 left-0 sm:left-2 md:left-0 lg:left-0 pointer-events-none select-none z-10"
+        className="absolute -bottom-10 sm:-bottom-10 md:-bottom-14 left-0 sm:left-2 md:left-0 lg:left-0 pointer-events-none select-none z-10"
       >
         <div className="relative w-[280px] sm:w-[260px] md:w-[340px] lg:w-[400px] xl:w-[460px] aspect-[499/566]">
           <Image
@@ -52,7 +52,7 @@ export default function AboutHeroSection() {
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-[3.125rem] font-bold text-zinc-900 tracking-tight leading-[1]"
+            className="text-[2.5rem] sm:text-5xl lg:text-[3.125rem] font-bold text-black tracking-tight leading-[1.1] md:leading-[1]"
           >
             You Stay On That Couch,<br />
             Our Care For Your Health Will Come<br />
@@ -64,7 +64,7 @@ export default function AboutHeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
-            className="mt-6 sm:mt-8 space-y-1 text-sm sm:text-base md:text-base lg:text-[18px] text-[#036132] font-medium leading-[1.2]"
+            className="mt-6 sm:mt-8 space-y-1 text-base md:text-base lg:text-[18px] text-[#036132] font-medium leading-[1.2]"
           >
             <p>It shouldn’t wait for you to become a patient.</p>
             <p>It shouldn’t wait for something to go wrong.</p>

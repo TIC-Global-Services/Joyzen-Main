@@ -75,7 +75,7 @@ const allItems = [...row1Items, ...row2Items];
 
 export default function SuperPowerSection() {
   return (
-    <section className="relative w-full px-5 sm:px-8 md:px-12 lg:px-[5%] py-16 sm:py-24 md:py-32 overflow-hidden select-none">
+    <section className="relative w-full px-[5%] py-16 sm:py-24 md:py-32 overflow-hidden select-none">
       <div className="w-full flex flex-col items-center">
         
         {/* Main Section Headline */}
@@ -86,8 +86,8 @@ export default function SuperPowerSection() {
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
           className="text-center mb-12 sm:mb-16 md:mb-20"
         >
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-bold text-zinc-900 tracking-tight leading-[1.18] sm:leading-[1.15]">
-            Superpowers For Your Everyday,<br  className='hidden lg:block'/>
+          <h2 className="text-[32px] sm:text-4xl md:text-5xl lg:text-[60px] font-bold text-zinc-900 tracking-tight leading-[1.18] sm:leading-[1.15]">
+            Superpowers For Your  Everyday,<br  className='block'/>
             <span className="text-[#036132]">No Cape Required.</span>
           </h2>
         </motion.div>

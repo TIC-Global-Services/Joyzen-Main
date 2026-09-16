@@ -199,10 +199,10 @@ export default function AboutMobileSection() {
         </div>
 
         {/* Narrative Copy - Staggered Two-Paragraph Layout with Word Reveal */}
-        <div className="w-full flex flex-col space-y-4 sm:space-y-6 md:space-y-8">
+        <div className="w-full flex flex-col space-y-4 sm:space-y-6 md:space-y-8 max-w-7xl">
           {/* Paragraph 1: Offset left/center */}
-          <div className="w-full md:w-[88%] lg:w-[72%] text-left">
-            <p className="text-lg sm:text-2xl md:text-[26px] lg:text-[28px] font-medium leading-[1.2] sm:leading-[1.2] tracking-tight">
+          <div className="w-full md:w-[88%] lg:w-[79%] text-left">
+            <p className="text-xl lg:text-[28px] font-medium leading-[1.2] sm:leading-[1.2] tracking-tight">
               {para1Tokens.map((item, i) => (
                 <span
                   key={i}
@@ -216,8 +216,8 @@ export default function AboutMobileSection() {
           </div>
 
           {/* Paragraph 2: Staggered further to the right */}
-          <div className="w-full md:w-[88%] lg:w-[72%] ml-auto text-right">
-            <p className="text-lg sm:text-lg md:text-xl lg:text-[28px] font-medium leading-[1.2] sm:leading-[1.2] tracking-tight">
+          <div className="w-full md:w-[88%] lg:w-[79%] ml-auto text-right">
+            <p className="text-xl lg:text-[28px] font-medium leading-[1.2] sm:leading-[1.2] tracking-tight">
               {para2Tokens.map((item, i) => (
                 <span
                   key={i}
