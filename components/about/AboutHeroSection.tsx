@@ -13,7 +13,7 @@ export default function AboutHeroSection() {
         initial={{ opacity: 0, x: 60, y: -40 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute -top-2 sm:-top-12 md:top-[10%] lg:top-10 -right-[70%] sm:right-2 md:-right-[30%] lg:-right-50 -rotate-50  pointer-events-none select-none z-10"
+        className="absolute -top-2 sm:-top-12 md:-top-[10%] lg:top-10 -right-[70%] sm:right-2 md:-right-[30%] lg:-right-50 -rotate-50  pointer-events-none select-none z-10"
       >
         <div className="relative w-[560px] sm:w-[480px] md:w-[480px] lg:w-[560px] xl:w-[720px] h-[600px] md:aspect-[436/1024]">
           <Image
@@ -55,7 +55,7 @@ export default function AboutHeroSection() {
             className="text-[2.5rem] sm:text-5xl lg:text-[3.125rem] font-bold text-black tracking-tight leading-[1.1] md:leading-[1]"
           >
             You Stay On That Couch,<br />
-            Our Care For Your Health Will Come<br />
+            Our Care For Your Health Will Come<br className='block md:hidden lg:block'/>
             To You
           </motion.h1>
 
