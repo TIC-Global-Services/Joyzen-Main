@@ -9,7 +9,7 @@ export default function HeroSection() {
   return (
     <section className="relative w-full min-h-[85vh] sm:min-h-screen flex items-end pt-16 sm:pt-24 pb-20 sm:pb-28 px-6 sm:px-12 lg:px-16 overflow-hidden">
       {/* Massive 3D DNA Helix spanning across top-center to bottom-right */}
-      <div className="absolute -top-16 sm:-top-58 -right-16 sm:-right-8 lg:-right-30 w-full pointer-events-none select-none z-0">
+      <div className="absolute -top-16 md:top-50 lg:-top-58 -right-16 md:right-0 lg:-right-8 lg:-right-30 w-full pointer-events-none select-none z-0">
         <Image
           src="/dna.png"
           alt="Joyzen DNA Helix"

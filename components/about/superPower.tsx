@@ -14,32 +14,32 @@ const row1Items: SuperpowerItem[] = [
   {
     id: 'personal-doctor',
     title: 'Personal Doctor',
-    icon: '/superpowers/personal-doctor.svg',
+    icon: '/superpowers/personal-doctor.png',
   },
   {
     id: 'diet-cycle-tracking',
     title: 'Diet & Cycle tracking',
-    icon: '/superpowers/diet-cycle-tracking.svg',
+    icon: '/superpowers/diet_plan.png',
   },
   {
     id: 'followup-reminder',
     title: 'Follow-ups & Reminders',
-    icon: '/superpowers/followup-reminder.svg',
+    icon: '/superpowers/follow-up.png',
   },
   {
     id: 'clarity-call',
     title: 'Clarity Call',
-    icon: '/superpowers/clarity-call.svg',
+    icon: '/superpowers/clarity-call.png',
   },
   {
     id: 'mental-health',
     title: 'Mental health support',
-    icon: '/superpowers/mental-health.svg',
+    icon: '/superpowers/mental-health.png',
   },
   {
     id: 'life-care',
     title: 'Life care',
-    icon: '/superpowers/life-care.svg',
+    icon: '/superpowers/life-care.png',
   },
 ];
 
@@ -47,27 +47,27 @@ const row2Items: SuperpowerItem[] = [
   {
     id: 'community-joyzen-club',
     title: 'Community & Joyzen club',
-    icon: '/superpowers/community-joyzen-club.svg',
+    icon: '/superpowers/community.png',
   },
   {
     id: 'internation-acess',
     title: 'International Access',
-    icon: '/superpowers/internation-acess.svg',
+    icon: '/superpowers/international-accesses.png',
   },
   {
     id: 'reprodective-care',
     title: 'reproductive care program',
-    icon: '/superpowers/reprodective-care.svg',
+    icon: '/superpowers/reproductive-care.png',
   },
   {
     id: 'fertility-care',
     title: 'Fertility care',
-    icon: '/superpowers/fertility-care.svg',
+    icon: '/superpowers/fertility-care.png',
   },
   {
     id: 'pregnancy-care',
     title: 'Pregnancy care',
-    icon: '/superpowers/pregnancy-care.svg',
+    icon: '/superpowers/pregnancy-care.png',
   },
 ];
 
@@ -87,13 +87,13 @@ export default function SuperPowerSection() {
           className="text-center mb-12 sm:mb-16 md:mb-20"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-bold text-zinc-900 tracking-tight leading-[1.18] sm:leading-[1.15]">
-            Superpowers For Your Everyday,<br />
+            Superpowers For Your Everyday,<br  className='hidden lg:block'/>
             <span className="text-[#036132]">No Cape Required.</span>
           </h2>
         </motion.div>
 
         {/* Desktop / Tablet Two-Row Staggered Layout */}
-        <div className="hidden md:flex flex-col items-center w-full gap-8 lg:gap-12">
+        <div className="hidden lg:flex flex-col items-center w-full gap-8 lg:gap-12">
           {/* Row 1: 6 Cards */}
           <div className="flex flex-wrap justify-center items-start gap-5 lg:gap-8 xl:gap-10 w-full">
             {row1Items.map((item, index) => (
@@ -166,7 +166,7 @@ export default function SuperPowerSection() {
         </div>
 
         {/* Mobile Responsive Infinite Marquee (2 rows with smooth edge fade) */}
-        <div className="flex md:hidden flex-col gap-6 w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-2">
+        <div className="flex lg:hidden flex-col gap-6 w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] [-webkit-mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] py-2">
           {/* Marquee Row 1 (Moves Left) */}
           <div className="w-full overflow-hidden flex">
             <motion.div

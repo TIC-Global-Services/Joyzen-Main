@@ -245,7 +245,7 @@ export const GlassSpecularCard = ({
   return (
     <div
       ref={cardRef}
-      className={`relative overflow-visible bg-white/5 backdrop-blur-xs rounded-[28px] sm:rounded-[32px] p-6 sm:p-7 md:p-8 shadow-[0_20px_45px_rgba(0,0,0,0.04),0_2px_8px_rgba(0,0,0,0.02),inset_0_1px_2px_rgba(255,255,255,0.95)] transition-all duration-300 hover:shadow-[0_25px_60px_rgba(239,143,96,0.14),0_4px_12px_rgba(0,0,0,0.03)] hover:scale-[1.02] ${className}`}
+      className={`relative overflow-visible bg-white/5 backdrop-blur-xs rounded-[24px] sm:rounded-[32px] p-6 sm:p-7 md:p-8 shadow-[0_20px_45px_rgba(0,0,0,0.04),0_2px_8px_rgba(0,0,0,0.02),inset_0_1px_2px_rgba(255,255,255,0.95)] transition-all duration-300 hover:shadow-[0_25px_60px_rgba(239,143,96,0.14),0_4px_12px_rgba(0,0,0,0.03)] hover:scale-[1.02] ${className}`}
     >
       {/* WebGL Specular Border Canvas */}
       <span
@@ -337,12 +337,12 @@ const ReviewCard = ({ card }: { card: ReviewCardItem }) => {
       <FiveStars rating={card.rating} />
 
       {/* Review Quote Text */}
-      <p className="text-sm md:text-base lg:text-2xl text-zinc-700 font-normal leading-[1.1] tracking-tight mt-1">
+      <p className="text-sm sm:text-base lg:text-2xl text-zinc-700 font-normal leading-[1.35] sm:leading-tight tracking-tight mt-1">
         {card.quote}
       </p>
 
       {/* Author Name in Orange */}
-      <span className="text-[16px] sm:text-[32px] font-semibold text-[#EF7C48] tracking-tight mt-0.5">
+      <span className="text-[18px] sm:text-[24px] lg:text-[32px] font-semibold text-[#EF7C48] tracking-tight mt-0.5">
         {card.authorName}
       </span>
     </GlassSpecularCard>
@@ -361,62 +361,104 @@ const Reviews = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-      const staggerDelay = isMobile ? 0.6 : 0.5;
-      const startY = isMobile ? '95vh' : '115vh';
-      const endY = isMobile ? '-95vh' : '-115vh';
+    const mm = gsap.matchMedia();
 
-      const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
-      const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
+    mm.add(
+      {
+        isMobile: '(max-width: 1023px)',
+        isDesktop: '(min-width: 1024px)',
+      },
+      (context) => {
+        const { isMobile } = context.conditions as { isMobile: boolean; isDesktop: boolean };
 
-      // Set initial positions below viewport
-      gsap.set(leftCards, { y: startY });
-      gsap.set(rightCards, { y: startY });
+        const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
+        const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: isMobile ? '+=3000' : '+=4500',
-          scrub: 1.2,
-          pin: true,
-          anticipatePin: 1,
-        },
-      });
+        if (isMobile) {
+          // Mobile setup: Interleave left & right cards into a single sequential queue
+          const allCards: HTMLElement[] = [];
+          const maxLen = Math.max(leftCards.length, rightCards.length);
+          for (let i = 0; i < maxLen; i++) {
+            if (leftCards[i]) allCards.push(leftCards[i]);
+            if (rightCards[i]) allCards.push(rightCards[i]);
+          }
 
-      // Animate left and right cards as PAIRS — both start at the same time
-      const pairCount = Math.max(leftCards.length, rightCards.length);
-      for (let i = 0; i < pairCount; i++) {
-        const delay = i * staggerDelay;
+          gsap.set(allCards, { y: '110vh' });
 
-        if (leftCards[i]) {
-          tl.to(
-            leftCards[i],
-            {
-              y: endY,
-              duration: 2.2,
-              ease: 'none',
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top top',
+              end: '+=2200',
+              scrub: 0.8,
+              pin: true,
+              anticipatePin: 1,
             },
-            delay
-          );
-        }
+          });
 
-        if (rightCards[i]) {
-          tl.to(
-            rightCards[i],
-            {
-              y: endY,
-              duration: 2.2,
-              ease: 'none',
+          allCards.forEach((card, index) => {
+            tl.to(
+              card,
+              {
+                y: '-110vh',
+                duration: 2.0,
+                ease: 'none',
+              },
+              index * 0.75
+            );
+          });
+        } else {
+          // Desktop setup: 2-column paired floating cards
+          const startY = '115vh';
+          const endY = '-115vh';
+
+          gsap.set(leftCards, { y: startY });
+          gsap.set(rightCards, { y: startY });
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: containerRef.current,
+              start: 'top top',
+              end: '+=4500',
+              scrub: 1.2,
+              pin: true,
+              anticipatePin: 1,
             },
-            delay
-          );
+          });
+
+          const pairCount = Math.max(leftCards.length, rightCards.length);
+          for (let i = 0; i < pairCount; i++) {
+            const delay = i * 0.5;
+
+            if (leftCards[i]) {
+              tl.to(
+                leftCards[i],
+                {
+                  y: endY,
+                  duration: 2.2,
+                  ease: 'none',
+                },
+                delay
+              );
+            }
+
+            if (rightCards[i]) {
+              tl.to(
+                rightCards[i],
+                {
+                  y: endY,
+                  duration: 2.2,
+                  ease: 'none',
+                },
+                delay
+              );
+            }
+          }
         }
       }
-    }, containerRef);
+    );
 
-    return () => ctx.revert();
+    return () => mm.revert();
   }, []);
 
   return (
@@ -426,7 +468,7 @@ const Reviews = ({
     >
       <div
         ref={containerRef}
-        className="h-screen w-full flex flex-col items-center justify-center overflow-hidden relative"
+        className="h-[100dvh] w-full flex flex-col items-center justify-center overflow-hidden relative"
       >
         {/* Background Ambient Spotlights */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] bg-gradient-to-tr from-[#EF8F60]/12 via-[#78C9CF]/12 to-transparent rounded-full blur-[140px] pointer-events-none" />
@@ -435,7 +477,7 @@ const Reviews = ({
         <div className="absolute inset-0 z-0 flex flex-col items-center justify-center pointer-events-none px-4 text-center select-none">
           <div className="flex flex-col items-center justify-center">
             {/* Orange Joyzen Logo in Center */}
-            <div className="relative w-36 h-36 sm:w-44 sm:h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 mb-1 sm:mb-2 transition-transform duration-500">
+            <div className="relative w-32 h-32 xs:w-36 xs:h-36 sm:w-44 sm:h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 mb-1 sm:mb-2 transition-transform duration-500">
               <Image
                 src="/joyzen-orange.png"
                 alt="Joyzen"
@@ -447,10 +489,10 @@ const Reviews = ({
 
             {/* Typography */}
             <div className="flex flex-col items-center">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[40px] font-bold text-zinc-900 tracking-tight leading-none">
+              <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[40px] font-bold text-zinc-900 tracking-tight leading-none">
                 Hear From Our
               </h2>
-              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-bold text-[#AEDEE4] tracking-tight leading-none">
+              <h2 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-bold text-[#AEDEE4] tracking-tight leading-none">
                 Joyzen Club
               </h2>
             </div>
@@ -458,13 +500,13 @@ const Reviews = ({
         </div>
 
         {/* FLOATING / SCROLLING REVIEW CARDS LAYER (Columns scroll past the pinned center) */}
-        <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto">
+        <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-4 sm:px-8 lg:px-12">
           {/* Left Column of Floating Glass Cards */}
           <div className="w-full lg:w-1/2 absolute inset-y-0 left-0 h-full">
             {leftReviews.map((card, i) => (
               <div
                 key={`rev-left-${card.id}-${i}`}
-                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-3 sm:pl-6 lg:pl-0 lg:pr-14 -mt-[16vh] sm:-mt-[26vh] lg:-mt-[22vh] pointer-events-none will-change-transform"
+                className="review-card-left absolute inset-0 flex items-center justify-center lg:justify-end px-4 lg:pl-0 lg:pr-14 lg:-mt-[22vh] pointer-events-none will-change-transform"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
@@ -478,7 +520,7 @@ const Reviews = ({
             {rightReviews.map((card, i) => (
               <div
                 key={`rev-right-${card.id}-${i}`}
-                className="review-card-right absolute inset-0 flex items-center justify-end lg:justify-start pr-3 sm:pr-6 lg:pr-0 lg:pl-14 mt-[32vh] sm:mt-[26vh] lg:mt-[22vh] pointer-events-none will-change-transform"
+                className="review-card-right absolute inset-0 flex items-center justify-center lg:justify-start px-4 lg:pr-0 lg:pl-14 lg:mt-[22vh] pointer-events-none will-change-transform"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />

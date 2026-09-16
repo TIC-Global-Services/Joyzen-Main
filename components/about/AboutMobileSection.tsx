@@ -186,7 +186,7 @@ export default function AboutMobileSection() {
         >
           <div className="relative w-full">
             {/* Half-Phone crop with bottom mask fade */}
-            <div className="relative w-full aspect-[6/2] [mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)] [-webkit-mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)]">
+            <div className="relative max-w-[50dvh] mx-auto h-[40dvh] [mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)] [-webkit-mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)]">
               <Image
                 src="/joyzen-mobile-mockup.png"
                 alt="Joyzen Mobile App Interface"

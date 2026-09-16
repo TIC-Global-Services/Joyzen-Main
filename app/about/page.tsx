@@ -5,7 +5,7 @@ import Footer from '@/reuseable/Footer';
 import AboutHeroSection from '@/components/about/AboutHeroSection';
 import AboutMobileSection from '@/components/about/AboutMobileSection';
 import SuperPowerSection from '@/components/about/superPower';
-// import AboutRobotSection from '@/components/about/AboutRobotSection';
+import DesignedForToday from '@/components/about/designedForToday';
 
 export const metadata: Metadata = {
   title: 'About | Joyzen - Care The Way Life Actually Happens',
@@ -29,7 +29,7 @@ export default function AboutPage() {
         <SuperPowerSection />
 
         {/* Component 4: Tomorrow's Healthcare & 3D Robot */}
-        {/* <AboutRobotSection /> */}
+        <DesignedForToday />
       </main>
 
     </div>

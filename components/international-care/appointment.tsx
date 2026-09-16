@@ -74,21 +74,18 @@ export default function Appointment() {
 
   const slideVariants = {
     enter: (dir: number) => ({
-      x: dir > 0 ? 300 : -300,
+      x: dir > 0 ? '100%' : '-100%',
       opacity: 0,
-      scale: 0.96,
     }),
     center: {
       zIndex: 1,
       x: 0,
       opacity: 1,
-      scale: 1,
     },
     exit: (dir: number) => ({
       zIndex: 0,
-      x: dir < 0 ? 300 : -300,
+      x: dir < 0 ? '100%' : '-100%',
       opacity: 0,
-      scale: 0.96,
     }),
   };
 
@@ -96,14 +93,28 @@ export default function Appointment() {
 
   return (
     <section className="relative w-full py-12 sm:py-16 md:py-20 px-[3%] bg-transparent overflow-hidden select-none">
+      {/* Preload slide images so transitions are instant without blank network lag */}
+      <div className="hidden">
+        {slides.map((slide) => (
+          <Image
+            key={slide.id}
+            src={slide.image}
+            alt="preload"
+            width={10}
+            height={10}
+            priority
+          />
+        ))}
+      </div>
+
       <div 
         className="w-full"
         onMouseEnter={() => setIsPaused(true)}
         onMouseLeave={() => setIsPaused(false)}
       >
         {/* Main Slider Card Container */}
-        <div className="relative w-full aspect-[9/16] md:aspect-[16/12] lg:aspect-[16/9] rounded-[24px] sm:rounded-[30px] overflow-hidden shadow-2xl">
-          <AnimatePresence initial={false} custom={direction} mode="wait">
+        <div className="relative w-full aspect-[9/16] md:aspect-[16/12] lg:aspect-[16/9] rounded-[24px] sm:rounded-[30px] overflow-hidden shadow-2xl bg-zinc-900">
+          <AnimatePresence initial={false} custom={direction} mode="popLayout">
             <motion.div
               key={currentSlide.id}
               custom={direction}
@@ -111,7 +122,7 @@ export default function Appointment() {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
               className="absolute inset-0 w-full h-full"
             >
               {/* Card Image */}

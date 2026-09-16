@@ -46,13 +46,13 @@ export default function AboutHeroSection() {
 
       {/* Main Left Content */}
       <div className="relative z-20 w-full">
-        <div className="flex flex-col items-start justify-end text-left md:translate-x-20">
+        <div className="flex flex-col items-start  justify-end text-left lg:translate-x-20">
           {/* Main Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 35 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-            className="text-4xl sm:text-5xl md:text-[3.125rem] font-bold text-zinc-900 tracking-tight leading-[1]"
+            className="text-4xl sm:text-5xl lg:text-[3.125rem] font-bold text-zinc-900 tracking-tight leading-[1]"
           >
             You Stay On That Couch,<br />
             Our Care For Your Health Will Come<br />
@@ -64,7 +64,7 @@ export default function AboutHeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
-            className="mt-6 sm:mt-8 space-y-1 text-sm sm:text-base md:text-lg lg:text-[18px] text-[#036132] font-medium leading-[1.2]"
+            className="mt-6 sm:mt-8 space-y-1 text-sm sm:text-base md:text-base lg:text-[18px] text-[#036132] font-medium leading-[1.2]"
           >
             <p>It shouldn’t wait for you to become a patient.</p>
             <p>It shouldn’t wait for something to go wrong.</p>
@@ -79,7 +79,7 @@ export default function AboutHeroSection() {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
-            className="mt-8 sm:mt-10"
+            className="mt-8 sm:mt-6"
           >
             <Link
               href="#contact"
@@ -92,9 +92,9 @@ export default function AboutHeroSection() {
       </div>
 
       {/* Bottom gradient */}
-      <div className="absolute -bottom-14  md:-bottom-20 -left-10 right-0 h-7 sm:h-44 md:h-10
-                  bg-white/90 to-transparent backdrop-blur-sm
-                  pointer-events-none blur-sm z-[10000000]" />
+      <div className="absolute -bottom-14  md:-bottom-20 -left-10 right-0 h-7 sm:h-44 w-65 md:h-20
+                  bg-white to-transparent
+                  pointer-events-none blur-lg z-[10000000] rounded-3xl" />
     </section>
   );
 }

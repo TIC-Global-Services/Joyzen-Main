@@ -14,7 +14,7 @@ export default function HereItFrom() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full  rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-zinc-200/40 bg-[#C3C3C5]"
+        className="relative w-full  rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl  bg-[#C3C3C5]"
       >
         {/* Founder & CEO Image */}
         <div className="relative w-full aspect-[3/5] sm:aspect-[4/4] lg:aspect-[16/8]">
@@ -84,7 +84,7 @@ export default function HereItFrom() {
       >
         <Link
           href="#founder-story"
-          className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-white/80 hover:bg-white backdrop-blur-md border border-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.04)] text-xs sm:text-sm font-bold uppercase tracking-tight text-[#EB7847] transition-all duration-300 hover:scale-105 active:scale-95 group"
+          className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-2.5 sm:py-3 rounded-full bg-white/20 shadow-xl hover:bg-white backdrop-blur-md shadow-[0_4px_20px_rgba(0,0,0,0.04)] text-xs sm:text-base font-normal uppercase tracking-tight text-[#EB7847] transition-all duration-300 hover:scale-105 active:scale-95 group"
         >
           {/* Target / Radar Indicator Dot */}
           <span className="relative flex items-center justify-center w-4 h-4 rounded-full border border-[#EB7847]/50 group-hover:border-[#EB7847] transition-colors">
