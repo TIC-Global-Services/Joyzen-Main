@@ -191,13 +191,13 @@ export default function Represents() {
         </svg>
       </div>
 
-      <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+      <div className="relative z-10 flex flex-col-reverse lg:flex-row items-center justify-between gap-12 lg:gap-16">
         {/* Left Column: Heading + 2x2 Stat Cards */}
         <div className="w-full lg:w-1/2 flex flex-col space-y-8">
           {/* Main Section Header */}
           <div>
             <h2 className="text-2xl sm:text-3xl lg:text-[34px] font-bold tracking-tight text-black leading-none">
-              Every number represents a life supported,{' '}
+              Every number represents a life supported,{' '}<br className='sm:hidden'/>
               <span className="text-[#6F7275] font-bold">
                 a journey guided, and a commitment to better healthcare.
               </span>
@@ -205,7 +205,7 @@ export default function Represents() {
           </div>
 
           {/* 2x2 Grid of Stat Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-4">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4">
             {stats.map((stat, idx) => (
               <motion.div
                 key={idx}
@@ -213,20 +213,17 @@ export default function Represents() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="bg-white/95 rounded-[20px] p-6 sm:p-8  shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col justify-between min-h-[180px] sm:min-h-[200px] hover:shadow-[0_14px_40px_rgba(3,97,50,0.08)] transition-all duration-300 group w-full"
+                className="bg-white/95 rounded-[20px] p-4 sm:p-8 shadow-[0_10px_30px_rgba(0,0,0,0.04)] flex flex-col justify-between min-h-[140px] sm:min-h-[200px] hover:shadow-[0_14px_40px_rgba(3,97,50,0.08)] transition-all duration-300 group w-full"
               >
                 {/* Big Green Stat Number */}
-                <div className="text-4xl sm:text-5xl lg:text-[4.750rem] font-bold text-[#036132] tracking-tight group-hover:scale-105 transition-transform duration-300 origin-left leading-none">
+                <div className="text-3xl sm:text-5xl lg:text-[4.750rem] font-bold text-[#036132] tracking-tight group-hover:scale-105 transition-transform duration-300 origin-left leading-none text-left">
                   {stat.number}
                 </div>
 
-                {/* Bottom Right Label */}
-                <div className="text-right self-end mt-4">
-                  <p className="text-base sm:text-xl lg:text-[28px] font-bold text-zinc-900 leading-none">
-                    {stat.line1}
-                  </p>
-                  <p className="text-base sm:text-xl lg:text-[28px] font-bold text-zinc-900 leading-none">
-                    {stat.line2}
+                {/* Bottom Label */}
+                <div className="text-left md:text-right self-start md:self-end mt-3 sm:mt-4 w-full">
+                  <p className="text-base sm:text-xl lg:text-[28px] font-bold text-zinc-900 leading-tight sm:leading-none">
+                    {stat.line1} <br /> {stat.line2}
                   </p>
                 </div>
               </motion.div>
@@ -432,7 +429,7 @@ export default function Represents() {
                       className={`transition-all duration-300 select-none ${
                         isHovered
                           ? 'font-bold fill-zinc-900 text-sm'
-                          : 'font-semibold fill-zinc-700 text-xs sm:text-[13px]'
+                          : 'font-semibold fill-zinc-700 text-sm sm:text-[14px]'
                       }`}
                     >
                       {slice.shortLabel}

@@ -67,7 +67,7 @@ export default function Epharmacy() {
       <div className="relative z-10 w-full max-w-4xl lg:max-w-5xl px-4 sm:px-8">
         <div
           ref={cardRef}
-          className="relative w-full aspect-[16/10] sm:aspect-[16/9] rounded-[30px] overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 will-change-transform"
+          className="relative w-full aspect-[3/4] sm:aspect-[16/9] rounded-[30px] overflow-hidden shadow-2xl border border-white/20 bg-zinc-900 will-change-transform"
         >
           {/* Main Pharmacy Lab Image */}
           <Image

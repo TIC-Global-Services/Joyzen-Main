@@ -47,25 +47,25 @@ export default function OnePlace() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="flex flex-col items-center justify-center text-center md:max-w-5xl mx-auto  sm:space-y-3"
       >
-        {/* Top Row: One Place + [10000 Badge] + Plus Connected */}
-        <div className="flex flex-wrap items-center justify-center  sm:gap-x-5  sm:gap-y-3 text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-          {/* Deep Forest Green */}
-          <span className="text-[#036132]">One Place</span>
+        {/* Top Row / Stacked Mobile: Plus Connected -> 10000 -> One Place */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-x-5 sm:gap-y-3 text-[32px] sm:text-4xl md:text35xl lg:text-6xl font-bold tracking-tight leading-tight">
+          {/* Plus Connected - 1st on mobile, 3rd on desktop */}
+          <span className="order-1 sm:order-3 text-[#EB7847]">Plus Connected</span>
 
-          {/* Frosted Pill Badge with Soft Lilac Counter */}
+          {/* Frosted Pill Badge with Soft Lilac Counter - 2nd on mobile & desktop */}
           <motion.div
             initial={{ scale: 0.85, opacity: 0 }}
             animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0.85, opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center justify-center px-4 sm:px-6 md:px-7 py-1 sm:py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-xs border border-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.03),inset_0_1px_2px_rgba(255,255,255,0.8)]"
+            className="order-2 sm:order-2 inline-flex items-center justify-center px-2 sm:px-6 md:px-7 py-1 sm:py-1.5 md:py-2 rounded-full bg-white/10 backdrop-blur-xs border border-white/80 shadow-[0_4px_20px_rgba(0,0,0,0.03),inset_0_1px_2px_rgba(255,255,255,0.8)]"
           >
-            <span className="text-[#C5A3CF] font-semibold tracking-normal text-2xl sm:text-3xl md:text-4xl lg:text-[44px] tabular-nums">
+            <span className="text-[#C5A3CF] font-semibold tracking-normal text-3xl sm:text-3xl md:text-3xl lg:text-[44px] tabular-nums">
               {count}
             </span>
           </motion.div>
 
-          {/* Warm Terracotta / Coral Orange */}
-          <span className="text-[#EB7847]">Plus Connected</span>
+          {/* Deep Forest Green - 3rd on mobile, 1st on desktop */}
+          <span className="order-3 sm:order-1 text-[#036132]">One Place</span>
         </div>
 
         {/* Bottom Row: Health Journey (Refreshing Soft Cyan/Blue) */}
@@ -73,7 +73,7 @@ export default function OnePlace() {
           initial={{ opacity: 0, y: 15 }}
           animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
           transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[#88CCE1] leading-tight"
+          className="mt-3 sm:mt-0 text-[32px] sm:text-4xl md:text-4xl lg:text-6xl font-bold tracking-tight text-[#88CCE1] leading-tight"
         >
           Health Journey
         </motion.div>
