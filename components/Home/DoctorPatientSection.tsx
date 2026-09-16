@@ -92,9 +92,9 @@ export default function DoctorPatientSection() {
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={canAnimateBadges ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden sm:block absolute sm:top-46 -right-6 lg:-right-30 z-20"
+            className="hidden sm:block absolute md:top-16 lg:top-46 -right-6 lg:-right-30 z-20"
           >
-            <div className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white/20 backdrop-blur-xs border border-[#AEDEE44D] shadow-[0_4px_20px_rgba(0,0,0,0.06)] text-xs sm:text-base font-medium text-zinc-800">
+            <div className="px-4 sm:px-5 py-2 sm:py-2.5 rounded-full bg-white/10 backdrop-blur-xs border border-[#AEDEE44D] shadow-[0_4px_20px_rgba(0,0,0,0.06)] text-xs sm:text-base font-medium text-black">
               Support that stays, start to finish
             </div>
           </motion.div>
@@ -117,7 +117,7 @@ export default function DoctorPatientSection() {
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={canAnimateBadges ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0 }}
             transition={{ duration: 0.6, delay: 1.25, ease: [0.16, 1, 0.3, 1] }}
-            className="hidden sm:block absolute sm:bottom-45 -right-8 lg:-right-40 z-20 max-w-xs"
+            className="hidden sm:block absolute lg:bottom-45 -right-8 lg:-right-40 z-20 max-w-xs"
           >
             <div className="p-4 sm:p-5 rounded-full bg-[#AEDEE44D]/70 backdrop-blur-xs border border-white/60 shadow-[0_4px_24px_rgba(0,0,0,0.07)] text-xs sm:text-base font-medium text-black leading-snug">
               It&apos;s 2026. Are you still carrying your medical history around in a plastic folder?
@@ -138,7 +138,7 @@ export default function DoctorPatientSection() {
 
             {/* Overlaid Banner at Bottom of Photo */}
             <div className="absolute inset-x-4 sm:inset-x-6 bottom-6 sm:bottom-10 z-10">
-              <div className="px-3 sm:px-4 py-3.5 sm:py-4.5 rounded-2xl bg-black/40 sm:bg-black/20 backdrop-blur-md border border-white/20 text-center shadow-lg min-h-[96px] sm:min-h-0 flex flex-col items-center justify-center">
+              <div className="px-3 sm:px-4 py-3.5 sm:py-4.5 rounded-2xl bg-black/40 sm:bg-black/20 backdrop-blur-xs border border-white/20 text-center shadow-lg min-h-[96px] sm:min-h-0 flex flex-col items-center justify-center">
                 
                 {/* Mobile: Auto-changing cards content */}
                 <div className="block sm:hidden w-full min-h-[70px] flex flex-col justify-center">

@@ -6,24 +6,24 @@ import AnimatedJoyzenLogo from '@/reuseable/AnimatedJoyzenLogo';
 
 export default function CareReimaginedSection() {
   return (
-    <section className="relative w-full py-16 sm:py-24 px-4 sm:px-8 text-center overflow-hidden">
+    <section className="relative w-full py-16 sm:py-24 px-[5%] sm:px-8 text-center overflow-hidden">
       <div className="max-w-4xl mx-auto flex flex-col items-center">
         {/* Centered Top Glyph Icon */}
-        <div className="relative w-10 h-14 sm:w-30 sm:h-38 mb-6 flex items-center justify-center">
+        <div className="relative w-20 h-30 sm:w-30 sm:h-38 mb-6 flex items-center justify-center">
           <AnimatedJoyzenLogo width="100%" height="100%" className="w-full h-full object-contain" amount={0.3} once={false} />
         </div>
 
         {/* Heading */}
         <Reveal delay={0.25}>
-          <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-black">
+          <h2 className="text-[2.5rem] sm:text-4xl lg:text-6xl font-bold leading-none tracking-tight text-black">
             <span className="text-[#036132]">Care,</span> Reimagined Around You
           </h2>
         </Reveal>
 
         {/* Subtitle / Description */}
         <Reveal delay={0.4} className="mt-4 sm:mt-4">
-          <p className="text-sm sm:text-base lg:text-[22px] text-black leading-[1.2]">
-            Let us bring you the care you deserve, because we’re obsessed with our humans<br/> and only mildly impressed by AI.
+          <p className="text-base lg:text-[22px] text-black leading-[1.2]">
+            Let us bring you the care you deserve, because we’re obsessed with our humans<br className='hidden md:block'/> and only mildly impressed by AI.
           </p>
         </Reveal>
       </div>

@@ -72,7 +72,7 @@ const APPOINTMENTS: Record<number, AppointmentInfo> = {
     title: 'Nutrition Review',
     time: '02:00 PM – 02:45 PM',
     doctor: 'Nutritionist Priya',
-   
+
   },
   18: {
     dayName: 'FRI',
@@ -345,11 +345,10 @@ function AppointmentsWidget() {
                       className="relative flex flex-col items-center justify-center py-0.5 group cursor-pointer"
                     >
                       <span
-                        className={`w-5 h-5 flex items-center justify-center rounded-full text-[10.5px] transition-all duration-300 ${
-                          isSelected
+                        className={`w-5 h-5 flex items-center justify-center rounded-full text-[10.5px] transition-all duration-300 ${isSelected
                             ? 'bg-[#036132] text-white font-bold shadow-sm scale-110'
                             : 'text-zinc-700 group-hover:bg-zinc-100'
-                        }`}
+                          }`}
                       >
                         {d}
                       </span>
@@ -374,11 +373,10 @@ function AppointmentsWidget() {
                       className="relative flex flex-col items-center justify-center py-0.5 group cursor-pointer"
                     >
                       <span
-                        className={`w-5 h-5 flex items-center justify-center rounded-full text-[10.5px] transition-all duration-300 ${
-                          isSelected
+                        className={`w-5 h-5 flex items-center justify-center rounded-full text-[10.5px] transition-all duration-300 ${isSelected
                             ? 'bg-[#036132] text-white font-bold shadow-sm scale-110'
                             : 'text-zinc-700 group-hover:bg-zinc-100'
-                        }`}
+                          }`}
                       >
                         {d}
                       </span>
@@ -410,13 +408,7 @@ function AppointmentsWidget() {
                 >
                   {/* Sleek SVG Hand Cursor */}
                   <div className="relative">
-                    <svg
-                      className="w-5 h-5 text-zinc-900 drop-shadow-md"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                    >
-                      <path d="M10 2a2 2 0 0 0-2 2v7.17l-1.59-1.58a2 2 0 0 0-2.82 2.82l4.82 4.83A7 7 0 0 0 13.36 22H16a6 6 0 0 0 6-6V9a2 2 0 0 0-2-2h-1V4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v3h-1V4a2 2 0 0 0-2-2h-2z" />
-                    </svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="#000" d="M4.5.79v22.42l6.56-6.57h9.29L4.5.79z"></path></svg>
 
                     {/* Tap Ripple Effect on Click */}
                     {cursorPosition.clicking && (
@@ -424,7 +416,7 @@ function AppointmentsWidget() {
                         initial={{ scale: 0.4, opacity: 0.9 }}
                         animate={{ scale: 2.2, opacity: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="absolute -top-1 -left-1 w-6 h-6 rounded-full border-2 border-[#036132] bg-[#036132]/20 pointer-events-none"
+                        className="absolute -top-3 -left-2 w-6 h-6 rounded-full border-2 border-[#036132] bg-[#036132]/20 pointer-events-none"
                       />
                     )}
                   </div>
@@ -442,7 +434,7 @@ function AppointmentsWidget() {
               <svg className="w-3 h-3 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>Last Visit <br/><strong className="font-semibold text-zinc-700">22 Jul</strong> • Blood Test</span>
+              <span>Last Visit <br /><strong className="font-semibold text-zinc-700">22 Jul</strong> • Blood Test</span>
             </div>
             <button
               type="button"
@@ -502,21 +494,21 @@ function HealthDashboardWidget() {
   const metrics = [
     {
       id: 'diet',
-      // title: 'Diet Tracker',
+      title: 'Diet Tracker',
       numericValue: dietLogged,
       suffix: '%',
       label: 'Daily Goal',
       barColor: 'bg-[#10B981]',
       textColor: 'text-[#059669]',
-      // subtext: dietLogged >= 100 ? 'Goal exceeded!' : 'Great choices today!',
+      subtext: dietLogged >= 100 ? 'Goal exceeded!' : 'Great choices today!',
       progress: Math.min(dietLogged, 100),
       interactiveAction: () => setDietLogged((prev) => (prev >= 100 ? 87 : prev + 5)),
-      // actionLabel: '+ Log Meal',
-        // icon: (
-        //   <svg className="w-4 h-4 text-[#059669]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        //     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-        //   </svg>
-        // ),
+      actionLabel: '+ Log Meal',
+      icon: (
+        <svg className="w-4 h-4 text-[#059669]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+        </svg>
+      ),
     },
     {
       id: 'fitness',
@@ -617,11 +609,10 @@ function HealthDashboardWidget() {
             <div
               key={m.id}
               onClick={() => setActiveMetricId(m.id)}
-              className={`bg-white rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between shadow-xs transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
-                isActive
+              className={`bg-white rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between shadow-xs transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${isActive
                   ? 'border-[#036132] ring-2 ring-[#036132]/10 shadow-sm'
                   : 'border-zinc-100 hover:border-zinc-300'
-              }`}
+                }`}
             >
               <div className="flex items-center justify-between">
                 <span className="text-[10px] sm:text-[11px] font-semibold text-zinc-500 truncate">{m.title}</span>
@@ -650,11 +641,10 @@ function HealthDashboardWidget() {
                       e.stopPropagation();
                       toggleMedication();
                     }}
-                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer ${
-                      medsTakenCount >= 2
+                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer ${medsTakenCount >= 2
                         ? 'text-emerald-800 bg-emerald-100 border border-emerald-300'
                         : 'text-emerald-700 bg-emerald-50 border border-emerald-200/60'
-                    }`}
+                      }`}
                   >
                     <svg className="w-2.5 h-2.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -701,30 +691,30 @@ function HealthDashboardWidget() {
 
 export default function DashboardShowcaseSection() {
   return (
-    <section className="relative w-full py-16 sm:py-20 px-[3%] overflow-hidden">
+    <section className="relative w-full py-16 sm:py-20 md:px-[3%] overflow-hidden">
       <div className="">
         {/* Bento Grid: Left large card, Right 2 stacked cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 md:gap-4 items-stretch">
           {/* Left Large Card: Heading + /in-one-place.png */}
           <div className="lg:col-span-7 flex">
             <Reveal delay={0.1} className="w-full h-full flex flex-col">
-              <div className="group w-full h-full bg-white rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-10 gap-16 flex flex-col overflow-hidden">
+              <div className="group w-full h-full bg-white sm:rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 py-6 px-[3%]  sm:p-10 gap-16 flex flex-col overflow-hidden">
                 {/* Heading */}
                 <div className="">
-                  <h2 className="text-2xl sm:text-3xl lg:text-[40px] font-bold text-zinc-950 tracking-tight leading-[1.18]">
+                  <h2 className="text-xl text-center md:text-left sm:text-3xl lg:text-[40px] font-bold text-black tracking-tight leading-none md:leading-[1.18]">
                     Everything your health <br />
                     has been asking for Finally in one place
                   </h2>
                 </div>
 
                 {/* Dashboard Screenshot with crisp natural fit and smooth hover scale */}
-                <div className="relative w-full flex-1 min-h-[300px] sm:min-h-[380px] lg:min-h-[450px] rounded-2xl overflow-hidden flex items-center">
+                <div className="relative w-full flex-1 min-h-[300px] sm:min-h-[380px] lg:min-h-[450px] rounded-2xl overflow-hidden flex items-center ">
                   <Image
                     src="/your-health.png"
                     alt="Everything your health has been asking for Finally in one place"
                     fill
                     priority
-                    className="w-full h-full object-cover lg:object-cover rounded-xl transition-transform duration-700 ease-out scale-[1.015]"
+                    className="w-full h-full object-cover object-top lg:object-cover rounded-xl transition-transform duration-700 ease-out scale-[1.015]"
                   />
                   {/* Bottom Gradient Overlay */}
                   <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-white via-white/50 to-transparent pointer-events-none z-10" />
@@ -734,16 +724,22 @@ export default function DashboardShowcaseSection() {
           </div>
 
           {/* Right Column: 2 Stacked Cards */}
-          <div className="lg:col-span-5 flex flex-col gap-4 justify-between">
+          <div className="lg:col-span-5 flex flex-col flex-col-reverse sm:flex-col sm:gap-4 justify-between">
             {/* Top Right Card: Coded Interactive Appointment Widget + Animated Touching Cursor + Text */}
             <Reveal delay={0.2} className="w-full h-full flex flex-col">
-              <div className="w-full h-full bg-white rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
+              <div className="w-full h-full bg-white sm:rounded-[20px] sm:border sm:border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
+                <div className="mt-2 text-center  md:hidden">
+                  <p className="text-xl sm:text-xl md:text-[20px] font-bold text-black tracking-tight leading-[1.2]">
+                    Stay informed . stay organised <br />
+                    stay on track
+                  </p>
+                </div>
                 {/* Live Interactive Coded Widget */}
                 <AppointmentsWidget />
 
                 {/* Text Bottom */}
-                <div className="mt-2 text-center">
-                  <p className="text-lg sm:text-xl md:text-[20px] font-bold text-black tracking-tight leading-[1.2]">
+                <div className="mt-2 text-center hidden md:block">
+                  <p className="text-xl sm:text-xl md:text-[20px] font-bold text-black tracking-tight leading-[1.2]">
                     Stay informed . stay organised <br />
                     stay on track
                   </p>
@@ -753,7 +749,7 @@ export default function DashboardShowcaseSection() {
 
             {/* Bottom Right Card: Text + Coded Interactive Health Dashboard Widget with Counter Animations */}
             <Reveal delay={0.3} className="w-full h-full flex flex-col">
-              <div className="w-full h-full bg-white rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
+              <div className="w-full h-full bg-white sm:rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
                 {/* Text Top */}
                 <div className="mb-5 text-center">
                   <h3 className="text-lg sm:text-xl md:text-[20px] font-bold text-black tracking-tight leading-[1.2]">
