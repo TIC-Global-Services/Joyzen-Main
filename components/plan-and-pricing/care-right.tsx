@@ -110,9 +110,9 @@ export default function CareRight() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-black leading-none"
+            className="text-[2.5rem] md:text-6xl font-bold tracking-tight text-black leading-none"
           >
-            Care, Right at Your Fingertips
+            Care, Right 
           </motion.h2>
 
           {/* Mobile Phone Mockup */}
@@ -131,7 +131,15 @@ export default function CareRight() {
               className="object-contain drop-shadow-xl"
             />
           </motion.div>
-
+         <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-[2.5rem] md:text-6xl font-bold tracking-tight text-black leading-none"
+          >
+            at Your <br/> Fingertips
+          </motion.h2>
           {/* Mobile CTA & Subtitle */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -147,7 +155,7 @@ export default function CareRight() {
               START YOUR CARE JOURNEY
             </Link>
 
-            <p className="text-base font-medium text-[#EF8F60] leading-[1.2]">
+            <p className="text-base font-medium text-[#EF8F60] leading-[1.2] tracking-tight">
               Stay connected with your care team through direct chat.From booking consultations to receiving updates, reminders, and support, everything you need is just a message away.
             </p>
           </motion.div>
