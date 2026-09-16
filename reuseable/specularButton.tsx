@@ -51,7 +51,7 @@ const PAD = 20;
 
 const SIZES: Record<ButtonSize, string> = {
   sm: 'text-[0.85rem] px-[22px] py-[10px]',
-  md: 'text-[1rem] px-[30px] py-[14px]',
+  md: 'text-[1rem] px-[60px] py-3.5',
   lg: 'text-[1.15rem] px-10 py-[18px]'
 };
 

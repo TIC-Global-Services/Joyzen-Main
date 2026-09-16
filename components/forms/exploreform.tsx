@@ -80,10 +80,10 @@ function GradientOptionWrapper({
       >
         {/* Inner Glassmorphic Pill Container */}
         <div
-          className={`w-full h-full rounded-[26px] backdrop-blur-md transition-all ${
+          className={`w-full h-full rounded-[26px] backdrop-blur-xs transition-all ${
             isSelected
               ? 'bg-[#FCFAF7]/95 text-zinc-900 font-bold'
-              : 'bg-white/40 group-hover:bg-[#FCFAF7]/90 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_4px_16px_rgba(0,0,0,0.02)]'
+              : 'bg-white/5 group-hover:bg-[#FCFAF7]/90 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_4px_16px_rgba(0,0,0,0.02)]'
           }`}
         >
           {children}
@@ -93,9 +93,6 @@ function GradientOptionWrapper({
   );
 }
 
-// ----------------------------------------------------------------------
-// Main ExploreForm Component
-// ----------------------------------------------------------------------
 export default function ExploreForm() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [genderOpen, setGenderOpen] = useState(false);
@@ -168,19 +165,25 @@ export default function ExploreForm() {
 
   return (
     <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden bg-[#FAF7F5]">
-      {/* 1. Background Hexagon Grid Mesh Overlay */}
+      {/* 1. Existing Background Hexagon Grid Mesh */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-25"
+        className="absolute inset-0 pointer-events-none opacity-25 z-0"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='56' height='97' viewBox='0 0 56 97' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M28 0l28 16v32L28 64 0 48V16zm0 97l28-16V49L28 33 0 49v32z' fill='%2000000' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E")`,
           backgroundSize: '56px 97px',
         }}
       />
 
-      {/* 2. Top Pastel Gradient Glow Background Effect */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-[#FFD1DC]/40 via-[#FFF1C5]/30 to-[#E0F7FA]/40 blur-3xl pointer-events-none -z-10" />
+      {/* 2. Soft Pastel Gradient Overlay on Top of Existing BG */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#FFC5CD]/55 via-[#E6D3F5]/45 to-[#B4ECF5]/60 pointer-events-none z-0" />
 
-      <div className="relative z-10 w-full max-w-2xl flex flex-col items-center">
+      {/* 3. Glowing Ambient Mesh Blobs */}
+      <div className="absolute -top-36 -left-36 w-[650px] h-[650px] bg-[#FFAAA6]/60 rounded-full blur-[110px] pointer-events-none z-0" />
+      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-[#FFDFD3]/50 rounded-full blur-[130px] pointer-events-none z-0" />
+      <div className="absolute top-1/6 -right-24 w-[650px] h-[650px] bg-[#B2EBF2]/75 rounded-full blur-[100px] pointer-events-none z-0" />
+      <div className="absolute -bottom-36 right-0 w-[600px] h-[600px] bg-[#80DEEA]/50 rounded-full blur-[120px] pointer-events-none z-0" />
+
+      <div className="relative z-10 w-full max-w-2xl flex flex-col items-center mt-10">
         {/* Dynamic Heading & Subtitle */}
         <div className="text-center max-w-2xl mx-auto mb-8 space-y-3">
           <AnimatePresence mode="wait">
@@ -319,7 +322,7 @@ export default function ExploreForm() {
                 >
                   {/* Full Name Input */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/40 backdrop-blur-md border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('fullName')}
                         type="text"
@@ -332,7 +335,7 @@ export default function ExploreForm() {
 
                   {/* Age Input */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/40 backdrop-blur-md border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('age')}
                         type="text"
@@ -345,7 +348,7 @@ export default function ExploreForm() {
 
                   {/* Gender Custom Dropdown */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/40 backdrop-blur-md border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
                       <button
                         type="button"
                         onClick={() => setGenderOpen(!genderOpen)}
@@ -404,7 +407,7 @@ export default function ExploreForm() {
                     <button
                       type="button"
                       onClick={handleNextStep}
-                      className="inline-flex items-center gap-2 px-8 py-3.5 rounded-[24px] text-sm font-bold uppercase tracking-tight text-black bg-[#AEDEE44D] border border-[#AEDEE4] backdrop-blur-md shadow-md hover:bg-[#AEDEE4]/60 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-2 px-8 py-3.5 rounded-[24px] text-sm font-bold uppercase tracking-tight text-black bg-[#AEDEE44D] border border-[#AEDEE4] backdrop-blur-xs shadow-md hover:bg-[#AEDEE4]/60 transition-all cursor-pointer"
                     >
                       <span>Continue</span>
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
@@ -454,7 +457,7 @@ export default function ExploreForm() {
                       })}
                     </div>
                   ) : (
-                    <div className="p-6 text-center rounded-[28px] bg-white/40 backdrop-blur-md border border-white/80 text-zinc-600 text-sm">
+                    <div className="p-6 text-center rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 text-zinc-600 text-sm">
                       No specific options required for your gender selection. You can submit the form directly.
                     </div>
                   )}

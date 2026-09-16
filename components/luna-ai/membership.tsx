@@ -1,0 +1,171 @@
+'use client';
+
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import SpecularButton from '@/reuseable/specularButton';
+
+interface PlanCardData {
+  id: number;
+  label: string;
+  prefixTitle?: string;
+  highlightPrice: string;
+  suffixTitle?: string;
+  subPrice: string;
+  cancelTag: string;
+  buttonText: string;
+}
+
+const plans: PlanCardData[] = [
+  {
+    id: 0,
+    label: 'Most Chosen',
+    prefixTitle: 'Start Today @ ',
+    highlightPrice: '1 Rs',
+    subPrice: 'Then  Rs 1,499/month',
+    cancelTag: 'Cancel Anytime',
+    buttonText: 'SUBMIT FORM',
+  },
+  {
+    id: 1,
+    label: 'Best Value',
+    highlightPrice: 'Rs 46 ',
+    suffixTitle: 'Per Day',
+    subPrice: '3 month care plan',
+    cancelTag: 'Cancel Anytime',
+    buttonText: 'SUBMIT FORM',
+  },
+  {
+    id: 2,
+    label: 'Complete Care',
+    highlightPrice: 'Rs 44 ',
+    suffixTitle: 'Per Day',
+    subPrice: '6 month care plan',
+    cancelTag: 'Cancel Anytime',
+    buttonText: 'SUBMIT FORM',
+  },
+];
+
+export default function LunaMembership() {
+  // First card (index 0) is active by default
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  return (
+    <div className="w-full  px-4 sm:px-6 lg:px-[5%] py-12 flex flex-col items-center select-none">
+      {/* LUNA Orb Logo Header */}
+      <div className="relative w-[24dvh] h-[24dvh] sm:w-32 sm:h-32 mb-4 drop-shadow-[0_12px_24px_rgba(150,100,220,0.25)] hover:scale-105 transition-transform duration-300">
+        <Image
+          src="/luna_ai.png"
+          alt="LUNA AI Orb Logo"
+          fill
+          className="object-contain"
+          priority
+        />
+      </div>
+
+      {/* Main Title & Subtitle */}
+      <h2 className="text-3xl sm:text-4xl lg:text-[50px] font-bold tracking-tight text-zinc-900 text-center mb-3">
+        Choose Your LUNA Membership
+      </h2>
+
+      <p className="text-sm sm:text-lg font-semibold text-[#036132] text-center max-w-md sm:max-w-3xl mb-10 leading-[1.2]">
+        Most LUNA members continue for 3-6 months to see meaningful improvement and confidence in their health.
+      </p>
+
+      {/* Interactive Expandable Cards Container */}
+      <div
+        onMouseLeave={() => setActiveIndex(0)}
+        className="w-full flex flex-col lg:flex-row items-stretch justify-center gap-4 sm:gap-6 min-h-[380px]"
+      >
+        {plans.map((plan, index) => {
+          const isActive = activeIndex === index;
+
+          return (
+            <motion.div
+              key={plan.id}
+              onMouseEnter={() => setActiveIndex(index)}
+              onClick={() => setActiveIndex(index)}
+              layout
+              transition={{ type: 'spring', stiffness: 220, damping: 25 }}
+              style={
+                isActive
+                  ? {
+                      background:
+                        'radial-gradient(circle at 100% 100%, rgba(143, 221, 243, 0.75) 0%, transparent 55%), radial-gradient(circle at 0% 100%, rgba(230, 205, 245, 0.75) 0%, transparent 55%), radial-gradient(circle at 90% 10%, rgba(254, 228, 212, 0.65) 0%, transparent 45%), linear-gradient(135deg, #ffffff 50%, #fffdfb 100%)',
+                    }
+                  : undefined
+              }
+              className={`relative rounded-[2rem]  p-6 sm:p-8 flex flex-col justify-between overflow-hidden cursor-pointer transition-all duration-500 ${
+                isActive
+                  ? 'flex-[2.2] shadow-[0_16px_48px_rgba(246,215,198,0.45),inset_0_1px_2px_rgba(255,255,255,0.9)] border-white'
+                  : 'flex-1 bg-white/10 backdrop-blur-xs shadow-[inset_0_1px_2px_rgba(255,255,255,0.7),0_8px_24px_rgba(0,0,0,0.02)] border-white/60 hover:bg-white/20'
+              }`}
+            >
+              {/* Background Joyzen Logo Watermark */}
+              <div
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-56 h-48 sm:h-56 pointer-events-none transition-opacity duration-300 ${
+                  isActive ? 'opacity-35 z-0' : 'opacity-15 z-0'
+                }`}
+              >
+                <Image
+                  src="/joyzen-logo.png"
+                  alt="Joyzen Watermark"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+
+              {/* Card Top Section: Label */}
+              <div className="relative z-10 space-y-2">
+                <h3 className="text-xl sm:text-[28px] font-bold tracking-tight text-zinc-900">
+                  {plan.label}
+                </h3>
+
+                {/* Pricing Details */}
+                <div className="space-y-1">
+                  <div className="text-2xl sm:text-[40px] font-bold text-zinc-900 tracking-tight leading-tight">
+                    {plan.prefixTitle && <span>{plan.prefixTitle}</span>}
+                    <span className="text-[#EF8F60] font-extrabold">{plan.highlightPrice}</span>
+                    {plan.suffixTitle && <span className="font-bold text-zinc-900">{plan.suffixTitle}</span>}
+                  </div>
+
+                  <p className="text-sm sm:text-xl font-bold text-black">
+                    {plan.subPrice}
+                  </p>
+
+                  <p className="text-sm font-bold tracking-tight text-[#036132] pt-1">
+                    {plan.cancelTag}
+                  </p>
+                </div>
+              </div>
+
+              {/* Card Bottom Section: Action Button */}
+              {isActive && (
+                <div className="relative z-10 flex justify-end pt-8">
+                  <SpecularButton
+                    type="button"
+                    size="md"
+                    tint="#AEDEE44D"
+                    tintOpacity={0.35}
+                    textColor="#000000"
+                    lineColor="#ffffff"
+                    baseColor="#AEDEE44D"
+                    radius={20}
+                    className="font-bold text-sm uppercase tracking-tight px-6 py-1 shadow-sm"
+                  >
+                    {plan.buttonText}
+                  </SpecularButton>
+                </div>
+              )}
+            </motion.div>
+          );
+        })}
+      </div>
+
+      {/* Footer Text */}
+      <p className="text-sm sm:text-2xl font-bold text-[#036132] text-center mt-10 max-w-3xl leading-[1.2]">
+        After enrollment, our care team will contact you within 24 hours to begin your LUNA program.
+      </p>
+    </div>
+  );
+}
