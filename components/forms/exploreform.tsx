@@ -210,8 +210,8 @@ export default function ExploreForm() {
                 exit={{ opacity: 0, y: 10 }}
                 className="space-y-3"
               >
-                <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.18]">
-                  Explore <span className="text-[#EF8F60]">Joyzen</span> models
+                <h1 className="text-[40px] sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.18]">
+                  Explore <br className='sm:hidden'/><span className="text-[#EF8F60]">Joyzen</span> models
                 </h1>
                 <p className="text-sm sm:text-base lg:text-lg text-zinc-600 font-normal leading-[1.4] max-w-xl mx-auto">
                   Discover personalized care programs designed around your journey, with structured guidance, continuous support, and plans that adapt as you progress.

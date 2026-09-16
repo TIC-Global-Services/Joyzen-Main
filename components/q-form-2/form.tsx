@@ -170,7 +170,7 @@ export default function QForm2() {
 
   return (
     <section className="relative w-full py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none">
-      <div className="relative z-10 w-full max-w-xl flex flex-col items-center mt-6">
+      <div className="relative z-10 w-full max-w-xl flex flex-col items-center mt-20 md:mt-6">
         {/* Main Title */}
         <h1 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-black leading-[1.18] text-center mb-8">
           To know more about you

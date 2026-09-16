@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
@@ -65,9 +65,23 @@ const GALLERY_COLUMNS: GalleryItem[][] = [
   ],
 ];
 
+const ALL_GALLERY_ITEMS: GalleryItem[] = GALLERY_COLUMNS.flat();
+
 export default function Gallery() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    if (clientWidth > 0) {
+      const index = Math.round(scrollLeft / (clientWidth * 0.78));
+      setActiveIndex(Math.min(Math.max(index, 0), ALL_GALLERY_ITEMS.length - 1));
+    }
+  };
+
   return (
-    <section className="relative w-full py-16 sm:py-20 md:py-28 px-4 sm:px-6 md:px-8 lg:px-12 select-none overflow-hidden">
+    <section className="relative w-full py-12 sm:py-20 md:py-28 px-4 sm:px-6 md:px-8 lg:px-12 select-none overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Section Heading */}
         <motion.div
@@ -75,15 +89,61 @@ export default function Gallery() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center mb-10 sm:mb-14 md:mb-16"
+          className="text-center mb-6 sm:mb-14 md:mb-16"
         >
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] font-bold text-zinc-900 tracking-tight leading-tight">
             Community Gallery
           </h2>
         </motion.div>
 
-        {/* 4-Column Grid with Uniform Sized Images and Alternating High/Low Placement */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-5 md:gap-6 items-start">
+        {/* Mobile View: Horizontal Touch Slider with Pagination Dots (Matching Consultation component) */}
+        <div className="md:hidden w-full">
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 -mx-4 px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden scroll-smooth"
+          >
+            {ALL_GALLERY_ITEMS.map((item, idx) => (
+              <motion.div
+                key={`mobile-gallery-${item.id}`}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.08 }}
+                className="relative shrink-0 w-[82vw] max-w-[300px] aspect-[6/9] rounded-[24px] overflow-hidden bg-zinc-100 shadow-lg border border-black/[0.04] snap-center"
+              >
+                <Image
+                  src={item.src}
+                  alt={item.alt}
+                  fill
+                  className="object-cover object-center"
+                />
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Mobile Pagination Dots */}
+          <div className="flex md:hidden items-center justify-center gap-2 mt-5">
+            {ALL_GALLERY_ITEMS.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  if (scrollRef.current) {
+                    const cardWidth = scrollRef.current.clientWidth * 0.82;
+                    scrollRef.current.scrollTo({ left: index * cardWidth, behavior: 'smooth' });
+                  }
+                }}
+                aria-label={`Go to slide ${index + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  index === activeIndex ? 'w-6 bg-[#EF8F60]' : 'w-2 bg-black/20'
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Desktop View: 4-Column Grid with Alternating High/Low Placement */}
+        <div className="hidden md:grid grid-cols-4 gap-5 md:gap-6 items-start">
           {GALLERY_COLUMNS.map((column, colIdx) => {
             // Alternating low/high column placement: Column 1 & 3 are High (mt-0), Column 2 & 4 are Low (offset down)
             const isLow = colIdx % 2 === 1;
@@ -91,8 +151,8 @@ export default function Gallery() {
             return (
               <div
                 key={`gallery-col-${colIdx}`}
-                className={`flex flex-col gap-4 sm:gap-5 md:gap-6 ${
-                  isLow ? 'mt-6 sm:mt-10 md:mt-14 lg:mt-18' : 'mt-0'
+                className={`flex flex-col gap-5 md:gap-6 ${
+                  isLow ? 'mt-10 md:mt-14 lg:mt-18' : 'mt-0'
                 }`}
               >
                 {column.map((item, itemIdx) => (
@@ -106,13 +166,12 @@ export default function Gallery() {
                       delay: colIdx * 0.1 + itemIdx * 0.15,
                       ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="group relative w-full aspect-[6/9] rounded-[20px]  overflow-hidden bg-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-black/[0.04] transition-all duration-500 hover:shadow-[0_14px_36px_rgba(0,0,0,0.08)]"
+                    className="group relative w-full aspect-[6/9] rounded-[20px] overflow-hidden bg-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)] border border-black/[0.04] transition-all duration-500 hover:shadow-[0_14px_36px_rgba(0,0,0,0.08)]"
                   >
                     <Image
                       src={item.src}
                       alt={item.alt}
                       fill
-                    //   sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 320px"
                       className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                     {/* Subtle hover shadow overlay */}

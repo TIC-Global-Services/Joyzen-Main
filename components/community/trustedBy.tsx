@@ -18,12 +18,12 @@ const MARQUEE_BADGES = [
 
 export default function TrustedBy() {
     return (
-        <section className="relative w-full py-12 sm:py-16 md:py-20 px-[5%] select-none">
-            <div className="flex flex-col gap-5 sm:gap-4">
+        <section className="relative w-full py-12 sm:py-16 md:py-20 px-[3%] md:px-[5%] select-none">
+            <div className="flex flex-col gap-2 sm:gap-4">
                 {/* Top Row Grid: Left (Card 1 & 2 stacked) + Right (Card 3 Large) */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-4">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-4">
                     {/* Left Column (4 cols on lg): Card 1 (70 Crore+) & Card 2 (25%) */}
-                    <div className="lg:col-span-4 flex flex-col gap-5 sm:gap-4">
+                    <div className="lg:col-span-4 flex flex-col gap-2 sm:gap-4">
                         {/* Card 1: 70 Crore+ */}
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -33,7 +33,7 @@ export default function TrustedBy() {
                             className="bg-white rounded-[20px] p-6 sm:p-7 md:p-8 flex flex-col justify-between shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 flex-1"
                         >
                             <div>
-                                <h3 className="text-4xl sm:text-6xl font-bold tracking-tight text-[#FAD405] leading-none">
+                                <h3 className="text-[40px] sm:text-6xl font-bold tracking-tight text-[#FAD405] leading-none">
                                     70 Crore+
                                 </h3>
                                 <p className="mt-3 text-base md:text-[22px] font-medium text-zinc-800 leading-[1.1] tracking-tight">
@@ -42,8 +42,8 @@ export default function TrustedBy() {
                             </div>
 
                             {/* PIB Badge */}
-                            <div className="flex justify-end mt-4 pt-2">
-                                <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-[#DDC5DF80] text-black text-base font-medium tracking-tight shadow-2xs">
+                            <div className="flex justify-start md:justify-end mt-4 pt-2">
+                                <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-[#DDC5DF80] text-black text-sm md:text-base font-medium tracking-tight shadow-2xs">
                                     <div className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-white/60">
                                         <Image
                                             src="/pib-india.jpg"
@@ -83,7 +83,7 @@ export default function TrustedBy() {
                         className="lg:col-span-8 bg-white rounded-[20px]  p-6 sm:p-8 md:p-10 flex flex-col justify-between shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300"
                     >
                         <div>
-                            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tighter text-[#E87547] leading-none">
+                            <h2 className="text-[40px] sm:text-4xl md:text-6xl font-bold tracking-tighter text-[#E87547] leading-none">
                                 Trusted by leading healthcare partners.
                             </h2>
                             <p className="mt-4 text-base md:text-[22px] font-medium text-black leading-[1.2] ">
@@ -92,22 +92,22 @@ export default function TrustedBy() {
                         </div>
 
                         {/* Bottom Partners Logo Boxes & Pill */}
-                        <div className="flex flex-col lg:flex-row items-start sm:items-end justify-between gap-2 mt-8 pt-2">
-                            <div className="flex items-center gap-2  lg:flex-nowrap">
+                        <div className="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-3 mt-8 pt-2 w-full">
+                            <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4 w-full lg:w-auto">
                                 {/* Digital India Box */}
-                                <div className="w-[20dvh] md:w-[35dvh] lg:w-[24dvw] h-30 md:h-24 md:h-[22dvh] rounded-2xl bg-[#DDC5DF80] hover:bg-[#DDC5DF80] transition-colors duration-300 p-3 flex items-center justify-center relative overflow-hidden group">
+                                <div className="w-full sm:w-1/2 lg:w-[240px] xl:w-[350px] h-24 sm:h-40 lg:h-50 rounded-2xl bg-[#DDC5DF80] hover:bg-[#DDC5DF80] transition-colors duration-300 p-3 flex items-center justify-center relative overflow-hidden group shrink-0">
                                     <div className="relative w-full h-full">
                                         <Image
                                             src="/digital_india.png"
                                             alt="Digital India"
                                             fill
-                                            className="object-cover p-1 group-hover:scale-105 transition-transform duration-300"
+                                            className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
                                         />
                                     </div>
                                 </div>
 
                                 {/* Digital Mission Box */}
-                                <div className="w-[15dvh] sm:w-[30dvw] lg:w-[18dvw] h-30 sm:h-24 md:h-[22dvh] rounded-2xl bg-[#DDC5DF80] hover:bg-[#DDC5DF80] transition-colors duration-300 p-3 flex items-center justify-center relative overflow-hidden group">
+                                <div className="w-full sm:w-1/2 lg:w-[200px] xl:w-[260px] h-24 sm:h-40 lg:h-50 rounded-2xl bg-[#DDC5DF80] hover:bg-[#DDC5DF80] transition-colors duration-300 p-3 flex items-center justify-center relative overflow-hidden group shrink-0">
                                     <div className="relative w-full h-full">
                                         <Image
                                             src="/digital_mission.png"
@@ -120,8 +120,8 @@ export default function TrustedBy() {
                             </div>
 
                             {/* Digital India Gov pill badge */}
-                            <div className="self-end sm:self-end">
-                                <div className="inline-flex  relative items-center w-full px-6 py-1.5 rounded-full bg-[#DDC5DF80] text-zinc-900 text-xs sm:text-base font-semibold tracking-tight shadow-2xs">
+                            <div className="self-start lg:self-end mt-2 sm:mt-0">
+                                <div className="inline-flex relative items-center px-6 py-1.5 rounded-full bg-[#DDC5DF80] text-black text-sm sm:text-base font-semibold tracking-tight shadow-2xs">
                                     Digitalindia.gov
                                 </div>
                             </div>
@@ -140,13 +140,13 @@ export default function TrustedBy() {
                         className="lg:col-span-8 bg-white rounded-[20px] p-6 sm:p-8 md:p-10 flex flex-col justify-between shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 overflow-hidden"
                     >
                         <div>
-                            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight text-[#036132] leading-tight">
+                            <h2 className="text-[40px] sm:text-4xl md:text-6xl font-bold tracking-tight text-[#036132] leading-none">
                                 Care beyond treatment
                             </h2>
                         </div>
 
                         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mt-2">
-                            <p className="text-base sm:text-[22px] font-medium text-zinc-800 leading-[1.1] tracking-tighter md:max-w-xs lg:max-w-sm flex-shrink-0">
+                            <p className="text-lg sm:text-[22px] font-medium text-zinc-800 leading-[1.1] tracking-tighter md:max-w-xs lg:max-w-sm flex-shrink-0">
                                 “From national digital health rails to everyday clinic workflows, we make care feel connected, not scattered.”
                             </p>
 
@@ -174,7 +174,7 @@ export default function TrustedBy() {
                         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
                         className="lg:col-span-4 bg-white rounded-[20px] p-6 sm:p-7 md:p-8 flex flex-col justify-center shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300"
                     >
-                        <h3 className="text-4xl sm:text-6xl font-bold tracking-tight text-[#AEDEE4] drop-shadow-xs leading-none">
+                        <h3 className="text-[40px] sm:text-6xl font-bold tracking-tight text-[#AEDEE4] drop-shadow-xs leading-none">
                             500+
                         </h3>
                         <p className="mt-3 text-base sm:text-[22px] font-medium text-black leading-[1.2] tracking-tighter">

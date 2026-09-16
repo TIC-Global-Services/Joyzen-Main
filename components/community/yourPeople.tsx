@@ -93,10 +93,10 @@ export default function YourPeople() {
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="text-center  mb-12 sm:mb-16 md:mb-0"
       >
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#111827] leading-[1.1]">
+        <h2 className="text-[40px] sm:text-5xl md:text-6xl font-bold tracking-tight text-[#111827] leading-[1.1]">
           Your People
         </h2>
-        <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight text-[#135836] leading-[1.1]">
+        <h2 className="text-[40px] sm:text-5xl md:text-6xl font-bold tracking-tight text-[#135836] leading-[1.1]">
           Are Already Here.
         </h2>
       </motion.div>
@@ -125,25 +125,25 @@ export default function YourPeople() {
               zIndex = 30;
               opacity = 1;
             } else if (offset === -1) {
-              xOffset = '-28%';
+              xOffset = '-18%';
               scale = 0.86;
               zIndex = 20;
-              opacity = 0.92;
+              opacity = 1;
             } else if (offset === 1) {
-              xOffset = '28%';
+              xOffset = '18%';
               scale = 0.86;
               zIndex = 20;
-              opacity = 0.92;
+              opacity = 1;
             } else if (offset === -2) {
-              xOffset = '-56%';
+              xOffset = '-36%';
               scale = 0.72;
               zIndex = 10;
-              opacity = 0.85;
+              opacity = 1;
             } else if (offset === 2) {
-              xOffset = '56%';
+              xOffset = '36%';
               scale = 0.72;
               zIndex = 10;
-              opacity = 0.85;
+              opacity =1;
             } else {
               // Hide cards that are out of 5-card range
               opacity = 0;
@@ -190,7 +190,7 @@ export default function YourPeople() {
                 />
 
                 {/* Subtle dark vignette overlay for text legibility */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/10 to-transparent pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-transparent pointer-events-none" />
 
                 {/* Overlay Text only on center card */}
                 {isCenter && (
@@ -203,14 +203,14 @@ export default function YourPeople() {
                   >
                     <div className="max-w-[85%] lg:max-w-[75%] space-y-1 sm:space-y-1.5 drop-shadow-md">
                       <div className="flex flex-col lg:flex-row items-baseline lg:gap-2">
-                        <span className="text-base md:text-2xl font-semibold text-[#DDC5DF]">
+                        <span className="text-2xl font-semibold text-[#DDC5DF]">
                           {card.tag}
                         </span>
-                        <span className="text-base md:text-lg font-normal text-white/90">
+                        <span className="text-lg font-normal text-white/90">
                           {card.subtitle}
                         </span>
                       </div>
-                      <p className="text-sm md:text-base font-light text-white leading-[1.2] drop-shadow">
+                      <p className="text-base font-light text-white leading-[1.2] drop-shadow">
                         {card.desc}
                       </p>
                     </div>
@@ -246,11 +246,11 @@ export default function YourPeople() {
         transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
         className="text-center max-w-2xl sm:max-w-5xl mx-auto mt-25 md:mt-20 lg:mt-2"
       >
-        <p className="text-sm sm:text-xl lg:text-[28px] text-[#EB7847] font-medium leading-[1.2]">
+        <p className="text-xl lg:text-[28px] text-[#EB7847] font-medium leading-[1.2]">
           People who make you laugh. People who challenge the way you think. People
           who understand exactly what you&apos;re going through. And people you haven&apos;t even met yet.
         </p>
-        <p className="text-base md:text-[28px] font-bold text-[#135836]">
+        <p className="text-xl md:text-[28px] font-bold text-[#135836]">
           Maybe it&apos;s time you find them.
         </p>
       </motion.div>

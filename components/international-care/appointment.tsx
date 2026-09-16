@@ -145,12 +145,12 @@ export default function Appointment() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="flex flex-wrap justify-center items-start items-baseline gap-x-3 sm:gap-x-4 gap-y-1 max-w-5xl my-auto"
+                  className="flex flex-wrap justify-center items-start items-baseline gap-x-3 sm:gap-x-4 lg:gap-y-1 max-w-5xl my-auto"
                 >
                   <span className="text-2xl sm:text-4xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight drop-shadow-md">
                     {currentSlide.prefixText}
                   </span>
-                  <span className={`text-4xl sm:text-6xl md:text-6xl lg:text-[80px] font-bold ${currentSlide.highlightColor} tracking-tight drop-shadow-lg`}>
+                  <span className={`text-[40px] sm:text-6xl md:text-6xl lg:text-[5rem] font-bold ${currentSlide.highlightColor} tracking-tight drop-shadow-lg`}>
                     {currentSlide.highlightText}
                   </span>
                 </motion.div>

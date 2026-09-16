@@ -337,12 +337,12 @@ const ReviewCard = ({ card }: { card: ReviewCardItem }) => {
       <FiveStars rating={card.rating} />
 
       {/* Review Quote Text */}
-      <p className="text-sm sm:text-base lg:text-2xl text-zinc-700 font-normal leading-[1.35] sm:leading-tight tracking-tight mt-1">
+      <p className="text-lg sm:text-lg lg:text-2xl text-zinc-700 font-normal leading-[1.35] sm:leading-tight tracking-tight mt-1">
         {card.quote}
       </p>
 
       {/* Author Name in Orange */}
-      <span className="text-[18px] sm:text-[24px] lg:text-[32px] font-semibold text-[#EF7C48] tracking-tight mt-0.5">
+      <span className="text-2xl lg:text-[32px] font-semibold text-[#EF7C48] tracking-tight mt-0.5">
         {card.authorName}
       </span>
     </GlassSpecularCard>
@@ -374,91 +374,64 @@ const Reviews = ({
         const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
         const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
 
-        if (isMobile) {
-          // Mobile setup: Interleave left & right cards into a single sequential queue
-          const allCards: HTMLElement[] = [];
-          const maxLen = Math.max(leftCards.length, rightCards.length);
-          for (let i = 0; i < maxLen; i++) {
-            if (leftCards[i]) allCards.push(leftCards[i]);
-            if (rightCards[i]) allCards.push(rightCards[i]);
-          }
+        const startY = '115vh';
+        const endY = '-115vh';
 
-          gsap.set(allCards, { y: '110vh' });
+        gsap.set(leftCards, { y: startY });
+        gsap.set(rightCards, { y: startY });
 
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top top',
-              end: '+=2200',
-              scrub: 0.8,
-              pin: true,
-              anticipatePin: 1,
-            },
-          });
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: isMobile ? '+=2600' : '+=4500',
+            scrub: isMobile ? 0.6 : 1.2,
+            pin: true,
+            pinSpacing: true,
+            invalidateOnRefresh: true,
+            fastScrollEnd: true,
+          },
+        });
 
-          allCards.forEach((card, index) => {
+        const pairCount = Math.max(leftCards.length, rightCards.length);
+        for (let i = 0; i < pairCount; i++) {
+          const delay = i * 0.75;
+
+          if (leftCards[i]) {
             tl.to(
-              card,
+              leftCards[i],
               {
-                y: '-110vh',
-                duration: 2.0,
+                y: endY,
+                duration: 2.2,
                 ease: 'none',
               },
-              index * 0.75
+              delay
             );
-          });
-        } else {
-          // Desktop setup: 2-column paired floating cards
-          const startY = '115vh';
-          const endY = '-115vh';
+          }
 
-          gsap.set(leftCards, { y: startY });
-          gsap.set(rightCards, { y: startY });
-
-          const tl = gsap.timeline({
-            scrollTrigger: {
-              trigger: containerRef.current,
-              start: 'top top',
-              end: '+=4500',
-              scrub: 1.2,
-              pin: true,
-              anticipatePin: 1,
-            },
-          });
-
-          const pairCount = Math.max(leftCards.length, rightCards.length);
-          for (let i = 0; i < pairCount; i++) {
-            const delay = i * 0.5;
-
-            if (leftCards[i]) {
-              tl.to(
-                leftCards[i],
-                {
-                  y: endY,
-                  duration: 2.2,
-                  ease: 'none',
-                },
-                delay
-              );
-            }
-
-            if (rightCards[i]) {
-              tl.to(
-                rightCards[i],
-                {
-                  y: endY,
-                  duration: 2.2,
-                  ease: 'none',
-                },
-                delay
-              );
-            }
+          if (rightCards[i]) {
+            tl.to(
+              rightCards[i],
+              {
+                y: endY,
+                duration: 2.2,
+                ease: 'none',
+              },
+              delay
+            );
           }
         }
       }
     );
 
-    return () => mm.revert();
+    const refreshTimer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 150);
+
+    return () => {
+      clearTimeout(refreshTimer);
+      mm.revert();
+    };
   }, []);
 
   return (
@@ -492,7 +465,7 @@ const Reviews = ({
               <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[40px] font-bold text-zinc-900 tracking-tight leading-none">
                 Hear From Our
               </h2>
-              <h2 className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-bold text-[#AEDEE4] tracking-tight leading-none">
+              <h2 className="text-[40px] xs:text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-bold text-[#AEDEE4] tracking-tight leading-none">
                 Joyzen Club
               </h2>
             </div>
@@ -500,13 +473,13 @@ const Reviews = ({
         </div>
 
         {/* FLOATING / SCROLLING REVIEW CARDS LAYER (Columns scroll past the pinned center) */}
-        <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-4 sm:px-8 lg:px-12">
-          {/* Left Column of Floating Glass Cards */}
+        <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-2 sm:px-8 lg:px-12">
+          {/* Left / Top Card Column (Aligned Left on mobile) */}
           <div className="w-full lg:w-1/2 absolute inset-y-0 left-0 h-full">
             {leftReviews.map((card, i) => (
               <div
                 key={`rev-left-${card.id}-${i}`}
-                className="review-card-left absolute inset-0 flex items-center justify-center lg:justify-end px-4 lg:pl-0 lg:pr-14 lg:-mt-[22vh] pointer-events-none will-change-transform"
+                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-1 sm:pl-4 lg:pl-0 lg:pr-14 -mt-[35dvh] sm:-mt-[24vh] lg:-mt-[22vh] pointer-events-none will-change-transform"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
@@ -515,12 +488,12 @@ const Reviews = ({
             ))}
           </div>
 
-          {/* Right Column of Floating Glass Cards */}
+          {/* Right / Bottom Card Column (Aligned Right on mobile) */}
           <div className="w-full lg:w-1/2 absolute inset-y-0 right-0 h-full">
             {rightReviews.map((card, i) => (
               <div
                 key={`rev-right-${card.id}-${i}`}
-                className="review-card-right absolute inset-0 flex items-center justify-center lg:justify-start px-4 lg:pr-0 lg:pl-14 lg:mt-[22vh] pointer-events-none will-change-transform"
+                className="review-card-right absolute inset-0 flex items-center justify-end lg:justify-start pr-1 sm:pr-4 lg:pr-0 lg:pl-14 mt-[35dvh] sm:mt-[24vh] lg:mt-[22vh] pointer-events-none will-change-transform"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />

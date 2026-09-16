@@ -58,7 +58,7 @@ export default function FAQ() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="text-3xl sm:text-4xl md:text-[40px] font-bold text-[#111111] tracking-tight text-center leading-tight"
+          className="text-[2rem] sm:text-4xl md:text-[40px] font-bold text-[#111111] tracking-tight text-center leading-tight"
         >
           Frequently Asked Questions
         </motion.h2>
@@ -69,9 +69,9 @@ export default function FAQ() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="mt-3.5 sm:mt-4 text-sm sm:text-lg text-black font-medium text-center leading-none max-w-3xl"
+          className="mt-3.5 sm:mt-4 text-base sm:text-lg text-black font-normal text-center leading-[1.2] max-w-3xl"
         >
-          Discover personalized care programs designed around your journey, with structured
+          Discover personalized care programs designed around your journey, with structured<br className=' hidden sm:block'/>
           guidance, continuous support, and plans that adapt as you progress.
         </motion.p>
 
@@ -92,14 +92,14 @@ export default function FAQ() {
                 <button
                   onClick={() => toggleFAQ(item.id)}
                   aria-expanded={isOpen}
-                  className="w-full flex items-center justify-between px-7 sm:px-9 py-5 sm:py-6 text-left transition-colors duration-200"
+                  className="w-full flex items-center justify-center sm:justify-between px-7 sm:px-9 py-5 sm:py-6 text-left transition-colors duration-200"
                 >
-                  <span className="text-base sm:text-xl font-bold text-[#111111] tracking-tight pr-4">
+                  <span className="text-base sm:text-left text-center sm:text-xl font-bold text-[#111111] tracking-tight pr-4">
                     {item.question}
                   </span>
                   
                   {/* Plus / Close Icon Indicator */}
-                  <div className="flex-shrink-0 w-6 h-6 flex items-center justify-center text-zinc-700">
+                  <div className="hidden sm:flex-shrink-0 w-6 h-6 items-center justify-center text-zinc-700">
                     <motion.span
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -121,7 +121,7 @@ export default function FAQ() {
                       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="px-7 sm:px-9 pb-6 sm:pb-7 pt-0 text-xs sm:text-sm md:text-base text-black font-medium leading-relaxed">
+                      <div className="px-7 sm:px-9 pb-6 sm:pb-7 pt-0 text-xs sm:text-sm text-center sm:text-left md:text-base text-black font-medium leading-[1.2]">
                         {item.answer}
                       </div>
                     </motion.div>

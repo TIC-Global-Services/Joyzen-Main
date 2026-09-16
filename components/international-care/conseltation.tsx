@@ -119,7 +119,7 @@ export default function Consultation() {
                                 <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight leading-none drop-shadow-sm">
                                     {card.title}
                                 </h3>
-                                <p className="mt-2.5 text-xs sm:text-base text-zinc-300/90 font-normal leading-[1.2] max-w-[92%] drop-shadow-xs">
+                                <p className="mt-2.5 text-base text-zinc-300/90 font-normal leading-[1.2] max-w-[92%] drop-shadow-xs">
                                     {card.description}
                                 </p>
                             </div>
@@ -139,8 +139,8 @@ export default function Consultation() {
                                 }
                             }}
                             aria-label={`Go to slide ${index + 1}`}
-                            className={`h-2 rounded-full transition-all duration-300 ${
-                                index === activeIndex ? 'w-6 bg-[#EF8F60]' : 'w-2 bg-black/20'
+                            className={`h-1 rounded-full transition-all duration-300 ${
+                                index === activeIndex ? 'w-10 bg-[#EF8F60]' : 'w-10 bg-[#EF8F60]/10'
                             }`}
                         />
                     ))}
