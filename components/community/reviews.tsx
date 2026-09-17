@@ -426,7 +426,7 @@ const Reviews = ({
     >
       <div
         ref={containerRef}
-        className="h-[100dvh] w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
+        className="h-screen w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
       >
         {/* Background Ambient Spotlights */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] bg-gradient-to-tr from-[#EF8F60]/12 via-[#78C9CF]/12 to-transparent rounded-full blur-[140px] pointer-events-none" />
