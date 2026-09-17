@@ -50,9 +50,56 @@ const CARDS: CardItem[] = [
   },
 ];
 
+type DeviceType = 'mobile' | 'tab' | 'desktop';
+
+const CARD_TRANSFORMS: Record<
+  DeviceType,
+  Record<number, { xOffset: string; scale: number; zIndex: number; opacity: number }>
+> = {
+  mobile: {
+    0: { xOffset: '0%', scale: 1, zIndex: 30, opacity: 1 },
+    '-1': { xOffset: '-25%', scale: 0.82, zIndex: 20, opacity: 0.85 },
+    1: { xOffset: '25%', scale: 0.82, zIndex: 20, opacity: 0.85 },
+    '-2': { xOffset: '-48%', scale: 0.65, zIndex: 10, opacity: 0.35 },
+    2: { xOffset: '48%', scale: 0.65, zIndex: 10, opacity: 0.35 },
+  },
+  tab: {
+    0: { xOffset: '0%', scale: 1, zIndex: 30, opacity: 1 },
+    '-1': { xOffset: '-20%', scale: 0.85, zIndex: 20, opacity: 0.95 },
+    1: { xOffset: '20%', scale: 0.85, zIndex: 20, opacity: 0.95 },
+    '-2': { xOffset: '-38%', scale: 0.7, zIndex: 10, opacity: 0.75 },
+    2: { xOffset: '38%', scale: 0.7, zIndex: 10, opacity: 0.75 },
+  },
+  desktop: {
+    0: { xOffset: '0%', scale: 1, zIndex: 30, opacity: 1 },
+    '-1': { xOffset: '-28%', scale: 0.86, zIndex: 20, opacity: 1 },
+    1: { xOffset: '28%', scale: 0.86, zIndex: 20, opacity: 1 },
+    '-2': { xOffset: '-46%', scale: 0.72, zIndex: 10, opacity: 1 },
+    2: { xOffset: '46%', scale: 0.72, zIndex: 10, opacity: 1 },
+  },
+};
+
 export default function YourPeople() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [deviceType, setDeviceType] = useState<DeviceType>('desktop');
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setDeviceType('mobile');
+      } else if (width < 1024) {
+        setDeviceType('tab');
+      } else {
+        setDeviceType('desktop');
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev + 1) % CARDS.length);
@@ -91,7 +138,7 @@ export default function YourPeople() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-50px' }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        className="text-center  mb-12 sm:mb-16 md:mb-0"
+        className="text-center mb-12 sm:mb-16 md:mb-0"
       >
         <h2 className="text-[40px] sm:text-5xl md:text-6xl font-bold tracking-tight text-[#111827] leading-[1.1]">
           Your People
@@ -103,7 +150,7 @@ export default function YourPeople() {
 
       {/* 5-Card Smooth Auto-Changing Stacked Carousel */}
       <div
-        className="relative w-full  h-[280px] sm:h-[360px] md:h-[440px] lg:h-[480px] flex items-center justify-center mt-6 lg:mt-0"
+        className="relative w-full h-[320px] sm:h-[380px] md:h-[440px] lg:h-[480px] flex items-center justify-center mt-6 lg:mt-0"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -112,44 +159,15 @@ export default function YourPeople() {
             const offset = getCardOffset(index);
             const isCenter = offset === 0;
 
-            // Compute dynamic transformation styles based on offset
-            // Center = 0, Near left = -1, Far left = -2, Near right = 1, Far right = 2
-            let xOffset = '0%';
-            let scale = 1;
-            let zIndex = 30;
-            let opacity = 1;
+            // Compute dynamic transformation styles based on offset & device type (mobile, tab, desktop)
+            const transformConfig = CARD_TRANSFORMS[deviceType]?.[offset] ?? {
+              xOffset: '0%',
+              scale: 0.5,
+              zIndex: 0,
+              opacity: 0,
+            };
 
-            if (offset === 0) {
-              xOffset = '0%';
-              scale = 1;
-              zIndex = 30;
-              opacity = 1;
-            } else if (offset === -1) {
-              xOffset = '-18%';
-              scale = 0.86;
-              zIndex = 20;
-              opacity = 1;
-            } else if (offset === 1) {
-              xOffset = '18%';
-              scale = 0.86;
-              zIndex = 20;
-              opacity = 1;
-            } else if (offset === -2) {
-              xOffset = '-36%';
-              scale = 0.72;
-              zIndex = 10;
-              opacity = 1;
-            } else if (offset === 2) {
-              xOffset = '36%';
-              scale = 0.72;
-              zIndex = 10;
-              opacity =1;
-            } else {
-              // Hide cards that are out of 5-card range
-              opacity = 0;
-              scale = 0.5;
-              zIndex = 0;
-            }
+            const { xOffset, scale, zIndex, opacity } = transformConfig;
 
             return (
               <motion.div
@@ -170,7 +188,7 @@ export default function YourPeople() {
                     setCurrentIndex(index);
                   }
                 }}
-                className={`absolute w-[68%] sm:w-[58%] md:w-[50%] lg:w-[46%] aspect-[3/4] md:aspect-[4/5]  lg:aspect-[16/8] rounded-2xl sm:rounded-3xl md:rounded-[28px] overflow-hidden cursor-pointer shadow-xl transition-shadow duration-300 ${
+                className={`absolute w-[78%] sm:w-[60%] md:w-[50%] lg:w-[46%] aspect-[3/4] sm:aspect-[4/5] lg:aspect-[16/8] rounded-2xl sm:rounded-3xl md:rounded-[28px] overflow-hidden cursor-pointer shadow-xl transition-shadow duration-300 ${
                   isCenter
                     ? 'shadow-2xl ring-1 ring-black/5 hover:scale-[1.01]'
                     : 'hover:opacity-100 hover:brightness-105'
@@ -184,7 +202,6 @@ export default function YourPeople() {
                   src={card.image}
                   alt={`${card.tag} - Joyzen Community`}
                   fill
-                //   sizes="(max-width: 640px) 75vw, (max-width: 1024px) 55vw, 46vw"
                   priority={isCenter || Math.abs(offset) === 1}
                   className="object-cover w-full h-full"
                 />
@@ -199,18 +216,18 @@ export default function YourPeople() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
-                    className="absolute inset-0 p-5 sm:p-7 md:p-8 flex flex-col justify-start pointer-events-none"
+                    className="absolute inset-0 p-4 sm:p-7 md:p-8 flex flex-col justify-start pointer-events-none"
                   >
-                    <div className="max-w-[85%] lg:max-w-[75%] space-y-1 sm:space-y-1.5 drop-shadow-md">
+                    <div className="max-w-[90%] sm:max-w-[85%] lg:max-w-[75%] space-y-1 sm:space-y-1.5 drop-shadow-md">
                       <div className="flex flex-col lg:flex-row items-baseline lg:gap-2">
-                        <span className="text-2xl font-semibold text-[#DDC5DF]">
+                        <span className="text-xl sm:text-2xl font-semibold text-[#DDC5DF]">
                           {card.tag}
                         </span>
-                        <span className="text-lg font-normal text-white/90">
+                        <span className="text-base sm:text-lg font-normal text-white/90">
                           {card.subtitle}
                         </span>
                       </div>
-                      <p className="text-base font-light text-white leading-[1.2] drop-shadow">
+                      <p className="text-xs sm:text-sm md:text-base font-light text-white leading-[1.3] drop-shadow">
                         {card.desc}
                       </p>
                     </div>

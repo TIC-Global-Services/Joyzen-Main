@@ -107,7 +107,7 @@ export default function PricingForms() {
   const [activeTab, setActiveTab] = useState<'reproductive' | 'general'>('reproductive');
 
   return (
-    <section className="relative w-full py-10 sm:py-20 px-[5%] select-none overflow-hidden">
+    <section className="relative w-full py-10 sm:py-20 md:px-[5%] select-none overflow-hidden">
       {/* Ambient Glass Glow Behind Forms */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-radial from-[#AEDEE4]/35 via-[#F6D7C6]/20 to-transparent blur-3xl pointer-events-none -z-10" />
 
@@ -117,7 +117,7 @@ export default function PricingForms() {
           <button
             type="button"
             onClick={() => setActiveTab('reproductive')}
-            className={`px-6 sm:px-8 py-2 rounded-full text-lg md:text-2xl font-semibold transition-all duration-300 ${
+            className={`px-6 sm:px-8 py-1.5 md:py-2 rounded-full text-lg md:text-2xl font-semibold transition-all duration-300 ${
               activeTab === 'reproductive'
                 ? 'bg-white/90 text-[#036132] shadow-[0_4px_16px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,1)] border border-white/90'
                 : 'text-zinc-500 hover:text-zinc-900'
@@ -229,7 +229,7 @@ function ReproductiveCareForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="relative w-full max-w-2xl mt-5">
+    <form onSubmit={handleSubmit(onSubmit)} className="relative w-full max-w-2xl mt-5 px-[5%] sm:px-0">
       {/* Background Joyzen Orange Logo Watermark */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 h-48 sm:h-64 pointer-events-none z-0 opacity-40 select-none">
         <Image src="/joyzen-orange.png" alt="Joyzen Orange Logo Watermark" fill className="object-contain" />

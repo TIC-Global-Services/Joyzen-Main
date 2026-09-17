@@ -441,7 +441,7 @@ const Reviews = ({
     >
       <div
         ref={containerRef}
-        className="h-[100dvh] w-full flex flex-col items-center justify-center overflow-hidden relative"
+        className="h-[100dvh] w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
       >
         {/* Background Ambient Spotlights */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] bg-gradient-to-tr from-[#EF8F60]/12 via-[#78C9CF]/12 to-transparent rounded-full blur-[140px] pointer-events-none" />
@@ -473,13 +473,13 @@ const Reviews = ({
         </div>
 
         {/* FLOATING / SCROLLING REVIEW CARDS LAYER (Columns scroll past the pinned center) */}
-        <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-2 sm:px-8 lg:px-12">
+        <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-0 sm:px-8 lg:px-12">
           {/* Left / Top Card Column (Aligned Left on mobile) */}
           <div className="w-full lg:w-1/2 absolute inset-y-0 left-0 h-full">
             {leftReviews.map((card, i) => (
               <div
                 key={`rev-left-${card.id}-${i}`}
-                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-1 sm:pl-4 lg:pl-0 lg:pr-14 -mt-[35dvh] sm:-mt-[24vh] lg:-mt-[22vh] pointer-events-none will-change-transform"
+                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-0 sm:pl-4 lg:pl-0 lg:pr-14 -mt-[35dvh] sm:-mt-[24vh] lg:-mt-[22vh] pointer-events-none will-change-transform"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
@@ -493,7 +493,7 @@ const Reviews = ({
             {rightReviews.map((card, i) => (
               <div
                 key={`rev-right-${card.id}-${i}`}
-                className="review-card-right absolute inset-0 flex items-center justify-end lg:justify-start pr-1 sm:pr-4 lg:pr-0 lg:pl-14 mt-[35dvh] sm:mt-[24vh] lg:mt-[22vh] pointer-events-none will-change-transform"
+                className="review-card-right absolute inset-0 flex items-center justify-end lg:justify-start pr-0 sm:pr-4 lg:pr-0 lg:pl-14 mt-[35dvh] sm:mt-[24vh] lg:mt-[22vh] pointer-events-none will-change-transform"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />

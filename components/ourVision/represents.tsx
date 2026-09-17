@@ -15,58 +15,76 @@ interface SliceData {
 
 const slicesData: SliceData[] = [
   {
-    id: 'salaries',
-    label: 'Salaries & Care Team',
-    shortLabel: 'Salaries',
-    value: 48,
-    percentage: '48%',
-    startColor: '#EF4444',
-    endColor: '#991B1B',
+    id: 'diagnosis',
+    label: 'Diagnosis & Assessment',
+    shortLabel: 'Diagnosis & Assessment',
+    value: 12.5,
+    percentage: '12.5%',
+    startColor: '#FBBF24',
+    endColor: '#D97706',
   },
   {
-    id: 'marketing',
-    label: 'Marketing & Outreach',
-    shortLabel: 'Marketing',
-    value: 18,
-    percentage: '18%',
-    startColor: '#0D9488',
-    endColor: '#115E59',
+    id: 'treatment',
+    label: 'Treatment',
+    shortLabel: 'Treatment',
+    value: 12.5,
+    percentage: '12.5%',
+    startColor: '#E879F9',
+    endColor: '#C084FC',
   },
   {
-    id: 'operations',
-    label: 'Operations & Facilities',
-    shortLabel: 'Operations',
-    value: 14,
-    percentage: '14%',
-    startColor: '#EAB308',
-    endColor: '#A16207',
+    id: 'medicine',
+    label: 'Medicine',
+    shortLabel: 'Medicine',
+    value: 12.5,
+    percentage: '12.5%',
+    startColor: '#2DD4BF',
+    endColor: '#06B6D4',
   },
   {
-    id: 'technology',
-    label: 'Technology & AI',
-    shortLabel: 'Technology',
-    value: 10,
-    percentage: '10%',
-    startColor: '#EA580C',
-    endColor: '#9A3412',
+    id: 'lifestyle',
+    label: 'Lifestyle',
+    shortLabel: 'Lifestyle',
+    value: 12.5,
+    percentage: '12.5%',
+    startColor: '#FB923C',
+    endColor: '#EA580C',
   },
   {
-    id: 'travel',
-    label: 'Travel & Field Care',
-    shortLabel: 'Travel',
-    value: 6,
-    percentage: '6%',
-    startColor: '#84CC16',
-    endColor: '#4D7C0F',
+    id: 'monitoring',
+    label: 'Monitoring',
+    shortLabel: 'Monitoring',
+    value: 12.5,
+    percentage: '12.5%',
+    startColor: '#86EFAC',
+    endColor: '#22C55E',
   },
   {
-    id: 'other',
-    label: 'Other Support',
-    shortLabel: 'Other',
-    value: 4,
-    percentage: '4%',
-    startColor: '#F43F5E',
-    endColor: '#9F1239',
+    id: 'prevention',
+    label: 'Prevention',
+    shortLabel: 'Prevention',
+    value: 12.5,
+    percentage: '12.5%',
+    startColor: '#FCA5A5',
+    endColor: '#F87171',
+  },
+  {
+    id: 'longevity',
+    label: 'Longevity',
+    shortLabel: 'Longevity',
+    value: 12.5,
+    percentage: '12.5%',
+    startColor: '#C084FC',
+    endColor: '#A855F7',
+  },
+  {
+    id: 'consultation',
+    label: 'Consultation',
+    shortLabel: 'Consultation',
+    value: 12.5,
+    percentage: '12.5%',
+    startColor: '#93C5FD',
+    endColor: '#3B82F6',
   },
 ];
 
@@ -286,18 +304,18 @@ export default function Represents() {
                 return (
                   <motion.g
                     key={slice.id}
-                    initial={{ opacity: 0, scale: 0.7 }}
+                    initial={{ opacity: 0, scale: 0.55 }}
                     animate={
                       isInView
                         ? {
                             opacity: isAnyHovered && !isHovered ? 0.65 : 1,
                             scale: 1,
                           }
-                        : { opacity: 0, scale: 0.7 }
+                        : { opacity: 0, scale: 0.55 }
                     }
                     transition={{
-                      duration: 0.6,
-                      delay: idx * 0.1,
+                      duration: 0.55,
+                      delay: idx * 0.14,
                       ease: [0.16, 1, 0.3, 1],
                     }}
                     className="cursor-pointer origin-center transition-opacity duration-300"
@@ -376,20 +394,21 @@ export default function Represents() {
                 return (
                   <motion.g
                     key={`line-${slice.id}`}
-                    initial={{ opacity: 0, y: 10 }}
+                    initial={{ opacity: 0, scale: 0.85 }}
                     animate={
                       isInView
                         ? {
                             opacity: isAnyHovered && !isHovered ? 0.45 : 1,
-                            y: 0,
+                            scale: 1,
                           }
-                        : { opacity: 0, y: 10 }
+                        : { opacity: 0, scale: 0.85 }
                     }
                     transition={{
                       duration: 0.5,
-                      delay: 0.4 + idx * 0.08,
+                      delay: 0.12 + idx * 0.14,
+                      ease: [0.16, 1, 0.3, 1],
                     }}
-                    className="cursor-pointer"
+                    className="cursor-pointer origin-center"
                     onMouseEnter={() => setHoveredIndex(idx)}
                     onMouseLeave={() => setHoveredIndex(null)}
                   >

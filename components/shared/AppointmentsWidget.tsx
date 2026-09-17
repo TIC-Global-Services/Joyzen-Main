@@ -38,17 +38,15 @@ export const APPOINTMENTS: Record<number, AppointmentInfo> = {
 /* --- Coded Interactive Appointments Widget with Simulated Touching Cursor --- */
 export default function AppointmentsWidget() {
   const [selectedDate, setSelectedDate] = useState<number>(18);
-  const [monthIndex, setMonthIndex] = useState<number>(0);
-  const [showResultsToast, setShowResultsToast] = useState<boolean>(false);
-  const [scheduledDates, setScheduledDates] = useState<number[]>([15, 18, 22]);
-  const [isUserInteracting, setIsUserInteracting] = useState<boolean>(false);
+  const [monthIndex] = useState<number>(0);
+  const [showResultsToast] = useState<boolean>(false);
+  const [scheduledDates] = useState<number[]>([15, 18, 22]);
   const [cursorPosition, setCursorPosition] = useState<{ x: number; y: number; clicking: boolean }>({
     x: 78,
     y: 44,
     clicking: false,
   });
 
-  const idleTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const months = ['July 2025', 'August 2025'];
   const currentMonth = months[monthIndex];
 
@@ -66,8 +64,6 @@ export default function AppointmentsWidget() {
 
   // Autonomous cursor animation sequence
   useEffect(() => {
-    if (isUserInteracting) return;
-
     const demoCycle = [18, 15, 22];
     let step = 0;
 
@@ -96,41 +92,11 @@ export default function AppointmentsWidget() {
     }, 3800);
 
     return () => clearInterval(interval);
-  }, [isUserInteracting]);
-
-  // Pause autonomous animation on user interaction
-  const handleUserClick = (date: number) => {
-    setIsUserInteracting(true);
-    setSelectedDate(date);
-
-    if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
-    idleTimeoutRef.current = setTimeout(() => {
-      setIsUserInteracting(false);
-    }, 9000);
-  };
-
-  const handleBookSlot = (date: number) => {
-    if (!scheduledDates.includes(date)) {
-      setScheduledDates((prev) => [...prev, date]);
-      APPOINTMENTS[date] = {
-        dayName: 'DAY',
-        title: 'New Health Check',
-        time: '10:00 AM – 10:30 AM',
-        doctor: 'Joyzen Care Team',
-        note: 'Reserved consultation slot',
-      };
-      setSelectedDate(date);
-    }
-  };
+  }, []);
 
   return (
     <div
-      className="w-full bg-[#FAFCFB] rounded-2xl border border-zinc-100/90 p-3.5 sm:p-5 shadow-[0_2px_16px_rgba(0,0,0,0.03)] select-none"
-      onMouseEnter={() => setIsUserInteracting(true)}
-      onMouseLeave={() => {
-        if (idleTimeoutRef.current) clearTimeout(idleTimeoutRef.current);
-        idleTimeoutRef.current = setTimeout(() => setIsUserInteracting(false), 3000);
-      }}
+      className="w-full bg-[#FAFCFB] rounded-2xl border border-zinc-100/90 p-3.5 sm:p-5 shadow-[0_2px_16px_rgba(0,0,0,0.03)] select-none pointer-events-none"
     >
       {/* Widget Header */}
       <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
@@ -145,19 +111,14 @@ export default function AppointmentsWidget() {
             <p className="text-[10px] sm:text-xs text-zinc-500">Stay on track, stay healthy</p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            const next = scheduledDates[(scheduledDates.indexOf(selectedDate) + 1) % scheduledDates.length];
-            handleUserClick(next);
-          }}
-          className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold text-[#036132] bg-[#ECF8F3] hover:bg-[#dff4ea] border border-[#c4ebd8] transition-all hover:scale-105 active:scale-95 cursor-pointer"
+        <div
+          className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-semibold text-[#036132] bg-[#ECF8F3] border border-[#c4ebd8]"
         >
           <span>Next Visit</span>
           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
           </svg>
-        </button>
+        </div>
       </div>
 
       {/* Widget Body Grid: 2 Columns on SM+, 1 Column on XS */}
@@ -220,13 +181,9 @@ export default function AppointmentsWidget() {
                     <span className="text-xs font-semibold text-zinc-700 block">Jul {selectedDate}: No visits</span>
                     <span className="text-[10px] text-zinc-400">Available consultation slot</span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleBookSlot(selectedDate)}
-                    className="text-[10px] sm:text-[11px] font-bold text-white bg-[#036132] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md hover:bg-[#024a26] transition-colors cursor-pointer"
-                  >
+                  <div className="text-[10px] sm:text-[11px] font-bold text-white bg-[#036132] px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md">
                     + Book
-                  </button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -246,26 +203,16 @@ export default function AppointmentsWidget() {
             <div className="flex items-center justify-between mb-1.5">
               <span className="text-xs font-bold text-zinc-900">{currentMonth}</span>
               <div className="flex items-center gap-1 text-zinc-400">
-                <button
-                  type="button"
-                  onClick={() => setMonthIndex((prev) => (prev === 0 ? 1 : 0))}
-                  className="p-0.5 sm:p-1 hover:text-zinc-700 hover:bg-zinc-100 rounded transition-colors cursor-pointer"
-                  title="Previous month"
-                >
+                <div className="p-0.5 sm:p-1 rounded">
                   <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
                   </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setMonthIndex((prev) => (prev === 0 ? 1 : 0))}
-                  className="p-0.5 sm:p-1 hover:text-zinc-700 hover:bg-zinc-100 rounded transition-colors cursor-pointer"
-                  title="Next month"
-                >
+                </div>
+                <div className="p-0.5 sm:p-1 rounded">
                   <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                   </svg>
-                </button>
+                </div>
               </div>
             </div>
 
@@ -282,16 +229,14 @@ export default function AppointmentsWidget() {
                   const isSelected = d === selectedDate;
                   const hasAppt = scheduledDates.includes(d);
                   return (
-                    <button
+                    <div
                       key={d}
-                      type="button"
-                      onClick={() => handleUserClick(d)}
-                      className="relative flex flex-col items-center justify-center py-0.5 group cursor-pointer"
+                      className="relative flex flex-col items-center justify-center py-0.5 group"
                     >
                       <span
                         className={`w-4.5 h-4.5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full text-[10px] sm:text-[10.5px] transition-all duration-300 ${isSelected
                             ? 'bg-[#036132] text-white font-bold shadow-sm scale-110'
-                            : 'text-zinc-700 group-hover:bg-zinc-100'
+                            : 'text-zinc-700'
                           }`}
                       >
                         {d}
@@ -299,7 +244,7 @@ export default function AppointmentsWidget() {
                       {hasAppt && !isSelected && (
                         <span className="w-1 h-1 rounded-full bg-[#036132] mt-0.5" />
                       )}
-                    </button>
+                    </div>
                   );
                 })}
               </div>
@@ -310,16 +255,14 @@ export default function AppointmentsWidget() {
                   const isSelected = d === selectedDate;
                   const hasAppt = scheduledDates.includes(d);
                   return (
-                    <button
+                    <div
                       key={d}
-                      type="button"
-                      onClick={() => handleUserClick(d)}
-                      className="relative flex flex-col items-center justify-center py-0.5 group cursor-pointer"
+                      className="relative flex flex-col items-center justify-center py-0.5 group"
                     >
                       <span
                         className={`w-4.5 h-4.5 sm:w-5 sm:h-5 flex items-center justify-center rounded-full text-[10px] sm:text-[10.5px] transition-all duration-300 ${isSelected
                             ? 'bg-[#036132] text-white font-bold shadow-sm scale-110'
-                            : 'text-zinc-700 group-hover:bg-zinc-100'
+                            : 'text-zinc-700'
                           }`}
                       >
                         {d}
@@ -327,49 +270,47 @@ export default function AppointmentsWidget() {
                       {hasAppt && !isSelected && (
                         <span className="w-1 h-1 rounded-full bg-[#036132] mt-0.5" />
                       )}
-                    </button>
+                    </div>
                   );
                 })}
               </div>
 
               {/* Simulated Floating Pointer / Touch Cursor */}
-              {!isUserInteracting && (
-                <motion.div
-                  className="pointer-events-none absolute z-20 flex items-center gap-1"
-                  animate={{
-                    left: `${cursorPosition.x}%`,
-                    top: `${cursorPosition.y}%`,
-                    scale: cursorPosition.clicking ? 0.82 : 1,
-                  }}
-                  transition={{
-                    left: { duration: 0.8, ease: [0.25, 1, 0.5, 1] },
-                    top: { duration: 0.8, ease: [0.25, 1, 0.5, 1] },
-                    scale: { duration: 0.18 },
-                  }}
-                  style={{
-                    transform: 'translate(-30%, -30%)',
-                  }}
-                >
-                  <div className="relative">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000" d="M4.5.79v22.42l6.56-6.57h9.29L4.5.79z"></path></svg>
-                    {cursorPosition.clicking && (
-                      <motion.span
-                        initial={{ scale: 0.4, opacity: 0.9 }}
-                        animate={{ scale: 2.2, opacity: 0 }}
-                        transition={{ duration: 0.5 }}
-                        className="absolute -top-3 -left-2 w-5 h-5 rounded-full border-2 border-[#036132] bg-[#036132]/20 pointer-events-none"
-                      />
-                    )}
-                  </div>
-                  <span className="text-[8.5px] font-bold text-white bg-zinc-900/90 backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-xs whitespace-nowrap">
-                    Tap to view
-                  </span>
-                </motion.div>
-              )}
+              <motion.div
+                className="pointer-events-none absolute z-20 flex items-center gap-1"
+                animate={{
+                  left: `${cursorPosition.x}%`,
+                  top: `${cursorPosition.y}%`,
+                  scale: cursorPosition.clicking ? 0.82 : 1,
+                }}
+                transition={{
+                  left: { duration: 0.8, ease: [0.25, 1, 0.5, 1] },
+                  top: { duration: 0.8, ease: [0.25, 1, 0.5, 1] },
+                  scale: { duration: 0.18 },
+                }}
+                style={{
+                  transform: 'translate(-30%, -30%)',
+                }}
+              >
+                <div className="relative">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><path fill="#000" d="M4.5.79v22.42l6.56-6.57h9.29L4.5.79z"></path></svg>
+                  {cursorPosition.clicking && (
+                    <motion.span
+                      initial={{ scale: 0.4, opacity: 0.9 }}
+                      animate={{ scale: 2.2, opacity: 0 }}
+                      transition={{ duration: 0.5 }}
+                      className="absolute -top-3 -left-2 w-5 h-5 rounded-full border-2 border-[#036132] bg-[#036132]/20 pointer-events-none"
+                    />
+                  )}
+                </div>
+                <span className="text-[8.5px] font-bold text-white bg-zinc-900/90 backdrop-blur-xs px-1.5 py-0.5 rounded-md shadow-xs whitespace-nowrap">
+                  Tap to view
+                </span>
+              </motion.div>
             </div>
           </div>
 
-          {/* Last Visit Footer with interactive Results trigger */}
+          {/* Last Visit Footer */}
           <div className="mt-2.5 pt-2 border-t border-zinc-100 flex items-center justify-between text-[10px] relative">
             <div className="flex items-center gap-1.5 text-zinc-500 truncate">
               <svg className="w-3 h-3 text-zinc-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -377,13 +318,11 @@ export default function AppointmentsWidget() {
               </svg>
               <span className="truncate">Last Visit: <strong className="font-semibold text-zinc-700">22 Jul</strong> • Blood Test</span>
             </div>
-            <button
-              type="button"
-              onClick={() => setShowResultsToast((prev) => !prev)}
-              className="text-[9.5px] sm:text-[10px] font-semibold text-zinc-700 hover:text-[#036132] px-1 py-0.5 rounded border border-zinc-200 hover:border-[#036132]/30 hover:bg-[#F2F9F5] transition-all active:scale-95 cursor-pointer shrink-0"
+            <div
+              className="text-[9.5px] sm:text-[10px] font-semibold text-zinc-700 px-1 py-0.5 rounded border border-zinc-200 shrink-0"
             >
-              {showResultsToast ? 'Close' : 'View Results'}
-            </button>
+              View Results
+            </div>
 
             {/* Results Popover */}
             <AnimatePresence>

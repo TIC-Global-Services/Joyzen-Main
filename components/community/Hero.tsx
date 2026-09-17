@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import CommunityHeroShowcase from './CommunityHeroShowcase';
 
 export default function Hero() {
@@ -18,7 +19,25 @@ export default function Hero() {
           className="order-1 lg:order-2 lg:col-span-7 flex justify-center lg:justify-end items-center"
         >
           <div className="relative w-full">
-            <CommunityHeroShowcase />
+
+            {/* Right: 3D Robot & Appointment Dashboard Banner */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              className="lg:col-span-7 flex justify-center lg:justify-end items-center"
+            >
+              <div className="relative w-full aspect-[16/9] transition-transform duration-500 hover:scale-[1.02]">
+                <Image
+                  src="/community-hero.png"
+                  alt="Joyzen Robot with Appointments Calendar"
+                  fill
+                  priority
+                  className="object-contain drop-shadow-sm"
+                />
+              </div>
+            </motion.div>
+
           </div>
         </motion.div>
 

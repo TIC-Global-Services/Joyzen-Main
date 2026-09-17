@@ -106,7 +106,7 @@ export default function DoctorPatientSection() {
             transition={{ duration: 0.6, delay: 0.9, ease: [0.16, 1, 0.3, 1] }}
             className="hidden sm:block absolute sm:bottom-58 -left-8 lg:-left-20 z-20 text-right"
           >
-            <div className="px-4 sm:px-5 py-3 rounded-2xl bg-white/30 backdrop-blur-xs border border-[#AEDEE44D] shadow-[0_4px_20px_rgba(0,0,0,0.06)] text-xs sm:text-base font-medium text-black leading-snug">
+            <div className="px-4 sm:px-5 py-3 rounded-full bg-white/30 backdrop-blur-xs border border-[#AEDEE44D] shadow-[0_4px_20px_rgba(0,0,0,0.06)] text-xs sm:text-base font-medium text-black leading-snug">
               Treatment shaped around you.<br />
               <span className="font-normal">Big problem or small.</span>
             </div>

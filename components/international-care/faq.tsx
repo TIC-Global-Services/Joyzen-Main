@@ -92,14 +92,14 @@ export default function FAQ() {
                 <button
                   onClick={() => toggleFAQ(item.id)}
                   aria-expanded={isOpen}
-                  className="w-full flex items-center justify-center sm:justify-between px-7 sm:px-9 py-5 sm:py-6 text-left transition-colors duration-200"
+                  className="w-full flex items-center justify-center md:justify-between px-2 sm:px-9 py-5 sm:py-6 text-left transition-colors duration-200"
                 >
-                  <span className="text-base sm:text-left text-center sm:text-xl font-bold text-[#111111] tracking-tight pr-4">
+                  <span className="text-base text-center sm:text-xl font-bold text-[#111111] tracking-tight pr-4 md:text-left">
                     {item.question}
                   </span>
                   
-                  {/* Plus / Close Icon Indicator */}
-                  <div className="hidden sm:flex-shrink-0 w-6 h-6 items-center justify-center text-zinc-700">
+                  {/* Desktop Icon Indicator (Simple Plus +) */}
+                  <div className="hidden sm:flex sm:shrink-0 w-6 h-6 items-center justify-center text-zinc-700">
                     <motion.span
                       animate={{ rotate: isOpen ? 45 : 0 }}
                       transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -107,6 +107,25 @@ export default function FAQ() {
                     >
                       +
                     </motion.span>
+                  </div>
+
+                  {/* Mobile Icon Indicator (Circled Plus (+) like image) */}
+                  <div className="flex sm:hidden shrink-0 w-4 h-4 items-center translate-x-5 justify-end text-black">
+                    <motion.svg
+                      animate={{ rotate: isOpen ? 45 : 0 }}
+                      transition={{ duration: 0.3, ease: 'easeInOut' }}
+                      className="w-6 h-6"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <circle cx="12" cy="12" r="9.5" />
+                      <line x1="12" y1="8" x2="12" y2="16" />
+                      <line x1="8" y1="12" x2="16" y2="12" />
+                    </motion.svg>
                   </div>
                 </button>
 
@@ -121,7 +140,7 @@ export default function FAQ() {
                       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                       className="overflow-hidden"
                     >
-                      <div className="px-7 sm:px-9 pb-6 sm:pb-7 pt-0 text-xs sm:text-sm text-center sm:text-left md:text-base text-black font-medium leading-[1.2]">
+                      <div className="px-6 sm:px-9 pb-6 sm:pb-7 pt-0 text-xs sm:text-sm text-left md:text-base text-black font-medium leading-[1.2]">
                         {item.answer}
                       </div>
                     </motion.div>

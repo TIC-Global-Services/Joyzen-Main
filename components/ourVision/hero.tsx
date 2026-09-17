@@ -7,7 +7,7 @@ export default function Hero() {
   return (
     <section className="relative w-full min-h-screen flex flex-col justify-end pt-24 sm:pt-28 md:pt-32 pb-14 sm:pb-20 md:pb-24 px-[5%] overflow-hidden select-none">
       {/* 3D Glass DNA Graphic with Floating Animation & Interactive Hotspots */}
-      <div className="absolute top-10 sm:top-10 md:-top-10 lg:-top-28 -right-[45%] sm:-right-[35%] lg:-right-[15%] w-[150%] sm:w-[95%] md:w-[150%] lg:w-[98%]  pointer-events-none z-0">
+      <div className="absolute -top-20 sm:top-10 md:-top-10 lg:-top-38 -right-[45%] sm:-right-[35%] lg:-right-[15%] w-[150%] sm:w-[95%] md:w-[150%] lg:w-[98%]  pointer-events-none z-0">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -21,13 +21,15 @@ export default function Hero() {
             className="relative w-full h-full"
           >
             <video
-              src="/DNA_Joyzen-nobg.webm"
               autoPlay
               loop
               muted
               playsInline
-              className="object-cover w-full h-full object-top-right drop-shadow-sm "
-            />
+              className="object-cover w-full h-full object-top-right drop-shadow-sm"
+            >
+              <source src="/DNA_Joyzen-nobg.mov" type='video/quicktime; codecs="hvc1"' />
+              <source src="/DNA_Joyzen-nobg.webm" type="video/webm" />
+            </video>
           </motion.div>
         </motion.div>
       </div>
@@ -39,7 +41,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-xl md:text-2xl font-semibold text-zinc-900 tracking-tight mb-2"
+          className="text-xl md:text-2xl font-semibold text-zinc-900 tracking-tight mb-2 leading-none"
         >
           We believe the future of healthcare <br/> shouldn&apos;t feel foreign
         </motion.p>
@@ -49,7 +51,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 25 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[2.5rem] md:text-5xl lg:text-[50px] font-bold tracking-tight text-zinc-950 leading-[1.08] sm:leading-[1.12]"
+          className="text-[2.5rem] md:text-5xl lg:text-[50px] font-bold tracking-tight text-black leading-none sm:leading-[1.12]"
         >
           It Should Feel Like Healthcare Finally <br className="hidden lg:inline" />
           Understands The Way You Live

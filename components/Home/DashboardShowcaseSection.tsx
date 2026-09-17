@@ -61,17 +61,26 @@ function AnimatedCounter({
 /* --- Coded Interactive Health Dashboard Widget with Counter Animations --- */
 function HealthDashboardWidget() {
   const [activeMetricId, setActiveMetricId] = useState<string>('diet');
-  const [medsTakenCount, setMedsTakenCount] = useState<number>(1);
-  const [dietLogged, setDietLogged] = useState<number>(87);
-  const [fitnessSteps, setFitnessSteps] = useState<number>(72);
-  const [treatmentCompleted, setTreatmentCompleted] = useState<boolean>(false);
+  const [medsTakenCount] = useState<number>(1);
+  const [dietLogged] = useState<number>(87);
+  const [fitnessSteps] = useState<number>(72);
+  const [treatmentCompleted] = useState<boolean>(false);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: '-40px' });
 
-  const toggleMedication = () => {
-    setMedsTakenCount((prev) => (prev >= 2 ? 1 : prev + 1));
-  };
+  // Automatic selection cycle through metrics
+  useEffect(() => {
+    const metricIds = ['diet', 'fitness', 'treatment', 'medication'];
+    let index = 0;
+
+    const interval = setInterval(() => {
+      index = (index + 1) % metricIds.length;
+      setActiveMetricId(metricIds[index]);
+    }, 3200);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const metrics = [
     {
@@ -84,7 +93,6 @@ function HealthDashboardWidget() {
       textColor: 'text-[#059669]',
       subtext: dietLogged >= 100 ? 'Goal exceeded!' : 'Great choices today!',
       progress: Math.min(dietLogged, 100),
-      interactiveAction: () => setDietLogged((prev) => (prev >= 100 ? 87 : prev + 5)),
       actionLabel: '+ Log Meal',
       icon: (
         <svg className="w-4 h-4 text-[#059669]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -102,7 +110,6 @@ function HealthDashboardWidget() {
       textColor: 'text-[#7C3AED]',
       subtext: fitnessSteps >= 100 ? 'Daily goal crushed!' : 'Keep moving!',
       progress: Math.min(fitnessSteps, 100),
-      interactiveAction: () => setFitnessSteps((prev) => (prev >= 100 ? 72 : prev + 10)),
       actionLabel: '+ 1K Steps',
       icon: (
         <svg className="w-4 h-4 text-[#7C3AED]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -120,7 +127,6 @@ function HealthDashboardWidget() {
       textColor: 'text-[#0284C7]',
       subtext: treatmentCompleted ? 'Fully completed!' : 'All set for today',
       progress: treatmentCompleted ? 100 : 93,
-      interactiveAction: () => setTreatmentCompleted((prev) => !prev),
       actionLabel: treatmentCompleted ? 'Reset' : 'Complete',
       icon: (
         <svg className="w-4 h-4 text-[#0284C7]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -138,7 +144,6 @@ function HealthDashboardWidget() {
       textColor: 'text-[#EA580C]',
       isMedication: true,
       subtext: `${medsTakenCount} taken`,
-      interactiveAction: toggleMedication,
       actionLabel: medsTakenCount >= 2 ? 'Reset Dose' : 'Take Dose',
       icon: (
         <svg className="w-4 h-4 text-[#EA580C]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -153,7 +158,7 @@ function HealthDashboardWidget() {
   return (
     <div
       ref={containerRef}
-      className="w-full bg-[#FAFCFB] rounded-2xl border border-zinc-100/90 p-4 sm:p-2 shadow-[0_2px_12px_rgba(0,0,0,0.02)] select-none"
+      className="w-full bg-[#FAFCFB] rounded-2xl border border-zinc-100/90 p-4 sm:p-2 shadow-[0_2px_12px_rgba(0,0,0,0.02)] select-none pointer-events-none"
     >
       {/* Widget Header */}
       <div className="flex items-center justify-between pb-3.5 border-b border-zinc-100">
@@ -168,19 +173,12 @@ function HealthDashboardWidget() {
             <p className="text-[11px] sm:text-xs text-zinc-500">Your health, all in one place</p>
           </div>
         </div>
-        <button
-          type="button"
-          onClick={() => {
-            const nextIdx = (metrics.findIndex((m) => m.id === activeMetricId) + 1) % metrics.length;
-            setActiveMetricId(metrics[nextIdx].id);
-          }}
-          className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold text-[#036132] bg-[#ECF8F3] hover:bg-[#dff4ea] border border-[#c4ebd8] transition-all hover:scale-105 active:scale-95 cursor-pointer"
-        >
+        <div className="inline-flex items-center gap-1 px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-semibold text-[#036132] bg-[#ECF8F3] border border-[#c4ebd8]">
           <span>Cycle Views</span>
           <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
-        </button>
+        </div>
       </div>
 
       {/* 4 Metric Cards Grid with Animated Counters */}
@@ -190,10 +188,9 @@ function HealthDashboardWidget() {
           return (
             <div
               key={m.id}
-              onClick={() => setActiveMetricId(m.id)}
-              className={`bg-white rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between shadow-xs transition-all cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${isActive
+              className={`bg-white rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between shadow-xs transition-all ${isActive
                   ? 'border-[#036132] ring-2 ring-[#036132]/10 shadow-sm'
-                  : 'border-zinc-100 hover:border-zinc-300'
+                  : 'border-zinc-100'
                 }`}
             >
               <div className="flex items-center justify-between">
@@ -217,13 +214,8 @@ function HealthDashboardWidget() {
 
               {m.isMedication ? (
                 <div className="mt-1 pt-2 border-t border-zinc-100/80 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleMedication();
-                    }}
-                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold transition-all hover:scale-105 active:scale-95 cursor-pointer ${medsTakenCount >= 2
+                  <div
+                    className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold ${medsTakenCount >= 2
                         ? 'text-emerald-800 bg-emerald-100 border border-emerald-300'
                         : 'text-emerald-700 bg-emerald-50 border border-emerald-200/60'
                       }`}
@@ -232,7 +224,7 @@ function HealthDashboardWidget() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                     </svg>
                     {medsTakenCount >= 2 ? 'All Taken' : m.subtext}
-                  </button>
+                  </div>
                 </div>
               ) : (
                 <div className="mt-1 pt-2 border-t border-zinc-100/80">
@@ -258,14 +250,10 @@ function HealthDashboardWidget() {
           <span className="font-semibold text-zinc-900">{activeMetric.title}:</span>
           <span className="text-zinc-500">{activeMetric.subtext}</span>
         </div>
-        <button
-          type="button"
-          onClick={activeMetric.interactiveAction}
-          className="inline-flex items-center gap-1 text-[10.5px] font-bold text-[#036132] bg-[#F0F9F4] hover:bg-[#e4f5ec] px-2.5 py-0.5 rounded-md border border-[#cbebdc] transition-all hover:scale-105 active:scale-95 cursor-pointer"
-        >
+        <div className="inline-flex items-center gap-1 text-[10.5px] font-bold text-[#036132] bg-[#F0F9F4] px-2.5 py-0.5 rounded-md border border-[#cbebdc]">
           {activeMetric.actionLabel}
           <span>→</span>
-        </button>
+        </div>
       </div>
     </div>
   );
@@ -273,17 +261,17 @@ function HealthDashboardWidget() {
 
 export default function DashboardShowcaseSection() {
   return (
-    <section className="relative w-full py-16 sm:py-20 md:px-[3%] overflow-hidden">
+    <section className="relative w-full py-16 sm:py-20 px-[3%] overflow-hidden">
       <div className="">
         {/* Bento Grid: Left large card, Right 2 stacked cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 md:gap-4 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
           {/* Left Large Card: Heading + /in-one-place.png */}
           <div className="lg:col-span-7 flex">
             <Reveal delay={0.1} className="w-full h-full flex flex-col">
-              <div className="group w-full h-full bg-white sm:rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 py-6 px-[3%]  sm:p-10 gap-16 flex flex-col overflow-hidden">
+              <div className="group w-full h-full bg-white rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 py-6 px-[3%]  sm:p-10 gap-16 flex flex-col overflow-hidden">
                 {/* Heading */}
                 <div className="">
-                  <h2 className="text-xl text-center md:text-left sm:text-3xl lg:text-[40px] font-bold text-black tracking-tight leading-none md:leading-[1.18]">
+                  <h2 className="text-xl text-center md:text-left sm:text-3xl lg:text-[40px] font-bold text-black tracking-tight leading-[1.1] md:leading-[1.18]">
                     Everything your health <br />
                     has been asking for Finally in one place
                   </h2>
@@ -306,10 +294,10 @@ export default function DashboardShowcaseSection() {
           </div>
 
           {/* Right Column: 2 Stacked Cards */}
-          <div className="lg:col-span-5 flex flex-col flex-col-reverse sm:flex-col sm:gap-4 justify-between">
+          <div className="lg:col-span-5 flex flex-col flex-col-reverse sm:flex-col gap-4 justify-between">
             {/* Top Right Card: Coded Interactive Appointment Widget + Animated Touching Cursor + Text */}
             <Reveal delay={0.2} className="w-full h-full flex flex-col">
-              <div className="w-full h-full bg-white sm:rounded-[20px] sm:border sm:border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
+              <div className="w-full h-full bg-white rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
                 <div className="mt-2 text-center  md:hidden">
                   <p className="text-xl sm:text-xl md:text-[20px] font-bold text-black tracking-tight leading-[1.2]">
                     Stay informed . stay organised <br />
@@ -331,7 +319,7 @@ export default function DashboardShowcaseSection() {
 
             {/* Bottom Right Card: Text + Coded Interactive Health Dashboard Widget with Counter Animations */}
             <Reveal delay={0.3} className="w-full h-full flex flex-col">
-              <div className="w-full h-full bg-white sm:rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
+              <div className="w-full h-full bg-white rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
                 {/* Text Top */}
                 <div className="mb-5 text-center">
                   <h3 className="text-lg sm:text-xl md:text-[20px] font-bold text-black tracking-tight leading-[1.2]">
