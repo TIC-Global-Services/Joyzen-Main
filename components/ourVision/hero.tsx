@@ -25,6 +25,7 @@ export default function Hero() {
               loop
               muted
               playsInline
+               style={{ transform: 'translateZ(0)', WebkitTransform: 'translate3d(0,0,0)' }}
               className="object-cover w-full h-full object-top-right drop-shadow-sm"
             >
               <source src="/DNA_Joyzen-nobg.mov" type='video/quicktime; codecs="hvc1"' />
