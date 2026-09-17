@@ -18,17 +18,22 @@ export default function Hero() {
           <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
-            className="relative w-full h-full"
+            className="relative w-full h-full drop-shadow-sm"
           >
             <video
               autoPlay
               loop
               muted
               playsInline
-               style={{ transform: 'translateZ(0)', WebkitTransform: 'translate3d(0,0,0)' }}
-              className="object-cover w-full h-full object-top-right drop-shadow-sm"
+              style={{
+                backgroundColor: 'transparent',
+                WebkitTransform: 'translate3d(0,0,0)',
+                transform: 'translateZ(0)',
+              }}
+              className="object-cover w-full h-full object-top-right bg-transparent border-0 outline-none"
             >
               <source src="/DNA_Joyzen-nobg.mov" type='video/quicktime; codecs="hvc1"' />
+              <source src="/DNA_Joyzen-nobg.mov" type='video/mp4; codecs="hvc1"' />
               <source src="/DNA_Joyzen-nobg.webm" type="video/webm" />
             </video>
           </motion.div>
