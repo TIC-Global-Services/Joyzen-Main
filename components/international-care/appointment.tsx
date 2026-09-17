@@ -145,12 +145,12 @@ export default function Appointment() {
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2 }}
-                  className="flex flex-wrap justify-center items-start items-baseline gap-x-3 sm:gap-x-4 lg:gap-y-1 max-w-5xl my-auto"
+                  className="flex flex-wrap justify-center items-start items-baseline gap-x-0 sm:gap-x-4 lg:gap-y-1 max-w-5xl md:my-auto"
                 >
-                  <span className="text-2xl sm:text-4xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight drop-shadow-md">
+                  <span className="text-2xl sm:text-4xl md:text-4xl lg:text-[40px] font-bold text-white tracking-tight drop-shadow-md leading-none">
                     {currentSlide.prefixText}
                   </span>
-                  <span className={`text-[40px] sm:text-6xl md:text-6xl lg:text-[5rem] font-bold ${currentSlide.highlightColor} tracking-tight drop-shadow-lg`}>
+                  <span className={`text-[40px] sm:text-6xl leading-none md:text-6xl lg:text-[5rem] font-bold ${currentSlide.highlightColor} tracking-tight drop-shadow-lg`}>
                     {currentSlide.highlightText}
                   </span>
                 </motion.div>
@@ -189,7 +189,7 @@ export default function Appointment() {
             className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/30 hover:bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group"
           >
             <svg 
-              className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:-translate-x-0.5" 
+              className="w-4 h-4 sm:w-6 sm:h-6 transition-transform group-hover:-translate-x-0.5" 
               fill="none" 
               viewBox="0 0 24 24" 
               stroke="currentColor"
@@ -205,7 +205,7 @@ export default function Appointment() {
             className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/5 hover:bg-black/60 text-white backdrop-blur-xs border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group"
           >
             <svg 
-              className="w-5 h-5 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-0.5" 
+              className="w-4 h-4 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-0.5" 
               fill="none" 
               viewBox="0 0 24 24" 
               stroke="currentColor"
@@ -216,7 +216,7 @@ export default function Appointment() {
         </div>
 
         {/* Carousel Dots & Indicators */}
-        <div className="flex items-center justify-center gap-2 sm:gap-3 mt-6">
+        {/* <div className="flex items-center justify-center gap-2 sm:gap-3 mt-6">
           {slides.map((slide, index) => (
             <button
               key={slide.id}
@@ -232,7 +232,7 @@ export default function Appointment() {
               }`}
             />
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );

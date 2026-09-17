@@ -4,7 +4,7 @@ import React, { useRef, useEffect, type ReactNode } from 'react';
 import Image from 'next/image';
 import { Renderer, Program, Mesh, Triangle, Color } from 'ogl';
 import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/dist/ScrollTrigger';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -361,77 +361,62 @@ const Reviews = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const mm = gsap.matchMedia();
+    const ctx = gsap.context(() => {
+      const isMobile = window.matchMedia('(max-width: 1024px)').matches;
+      const staggerDelay = isMobile ? 1.3 : 0.7;
+      const startY = isMobile ? '90vh' : '110vh';
+      const endY = isMobile ? '-100vh' : '-110vh';
 
-    mm.add(
-      {
-        isMobile: '(max-width: 1023px)',
-        isDesktop: '(min-width: 1024px)',
-      },
-      (context) => {
-        const { isMobile } = context.conditions as { isMobile: boolean; isDesktop: boolean };
+      const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
+      const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
 
-        const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
-        const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
+      // Set initial positions below viewport
+      gsap.set(leftCards, { y: startY });
+      gsap.set(rightCards, { y: startY });
 
-        const startY = '115vh';
-        const endY = '-115vh';
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: 'top top',
+          end: isMobile ? '+=3000' : '+=4500',
+          scrub: 1.2,
+          pin: true,
+          anticipatePin: 1,
+        },
+      });
 
-        gsap.set(leftCards, { y: startY });
-        gsap.set(rightCards, { y: startY });
+      // Animate left and right cards as PAIRS — both start at the same time
+      const pairCount = Math.max(leftCards.length, rightCards.length);
+      for (let i = 0; i < pairCount; i++) {
+        const delay = i * staggerDelay;
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top top',
-            end: isMobile ? '+=2600' : '+=4500',
-            scrub: isMobile ? 0.6 : 1.2,
-            pin: true,
-            pinSpacing: true,
-            invalidateOnRefresh: true,
-            fastScrollEnd: true,
-          },
-        });
+        if (leftCards[i]) {
+          tl.to(
+            leftCards[i],
+            {
+              y: endY,
+              duration: 2.2,
+              ease: 'none',
+            },
+            delay
+          );
+        }
 
-        const pairCount = Math.max(leftCards.length, rightCards.length);
-        for (let i = 0; i < pairCount; i++) {
-          const delay = i * 0.75;
-
-          if (leftCards[i]) {
-            tl.to(
-              leftCards[i],
-              {
-                y: endY,
-                duration: 2.2,
-                ease: 'none',
-              },
-              delay
-            );
-          }
-
-          if (rightCards[i]) {
-            tl.to(
-              rightCards[i],
-              {
-                y: endY,
-                duration: 2.2,
-                ease: 'none',
-              },
-              delay
-            );
-          }
+        if (rightCards[i]) {
+          tl.to(
+            rightCards[i],
+            {
+              y: endY,
+              duration: 2.2,
+              ease: 'none',
+            },
+            delay
+          );
         }
       }
-    );
+    }, containerRef);
 
-    const refreshTimer = setTimeout(() => {
-      ScrollTrigger.refresh();
-    }, 150);
-
-    return () => {
-      clearTimeout(refreshTimer);
-      mm.revert();
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -473,13 +458,13 @@ const Reviews = ({
         </div>
 
         {/* FLOATING / SCROLLING REVIEW CARDS LAYER (Columns scroll past the pinned center) */}
-        <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-0 sm:px-8 lg:px-12">
-          {/* Left / Top Card Column (Aligned Left on mobile) */}
+        <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-2 sm:px-4">
+          {/* Left Column of Floating Cards */}
           <div className="w-full lg:w-1/2 absolute inset-y-0 left-0 h-full">
             {leftReviews.map((card, i) => (
               <div
                 key={`rev-left-${card.id}-${i}`}
-                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-0 sm:pl-4 lg:pl-0 lg:pr-14 -mt-[35dvh] sm:-mt-[24vh] lg:-mt-[22vh] pointer-events-none will-change-transform"
+                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-2 sm:pl-4 lg:pl-0 lg:pr-16 -mt-[44vh] sm:-mt-[28vh] lg:-mt-[22vh] pointer-events-none"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
@@ -488,12 +473,12 @@ const Reviews = ({
             ))}
           </div>
 
-          {/* Right / Bottom Card Column (Aligned Right on mobile) */}
+          {/* Right Column of Floating Cards */}
           <div className="w-full lg:w-1/2 absolute inset-y-0 right-0 h-full">
             {rightReviews.map((card, i) => (
               <div
                 key={`rev-right-${card.id}-${i}`}
-                className="review-card-right absolute inset-0 flex items-center justify-end lg:justify-start pr-0 sm:pr-4 lg:pr-0 lg:pl-14 mt-[35dvh] sm:mt-[24vh] lg:mt-[22vh] pointer-events-none will-change-transform"
+                className="review-card-right absolute inset-0 flex items-center justify-end lg:justify-start pr-2 sm:pr-4 lg:pr-0 lg:pl-16 mt-[52vh] sm:mt-[28vh] lg:mt-[22vh] pointer-events-none"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
