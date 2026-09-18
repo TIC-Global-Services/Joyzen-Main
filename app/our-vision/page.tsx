@@ -13,6 +13,7 @@ const page = () => {
       <HereItFrom />
       <Represents/>
       <Epharmacy />
+      <div className='h-16 w-full bg-[#fcf9f2] absolute bottom-[13.2%] left-0 z-100 blur-sm'></div>
     </main>
   );
 };

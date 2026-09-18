@@ -29,6 +29,7 @@ export default function LunaAIPage() {
         <LunaAI />
         <Membership />
       </div>
+      <div className='h-16 w-full bg-[#fcf9f2] absolute -bottom-[0.5%] left-0 z-100 blur-md'></div>
     </main>
   );
 }

@@ -6,6 +6,7 @@ import AboutHeroSection from '@/components/about/AboutHeroSection';
 import AboutMobileSection from '@/components/about/AboutMobileSection';
 import SuperPowerSection from '@/components/about/superPower';
 import DesignedForToday from '@/components/about/designedForToday';
+import LetsJoin from '@/components/about/letsJoin';
 
 export const metadata: Metadata = {
   title: 'About | Joyzen - Care The Way Life Actually Happens',
@@ -16,8 +17,8 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="relative min-h-screen flex flex-col w-full selection:bg-[#EF8F60]/20 selection:text-[#EF8F60] overflow-x-hidden">
-   
-      {/* 4 About Components */}
+
+      {/* 5 About Components */}
       <main className="flex-1 flex flex-col w-full">
         {/* Component 1: Hero ("You Stay On That Couch...") */}
         <AboutHeroSection />
@@ -30,8 +31,11 @@ export default function AboutPage() {
 
         {/* Component 4: Tomorrow's Healthcare & 3D Robot */}
         <DesignedForToday />
-      </main>
 
+        {/* Component 5: Let's Join – Scroll Image Sequence */}
+        {/* <LetsJoin /> */}
+      </main>
+      <div className='h-16 w-full bg-[#fcf9f2] absolute -bottom-[0.5%] left-0 z-100 blur-sm'></div>
     </div>
   );
 }

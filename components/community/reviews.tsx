@@ -362,58 +362,85 @@ const Reviews = ({
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      const isMobile = window.matchMedia('(max-width: 1024px)').matches;
-      const staggerDelay = isMobile ? 1.3 : 0.7;
-      const startY = isMobile ? '90vh' : '110vh';
-      const endY = isMobile ? '-100vh' : '-110vh';
+      const mm = gsap.matchMedia();
 
-      const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
-      const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
+      // Helper to build the paired card timeline
+      const buildTimeline = (
+        tl: gsap.core.Timeline,
+        leftCards: HTMLElement[],
+        rightCards: HTMLElement[],
+        startY: number | string,
+        endY: number | string,
+        staggerDelay: number
+      ) => {
+        gsap.set(leftCards, { y: startY, force3D: true });
+        gsap.set(rightCards, { y: startY, force3D: true });
 
-      // Set initial positions below viewport
-      gsap.set(leftCards, { y: startY });
-      gsap.set(rightCards, { y: startY });
+        const pairCount = Math.max(leftCards.length, rightCards.length);
+        for (let i = 0; i < pairCount; i++) {
+          const delay = i * staggerDelay;
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: isMobile ? '+=3000' : '+=4500',
-          scrub: 1.2,
-          pin: true,
-          anticipatePin: 1,
-        },
+          if (leftCards[i]) {
+            tl.to(
+              leftCards[i],
+              { y: endY, duration: 2.2, ease: 'none', force3D: true },
+              delay
+            );
+          }
+
+          if (rightCards[i]) {
+            tl.to(
+              rightCards[i],
+              { y: endY, duration: 2.2, ease: 'none', force3D: true },
+              delay
+            );
+          }
+        }
+      };
+
+      // ── Mobile / Tablet (≤1024px) ──
+      mm.add('(max-width: 1024px)', () => {
+        const vh = window.innerHeight; // Fixed pixel snapshot — immune to address-bar resizes
+        const startY = vh * 0.9;
+        const endY = -vh;
+
+        const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
+        const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
+
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: '+=3000',
+            scrub: 0.5, // Snappier for touch scrolling
+            pin: true,
+            pinSpacing: true,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        buildTimeline(tl, leftCards, rightCards, startY, endY, 1.3);
       });
 
-      // Animate left and right cards as PAIRS — both start at the same time
-      const pairCount = Math.max(leftCards.length, rightCards.length);
-      for (let i = 0; i < pairCount; i++) {
-        const delay = i * staggerDelay;
+      // ── Desktop (>1024px) ──
+      mm.add('(min-width: 1025px)', () => {
+        const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
+        const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
 
-        if (leftCards[i]) {
-          tl.to(
-            leftCards[i],
-            {
-              y: endY,
-              duration: 2.2,
-              ease: 'none',
-            },
-            delay
-          );
-        }
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: '+=4500',
+            scrub: 1.2,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
 
-        if (rightCards[i]) {
-          tl.to(
-            rightCards[i],
-            {
-              y: endY,
-              duration: 2.2,
-              ease: 'none',
-            },
-            delay
-          );
-        }
-      }
+        buildTimeline(tl, leftCards, rightCards, '110vh', '-110vh', 0.7);
+      });
     }, containerRef);
 
     return () => ctx.revert();
@@ -426,7 +453,7 @@ const Reviews = ({
     >
       <div
         ref={containerRef}
-        className="h-screen w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
+        className="h-screen h-[100dvh] w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
       >
         {/* Background Ambient Spotlights */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] bg-gradient-to-tr from-[#EF8F60]/12 via-[#78C9CF]/12 to-transparent rounded-full blur-[140px] pointer-events-none" />

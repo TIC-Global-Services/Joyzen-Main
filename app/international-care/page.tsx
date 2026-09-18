@@ -13,6 +13,7 @@ export default function InternationalCarePage() {
       <Consultation />
       <FAQ />
       <StartYourHealth/>
+      <div className='h-16 w-full bg-[#fcf9f2] absolute bottom-[12.2%] left-0 z-100 blur-sm'></div>
     </main>
   );
 }

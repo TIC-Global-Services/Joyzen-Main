@@ -30,7 +30,7 @@ export default function Hero() {
                 WebkitTransform: 'translate3d(0,0,0)',
                 transform: 'translateZ(0)',
               }}
-              className="object-cover w-full h-full object-top-right bg-transparent border-0 outline-none"
+              className="object-cover w-full h-full object-top-right bg-transparent border-0 outline-none  mix-blend-multiply"
             >
               <source src="/DNA_Joyzen-nobg.mov" type='video/quicktime; codecs="hvc1"' />
               <source src="/DNA_Joyzen-nobg.mov" type='video/mp4; codecs="hvc1"' />

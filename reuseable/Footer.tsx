@@ -15,14 +15,14 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer className="relative w-full h-[60dvh] sm:h-[60svh] md:h-[40dvh] lg:h-[70dvh] bg-gradient-to-r from-transparent via-[#D1E0EC] to-[#A9BFCF] flex flex-col justify-between p-5 sm:p-10 lg:p-[2rem] overflow-hidden text-black select-none font-epilogue">
+    <footer className="relative w-full h-[60dvh] sm:h-[60svh] md:h-[40dvh] lg:h-[600px] flex flex-col justify-between p-5 sm:p-10 lg:p-[2rem] overflow-hidden text-black select-none font-epilogue">
       {/* Background Video — single stream, source chosen by device at mount */}
       <div
         className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
-        style={{
-          WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 8%, black 22%, black 100%)',
-          maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 8%, black 22%, black 100%)',
-        }}
+        // style={{
+        //   WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 8%, black 22%, black 100%)',
+        //   maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 8%, black 22%, black 100%)',
+        // }}
       >
         <div className="relative w-full h-full">
           {videoSrc && (

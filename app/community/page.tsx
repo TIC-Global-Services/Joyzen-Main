@@ -15,6 +15,7 @@ const page = () => {
       <Reviews />
       <Gallery />
       <BigDeal/>
+      <div className='h-16 w-full bg-[#fcf9f2] absolute bottom-[5.5%] left-0 z-100 blur-sm'></div>
     </div>
   )
 }
