@@ -46,7 +46,7 @@ export default function AboutHeroSection() {
 
       {/* Main Left Content */}
       <div className="relative z-20 w-full">
-        <div className="flex flex-col items-start mb-10 justify-end text-left lg:translate-x-20">
+        <div className="flex flex-col items-start mb-20 justify-end text-left lg:translate-x-20">
           {/* Main Headline */}
           <motion.h1
             initial={{ opacity: 0, y: 35 }}

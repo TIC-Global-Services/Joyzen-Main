@@ -245,7 +245,7 @@ export const GlassSpecularCard = ({
   return (
     <div
       ref={cardRef}
-      className={`relative overflow-visible bg-white/80 backdrop-blur-md rounded-[24px] sm:rounded-[32px] p-5 sm:p-7 md:p-8 border border-white/60 shadow-[0_18px_40px_rgba(0,0,0,0.05),0_2px_8px_rgba(0,0,0,0.02),inset_0_1px_2px_rgba(255,255,255,0.95)] transition-all duration-300 hover:shadow-[0_25px_60px_rgba(239,143,96,0.14),0_4px_12px_rgba(0,0,0,0.03)] hover:scale-[1.02] ${className}`}
+      className={`relative overflow-visible bg-white/5 backdrop-blur-xs rounded-[24px] sm:rounded-[32px] p-6 sm:p-7 md:p-8 shadow-[0_20px_45px_rgba(0,0,0,0.04),0_2px_8px_rgba(0,0,0,0.02),inset_0_1px_2px_rgba(255,255,255,0.95)] transition-all duration-300 hover:shadow-[0_25px_60px_rgba(239,143,96,0.14),0_4px_12px_rgba(0,0,0,0.03)] hover:scale-[1.02] ${className}`}
     >
       {/* WebGL Specular Border Canvas */}
       <span
@@ -254,7 +254,7 @@ export const GlassSpecularCard = ({
         className="pointer-events-none absolute -inset-6 z-10 [&_canvas]:block [&_canvas]:h-full [&_canvas]:w-full"
       />
       {/* Card Content */}
-      <div className="relative z-[2] flex flex-col gap-2 sm:gap-2.5">
+      <div className="relative z-[2] flex flex-col gap-2.5 sm:gap-2">
         {children}
       </div>
     </div>
@@ -321,7 +321,7 @@ const FiveStars = ({ rating = 5 }: { rating?: number }) => (
     {Array.from({ length: rating }).map((_, i) => (
       <svg
         key={i}
-        className="w-4 h-4 xs:w-4.5 xs:h-4.5 sm:w-6 sm:h-6 fill-current drop-shadow-[0_1px_2px_rgba(251,191,36,0.3)]"
+        className="w-4.5 h-4.5 sm:w-6 sm:h-6 fill-current drop-shadow-[0_1px_2px_rgba(251,191,36,0.3)]"
         viewBox="0 0 20 20"
       >
         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -332,17 +332,17 @@ const FiveStars = ({ rating = 5 }: { rating?: number }) => (
 
 const ReviewCard = ({ card }: { card: ReviewCardItem }) => {
   return (
-    <GlassSpecularCard className="w-[280px] xs:w-[310px] sm:w-[350px] md:w-[390px] lg:w-[430px]">
+    <GlassSpecularCard className="w-[280px] xs:w-[300px] sm:w-[340px] md:w-[380px] lg:w-[437px]">
       {/* 5 Golden Stars */}
       <FiveStars rating={card.rating} />
 
       {/* Review Quote Text */}
-      <p className="text-sm xs:text-base sm:text-lg lg:text-2xl text-zinc-800 font-normal leading-snug sm:leading-tight tracking-tight mt-1">
+      <p className="text-lg sm:text-lg lg:text-2xl text-zinc-700 font-normal leading-[1.35] sm:leading-tight tracking-tight mt-1">
         {card.quote}
       </p>
 
       {/* Author Name in Orange */}
-      <span className="text-lg xs:text-xl sm:text-2xl lg:text-[30px] font-semibold text-[#EF7C48] tracking-tight mt-0.5">
+      <span className="text-2xl lg:text-[32px] font-semibold text-[#EF7C48] tracking-tight mt-0.5">
         {card.authorName}
       </span>
     </GlassSpecularCard>
