@@ -13,11 +13,11 @@ export default function AboutHeroSection() {
         initial={{ opacity: 0, x: 60, y: -40 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute -top-10 sm:-top-12 md:-top-[10%] lg:top-10 -right-[70%] sm:right-2 md:-right-[30%] lg:-right-50 -rotate-50  pointer-events-none select-none z-10"
+        className="absolute -top-10 sm:-top-12 md:-top-[10%] lg:top-10 -right-[70%] sm:right-2 md:-right-[30%] lg:-right-60 -rotate-50  pointer-events-none select-none z-10"
       >
-        <div className="relative w-[450px] sm:w-[480px] md:w-[480px] lg:w-[560px] xl:w-[600px] h-[600px] md:aspect-[436/1024]">
+        <div className="relative w-[450px] sm:w-[480px] md:w-[480px] lg:w-[560px] xl:w-[800px] h-[700px] md:aspect-[436/1024]">
           <Image
-            src="/robot-hand-1.png"
+            src="/ROBOT VINES TEST.gif"
             alt="Joyzen Robot Hand with Wild Flowers"
             fill
             priority

@@ -10,7 +10,7 @@ export default function Footer() {
     if (window.innerWidth < 640) {
       setVideoSrc('/joyzenfooterMobile.mp4');
     } else {
-      setVideoSrc('/joyzen_glass_footer.mp4');
+      setVideoSrc('/joylogo.mp4');
     }
   }, []);
 
