@@ -245,7 +245,7 @@ export const GlassSpecularCard = ({
   return (
     <div
       ref={cardRef}
-      className={`relative overflow-visible bg-white/5 backdrop-blur-xs rounded-[24px] sm:rounded-[32px] p-6 sm:p-7 md:p-8 shadow-[0_20px_45px_rgba(0,0,0,0.04),0_2px_8px_rgba(0,0,0,0.02),inset_0_1px_2px_rgba(255,255,255,0.95)] transition-all duration-300 hover:shadow-[0_25px_60px_rgba(239,143,96,0.14),0_4px_12px_rgba(0,0,0,0.03)] hover:scale-[1.02] ${className}`}
+      className={`relative overflow-visible bg-white/80 backdrop-blur-md rounded-[24px] sm:rounded-[32px] p-5 sm:p-7 md:p-8 border border-white/60 shadow-[0_18px_40px_rgba(0,0,0,0.05),0_2px_8px_rgba(0,0,0,0.02),inset_0_1px_2px_rgba(255,255,255,0.95)] transition-all duration-300 hover:shadow-[0_25px_60px_rgba(239,143,96,0.14),0_4px_12px_rgba(0,0,0,0.03)] hover:scale-[1.02] ${className}`}
     >
       {/* WebGL Specular Border Canvas */}
       <span
@@ -254,7 +254,7 @@ export const GlassSpecularCard = ({
         className="pointer-events-none absolute -inset-6 z-10 [&_canvas]:block [&_canvas]:h-full [&_canvas]:w-full"
       />
       {/* Card Content */}
-      <div className="relative z-[2] flex flex-col gap-2.5 sm:gap-2">
+      <div className="relative z-[2] flex flex-col gap-2 sm:gap-2.5">
         {children}
       </div>
     </div>
@@ -321,7 +321,7 @@ const FiveStars = ({ rating = 5 }: { rating?: number }) => (
     {Array.from({ length: rating }).map((_, i) => (
       <svg
         key={i}
-        className="w-4.5 h-4.5 sm:w-6 sm:h-6 fill-current drop-shadow-[0_1px_2px_rgba(251,191,36,0.3)]"
+        className="w-4 h-4 xs:w-4.5 xs:h-4.5 sm:w-6 sm:h-6 fill-current drop-shadow-[0_1px_2px_rgba(251,191,36,0.3)]"
         viewBox="0 0 20 20"
       >
         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
@@ -332,17 +332,17 @@ const FiveStars = ({ rating = 5 }: { rating?: number }) => (
 
 const ReviewCard = ({ card }: { card: ReviewCardItem }) => {
   return (
-    <GlassSpecularCard className="w-[280px] xs:w-[300px] sm:w-[340px] md:w-[380px] lg:w-[437px]">
+    <GlassSpecularCard className="w-[280px] xs:w-[310px] sm:w-[350px] md:w-[390px] lg:w-[430px]">
       {/* 5 Golden Stars */}
       <FiveStars rating={card.rating} />
 
       {/* Review Quote Text */}
-      <p className="text-lg sm:text-lg lg:text-2xl text-zinc-700 font-normal leading-[1.35] sm:leading-tight tracking-tight mt-1">
+      <p className="text-sm xs:text-base sm:text-lg lg:text-2xl text-zinc-800 font-normal leading-snug sm:leading-tight tracking-tight mt-1">
         {card.quote}
       </p>
 
       {/* Author Name in Orange */}
-      <span className="text-2xl lg:text-[32px] font-semibold text-[#EF7C48] tracking-tight mt-0.5">
+      <span className="text-lg xs:text-xl sm:text-2xl lg:text-[30px] font-semibold text-[#EF7C48] tracking-tight mt-0.5">
         {card.authorName}
       </span>
     </GlassSpecularCard>
@@ -361,38 +361,102 @@ const Reviews = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    ScrollTrigger.config({ ignoreMobileResize: true });
+
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
-      // Helper to build the paired card timeline
-      const buildTimeline = (
-        tl: gsap.core.Timeline,
+      // Helper function to build a continuous, seamlessly fading flow of cards
+      const buildScrollTimeline = (
         leftCards: HTMLElement[],
         rightCards: HTMLElement[],
-        startY: number | string,
-        endY: number | string,
-        staggerDelay: number
+        scrollDistance: number,
+        cardDuration: number,
+        staggerStep: number,
+        scrubSpeed: number
       ) => {
-        gsap.set(leftCards, { y: startY, force3D: true });
-        gsap.set(rightCards, { y: startY, force3D: true });
+        const vh = window.innerHeight;
+        // Travel distance safely past the viewport bounds (top & bottom)
+        const travelDistance = Math.max(vh * 1.15, 800);
 
-        const pairCount = Math.max(leftCards.length, rightCards.length);
-        for (let i = 0; i < pairCount; i++) {
-          const delay = i * staggerDelay;
+        // Initially hide all upcoming cards completely offscreen with 0 opacity
+        gsap.set([...leftCards, ...rightCards], {
+          y: travelDistance,
+          opacity: 0,
+          autoAlpha: 0,
+          force3D: true,
+          willChange: 'transform, opacity',
+        });
 
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: `+=${scrollDistance}`,
+            scrub: scrubSpeed,
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        const totalPairs = Math.max(leftCards.length, rightCards.length);
+
+        for (let i = 0; i < totalPairs; i++) {
+          // Left card animation
           if (leftCards[i]) {
+            const startTime = i * staggerStep;
+
+            // Travel from bottom to top
+            tl.fromTo(
+              leftCards[i],
+              { y: travelDistance },
+              { y: -travelDistance, duration: cardDuration, ease: 'none', force3D: true },
+              startTime
+            );
+
+            // Fade in as card enters bottom viewport
+            tl.fromTo(
+              leftCards[i],
+              { opacity: 0, autoAlpha: 0 },
+              { opacity: 1, autoAlpha: 1, duration: cardDuration * 0.22, ease: 'power1.out' },
+              startTime
+            );
+
+            // Fade out as card exits top viewport
             tl.to(
               leftCards[i],
-              { y: endY, duration: 2.2, ease: 'none', force3D: true },
-              delay
+              { opacity: 0, autoAlpha: 0, duration: cardDuration * 0.22, ease: 'power1.in' },
+              startTime + cardDuration * 0.78
             );
           }
 
+          // Right card animation (interleaved for continuous alternating flow)
           if (rightCards[i]) {
+            const rightStartTime = i * staggerStep + staggerStep * 0.5;
+
+            // Travel from bottom to top
+            tl.fromTo(
+              rightCards[i],
+              { y: travelDistance },
+              { y: -travelDistance, duration: cardDuration, ease: 'none', force3D: true },
+              rightStartTime
+            );
+
+            // Fade in
+            tl.fromTo(
+              rightCards[i],
+              { opacity: 0, autoAlpha: 0 },
+              { opacity: 1, autoAlpha: 1, duration: cardDuration * 0.22, ease: 'power1.out' },
+              rightStartTime
+            );
+
+            // Fade out
             tl.to(
               rightCards[i],
-              { y: endY, duration: 2.2, ease: 'none', force3D: true },
-              delay
+              { opacity: 0, autoAlpha: 0, duration: cardDuration * 0.22, ease: 'power1.in' },
+              rightStartTime + cardDuration * 0.78
             );
           }
         }
@@ -400,46 +464,17 @@ const Reviews = ({
 
       // ── Mobile / Tablet (≤1024px) ──
       mm.add('(max-width: 1024px)', () => {
-        const vh = window.innerHeight; // Fixed pixel snapshot — immune to address-bar resizes
-        const startY = vh * 0.9;
-        const endY = -vh;
-
         const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
         const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top top',
-            end: '+=3000',
-            scrub: 0.5, // Snappier for touch scrolling
-            pin: true,
-            pinSpacing: true,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        buildTimeline(tl, leftCards, rightCards, startY, endY, 1.3);
+        // Snappy touch scroll distance, smooth alternating cards without large gaps
+        buildScrollTimeline(leftCards, rightCards, 1900, 2.2, 0.7, 0.5);
       });
 
       // ── Desktop (>1024px) ──
       mm.add('(min-width: 1025px)', () => {
         const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
         const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
-
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: 'top top',
-            end: '+=4500',
-            scrub: 1.2,
-            pin: true,
-            anticipatePin: 1,
-            invalidateOnRefresh: true,
-          },
-        });
-
-        buildTimeline(tl, leftCards, rightCards, '110vh', '-110vh', 0.7);
+        buildScrollTimeline(leftCards, rightCards, 3000, 2.4, 0.8, 1.0);
       });
     }, containerRef);
 
@@ -462,7 +497,7 @@ const Reviews = ({
         <div className="absolute inset-0 z-0 flex flex-col items-center justify-center pointer-events-none px-4 text-center select-none">
           <div className="flex flex-col items-center justify-center">
             {/* Orange Joyzen Logo in Center */}
-            <div className="relative w-32 h-32 xs:w-36 xs:h-36 sm:w-44 sm:h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 mb-1 sm:mb-2 transition-transform duration-500">
+            <div className="relative w-28 h-28 xs:w-36 xs:h-36 sm:w-44 sm:h-44 md:w-56 md:h-56 lg:w-64 lg:h-64 mb-1 sm:mb-2 transition-transform duration-500">
               <Image
                 src="/joyzen-orange.png"
                 alt="Joyzen"
@@ -477,7 +512,7 @@ const Reviews = ({
               <h2 className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[40px] font-bold text-zinc-900 tracking-tight leading-none">
                 Hear From Our
               </h2>
-              <h2 className="text-[40px] xs:text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-bold text-[#AEDEE4] tracking-tight leading-none">
+              <h2 className="text-[36px] xs:text-4xl sm:text-5xl md:text-6xl lg:text-[5rem] font-bold text-[#AEDEE4] tracking-tight leading-none">
                 Joyzen Club
               </h2>
             </div>
@@ -487,11 +522,11 @@ const Reviews = ({
         {/* FLOATING / SCROLLING REVIEW CARDS LAYER (Columns scroll past the pinned center) */}
         <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-2 sm:px-4">
           {/* Left Column of Floating Cards */}
-          <div className="w-full lg:w-1/2 absolute inset-y-0 left-0 h-full">
+          <div className="w-full lg:w-1/2 absolute inset-y-0 left-0 h-full pointer-events-none">
             {leftReviews.map((card, i) => (
               <div
                 key={`rev-left-${card.id}-${i}`}
-                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-2 sm:pl-4 lg:pl-0 lg:pr-16 -mt-[44vh] sm:-mt-[28vh] lg:-mt-[22vh] pointer-events-none"
+                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-3 xs:pl-4 sm:pl-6 lg:pl-0 lg:pr-16 pointer-events-none"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
@@ -501,11 +536,11 @@ const Reviews = ({
           </div>
 
           {/* Right Column of Floating Cards */}
-          <div className="w-full lg:w-1/2 absolute inset-y-0 right-0 h-full">
+          <div className="w-full lg:w-1/2 absolute inset-y-0 right-0 h-full pointer-events-none">
             {rightReviews.map((card, i) => (
               <div
                 key={`rev-right-${card.id}-${i}`}
-                className="review-card-right absolute inset-0 flex items-center justify-end lg:justify-start pr-2 sm:pr-4 lg:pr-0 lg:pl-16 mt-[52vh] sm:mt-[28vh] lg:mt-[22vh] pointer-events-none"
+                className="review-card-right absolute inset-0 flex items-center justify-end lg:justify-start pr-3 xs:pr-4 sm:pr-6 lg:pr-0 lg:pl-16 pointer-events-none"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
