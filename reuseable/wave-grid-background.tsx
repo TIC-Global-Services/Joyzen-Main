@@ -204,16 +204,29 @@ export function WaveGridBackground({
         const canvas = canvasRef.current;
         if (!container || !canvas) return;
 
+        // ── Device Detection ─────────────────────────────────────────────────────
+        const isMobile =
+            typeof window !== "undefined" &&
+            (window.innerWidth <= 768 ||
+                window.matchMedia("(max-width: 768px)").matches ||
+                window.matchMedia("(pointer: coarse)").matches ||
+                "ontouchstart" in window);
+
+        // Optimize grid resolution for mobile (484 instances vs 1600 instances)
+        const effectiveGridSize = isMobile ? Math.min(gridSize, 22) : gridSize;
+
         const hexRadius = 0.45;
         const cubeHeight = 3;
         const gap = 0.01;
-        const bounds = gridSize * (Math.sqrt(3) * hexRadius + gap);
+        const bounds = effectiveGridSize * (Math.sqrt(3) * hexRadius + gap);
 
         // ── Sizes ────────────────────────────────────────────────────────────────
         const getSize = () => ({
             width: container.clientWidth || 1,
             height: container.clientHeight || 1,
-            pixelRatio: Math.min(window.devicePixelRatio, 2),
+            pixelRatio: isMobile
+                ? Math.min(window.devicePixelRatio || 1, 1.25)
+                : Math.min(window.devicePixelRatio || 1, 2),
         });
         let size = getSize();
 
@@ -221,7 +234,7 @@ export function WaveGridBackground({
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(colorBase);
 
-        // ── Camera (mouse-driven orbit) ────────────────────────────────────────
+        // ── Camera ───────────────────────────────────────────────────────────────
         const radius = 12;
         const alphaRange = Math.PI * 0.03;
         const betaRange = Math.PI * 0.05;
@@ -243,28 +256,24 @@ export function WaveGridBackground({
         positionCamera(0, 0);
         scene.add(camera);
 
-        const onMouseMove = (e: MouseEvent) => {
-            mouse.x = (e.clientX / size.width) * 2 - 1;
-            mouse.y = -(e.clientY / size.height) * 2 + 1;
-        };
-        window.addEventListener("mousemove", onMouseMove);
-
         // ── Lighting ───────────────────────────────────────────────────────────
-        const ambientLight = new THREE.AmbientLight("#ffffff", 0.9);
+        const ambientLight = new THREE.AmbientLight("#ffffff", isMobile ? 1.2 : 0.9);
         scene.add(ambientLight);
 
         const keyLight = new THREE.DirectionalLight("#ffffff", 3.0);
         keyLight.position.set(-20, 15, 8);
-        keyLight.castShadow = true;
-        keyLight.shadow.mapSize.set(1024, 1024);
-        keyLight.shadow.radius = 6;
-        keyLight.shadow.camera.near = 0.1;
-        keyLight.shadow.camera.far = 60;
-        keyLight.shadow.camera.left = -22;
-        keyLight.shadow.camera.right = 22;
-        keyLight.shadow.camera.top = 22;
-        keyLight.shadow.camera.bottom = -22;
-        keyLight.shadow.bias = 0.0001;
+        if (!isMobile) {
+            keyLight.castShadow = true;
+            keyLight.shadow.mapSize.set(1024, 1024);
+            keyLight.shadow.radius = 6;
+            keyLight.shadow.camera.near = 0.1;
+            keyLight.shadow.camera.far = 60;
+            keyLight.shadow.camera.left = -22;
+            keyLight.shadow.camera.right = 22;
+            keyLight.shadow.camera.top = 22;
+            keyLight.shadow.camera.bottom = -22;
+            keyLight.shadow.bias = 0.0001;
+        }
         scene.add(keyLight);
 
         const fillLight = new THREE.DirectionalLight("#ffffff", 1.0);
@@ -317,6 +326,12 @@ export function WaveGridBackground({
         const raycaster = new THREE.Raycaster();
         const pointerNDC = new THREE.Vector2();
 
+        // Only listen for mouse/hover interactions on desktop
+        const onMouseMove = (e: MouseEvent) => {
+            mouse.x = (e.clientX / size.width) * 2 - 1;
+            mouse.y = -(e.clientY / size.height) * 2 + 1;
+        };
+
         const onPointerMove = (e: PointerEvent | MouseEvent) => {
             const rect = canvas.getBoundingClientRect();
             pointerNDC.set(
@@ -338,8 +353,11 @@ export function WaveGridBackground({
             currentHover = null;
         };
 
-        window.addEventListener("pointermove", onPointerMove, { passive: true });
-        window.addEventListener("mouseleave", onMouseLeave);
+        if (!isMobile) {
+            window.addEventListener("mousemove", onMouseMove, { passive: true });
+            window.addEventListener("pointermove", onPointerMove, { passive: true });
+            window.addEventListener("mouseleave", onMouseLeave);
+        }
 
         const addRandomPoint = () => {
             const x = (Math.random() * 0.5 - 0.25) * bounds;
@@ -350,13 +368,20 @@ export function WaveGridBackground({
         };
 
         const updateTrail = (delta: number) => {
+            if (isMobile && !propsRef.current.autoAnimate) {
+                if (trailUniforms.uTrailCount.value !== 0) {
+                    trailUniforms.uTrailCount.value = 0;
+                }
+                return;
+            }
+
             const expiry = fadeTime * 2.5;
             for (let i = trail.length - 1; i >= 0; i--) {
                 trail[i].age += delta;
                 if (trail[i].age > expiry) trail.splice(i, 1);
             }
 
-            if (currentHover) {
+            if (currentHover && !isMobile) {
                 if (trail.length === 0) {
                     trail.push({ x: currentHover.x, z: currentHover.z, age: 0, distDelta: 1.0 });
                 } else {
@@ -401,7 +426,7 @@ export function WaveGridBackground({
         };
 
         // ── Grid (instanced hexagons) ─────────────────────────────────────────
-        const count = gridSize * gridSize;
+        const count = effectiveGridSize * effectiveGridSize;
         const geometry = new THREE.CylinderGeometry(hexRadius, hexRadius, cubeHeight, 6);
         const offsetAttribute = new THREE.InstancedBufferAttribute(new Float32Array(count * 2), 2);
         geometry.setAttribute("aOffset", offsetAttribute);
@@ -434,21 +459,23 @@ export function WaveGridBackground({
         };
 
         const instancedMesh = new THREE.InstancedMesh(geometry, material, count);
-        instancedMesh.customDepthMaterial = depthMaterial;
-        instancedMesh.castShadow = true;
-        instancedMesh.receiveShadow = true;
+        if (!isMobile) {
+            instancedMesh.customDepthMaterial = depthMaterial;
+            instancedMesh.castShadow = true;
+            instancedMesh.receiveShadow = true;
+        }
         scene.add(instancedMesh);
 
         const dummy = new THREE.Object3D();
         const horizSpacing = Math.sqrt(3) * hexRadius + gap;
         const vertSpacing = 1.5 * hexRadius + gap * 0.75;
 
-        const offsetX = ((gridSize - 1) * horizSpacing) / 2;
-        const offsetZ = ((gridSize - 1) * vertSpacing) / 2;
+        const offsetX = ((effectiveGridSize - 1) * horizSpacing) / 2;
+        const offsetZ = ((effectiveGridSize - 1) * vertSpacing) / 2;
 
-        for (let i = 0; i < gridSize; i++) {
-            for (let j = 0; j < gridSize; j++) {
-                const index = i * gridSize + j;
+        for (let i = 0; i < effectiveGridSize; i++) {
+            for (let j = 0; j < effectiveGridSize; j++) {
+                const index = i * effectiveGridSize + j;
                 const rowShift = (i % 2) * (horizSpacing / 2);
                 const x = j * horizSpacing + rowShift - offsetX;
                 const z = i * vertSpacing - offsetZ;
@@ -462,12 +489,21 @@ export function WaveGridBackground({
         instancedMesh.instanceMatrix.needsUpdate = true;
         offsetAttribute.needsUpdate = true;
 
-        // ── Direct WebGL Renderer (Clean & Fast without postprocessing shaders) ─
-        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        // ── Direct WebGL Renderer ─────────────────────────────────────────────
+        const renderer = new THREE.WebGLRenderer({
+            canvas,
+            antialias: !isMobile, // Disable MSAA on mobile for huge performance gain
+            alpha: true,
+            powerPreference: "high-performance",
+        });
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.95;
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFShadowMap;
+        if (!isMobile) {
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFShadowMap;
+        } else {
+            renderer.shadowMap.enabled = false;
+        }
         renderer.setClearColor(colorBase);
         renderer.setSize(size.width, size.height);
         renderer.setPixelRatio(size.pixelRatio);
@@ -479,14 +515,18 @@ export function WaveGridBackground({
             camera.updateProjectionMatrix();
             renderer.setSize(size.width, size.height);
             renderer.setPixelRatio(size.pixelRatio);
+            if (isMobile && !propsRef.current.autoAnimate) {
+                renderer.render(scene, camera);
+            }
         };
         const resizeObserver = new ResizeObserver(applySize);
         resizeObserver.observe(container);
         window.addEventListener("resize", applySize);
 
-        // ── Animation loop ─────────────────────────────────────────────────────
+        // ── Animation Loop ─────────────────────────────────────────────────────
         const clock = new THREE.Clock();
-        renderer.setAnimationLoop(() => {
+
+        const renderFrame = () => {
             const delta = clock.getDelta();
             const elapsed = clock.getElapsedTime();
             const p = propsRef.current;
@@ -503,20 +543,30 @@ export function WaveGridBackground({
             scene.background = new THREE.Color(p.colorBase);
 
             updateTrail(delta);
-            lerpedMouse.x += (mouse.x - lerpedMouse.x) * 0.04;
-            lerpedMouse.y += (mouse.y - lerpedMouse.y) * 0.04;
-            positionCamera(lerpedMouse.x, lerpedMouse.y);
 
-            // Direct render
+            if (!isMobile) {
+                lerpedMouse.x += (mouse.x - lerpedMouse.x) * 0.04;
+                lerpedMouse.y += (mouse.y - lerpedMouse.y) * 0.04;
+                positionCamera(lerpedMouse.x, lerpedMouse.y);
+            }
+
             renderer.render(scene, camera);
-        });
+        };
 
-   
+        if (isMobile && !autoAnimate) {
+            // Static render for mobile — saves battery & GPU cycles completely!
+            renderFrame();
+        } else {
+            renderer.setAnimationLoop(renderFrame);
+        }
+
         return () => {
             renderer.setAnimationLoop(null);
-            window.removeEventListener("mousemove", onMouseMove);
-            window.removeEventListener("pointermove", onPointerMove);
-            window.removeEventListener("mouseleave", onMouseLeave);
+            if (!isMobile) {
+                window.removeEventListener("mousemove", onMouseMove);
+                window.removeEventListener("pointermove", onPointerMove);
+                window.removeEventListener("mouseleave", onMouseLeave);
+            }
             window.removeEventListener("resize", applySize);
             resizeObserver.disconnect();
 
