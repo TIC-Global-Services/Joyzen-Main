@@ -24,7 +24,7 @@ export default function Hero() {
               autoPlay
               loop
               muted
-              src={'/DNA_Joyzen.mov'}
+              src={'/DNA_Joyzen-nobg.webm'}
               playsInline
               style={{
                 backgroundColor: 'transparent',

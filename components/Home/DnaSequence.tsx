@@ -17,6 +17,9 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
   const isVisibleRef = useRef(true);
   const animationFrameIdRef = useRef<number | null>(null);
 
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [progress, setProgress] = useState(0);
+
   useEffect(() => {
     isMountedRef.current = true;
     const canvas = canvasRef.current;
@@ -53,6 +56,7 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
     const imageCache: (HTMLImageElement | null)[] = new Array(frameCount).fill(null);
     let lastRenderedIndex = -1;
     let currentFrameIdx = 0;
+    let loadedCount = 0;
 
     const getSrc = (index: number) => `/dna-sequence/${frameIndices[index]}.webp`;
 
@@ -61,90 +65,94 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
       ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
     };
 
-    // Fast-path: Preload & render frame 0 immediately
-    const firstImg = new window.Image();
+    // Animation Loop
+    let lastTime = performance.now();
+    let accumulatedTime = 0;
+    let loopStarted = false;
 
-    firstImg.onload = () => {
-      if (!isMountedRef.current) return;
+    const startAnimationLoop = () => {
+      if (loopStarted) return;
+      loopStarted = true;
+      lastTime = performance.now();
 
-      imageCache[0] = firstImg;
-      renderFrame(firstImg);
-      lastRenderedIndex = 0;
+      const tick = (now: number) => {
+        if (!isMountedRef.current) return;
 
-      // Start aggressive preloading only after first frame is visible
-      for (let c = 0; c < (isMobile ? 2 : 6); c++) {
-        loadNext();
-      }
+        const delta = now - lastTime;
+        lastTime = now;
+
+        if (isVisibleRef.current) {
+          accumulatedTime += delta;
+
+          while (accumulatedTime >= frameDuration) {
+            accumulatedTime -= frameDuration;
+            currentFrameIdx = (currentFrameIdx + 1) % frameCount;
+          }
+
+          const candidateImg = imageCache[currentFrameIdx];
+          if (candidateImg && candidateImg.complete && candidateImg.naturalWidth > 0) {
+            if (lastRenderedIndex !== currentFrameIdx) {
+              renderFrame(candidateImg);
+              lastRenderedIndex = currentFrameIdx;
+            }
+          }
+        }
+
+        animationFrameIdRef.current = requestAnimationFrame(tick);
+      };
+
+      animationFrameIdRef.current = requestAnimationFrame(tick);
     };
 
-    firstImg.src = getSrc(0);
-
-    // Progressive queue with mobile-optimized concurrency (4 on mobile, 8 on desktop)
-
+    // Preload frames progressively
+    let nextToLoad = 0;
     const CONCURRENCY = isMobile ? 4 : 8;
 
-    const loadNext = async () => {
+    const loadNext = () => {
       if (!isMountedRef.current || nextToLoad >= frameCount) return;
       const idx = nextToLoad++;
       const img = new window.Image();
       img.src = getSrc(idx);
 
-      const onDone = async () => {
+      const handleDone = () => {
         if (!isMountedRef.current) return;
-        try {
-          if ('decode' in img) {
-            await img.decode();
-          }
-        } catch {
-          // ignore
-        }
         imageCache[idx] = img;
-        loadNext();
+        loadedCount++;
+
+        const currentPct = Math.min(100, Math.round((loadedCount / frameCount) * 100));
+        setProgress(currentPct);
+
+        // When first frame is loaded, render it immediately
+        if (idx === 0) {
+          renderFrame(img);
+          lastRenderedIndex = 0;
+        }
+
+        // When all images are loaded, show video and start loop
+        if (loadedCount >= frameCount) {
+          setImagesLoaded(true);
+          startAnimationLoop();
+        } else {
+          loadNext();
+        }
       };
 
-      img.onload = onDone;
-      img.onerror = () => {
-        if (isMountedRef.current) loadNext();
-      };
+      img.onload = handleDone;
+      img.onerror = handleDone;
     };
-    let nextToLoad = 1;
-    const INITIAL_CONCURRENCY = 2;
 
+    // Launch worker queue
     for (let c = 0; c < CONCURRENCY; c++) {
       loadNext();
     }
 
-    // RAF Animation Loop with Delta Time and Visibility Check
-    let lastTime = performance.now();
-    let accumulatedTime = 0;
-
-    const tick = (now: number) => {
-      if (!isMountedRef.current) return;
-
-      const delta = now - lastTime;
-      lastTime = now;
-
-      if (isVisibleRef.current) {
-        accumulatedTime += delta;
-
-        while (accumulatedTime >= frameDuration) {
-          accumulatedTime -= frameDuration;
-          currentFrameIdx = (currentFrameIdx + 1) % frameCount;
-        }
-
-        const candidateImg = imageCache[currentFrameIdx];
-        if (candidateImg && candidateImg.complete && candidateImg.naturalWidth > 0) {
-          if (lastRenderedIndex !== currentFrameIdx) {
-            renderFrame(candidateImg);
-            lastRenderedIndex = currentFrameIdx;
-          }
-        }
+    // Safety fallback: if connection is slow, start loop with buffered frames after 4s
+    const fallbackTimeout = setTimeout(() => {
+      if (isMountedRef.current && loadedCount >= 20 && !loopStarted) {
+        setImagesLoaded(true);
+        startAnimationLoop();
       }
-
-      animationFrameIdRef.current = requestAnimationFrame(tick);
-    };
-
-    animationFrameIdRef.current = requestAnimationFrame(tick);
+    }, 4000);
 
     // IntersectionObserver to pause loop when offscreen
     let observer: IntersectionObserver | null = null;
@@ -170,6 +178,7 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
 
     return () => {
       isMountedRef.current = false;
+      clearTimeout(fallbackTimeout);
       if (animationFrameIdRef.current) {
         cancelAnimationFrame(animationFrameIdRef.current);
       }
@@ -181,19 +190,36 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={
-        className ||
-        'w-full h-auto aspect-[1920/1080] max-h-[900px] object-contain object-right opacity-95 scale-100 sm:scale-105 md:scale-110 origin-right-center'
-      }
-      style={{
-        display: 'block',
-        transform: 'translate3d(0, 0, 0)',
-        WebkitTransform: 'translate3d(0, 0, 0)',
-        backfaceVisibility: 'hidden',
-        WebkitBackfaceVisibility: 'hidden',
-      }}
-    />
+    <div className="relative w-full h-full flex items-center justify-center">
+      {/* ─── Loader ─── */}
+      {!imagesLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 transition-opacity duration-500">
+          <div className="flex flex-col items-center gap-3">
+            <div className="w-8 h-8 border-[3px] border-[#036132] border-t-transparent rounded-full animate-spin" />
+            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+              {progress > 0 ? `Loading ${progress}%` : 'Loading…'}
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* ─── Canvas ─── */}
+      <canvas
+        ref={canvasRef}
+        className={`${
+          className ||
+          'w-full h-auto aspect-[1920/1080] max-h-[900px] object-contain object-right origin-right-center'
+        } transition-opacity duration-700 ease-out ${
+          imagesLoaded ? 'opacity-95' : 'opacity-0'
+        }`}
+        style={{
+          display: 'block',
+          transform: 'translate3d(0, 0, 0)',
+          WebkitTransform: 'translate3d(0, 0, 0)',
+          backfaceVisibility: 'hidden',
+          WebkitBackfaceVisibility: 'hidden',
+        }}
+      />
+    </div>
   );
 }
