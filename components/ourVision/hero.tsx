@@ -24,17 +24,15 @@ export default function Hero() {
               autoPlay
               loop
               muted
+              src={'/DNA_Joyzen.mov'}
               playsInline
               style={{
                 backgroundColor: 'transparent',
                 WebkitTransform: 'translate3d(0,0,0)',
                 transform: 'translateZ(0)',
               }}
-              className="object-cover w-full h-full object-top-right bg-transparent border-0 outline-none  mix-blend-multiply"
+              className="object-cover w-full h-full object-top-right bg-transparent border-0 outline-none mix-blend-multiply"
             >
-              <source src="/DNA_Joyzen-nobg.mov" type='video/quicktime; codecs="hvc1"' />
-              <source src="/DNA_Joyzen-nobg.mov" type='video/mp4; codecs="hvc1"' />
-              <source src="/DNA_Joyzen-nobg.webm" type="video/webm" />
             </video>
           </motion.div>
         </motion.div>
@@ -49,7 +47,7 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="text-xl md:text-2xl font-semibold text-zinc-900 tracking-tight mb-2 leading-none"
         >
-          We believe the future of healthcare <br/> shouldn&apos;t feel foreign
+          We believe the future of healthcare <br /> shouldn&apos;t feel foreign
         </motion.p>
 
         {/* Primary Headline */}

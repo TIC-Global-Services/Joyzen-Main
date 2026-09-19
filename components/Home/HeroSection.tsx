@@ -1,23 +1,18 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import Reveal from '@/reuseable/Reveal';
+
+import DnaSequence from './DnaSequence';
 
 export default function HeroSection() {
   return (
     <section className="relative w-full min-h-screen flex items-end pt-16 sm:pt-24 pb-10 sm:pb-28 px-6 sm:px-12 lg:px-16 overflow-hidden">
       {/* 3D DNA Helix positioned on the right side */}
-      <div className="absolute -top-20 md:-top-12 -right-80 md:right-0 w-[230%] sm:w-[100%] h-full pointer-events-none select-none z-0 flex items-center justify-end">
-        <div className="relative w-full h-[95dvh] sm:h-[75dvh] md:h-full max-h-[900px]">
-          <Image
-            src="/dna.png"
-            alt="Joyzen DNA Helix"
-            fill
-            priority
-            className="object-contain object-right opacity-95 scale-100 sm:scale-105 md:scale-110 origin-right-center"
-          />
+      <div className="absolute -top-20 lg:-top-[10%] -right-[60%] md:-right-[50%] lg:-right-[0%] w-[230%] md:w-[200%] lg:w-[100%] h-full pointer-events-none select-none z-0 flex items-center justify-end ">
+        <div className="relative w-full">
+          <DnaSequence />
         </div>
       </div>
 
@@ -57,6 +52,7 @@ export default function HeroSection() {
           </Reveal>
         </div>
       </div>
+              <div className='h-20 w-full hidden lg:block -right-10 bg-[#f2f2f2] absolute bottom-0 z-100 blur-md'></div>
     </section>
   );
 }
