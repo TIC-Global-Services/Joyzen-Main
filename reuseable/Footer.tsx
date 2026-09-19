@@ -8,7 +8,7 @@ export default function Footer() {
 
   useEffect(() => {
     if (window.innerWidth < 640) {
-      setVideoSrc('/joyzenfooterMobile.mp4');
+      setVideoSrc('/joylogo mob.mp4');
     } else {
       setVideoSrc('/joylogo.mp4');
     }
