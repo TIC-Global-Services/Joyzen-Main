@@ -56,7 +56,7 @@ export default function Navbar() {
         {/* Right CTA Button: Talk to us (with icon) */}
         <div className="hidden lg:flex items-center">
           <Link
-            href="#contact"
+            href="/q-form"
 
           >
             <button className={`hidden px-3 lg:px-6 md:flex gap-2 text-xs lg:text-base items-center justify-center py-1.5 lg:py-3 rounded-[2.625rem] border border-white/10 backdrop-blur-xs shadow-md font-satoshi font-medium transition-colors ${isHome ? 'bg-white/10 hover:bg-[#F9F9F9]' : 'bg-white/20 hover:bg-white/30'}`}>
@@ -100,7 +100,7 @@ export default function Navbar() {
             );
           })}
           <Link
-            href="#contact"
+            href="/q-form"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-center mt-2 px-4 py-2 text-sm font-medium text-zinc-900 bg-zinc-100 rounded-full border border-zinc-300"
           >
