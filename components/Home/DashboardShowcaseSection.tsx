@@ -280,11 +280,11 @@ export default function DashboardShowcaseSection() {
                 {/* Dashboard Screenshot with crisp natural fit and smooth hover scale */}
                 <div className="relative w-full flex-1 min-h-[300px] sm:min-h-[380px] lg:min-h-[450px] rounded-2xl overflow-hidden flex items-center ">
                   <Image
-                    src="/your-health.png"
+                    src="/in-one-place.png"
                     alt="Everything your health has been asking for Finally in one place"
                     fill
                     priority
-                    className="w-full h-full object-cover object-top lg:object-cover rounded-xl transition-transform duration-700 ease-out scale-[1.015]"
+                    className="w-full h-full object-cover object-top lg:object-contain rounded-xl transition-transform duration-700 ease-out scale-[1.015]"
                   />
                   {/* Bottom Gradient Overlay */}
                   <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-white via-white/50 to-transparent pointer-events-none z-10" />
