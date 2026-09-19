@@ -273,11 +273,34 @@ export const GlassSpecularCard = ({
       }
     };
 
+    // Capture whatever `backdrop-blur-xs` actually resolves to in this
+    // project's Tailwind config (rather than hardcoding a blur radius),
+    // then drive it with inline styles for touch devices. Inline styles
+    // always take effect regardless of build/purge setup, unlike toggling
+    // a utility class at runtime, which depends on that exact class
+    // already existing in the compiled stylesheet.
+    let restingBackdropFilter = 'none';
+    if (isCoarsePointer) {
+      restingBackdropFilter = getComputedStyle(card).backdropFilter || 'blur(4px)';
+      card.style.backdropFilter = 'none';
+      card.style.setProperty('-webkit-backdrop-filter', 'none');
+    }
+
     const io = new IntersectionObserver(
       ([entry]) => {
         isIntersecting = entry.isIntersecting;
         if (shouldRun()) startLoop();
         else stopLoop();
+        // Glass stays everywhere. On touch devices, only pay the
+        // backdrop-filter compositing cost while the card is actually near
+        // the viewport — off-screen cards (most of the 6, at any instant)
+        // don't carry it. Desktop/pointer devices keep it always-on since
+        // that's not where the iOS jank comes from.
+        if (isCoarsePointer) {
+          const value = isIntersecting ? restingBackdropFilter : 'none';
+          card.style.backdropFilter = value;
+          card.style.setProperty('-webkit-backdrop-filter', value);
+        }
       },
       { rootMargin: '40% 0px', threshold: 0 }
     );
@@ -308,7 +331,7 @@ export const GlassSpecularCard = ({
   return (
     <div
       ref={cardRef}
-      className={`relative overflow-visible  bg-white/30 backdrop-blur-md border-t border-b border-white/80 shadow-[inset_-1px_-1px_4px_0_rgba(0,0,0,0.25)] rounded-[24px] sm:rounded-[32px] p-6 sm:p-7 md:p-8  hover:scale-[1.02] ${className}`}
+      className={`relative overflow-visible bg-white/5 backdrop-blur-xs rounded-[24px] sm:rounded-[32px] p-6 sm:p-7 md:p-8 shadow-[0_20px_45px_rgba(0,0,0,0.04),0_2px_8px_rgba(0,0,0,0.02),inset_0_1px_2px_rgba(255,255,255,0.95)] transition-[box-shadow,transform] duration-300 hover:shadow-[0_25px_60px_rgba(239,143,96,0.14),0_4px_12px_rgba(0,0,0,0.03)] hover:scale-[1.02] ${className}`}
     >
       {/* WebGL Specular Border Canvas */}
       <span
