@@ -7,7 +7,7 @@ import { motion } from 'framer-motion';
 
 export default function AboutHeroSection() {
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-end px-[5%]  sm:pt-40 pb-2 sm:pb-32 select-none">
+    <section className="relative w-full min-h-screen flex flex-col justify-end px-[5%] sm:pt-40 pb-2 sm:pb-32 select-none overflow-hidden">
       {/* Top-Right: Mechanical Robot Hand with Sweet Pea Flowers */}
       <motion.div
         initial={{ opacity: 0, x: 60, y: -40 }}
@@ -92,7 +92,7 @@ export default function AboutHeroSection() {
       </div>
 
       {/* Bottom gradient */}
-      <div className="absolute -bottom-14  md:-bottom-20 -left-10 right-0 h-7 sm:h-44 w-65 md:h-20
+      <div className="absolute -bottom-14  md:-bottom-10 -left-10 right-0 h-7 sm:h-44 w-65 md:h-20
                   bg-white to-transparent
                   pointer-events-none blur-lg z-[10000000] rounded-3xl" />
     </section>

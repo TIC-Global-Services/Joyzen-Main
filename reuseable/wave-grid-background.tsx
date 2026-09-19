@@ -160,7 +160,7 @@ export function WaveGridBackground({
     children,
     className,
     gridSize = 40,
-    colorBase = "#ffffff",
+    colorBase = "#fcf9f2",
     colorHigh = "#EF8F60",
     waveAmplitude = 0.5,
     waveSpeed = 6.0,
@@ -581,8 +581,8 @@ export function WaveGridBackground({
     }, [gridSize, colorBase, colorHigh]);
 
     return (
-        <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden bg-white select-none", className)}>
-            <canvas ref={canvasRef} className="block h-full w-full bg-white" />
+        <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden bg-[#fcf9f2] select-none", className)}>
+            <canvas ref={canvasRef} className="block h-full w-full bg-[#fcf9f2]" />
             {children != null && <div className="absolute inset-0">{children}</div>}
         </div>
     );

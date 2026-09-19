@@ -107,11 +107,10 @@ function GlassDropdown({
                     onChange(option);
                     setIsOpen(false);
                   }}
-                  className={`text-sm sm:text-base cursor-pointer py-2 px-3 rounded-xl transition-colors ${
-                    value === option
+                  className={`text-sm sm:text-base cursor-pointer py-2 px-3 rounded-xl transition-colors ${value === option
                       ? 'font-bold text-zinc-900 bg-white/60'
                       : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-white/30'
-                  }`}
+                    }`}
                 >
                   {option}
                 </div>

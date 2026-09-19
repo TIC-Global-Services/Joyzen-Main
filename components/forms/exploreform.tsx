@@ -55,43 +55,75 @@ const maleOptions = [
 ];
 
 // ----------------------------------------------------------------------
-// Gradient Border & Ambient Glow Pill Wrapper
+// Gradient Border & Ambient Glow Pill Wrapper with Moving Gradient
 // ----------------------------------------------------------------------
 function GradientOptionWrapper({
   children,
   className = '',
   isSelected = false,
+  index = 0,
 }: {
   children: React.ReactNode;
   className?: string;
   isSelected?: boolean;
+  index?: number;
 }) {
+  // Staggered speed and negative delay per item for natural, asynchronous fluid movement
+  const duration = 7 + (index % 5) * 1.5;
+  const delay = -((index * 2.3) % 7);
+  const glowDuration = 6 + (index % 4) * 1.8;
+
+  const gradientStyle = {
+    backgroundImage:
+      'linear-gradient(130deg, #F6D7C6 0%, #F9E0AE 22%, #AEDEE4 15%, #FFD4BF 12%, #B5ECF2 10%, #F6D7C6 10%)',
+    backgroundSize: '350% 350%',
+    animation: `dynamicGradientFlow ${duration}s ease-in-out infinite alternate`,
+    animationDelay: `${delay}s`,
+  };
+
   return (
     <div className={`relative group w-full ${className}`}>
-      {/* Soft Ambient Glow BEHIND the Option Pill */}
+      {/* Soft Ambient Glow BEHIND the Option Pill with organic drifting motion */}
       <div
-        className={`absolute -inset-[3px] rounded-[32px] bg-gradient-to-r from-[#F6D7C6] via-[#F9E0AE] to-[#AEDEE4] blur-sm pointer-events-none transition-opacity duration-300 ${
-          isSelected
-            ? 'opacity-85'
-            : 'opacity-0 group-hover:opacity-65 group-focus-within:opacity-75'
-        }`}
+        className={`absolute -inset-[3px] rounded-[32px] blur-[7px] pointer-events-none transition-all duration-500 will-change-transform ${isSelected
+            ? 'opacity-90 scale-[1.01]'
+            : 'opacity-0 group-hover:opacity-75 group-focus-within:opacity-80'
+          }`}
+        style={{
+          ...gradientStyle,
+          animation: `dynamicGradientFlow ${duration}s ease-in-out infinite alternate, floatMeshGlow ${glowDuration}s ease-in-out infinite alternate`,
+          animationDelay: `${delay}s, ${delay * 0.7}s`,
+        }}
       />
 
       {/* 1.5px Outer Frame forming the Gradient Border Stroke */}
       <div
-        className={`relative p-[1.5px] rounded-[28px] transition-all duration-300 ${
-          isSelected
-            ? 'bg-gradient-to-r from-[#F6D7C6] via-[#F9E0AE] to-[#AEDEE4] shadow-[0_4px_24px_rgba(246,215,198,0.35)]'
-            : 'bg-white/80 group-hover:bg-gradient-to-r group-hover:from-[#F6D7C6] group-hover:via-[#F9E0AE] group-hover:to-[#AEDEE4] group-focus-within:bg-gradient-to-r group-focus-within:from-[#F6D7C6] group-focus-within:via-[#F9E0AE] group-focus-within:to-[#AEDEE4]'
-        }`}
+        className={`relative p-[1.5px] rounded-[28px] overflow-hidden transition-all duration-300 ${isSelected
+            ? 'shadow-[0_4px_24px_rgba(246,215,198,0.45)]'
+            : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)]'
+          }`}
       >
+        {/* Animated Moving Gradient Fill */}
+        <div
+          className={`absolute inset-0 rounded-[28px] transition-opacity duration-300 ${isSelected
+              ? 'opacity-100'
+              : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100'
+            }`}
+          style={gradientStyle}
+        />
+
+        {/* Static Subtle Border (visible when idle / not hovered & not selected) */}
+        <div
+          className={`absolute inset-0 rounded-[28px] bg-white/80 border border-black/5 transition-opacity duration-300 ${isSelected ? 'opacity-0' : 'group-hover:opacity-0 group-focus-within:opacity-0'
+            }`}
+        />
+
         {/* Inner Glassmorphic Pill Container */}
         <div
-          className={`w-full h-full rounded-[26px] backdrop-blur-xs transition-all ${
-            isSelected
+          className={`relative z-10 w-full h-full rounded-[26.5px] backdrop-blur-xs transition-all duration-300 ${isSelected
               ? 'bg-[#FCFAF7]/95 text-zinc-900 font-bold'
-              : 'bg-white/5 group-hover:bg-[#FCFAF7]/90 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_4px_16px_rgba(0,0,0,0.02)]'
-          }`}
+              : 'bg-white/90 group-hover:bg-[#FCFAF7]/95 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_4px_16px_rgba(0,0,0,0.02)]'
+            }`}
         >
           {children}
         </div>
@@ -130,8 +162,8 @@ export default function ExploreForm() {
     selectedGender === 'Male'
       ? maleOptions
       : selectedGender === 'Female'
-      ? femaleOptions
-      : null;
+        ? femaleOptions
+        : null;
 
   const handleNextStep = async () => {
     const isStep1Valid = await trigger(['fullName', 'age', 'gender']);
@@ -171,24 +203,89 @@ export default function ExploreForm() {
   };
 
   return (
-    <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden bg-[#FAF7F5]">
+    <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden ">
       {/* 1. Existing Background Hexagon Grid Mesh */}
-      <div
+      {/* <div
         className="absolute inset-0 pointer-events-none opacity-25 z-0"
         style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='56' height='97' viewBox='0 0 56 97' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M28 0l28 16v32L28 64 0 48V16zm0 97l28-16V49L28 33 0 49v32z' fill='%2000000' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E")`,
           backgroundSize: '56px 97px',
         }}
+      /> */}
+
+      {/* 2. Soft Pastel Dynamic Moving Mesh Gradient Overlay */}
+      <div className="absolute inset-0 moving-bg-mesh pointer-events-none z-0" />
+
+      {/* 3. Glowing Ambient Mesh Blobs crossing left-to-right & right-to-left */}
+      {/* Left Peach blob moves all the way to the Right */}
+      <motion.div
+        className="absolute top-0 -left-20 w-[650px] h-[650px] bg-[#FFAAA6]/75 rounded-full blur-[110px] pointer-events-none z-0"
+        animate={{
+          x: ['-5vw', '70vw', '-5vw'],
+          y: ['0vh', '30vh', '0vh'],
+          scale: [1, 1.25, 1],
+        }}
+        transition={{
+          duration: 14,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
       />
-
-      {/* 2. Soft Pastel Gradient Overlay on Top of Existing BG */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FFC5CD]/55 via-[#E6D3F5]/45 to-[#B4ECF5]/60 pointer-events-none z-0" />
-
-      {/* 3. Glowing Ambient Mesh Blobs */}
-      <div className="absolute -top-36 -left-36 w-[650px] h-[650px] bg-[#FFAAA6]/60 rounded-full blur-[110px] pointer-events-none z-0" />
-      <div className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-[#FFDFD3]/50 rounded-full blur-[130px] pointer-events-none z-0" />
-      <div className="absolute top-1/6 -right-24 w-[650px] h-[650px] bg-[#B2EBF2]/75 rounded-full blur-[100px] pointer-events-none z-0" />
-      <div className="absolute -bottom-36 right-0 w-[600px] h-[600px] bg-[#80DEEA]/50 rounded-full blur-[120px] pointer-events-none z-0" />
+      {/* Right Cyan blob moves all the way to the Left */}
+      <motion.div
+        className="absolute top-1/4 -right-20 w-[650px] h-[650px] bg-[#80DEEA]/70 rounded-full blur-[110px] pointer-events-none z-0"
+        animate={{
+          x: ['5vw', '-70vw', '5vw'],
+          y: ['0vh', '-25vh', '0vh'],
+          scale: [1, 1.2, 1],
+        }}
+        transition={{
+          duration: 14,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+      {/* Top Warm Champagne blob crosses left to right */}
+      <motion.div
+        className="absolute -top-32 left-10 w-[550px] h-[550px] bg-[#FFDFD3]/65 rounded-full blur-[120px] pointer-events-none z-0"
+        animate={{
+          x: ['0vw', '55vw', '0vw'],
+          y: ['0vh', '40vh', '0vh'],
+          scale: [0.9, 1.15, 0.9],
+        }}
+        transition={{
+          duration: 18,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+      {/* Bottom Aqua blob crosses right to left */}
+      <motion.div
+        className="absolute -bottom-32 right-10 w-[600px] h-[600px] bg-[#B2EBF2]/75 rounded-full blur-[120px] pointer-events-none z-0"
+        animate={{
+          x: ['0vw', '-55vw', '0vw'],
+          y: ['0vh', '-35vh', '0vh'],
+          scale: [1, 1.2, 1],
+        }}
+        transition={{
+          duration: 18,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
+      {/* Central Soft Lavender blending cloud */}
+      <motion.div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#E6D3F5]/55 rounded-full blur-[130px] pointer-events-none z-0"
+        animate={{
+          scale: [0.85, 1.25, 0.85],
+          rotate: [0, 180, 360],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: 'easeInOut',
+        }}
+      />
 
       <div className="relative z-10 w-full max-w-2xl flex flex-col items-center mt-10">
         {/* Dynamic Heading & Subtitle */}
@@ -218,7 +315,7 @@ export default function ExploreForm() {
                 className="space-y-3"
               >
                 <h1 className="text-[40px] sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.18]">
-                  Explore <br className='sm:hidden'/><span className="text-[#EF8F60]">Joyzen</span> models
+                  Explore <br className='sm:hidden' /><span className="text-[#EF8F60]">Joyzen</span> models
                 </h1>
                 <p className="text-sm sm:text-base lg:text-lg text-zinc-600 font-normal leading-[1.4] max-w-xl mx-auto">
                   Discover personalized care programs designed around your journey, with structured guidance, continuous support, and plans that adapt as you progress.
@@ -234,11 +331,10 @@ export default function ExploreForm() {
             <div className="flex items-center justify-between px-2">
               <div className="flex items-center space-x-2">
                 <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                    currentStep === 1
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 1
                       ? 'bg-[#EF8F60] text-white shadow-sm'
                       : 'bg-[#AEDEE4] text-[#036132]'
-                  }`}
+                    }`}
                 >
                   1
                 </span>
@@ -251,11 +347,10 @@ export default function ExploreForm() {
 
               <div className="flex items-center space-x-2">
                 <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                    currentStep === 2
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 2
                       ? 'bg-[#EF8F60] text-white shadow-sm'
                       : 'bg-zinc-200 text-zinc-500'
-                  }`}
+                    }`}
                 >
                   2
                 </span>
@@ -404,11 +499,10 @@ export default function ExploreForm() {
                                   setValue('selectedOption', ''); // Reset option when gender changes
                                   setGenderOpen(false);
                                 }}
-                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
-                                  selectedGender === option
+                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${selectedGender === option
                                     ? 'font-bold text-zinc-900'
                                     : 'font-medium text-zinc-500 hover:text-zinc-900'
-                                }`}
+                                  }`}
                               >
                                 {option}
                               </div>
@@ -455,18 +549,17 @@ export default function ExploreForm() {
                           {selectedGender} Health Description Options
                         </span>
                       </div>
-                      {currentOptions.map((option) => {
+                      {currentOptions.map((option, idx) => {
                         const isItemChosen = selectedOption === option;
                         return (
-                          <GradientOptionWrapper key={option} isSelected={isItemChosen}>
+                          <GradientOptionWrapper key={option} isSelected={isItemChosen} index={idx}>
                             <button
                               type="button"
                               onClick={() => {
                                 setValue('selectedOption', isItemChosen ? '' : option, { shouldValidate: true });
                               }}
-                              className={`w-full text-center sm:text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] ${
-                                isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-zinc-700 hover:text-zinc-900'
-                              }`}
+                              className={`w-full text-center sm:text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] ${isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-zinc-700 hover:text-zinc-900'
+                                }`}
                             >
                               {option}
                             </button>

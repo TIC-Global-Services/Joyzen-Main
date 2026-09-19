@@ -1,8 +1,11 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 
 export default function Footer() {
+  const pathname = usePathname();
+
   // Pick the correct video for the device — client-side check avoids SSR mismatch.
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
 
@@ -13,6 +16,11 @@ export default function Footer() {
       setVideoSrc('/joylogo.mp4');
     }
   }, []);
+
+  // Hide footer on specific question form pages
+  if (pathname === '/q-form' || pathname === '/q-form-2') {
+    return null;
+  }
 
   return (
     <footer className="relative w-full h-[60dvh] sm:h-[60svh] md:h-[40dvh] lg:h-[600px] flex flex-col justify-between p-5 sm:p-10 lg:p-[2rem] overflow-hidden text-black select-none font-epilogue">

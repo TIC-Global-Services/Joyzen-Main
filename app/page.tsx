@@ -28,7 +28,7 @@ export default function Home() {
         {/* Component 5: Care Reimagined Climax */}
         <CareReimaginedSection />
       </main>
-     <div className='h-16 w-full bg-[#fcf9f2] absolute -bottom-[0.5%] left-0 z-100 blur-md'></div>
+     <div className='h-16 w-full bg-[#f2f1f0] absolute -bottom-[0.5%] left-0 z-100 blur-md'></div>
      
     </div>
   );

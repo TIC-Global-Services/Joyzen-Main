@@ -1,6 +1,7 @@
 "use client";
 import { ReactNode, useRef, useEffect } from "react";
 import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 import gsap from "gsap";
 import { usePathname } from "next/navigation";

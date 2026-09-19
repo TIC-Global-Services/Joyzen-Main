@@ -313,8 +313,6 @@ export default function DesignedForToday() {
   return (
     <section className="relative w-full min-h-[90vh] lg:min-h-screen flex flex-col items-center justify-between py-12 px-4 bg-transparent overflow-hidden select-none">
       <Leva hidden={!showLeva} />
-      <HoneycombBackground />
-
       {/* Header */}
       <div className="relative z-10 text-center max-w-5xl mx-auto px-4 pt-4">
         <motion.h2
@@ -324,7 +322,7 @@ export default function DesignedForToday() {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-2xl sm:text-3xl lg:text-[2.5rem] font-bold text-zinc-900 tracking-tight leading-tight"
         >
-          Designed For Today. Not <br className='md:hidden'/> Inherited From Yesterday.
+          Designed For Today. Not <br className='md:hidden' /> Inherited From Yesterday.
         </motion.h2>
 
         <motion.p
@@ -386,6 +384,9 @@ export default function DesignedForToday() {
             camera={{ position: [0, 0, 7], fov: 45 }}
             gl={{ antialias: true, alpha: true }}
             dpr={[1, 2]}
+            style={{
+              filter: "contrast(1) saturate(1.1)",
+            }}
           >
             <ambientLight intensity={ambientIntensity} />
             <directionalLight position={[5, 8, 5]} intensity={dirIntensity} />
