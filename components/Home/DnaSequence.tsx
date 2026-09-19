@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 const TOTAL_FRAMES = 360;
 const START_INDEX = 10001;
@@ -16,9 +16,6 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
   const isMountedRef = useRef(true);
   const isVisibleRef = useRef(true);
   const animationFrameIdRef = useRef<number | null>(null);
-
-  const [imagesLoaded, setImagesLoaded] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     isMountedRef.current = true;
@@ -104,7 +101,7 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
       animationFrameIdRef.current = requestAnimationFrame(tick);
     };
 
-    // Preload frames progressively
+    // Preload frames progressively and notify global preloader
     let nextToLoad = 0;
     const CONCURRENCY = isMobile ? 4 : 8;
 
@@ -120,17 +117,27 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
         loadedCount++;
 
         const currentPct = Math.min(100, Math.round((loadedCount / frameCount) * 100));
-        setProgress(currentPct);
 
-        // When first frame is loaded, render it immediately
+        // Dispatch global progress event for full page preloader
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(
+            new CustomEvent('dna-progress', {
+              detail: {
+                progress: currentPct,
+                isComplete: loadedCount >= frameCount,
+              },
+            })
+          );
+        }
+
+        // Render first frame immediately once available
         if (idx === 0) {
           renderFrame(img);
           lastRenderedIndex = 0;
         }
 
-        // When all images are loaded, show video and start loop
+        // When all images are loaded, start loop
         if (loadedCount >= frameCount) {
-          setImagesLoaded(true);
           startAnimationLoop();
         } else {
           loadNext();
@@ -146,11 +153,17 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
       loadNext();
     }
 
-    // Safety fallback: if connection is slow, start loop with buffered frames after 4s
+    // Safety fallback: start animation loop if network is slow after 4s
     const fallbackTimeout = setTimeout(() => {
       if (isMountedRef.current && loadedCount >= 20 && !loopStarted) {
-        setImagesLoaded(true);
         startAnimationLoop();
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(
+            new CustomEvent('dna-progress', {
+              detail: { progress: 100, isComplete: true },
+            })
+          );
+        }
       }
     }, 4000);
 
@@ -190,36 +203,19 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
   }, []);
 
   return (
-    <div className="relative w-full h-full flex items-center justify-center">
-      {/* ─── Loader ─── */}
-      {!imagesLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 transition-opacity duration-500">
-          <div className="flex flex-col items-center gap-3">
-            <div className="w-8 h-8 border-[3px] border-[#036132] border-t-transparent rounded-full animate-spin" />
-            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
-              {progress > 0 ? `Loading ${progress}%` : 'Loading…'}
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* ─── Canvas ─── */}
-      <canvas
-        ref={canvasRef}
-        className={`${
-          className ||
-          'w-full h-auto aspect-[1920/1080] max-h-[900px] object-contain object-right origin-right-center'
-        } transition-opacity duration-700 ease-out ${
-          imagesLoaded ? 'opacity-95' : 'opacity-0'
-        }`}
-        style={{
-          display: 'block',
-          transform: 'translate3d(0, 0, 0)',
-          WebkitTransform: 'translate3d(0, 0, 0)',
-          backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden',
-        }}
-      />
-    </div>
+    <canvas
+      ref={canvasRef}
+      className={
+        className ||
+        'w-full h-auto aspect-[1920/1080] max-h-[900px] object-contain object-right opacity-95 scale-100 sm:scale-105 md:scale-110 origin-right-center'
+      }
+      style={{
+        display: 'block',
+        transform: 'translate3d(0, 0, 0)',
+        WebkitTransform: 'translate3d(0, 0, 0)',
+        backfaceVisibility: 'hidden',
+        WebkitBackfaceVisibility: 'hidden',
+      }}
+    />
   );
 }

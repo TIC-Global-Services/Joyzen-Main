@@ -10,11 +10,18 @@ import SpecularButton from '@/reuseable/specularButton';
 
 
 export const exploreFormSchema = z.object({
-  fullName: z.string().min(2, 'Full name must be at least 2 characters'),
+  fullName: z
+    .string()
+    .min(2, 'Full name must be at least 2 characters')
+    .regex(/^[a-zA-Z\s.'-]+$/, 'Name cannot contain numbers'),
   age: z
     .string()
     .min(1, 'Age is required')
-    .refine((val) => !isNaN(Number(val)) && Number(val) > 0 && Number(val) < 120, 'Please enter a valid age'),
+    .regex(/^\d+$/, 'Age must be a number')
+    .refine((val) => {
+      const num = Number(val);
+      return !isNaN(num) && num > 0 && num < 120;
+    }, 'Please enter a valid age'),
   gender: z.string().min(1, 'Please select your gender'),
   selectedOption: z.string().optional(),
 });
@@ -324,7 +331,11 @@ export default function ExploreForm() {
                   <div>
                     <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
-                        {...register('fullName')}
+                        {...register('fullName', {
+                          onChange: (e) => {
+                            e.target.value = e.target.value.replace(/[0-9]/g, '');
+                          },
+                        })}
                         type="text"
                         placeholder="Full Name"
                         className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
@@ -337,8 +348,15 @@ export default function ExploreForm() {
                   <div>
                     <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
-                        {...register('age')}
+                        {...register('age', {
+                          onChange: (e) => {
+                            e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
+                          },
+                        })}
                         type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={3}
                         placeholder="Age"
                         className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
                       />
@@ -376,7 +394,7 @@ export default function ExploreForm() {
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.25 }}
-                            className="px-6 pb-5 pt-2 space-y-2 border-t border-white/60 bg-white/60 backdrop-blur-2xl"
+                            className="px-6 pb-5 pt-2 space-y-2 border-t border-white/60 bg-white/5 backdrop-blur-xs"
                           >
                             {['Female', 'Male', 'Prefer not to say'].map((option) => (
                               <div

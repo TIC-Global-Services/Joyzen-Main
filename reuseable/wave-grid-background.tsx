@@ -582,7 +582,7 @@ export function WaveGridBackground({
 
     return (
         <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden bg-white select-none", className)}>
-            <canvas ref={canvasRef} className="block h-full w-full" />
+            <canvas ref={canvasRef} className="block h-full w-full bg-white" />
             {children != null && <div className="absolute inset-0">{children}</div>}
         </div>
     );
