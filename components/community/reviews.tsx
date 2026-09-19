@@ -104,11 +104,29 @@ export const GlassSpecularCard = ({
     const fx = fxRef.current;
     if (!card || !fx) return;
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Device-aware flags — these drive most of the mobile/iOS savings below.
+    const isCoarsePointer =
+      typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+    const prefersReducedMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Respect reduced-motion: render the plain glass card (CSS only), skip WebGL entirely.
+    if (prefersReducedMotion) return;
+
+    // Cap DPR harder on touch devices — a 3x-DPR iPhone rendering 6 canvases at dpr=2
+    // is a lot of fill-rate for an effect this subtle.
+    const dpr = Math.min(window.devicePixelRatio || 1, isCoarsePointer ? 1.5 : 2);
     let renderer: Renderer | null = null;
 
     try {
-      renderer = new Renderer({ alpha: true, premultipliedAlpha: true, antialias: true, dpr });
+      renderer = new Renderer({
+        alpha: true,
+        premultipliedAlpha: true,
+        // MSAA is expensive on mobile tile-based GPUs; skip it on touch devices.
+        antialias: !isCoarsePointer,
+        dpr,
+      });
     } catch {
       return;
     }
@@ -189,7 +207,10 @@ export const GlassSpecularCard = ({
       proximityT = t * t * (3 - 2 * t);
     };
 
-    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    // Pointer-proximity glow is a mouse-only affordance — skip the listener on touch.
+    if (!isCoarsePointer) {
+      window.addEventListener('pointermove', onPointerMove, { passive: true });
+    }
 
     let angle = 2.4;
     let idleAngle = 2.4;
@@ -229,12 +250,54 @@ export const GlassSpecularCard = ({
       }
     };
 
-    raf = requestAnimationFrame(update);
+    // --- Visibility-gated render loop -------------------------------------
+    // This is the main fix: previously every card's shader ran forever,
+    // regardless of whether it was actually on screen. With 6 cards that's
+    // 6 permanently-active WebGL contexts, which is close to iOS Safari's
+    // context ceiling and a steady GPU/battery drain. Now the loop only
+    // runs while the card is (a) intersecting the viewport and (b) the tab
+    // is foregrounded.
+    let isIntersecting = false;
+    let isPageVisible = document.visibilityState === 'visible';
+    const shouldRun = () => isIntersecting && isPageVisible;
+
+    const startLoop = () => {
+      if (raf) return;
+      last = performance.now();
+      raf = requestAnimationFrame(update);
+    };
+    const stopLoop = () => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        isIntersecting = entry.isIntersecting;
+        if (shouldRun()) startLoop();
+        else stopLoop();
+      },
+      { rootMargin: '40% 0px', threshold: 0 }
+    );
+    io.observe(card);
+
+    const onVisibilityChange = () => {
+      isPageVisible = document.visibilityState === 'visible';
+      if (shouldRun()) startLoop();
+      else stopLoop();
+    };
+    document.addEventListener('visibilitychange', onVisibilityChange);
 
     return () => {
-      cancelAnimationFrame(raf);
+      stopLoop();
+      io.disconnect();
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       ro.disconnect();
-      window.removeEventListener('pointermove', onPointerMove);
+      if (!isCoarsePointer) {
+        window.removeEventListener('pointermove', onPointerMove);
+      }
       if (gl?.canvas && gl.canvas instanceof HTMLCanvasElement && gl.canvas.parentNode === fx) {
         fx.removeChild(gl.canvas);
       }
@@ -245,7 +308,7 @@ export const GlassSpecularCard = ({
   return (
     <div
       ref={cardRef}
-      className={`relative overflow-visible bg-white/5 backdrop-blur-xs rounded-[24px] sm:rounded-[32px] p-6 sm:p-7 md:p-8 shadow-[0_20px_45px_rgba(0,0,0,0.04),0_2px_8px_rgba(0,0,0,0.02),inset_0_1px_2px_rgba(255,255,255,0.95)] transition-all duration-300 hover:shadow-[0_25px_60px_rgba(239,143,96,0.14),0_4px_12px_rgba(0,0,0,0.03)] hover:scale-[1.02] ${className}`}
+      className={`relative overflow-visible  bg-white/30 backdrop-blur-md border-t border-b border-white/80 shadow-[inset_-1px_-1px_4px_0_rgba(0,0,0,0.25)] rounded-[24px] sm:rounded-[32px] p-6 sm:p-7 md:p-8  hover:scale-[1.02] ${className}`}
     >
       {/* WebGL Specular Border Canvas */}
       <span
@@ -273,21 +336,21 @@ const defaultLeftReviews: ReviewCardItem[] = [
     id: 'rev-1',
     rating: 5,
     quote:
-      '“Joyzen transformed the way I approach my healthcare. The continuous support made all the difference.”',
+      '"Joyzen transformed the way I approach my healthcare. The continuous support made all the difference."',
     authorName: '-Sarah M.',
   },
   {
     id: 'rev-2',
     rating: 5,
     quote:
-      '“Having doctors and wellness mentors in one circle changed everything for my everyday routine.”',
+      '"Having doctors and wellness mentors in one circle changed everything for my everyday routine."',
     authorName: '-David Ross',
   },
   {
     id: 'rev-3',
     rating: 5,
     quote:
-      '“The empathy, quick consultations, and warm community feel is unmatched anywhere else.”',
+      '"The empathy, quick consultations, and warm community feel is unmatched anywhere else."',
     authorName: '-Elena Rostova',
   },
 ];
@@ -297,21 +360,21 @@ const defaultRightReviews: ReviewCardItem[] = [
     id: 'rev-4',
     rating: 5,
     quote:
-      '“From mindful workshops to doctor checkups, everything feels deeply personal and empowering.”',
+      '"From mindful workshops to doctor checkups, everything feels deeply personal and empowering."',
     authorName: '-Michael Chen',
   },
   {
     id: 'rev-5',
     rating: 5,
     quote:
-      '“No more guesswork or rushing through appointments. Genuine care and continuous guidance.”',
+      '"No more guesswork or rushing through appointments. Genuine care and continuous guidance."',
     authorName: '-Sarah Jenkins',
   },
   {
     id: 'rev-6',
     rating: 5,
     quote:
-      '“A safe space where healthcare meets human connection. Life is so much better as part of Joyzen.”',
+      '"A safe space where healthcare meets human connection. Life is so much better as part of Joyzen."',
     authorName: '-Marcus Vance',
   },
 ];
@@ -361,7 +424,22 @@ const Reviews = ({
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    // Prevents iOS Safari's dynamic-toolbar resize events from forcing a
+    // full ScrollTrigger.refresh() mid-scroll (which would reset every
+    // card's gsap.set() offscreen position and read as a stutter/reset).
     ScrollTrigger.config({ ignoreMobileResize: true });
+
+    const isTouch =
+      typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+
+    // GSAP's documented fix for pinned-section jank on iOS Safari, caused by
+    // its momentum/rubber-band scroll physics fighting the pin. This is a
+    // page-level scroll-physics change (not scoped to this section alone),
+    // so it's applied only on touch devices and reverted on unmount — test
+    // it against any other scroll-driven sections elsewhere on the page.
+    if (isTouch) {
+      ScrollTrigger.normalizeScroll(true);
+    }
 
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
@@ -467,7 +545,7 @@ const Reviews = ({
         const leftCards = gsap.utils.toArray<HTMLElement>('.review-card-left');
         const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
         // Snappy touch scroll distance, smooth alternating cards without large gaps
-        buildScrollTimeline(leftCards, rightCards, 1900, 2.2, 0.7, 0.5);
+        buildScrollTimeline(leftCards, rightCards, 1900, 2.2, 0.7, 0.35);
       });
 
       // ── Desktop (>1024px) ──
@@ -478,7 +556,12 @@ const Reviews = ({
       });
     }, containerRef);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      if (isTouch) {
+        ScrollTrigger.normalizeScroll(false);
+      }
+    };
   }, []);
 
   return (
@@ -488,7 +571,7 @@ const Reviews = ({
     >
       <div
         ref={containerRef}
-        className="h-screen h-[100dvh] w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
+        className="h-[100dvh] w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
       >
         {/* Background Ambient Spotlights */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] bg-gradient-to-tr from-[#EF8F60]/12 via-[#78C9CF]/12 to-transparent rounded-full blur-[140px] pointer-events-none" />
