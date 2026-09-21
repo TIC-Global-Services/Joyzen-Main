@@ -1,7 +1,5 @@
 import React from 'react';
-import { Metadata } from 'next';
-import Navbar from '@/reuseable/Navbar';
-import Footer from '@/reuseable/Footer';
+import type { Metadata } from 'next';
 import AboutHeroSection from '@/components/about/AboutHeroSection';
 import AboutMobileSection from '@/components/about/AboutMobileSection';
 import SuperPowerSection from '@/components/about/superPower';
@@ -9,9 +7,43 @@ import DesignedForToday from '@/components/about/designedForToday';
 import LetsJoin from '@/components/about/letsJoin';
 
 export const metadata: Metadata = {
-  title: 'About | Joyzen - Care The Way Life Actually Happens',
+  title: 'About Us | Care The Way Life Actually Happens',
   description:
-    'Joyzen brings your care, your health information, your guidance and your support into one connected experience.',
+    'Discover Joyzen’s mission to connect care, health guidance, doctor support, and modern longevity medicine into one seamless experience.',
+  keywords: [
+    'About Joyzen',
+    'Joyzen Healthcare Mission',
+    'Personalized Medicine',
+    'Doctor Guided Care',
+    'Longevity Platform India',
+    'Healthcare Innovation',
+  ],
+  alternates: {
+    canonical: '/about',
+  },
+  openGraph: {
+    title: 'About Joyzen | Care The Way Life Actually Happens',
+    description:
+      'Discover Joyzen’s mission to connect care, health guidance, doctor support, and modern longevity medicine into one seamless experience.',
+    url: 'https://joyzen.in/about',
+    siteName: 'Joyzen',
+    images: [
+      {
+        url: '/joyzen_logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'About Joyzen Healthcare',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'About Joyzen | Care The Way Life Actually Happens',
+    description:
+      'Discover Joyzen’s mission to connect care, health guidance, doctor support, and modern longevity medicine into one seamless experience.',
+    images: ['/joyzen_logo.png'],
+  },
 };
 
 export default function AboutPage() {
@@ -33,7 +65,7 @@ export default function AboutPage() {
         <DesignedForToday />
 
         {/* Component 5: Let's Join – Scroll Image Sequence */}
-        {/* <LetsJoin /> */}
+        <LetsJoin />
       </main>
       <div className="h-20 w-full bg-[#f2f1f0] absolute bottom-0 translate-y-1/2 left-0 z-40 blur-sm pointer-events-none"></div>
     </div>

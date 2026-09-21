@@ -7,39 +7,29 @@ import React, {
   useMemo,
   useCallback,
 } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
 /* ─── constants ─── */
-const TOTAL_FRAMES = 403; // 00000 → 00402
+const TOTAL_FRAMES = 387; // 00000 → 00386
 const FRAME_STEP = 2;     // use every 2nd frame for faster loading
 
-/* ─── honeycomb background (matches DesignedForToday) ─── */
-const HoneycombBackground = React.memo(() => (
-  <div className="absolute inset-0 pointer-events-none opacity-25 overflow-hidden z-0">
-    <svg className="w-full h-full" width="100%" height="100%">
-      <pattern
-        id="honeycomb-letsjoin"
-        width="60"
-        height="104"
-        patternUnits="userSpaceOnUse"
-      >
-        <path
-          d="M30 0 L60 17.32 L60 51.96 L30 69.28 L0 51.96 L0 17.32 Z M30 52 L60 69.32 L60 103.96 L30 121.28 L0 103.96 L0 69.32 Z"
-          fill="none"
-          stroke="#D1D5DB"
-          strokeWidth="1"
-        />
-      </pattern>
-      <rect width="100%" height="100%" fill="url(#honeycomb-letsjoin)" />
-    </svg>
-  </div>
-));
-HoneycombBackground.displayName = 'HoneycombBackground';
+/* ─── dynamic text content for before & after frame 270 ─── */
+const INITIAL_CONTENT = {
+  headline: "Let's join the dots your healthcare keeps missing. And let's make you smile a little more today.",
+  paragraph: "Talk to our team. They'll show you exactly how it feels when your doctor, your health and your day are finally on the same page.",
+};
+
+const POST_270_CONTENT = {
+  headline: "Care, connected and built for your life. Ready when you are.",
+  paragraph: "Begin your personalized healthcare journey today. Speak with our experts and experience seamless, doctor-guided care.",
+};
+
 
 /* ─── main component ─── */
 export default function LetsJoin() {
@@ -52,13 +42,14 @@ export default function LetsJoin() {
 
   /* state */
   const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [isAfter270, setIsAfter270] = useState(false);
 
   /* ─── memoised frame paths (every FRAME_STEP-th frame) ─── */
   const framePaths = useMemo(() => {
     const paths: string[] = [];
     for (let i = 0; i < TOTAL_FRAMES; i += FRAME_STEP) {
       const idx = String(i).padStart(5, '0');
-      paths.push(`/tab-sequence/IPAD PNG_${idx}.png`);
+      paths.push(`/tab-sequence/JOYZEN IPAD FINAL RENDER_${idx}.png`);
     }
     return paths;
   }, []);
@@ -145,6 +136,9 @@ export default function LetsJoin() {
             frameIndexRef.current = nextIndex;
             drawFrame(nextIndex);
           }
+          const rawFrame = nextIndex * FRAME_STEP;
+          const isPast = rawFrame >= 270;
+          setIsAfter270((prev) => (prev !== isPast ? isPast : prev));
         },
       });
     }, wrapperRef);
@@ -157,9 +151,8 @@ export default function LetsJoin() {
       <section
         ref={pinRef}
         id="lets-join"
-        className="relative w-full h-screen flex flex-col items-center justify-center  overflow-hidden select-none"
+        className="relative w-full h-screen flex flex-col items-center justify-between overflow-hidden select-none px-4 sm:px-6 lg:px-12 pt-16 sm:pt-20 lg:pt-24 pb-0"
       >
-        <HoneycombBackground />
 
         {/* ─── Top-Right Flower ─── */}
         <motion.div
@@ -167,7 +160,7 @@ export default function LetsJoin() {
           whileInView={{ opacity: 1, x: 0, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="absolute -top-6 sm:-top-10 -right-16 sm:-right-10 md:-right-6 pointer-events-none select-none z-[1] rotate-[160deg]"
+          className="absolute -top-6 sm:-top-10 -right-16 sm:-right-10 md:-right-6 pointer-events-none select-none z-[1] rotate-[180deg]"
         >
           <div className="relative w-[220px] sm:w-[280px] md:w-[340px] lg:w-[400px] aspect-[499/566]">
             <Image
@@ -197,41 +190,80 @@ export default function LetsJoin() {
           </div>
         </motion.div>
 
-        {/* ─── Text Content ─── */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-start lg:items-start justify-between gap-6 lg:gap-12 mb-8 sm:mb-12">
-          {/* Left headline */}
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[1.75rem] sm:text-3xl md:text-[2.2rem] lg:text-[2.5rem] font-bold text-black tracking-tight leading-[1.15] max-w-xl"
-          >
-            Let&apos;s join the dots your healthcare keeps missing. And let&apos;s
-            make you smile a little more today.
-          </motion.h2>
+        {/* ─── Top Content & CTA Area ─── */}
+        <div className="relative z-10 w-full flex flex-col">
+          {/* ─── Text Content (Dynamic before / after frame 270) ─── */}
+          <div className="w-full min-h-[90px] sm:min-h-[110px] mb-3 sm:mb-4">
+            <AnimatePresence mode="wait">
+              {!isAfter270 ? (
+                <motion.div
+                  key="initial-state"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex flex-col lg:flex-row items-start lg:items-start justify-between gap-6 lg:gap-12 w-full"
+                >
+                  {/* Left headline */}
+                  <h2 className="text-[1.75rem] sm:text-3xl md:text-[2.2rem] lg:text-[2.125rem] font-bold text-black tracking-tight leading-[1.1] max-w-xl">
+                    {INITIAL_CONTENT.headline}
+                  </h2>
 
-          {/* Right paragraph */}
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-            className="text-sm sm:text-base lg:text-lg text-zinc-600 font-medium leading-relaxed max-w-md lg:mt-2"
-          >
-            Talk to our team. They&apos;ll show you exactly how it feels when your
-            doctor, your health and your day are finally on the same page.
-          </motion.p>
+                  {/* Right paragraph */}
+                  <p className="text-sm sm:text-[22px] lg:text-[22px] text-black font-medium leading-[1.2] text-left lg:text-right max-w-md  tracking-tight lg:mt-2">
+                    {INITIAL_CONTENT.paragraph}
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="post-270-state"
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex flex-col lg:flex-row items-start lg:items-start justify-between gap-6 lg:gap-12 w-full"
+                >
+                  {/* Left headline */}
+                  <h2 className="text-[1.75rem] sm:text-3xl md:text-[2.125rem] lg:text-[2.125rem] font-bold text-black tracking-tight leading-[1.15] max-w-xl">
+                    {POST_270_CONTENT.headline}
+                  </h2>
+
+                  {/* Right paragraph */}
+                  <p className="text-sm sm:text-[22px] lg:text-[22px] text-black font-medium leading-[1.2] text-left lg:text-right max-w-xl tracking-tight lg:mt-2">
+                    {POST_270_CONTENT.paragraph}
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* ─── Center CTA (Appears after Frame 270) ─── */}
+          <div className="relative z-20 flex justify-center items-center w-full h-9">
+            <motion.div
+              animate={{
+                opacity: isAfter270 ? 1 : 0,
+                y: isAfter270 ? 0 : 10,
+                scale: isAfter270 ? 1 : 0.95,
+              }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              className={isAfter270 ? 'pointer-events-auto' : 'pointer-events-none'}
+            >
+              <Link
+                href="/q-form"
+                className="inline-flex items-center justify-center px-6 sm:px-7 py-2 sm:py-2.5 rounded-full text-[11px] sm:text-xs font-bold tracking-wider text-zinc-900 bg-[#AEDEE4]/60 hover:bg-[#95C1E2]/80 border border-white/80 backdrop-blur-md uppercase transition-all duration-300 shadow-xs hover:scale-105 active:scale-95"
+              >
+                START YOUR CARE JOURNEY
+              </Link>
+            </motion.div>
+          </div>
         </div>
 
-        {/* ─── Canvas Image Sequence ─── */}
-        <div className="relative z-10 w-full ">
+        {/* ─── Canvas Image Sequence (Anchored to Bottom) ─── */}
+        <div className="relative mt-auto translate-y-6 z-10 w-full flex-1 flex justify-center items-end overflow-hidden">
           <canvas
             ref={canvasRef}
-            className="w-full h-auto"
-            style={{ display: 'block' }}
+            className="w-full h-full max-h-[55vh] sm:max-h-[70vh] lg:max-h-[75vh] object-contain object-bottom"
           />
-
           {/* Subtle loading indicator */}
           {!imagesLoaded && (
             <div className="absolute inset-0 flex items-center justify-center">

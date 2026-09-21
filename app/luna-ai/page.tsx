@@ -1,6 +1,46 @@
 import React from 'react';
+import type { Metadata } from 'next';
 import LunaAI from '@/components/luna-ai/luna';
 import Membership from '@/components/luna-ai/membership';
+
+export const metadata: Metadata = {
+  title: 'Luna AI | Your Intelligent Health & Longevity Companion',
+  description:
+    'Discover Luna AI by Joyzen: an intelligent companion providing personalized health insights, proactive wellness recommendations, and synchronized care coordination.',
+  keywords: [
+    'Luna AI Health',
+    'AI Healthcare Companion',
+    'Joyzen AI',
+    'Personalized Health Insights',
+    'AI Symptom & Wellness Guide',
+  ],
+  alternates: {
+    canonical: '/luna-ai',
+  },
+  openGraph: {
+    title: 'Luna AI | Joyzen Intelligent Health Companion',
+    description:
+      'Discover Luna AI by Joyzen: an intelligent companion providing personalized health insights and proactive wellness support.',
+    url: 'https://joyzen.in/luna-ai',
+    siteName: 'Joyzen',
+    images: [
+      {
+        url: '/luna_ai.png',
+        width: 1200,
+        height: 630,
+        alt: 'Luna AI Health Companion',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Luna AI | Joyzen Intelligent Health Companion',
+    description:
+      'Discover Luna AI by Joyzen: an intelligent companion providing personalized health insights and proactive wellness support.',
+    images: ['/luna_ai.png'],
+  },
+};
 
 export default function LunaAIPage() {
   return (
