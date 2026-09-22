@@ -20,8 +20,8 @@ const slicesData: SliceData[] = [
     shortLabel: 'Diagnosis & Assessment',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#FBBF24',
-    endColor: '#D97706',
+    startColor: '#ef8f60',
+    endColor: '#ef8f60',
   },
   {
     id: 'treatment',
@@ -29,8 +29,8 @@ const slicesData: SliceData[] = [
     shortLabel: 'Treatment',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#E879F9',
-    endColor: '#C084FC',
+    startColor: '#f8e780',
+    endColor: '#f8e780',
   },
   {
     id: 'medicine',
@@ -38,8 +38,8 @@ const slicesData: SliceData[] = [
     shortLabel: 'Medicine',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#2DD4BF',
-    endColor: '#06B6D4',
+    startColor: '#036132',
+    endColor: '#036132',
   },
   {
     id: 'lifestyle',
@@ -47,8 +47,8 @@ const slicesData: SliceData[] = [
     shortLabel: 'Lifestyle',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#FB923C',
-    endColor: '#EA580C',
+    startColor: '#b4def7',
+    endColor: '#b4def7',
   },
   {
     id: 'monitoring',
@@ -56,8 +56,8 @@ const slicesData: SliceData[] = [
     shortLabel: 'Monitoring',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#86EFAC',
-    endColor: '#22C55E',
+    startColor: '#ddc4df',
+    endColor: '#ddc4df',
   },
   {
     id: 'prevention',
@@ -65,8 +65,8 @@ const slicesData: SliceData[] = [
     shortLabel: 'Prevention',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#FCA5A5',
-    endColor: '#F87171',
+    startColor: '#212121',
+    endColor: '#212121',
   },
   {
     id: 'longevity',
@@ -74,8 +74,8 @@ const slicesData: SliceData[] = [
     shortLabel: 'Longevity',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#C084FC',
-    endColor: '#A855F7',
+    startColor: '#f7f4ed',
+    endColor: '#ddc4df',
   },
   {
     id: 'consultation',
@@ -83,8 +83,8 @@ const slicesData: SliceData[] = [
     shortLabel: 'Consultation',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#93C5FD',
-    endColor: '#3B82F6',
+    startColor: '#036132',
+    endColor: '#036132',
   },
 ];
 

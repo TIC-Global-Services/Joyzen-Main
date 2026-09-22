@@ -36,14 +36,14 @@ const CARDS: CardItem[] = [
   },
   {
     id: 4,
-    image: '/your-people-1.png',
+    image: '/your-people-4.png',
     tag: 'Workshops',
     subtitle: 'Engage. Heal. Transform.',
     desc: 'Interactive guided sessions designed to spark discovery and everyday mindfulness.',
   },
   {
     id: 5,
-    image: '/your-people-2.png',
+    image: '/your-people-5.png',
     tag: 'Meetups',
     subtitle: 'Laugh. Unwind. Relate.',
     desc: 'Casual get-togethers where conversations flow naturally and friendships form.',

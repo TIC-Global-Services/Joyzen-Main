@@ -38,7 +38,7 @@ const consultationCards: CardItem[] = [
         description: 'Consult From Anywhere Through Safe And Convenient Virtual Appointments.',
         image: '/secure-online.png',
         isOffset: false,
-        objectPosition:"object-right"
+        objectPosition:"object-left"
     },
     {
         id: 4,

@@ -16,7 +16,7 @@ export default function Hero() {
       >
         <div className="relative w-full aspect-[3/4] sm:aspect-[16/9] md:aspect-[5/2]">
           <Image
-            src="/pricing-hero.jpg"
+            src="/pricing-hero.png"
             alt="Doctor consulting with patient"
             fill
             priority
