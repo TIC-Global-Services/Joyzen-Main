@@ -256,6 +256,11 @@ export default function DesignedForToday() {
     dirIntensity,
     showLeva,
     headRollOffset,
+    hueRotate,
+    contrast,
+    saturate,
+    brightness,
+    rimIntensity,
   } = useControls('Robot Showcase Controls', {
     showLeva: { value: false, label: 'Show Leva Panel' },
 
@@ -302,11 +307,46 @@ export default function DesignedForToday() {
       label: 'Ambient Light',
     },
     dirIntensity: {
-      value: 2.2,
+      value: 4.2,
       min: 0,
       max: 6,
       step: 0.1,
       label: 'Key Light Intensity',
+    },
+    hueRotate: {
+      value: 0,
+      min: 0,
+      max: 360,
+      step: 1,
+      label: 'Hue Rotate (deg)',
+    },
+    contrast: {
+      value: 1.4,
+      min: 0.5,
+      max: 2,
+      step: 0.05,
+      label: 'Contrast',
+    },
+    saturate: {
+      value: 0.8,
+      min: 0.5,
+      max: 3,
+      step: 0.05,
+      label: 'Saturation',
+    },
+    brightness: {
+      value: 1.12,
+      min: 0.5,
+      max: 2,
+      step: 0.05,
+      label: 'Brightness',
+    },
+    rimIntensity: {
+      value: 1.2,
+      min: 0,
+      max: 5,
+      step: 0.1,
+      label: 'Purple Rim Light',
     },
   });
 
@@ -347,7 +387,7 @@ export default function DesignedForToday() {
                   Care That Continues
                 </span>
                 <span className="text-zinc-300 text-2xl font-light select-none">•</span>
-                <span className="font-bold tracking-tight text-4xl sm:text-4xl text-[#9CD8E8] drop-shadow-xs whitespace-nowrap">
+                <span className="font-bold tracking-tight text-4xl sm:text-4xl text-[#e6ceed] drop-shadow-xs whitespace-nowrap">
                   Built Around You
                 </span>
                 <span className="text-zinc-300 text-2xl font-light select-none">•</span>
@@ -368,7 +408,7 @@ export default function DesignedForToday() {
           </div>
 
           {/* Built Around You - Top Right */}
-          <div className="absolute top-[30%] lg:top-[18%] right-[2%] sm:right-[4%] lg:right-[18%] font-bold tracking-tight text-3xl sm:text-3xl lg:text-5xl lg:text-[3.125rem] text-[#9CD8E8] drop-shadow-xs leading-none">
+          <div className="absolute top-[30%] lg:top-[18%] right-[2%] sm:right-[4%] lg:right-[18%] font-bold tracking-tight text-3xl sm:text-3xl lg:text-5xl lg:text-[3.125rem] text-[#e6ceed] drop-shadow-xs leading-none">
             Built Around You
           </div>
 
@@ -385,12 +425,12 @@ export default function DesignedForToday() {
             gl={{ antialias: true, alpha: true }}
             dpr={[1, 2]}
             style={{
-              filter: "contrast(1) saturate(1.1)",
+              filter: `contrast(${contrast}) saturate(${saturate}) brightness(${brightness}) hue-rotate(${hueRotate}deg)`,
             }}
           >
             <ambientLight intensity={ambientIntensity} />
-            <directionalLight position={[5, 8, 5]} intensity={dirIntensity} />
-            <directionalLight position={[-5, 3, -2]} intensity={ambientIntensity * 0.4} />
+            <directionalLight position={[2, 18, 0]} intensity={dirIntensity} />
+            <directionalLight position={[-3, 4, -2]} intensity={rimIntensity} color="#b9adde" />
 
             <Suspense fallback={<LoaderFallback />}>
               <RobotModel
