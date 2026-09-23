@@ -75,17 +75,14 @@ export default function Appointment() {
   const slideVariants = {
     enter: (dir: number) => ({
       x: dir > 0 ? '100%' : '-100%',
-      opacity: 0,
     }),
     center: {
       zIndex: 1,
       x: 0,
-      opacity: 1,
     },
     exit: (dir: number) => ({
       zIndex: 0,
       x: dir < 0 ? '100%' : '-100%',
-      opacity: 0,
     }),
   };
 
