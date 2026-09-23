@@ -1,0 +1,2721 @@
+{
+  "v": "5.7.4",
+  "fr": 30,
+  "ip": 0,
+  "op": 387,
+  "w": 1920,
+  "h": 1080,
+  "nm": "Tab Sequence",
+  "ddd": 0,
+  "assets": [
+    {
+      "id": "image_0",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00000.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_1",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00001.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_2",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00002.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_3",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00003.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_4",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00004.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_5",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00005.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_6",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00006.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_7",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00007.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_8",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00008.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_9",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00009.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_10",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00010.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_11",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00011.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_12",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00012.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_13",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00013.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_14",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00014.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_15",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00015.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_16",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00016.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_17",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00017.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_18",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00018.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_19",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00019.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_20",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00020.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_21",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00021.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_22",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00022.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_23",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00023.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_24",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00024.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_25",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00025.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_26",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00026.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_27",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00027.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_28",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00028.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_29",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00029.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_30",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00030.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_31",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00031.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_32",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00032.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_33",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00033.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_34",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00034.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_35",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00035.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_36",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00036.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_37",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00037.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_38",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00038.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_39",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00039.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_40",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00040.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_41",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00041.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_42",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00042.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_43",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00043.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_44",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00044.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_45",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00045.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_46",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00046.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_47",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00047.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_48",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00048.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_49",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00049.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_50",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00050.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_51",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00051.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_52",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00052.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_53",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00053.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_54",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00054.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_55",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00055.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_56",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00056.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_57",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00057.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_58",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00058.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_59",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00059.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_60",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00060.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_61",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00061.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_62",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00062.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_63",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00063.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_64",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00064.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_65",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00065.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_66",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00066.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_67",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00067.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_68",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00068.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_69",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00069.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_70",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00070.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_71",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00071.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_72",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00072.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_73",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00073.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_74",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00074.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_75",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00075.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_76",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00076.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_77",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00077.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_78",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00078.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_79",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00079.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_80",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00080.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_81",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00081.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_82",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00082.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_83",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00083.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_84",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00084.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_85",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00085.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_86",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00086.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_87",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00087.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_88",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00088.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_89",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00089.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_90",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00090.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_91",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00091.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_92",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00092.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_93",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00093.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_94",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00094.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_95",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00095.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_96",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00096.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_97",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00097.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_98",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00098.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_99",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00099.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_100",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00100.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_101",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00101.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_102",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00102.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_103",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00103.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_104",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00104.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_105",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00105.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_106",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00106.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_107",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00107.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_108",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00108.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_109",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00109.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_110",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00110.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_111",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00111.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_112",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00112.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_113",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00113.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_114",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00114.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_115",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00115.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_116",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00116.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_117",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00117.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_118",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00118.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_119",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00119.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_120",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00120.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_121",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00121.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_122",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00122.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_123",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00123.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_124",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00124.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_125",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00125.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_126",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00126.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_127",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00127.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_128",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00128.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_129",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00129.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_130",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00130.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_131",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00131.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_132",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00132.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_133",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00133.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_134",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00134.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_135",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00135.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_136",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00136.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_137",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00137.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_138",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00138.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_139",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00139.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_140",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00140.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_141",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00141.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_142",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00142.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_143",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00143.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_144",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00144.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_145",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00145.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_146",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00146.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_147",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00147.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_148",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00148.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_149",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00149.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_150",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00150.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_151",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00151.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_152",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00152.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_153",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00153.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_154",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00154.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_155",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00155.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_156",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00156.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_157",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00157.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_158",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00158.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_159",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00159.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_160",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00160.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_161",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00161.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_162",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00162.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_163",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00163.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_164",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00164.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_165",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00165.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_166",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00166.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_167",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00167.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_168",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00168.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_169",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00169.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_170",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00170.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_171",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00171.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_172",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00172.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_173",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00173.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_174",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00174.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_175",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00175.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_176",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00176.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_177",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00177.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_178",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00178.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_179",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00179.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_180",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00180.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_181",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00181.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_182",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00182.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_183",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00183.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_184",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00184.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_185",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00185.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_186",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00186.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_187",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00187.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_188",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00188.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_189",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00189.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_190",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00190.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_191",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00191.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_192",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00192.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_193",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00193.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_194",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00194.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_195",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00195.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_196",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00196.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_197",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00197.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_198",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00198.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_199",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00199.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_200",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00200.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_201",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00201.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_202",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00202.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_203",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00203.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_204",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00204.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_205",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00205.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_206",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00206.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_207",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00207.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_208",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00208.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_209",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00209.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_210",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00210.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_211",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00211.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_212",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00212.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_213",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00213.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_214",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00214.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_215",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00215.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_216",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00216.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_217",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00217.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_218",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00218.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_219",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00219.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_220",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00220.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_221",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00221.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_222",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00222.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_223",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00223.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_224",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00224.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_225",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00225.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_226",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00226.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_227",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00227.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_228",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00228.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_229",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00229.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_230",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00230.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_231",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00231.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_232",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00232.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_233",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00233.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_234",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00234.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_235",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00235.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_236",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00236.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_237",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00237.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_238",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00238.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_239",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00239.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_240",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00240.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_241",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00241.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_242",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00242.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_243",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00243.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_244",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00244.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_245",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00245.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_246",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00246.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_247",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00247.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_248",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00248.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_249",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00249.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_250",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00250.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_251",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00251.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_252",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00252.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_253",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00253.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_254",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00254.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_255",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00255.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_256",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00256.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_257",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00257.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_258",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00258.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_259",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00259.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_260",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00260.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_261",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00261.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_262",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00262.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_263",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00263.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_264",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00264.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_265",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00265.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_266",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00266.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_267",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00267.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_268",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00268.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_269",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00269.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_270",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00270.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_271",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00271.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_272",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00272.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_273",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00273.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_274",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00274.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_275",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00275.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_276",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00276.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_277",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00277.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_278",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00278.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_279",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00279.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_280",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00280.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_281",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00281.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_282",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00282.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_283",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00283.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_284",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00284.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_285",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00285.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_286",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00286.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_287",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00287.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_288",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00288.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_289",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00289.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_290",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00290.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_291",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00291.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_292",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00292.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_293",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00293.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_294",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00294.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_295",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00295.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_296",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00296.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_297",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00297.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_298",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00298.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_299",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00299.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_300",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00300.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_301",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00301.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_302",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00302.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_303",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00303.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_304",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00304.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_305",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00305.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_306",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00306.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_307",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00307.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_308",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00308.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_309",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00309.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_310",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00310.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_311",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00311.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_312",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00312.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_313",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00313.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_314",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00314.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_315",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00315.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_316",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00316.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_317",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00317.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_318",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00318.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_319",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00319.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_320",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00320.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_321",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00321.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_322",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00322.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_323",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00323.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_324",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00324.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_325",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00325.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_326",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00326.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_327",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00327.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_328",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00328.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_329",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00329.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_330",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00330.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_331",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00331.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_332",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00332.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_333",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00333.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_334",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00334.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_335",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00335.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_336",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00336.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_337",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00337.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_338",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00338.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_339",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00339.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_340",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00340.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_341",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00341.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_342",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00342.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_343",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00343.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_344",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00344.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_345",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00345.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_346",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00346.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_347",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00347.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_348",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00348.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_349",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00349.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_350",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00350.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_351",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00351.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_352",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00352.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_353",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00353.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_354",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00354.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_355",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00355.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_356",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00356.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_357",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00357.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_358",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00358.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_359",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00359.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_360",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00360.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_361",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00361.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_362",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00362.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_363",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00363.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_364",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00364.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_365",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00365.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_366",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00366.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_367",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00367.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_368",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00368.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_369",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00369.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_370",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00370.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_371",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00371.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_372",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00372.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_373",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00373.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_374",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00374.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_375",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00375.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_376",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00376.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_377",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00377.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_378",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00378.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_379",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00379.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_380",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00380.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_381",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00381.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_382",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00382.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_383",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00383.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_384",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00384.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_385",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00385.png?updatedAt=1790139240871"
+    },
+    {
+      "id": "image_386",
+      "w": 1920,
+      "h": 1080,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/tab-sequence/",
+      "p": "JOYZEN%20IPAD%20FINAL%20RENDER_00386.png?updatedAt=1790139240871"
+    }
+  ]
+}

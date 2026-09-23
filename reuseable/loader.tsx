@@ -47,30 +47,87 @@ export default function Preloader() {
 
     window.addEventListener('dna-progress', handleDnaProgress);
 
-    // 2. Fallback simulation (for pages without DNA sequence or slow network)
+    // 2. Track standard page images loading state in DOM
+    const trackPageImages = () => {
+      if (hasReceivedDnaEvent || isFinishedRef.current) return;
+
+      const imgs = Array.from(document.querySelectorAll<HTMLImageElement>('img'));
+      if (imgs.length === 0) return;
+
+      let loadedCount = 0;
+      imgs.forEach((img) => {
+        if (img.complete && img.naturalWidth > 0) {
+          loadedCount++;
+        }
+      });
+
+      const imgPct = Math.round((loadedCount / imgs.length) * 100);
+      if (imgPct > progressRef.current) {
+        progressRef.current = imgPct;
+        setProgress(imgPct);
+      }
+
+      if (loadedCount === imgs.length && document.readyState === 'complete') {
+        finishLoading();
+      }
+    };
+
+    // Attach listeners to images present in DOM
+    const imgElements = Array.from(document.querySelectorAll<HTMLImageElement>('img'));
+    imgElements.forEach((img) => {
+      if (!img.complete) {
+        img.addEventListener('load', trackPageImages);
+        img.addEventListener('error', trackPageImages);
+      }
+    });
+
+    // Also listen to window load event
+    const handleWindowLoad = () => {
+      if (!hasReceivedDnaEvent) {
+        trackPageImages();
+        finishLoading();
+      }
+    };
+
+    if (document.readyState === 'complete') {
+      trackPageImages();
+    } else {
+      window.addEventListener('load', handleWindowLoad);
+    }
+
+    // 3. Fallback smooth progression timer
     const interval = setInterval(() => {
       if (isFinishedRef.current) {
         clearInterval(interval);
         return;
       }
 
+      trackPageImages();
+
       if (!hasReceivedDnaEvent) {
-        // Natural progression for subpages
         setProgress((prev) => {
-          const next = Math.min(prev + Math.floor(Math.random() * 15 + 10), 95);
+          if (prev >= 95 && document.readyState !== 'complete') {
+            return prev;
+          }
+          const next = Math.min(prev + Math.floor(Math.random() * 10 + 5), 95);
           progressRef.current = next;
           return next;
         });
       }
-    }, 120);
+    }, 150);
 
     // Maximum cap to ensure preloader never hangs indefinitely
     const maxTimeout = setTimeout(() => {
       finishLoading();
-    }, 3500);
+    }, 6000);
 
     return () => {
       window.removeEventListener('dna-progress', handleDnaProgress);
+      window.removeEventListener('load', handleWindowLoad);
+      imgElements.forEach((img) => {
+        img.removeEventListener('load', trackPageImages);
+        img.removeEventListener('error', trackPageImages);
+      });
       clearInterval(interval);
       clearTimeout(maxTimeout);
     };

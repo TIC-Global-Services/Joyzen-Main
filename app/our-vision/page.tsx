@@ -1,7 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
 import Hero from '@/components/ourVision/hero';
-import OnePlace from '@/components/ourVision/onePlace';
 import HereItFrom from '@/components/ourVision/hereItFrom';
 import Epharmacy from '@/components/ourVision/e-pharmacy';
 import Represents from '@/components/ourVision/represents';
@@ -50,7 +49,6 @@ const page = () => {
   return (
     <main className="relative flex-1 flex flex-col w-full">
       <Hero />
-      <OnePlace />
       <HereItFrom />
       <Represents/>
       <Epharmacy />

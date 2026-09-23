@@ -13,13 +13,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+import tabSequenceData from '@/data/tabSequence.json';
+import mobSequenceData from '@/data/mobSequence.json';
+
 gsap.registerPlugin(ScrollTrigger);
 
 /* ─── constants ─── */
-const DESKTOP_TOTAL_FRAMES = 387; // 00000 → 00386
+const DESKTOP_TOTAL_FRAMES = tabSequenceData.assets.length; // 387 frames from ImageKit
 const DESKTOP_FRAME_STEP = 2;     // use every 2nd frame for faster loading
 
-const MOBILE_TOTAL_FRAMES = 121;  // 00000 → 00120
+const MOBILE_TOTAL_FRAMES = mobSequenceData.assets.length;  // 121 frames from ImageKit
 const MOBILE_FRAME_STEP = 1;      // step 1 for mobile animation
 
 /* ─── dynamic text content for before & after frame 270 (~70% progress) ─── */
@@ -62,14 +65,18 @@ export default function LetsJoin() {
   const framePaths = useMemo(() => {
     const paths: string[] = [];
     if (isMobile) {
+      const mobAssets = mobSequenceData.assets;
       for (let i = 0; i < MOBILE_TOTAL_FRAMES; i += MOBILE_FRAME_STEP) {
-        const idx = String(i).padStart(5, '0');
-        paths.push(`/mob-sequence/PNG MOBILE JOYZEN_${idx}.png`);
+        if (mobAssets[i]) {
+          paths.push(mobAssets[i].u + mobAssets[i].p);
+        }
       }
     } else {
+      const tabAssets = tabSequenceData.assets;
       for (let i = 0; i < DESKTOP_TOTAL_FRAMES; i += DESKTOP_FRAME_STEP) {
-        const idx = String(i).padStart(5, '0');
-        paths.push(`/tab-sequence/JOYZEN IPAD FINAL RENDER_${idx}.png`);
+        if (tabAssets[i]) {
+          paths.push(tabAssets[i].u + tabAssets[i].p);
+        }
       }
     }
     return paths;

@@ -1,0 +1,859 @@
+{
+  "v": "5.7.4",
+  "fr": 30,
+  "ip": 0,
+  "op": 121,
+  "w": 1080,
+  "h": 1920,
+  "nm": "Mobile Sequence",
+  "ddd": 0,
+  "assets": [
+    {
+      "id": "image_0",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00000.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_1",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00001.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_2",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00002.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_3",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00003.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_4",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00004.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_5",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00005.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_6",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00006.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_7",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00007.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_8",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00008.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_9",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00009.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_10",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00010.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_11",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00011.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_12",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00012.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_13",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00013.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_14",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00014.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_15",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00015.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_16",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00016.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_17",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00017.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_18",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00018.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_19",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00019.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_20",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00020.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_21",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00021.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_22",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00022.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_23",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00023.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_24",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00024.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_25",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00025.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_26",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00026.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_27",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00027.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_28",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00028.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_29",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00029.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_30",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00030.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_31",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00031.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_32",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00032.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_33",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00033.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_34",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00034.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_35",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00035.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_36",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00036.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_37",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00037.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_38",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00038.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_39",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00039.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_40",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00040.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_41",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00041.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_42",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00042.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_43",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00043.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_44",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00044.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_45",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00045.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_46",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00046.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_47",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00047.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_48",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00048.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_49",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00049.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_50",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00050.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_51",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00051.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_52",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00052.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_53",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00053.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_54",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00054.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_55",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00055.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_56",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00056.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_57",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00057.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_58",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00058.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_59",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00059.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_60",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00060.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_61",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00061.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_62",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00062.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_63",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00063.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_64",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00064.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_65",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00065.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_66",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00066.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_67",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00067.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_68",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00068.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_69",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00069.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_70",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00070.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_71",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00071.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_72",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00072.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_73",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00073.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_74",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00074.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_75",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00075.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_76",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00076.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_77",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00077.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_78",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00078.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_79",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00079.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_80",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00080.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_81",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00081.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_82",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00082.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_83",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00083.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_84",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00084.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_85",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00085.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_86",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00086.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_87",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00087.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_88",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00088.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_89",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00089.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_90",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00090.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_91",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00091.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_92",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00092.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_93",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00093.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_94",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00094.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_95",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00095.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_96",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00096.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_97",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00097.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_98",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00098.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_99",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00099.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_100",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00100.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_101",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00101.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_102",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00102.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_103",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00103.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_104",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00104.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_105",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00105.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_106",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00106.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_107",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00107.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_108",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00108.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_109",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00109.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_110",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00110.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_111",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00111.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_112",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00112.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_113",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00113.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_114",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00114.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_115",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00115.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_116",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00116.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_117",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00117.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_118",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00118.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_119",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00119.png?updatedAt=1790139723198"
+    },
+    {
+      "id": "image_120",
+      "w": 1080,
+      "h": 1920,
+      "u": "https://ik.imagekit.io/gyg6yfnd5/mob-sequence/",
+      "p": "PNG%20MOBILE%20JOYZEN_00120.png?updatedAt=1790139723198"
+    }
+  ]
+}

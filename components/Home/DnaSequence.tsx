@@ -1,11 +1,22 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import dnaGradientData from '@/data/dnaGradientSequence.json';
 
-const TOTAL_FRAMES = 360;
-const START_INDEX = 10001;
 const CANVAS_WIDTH = 1920;
 const CANVAS_HEIGHT = 1080;
+const TOTAL_FRAMES = dnaGradientData.assets.length;
+
+// Decided once per tab load, not per render — avoids the double-load bug where
+// isMobile starts false, then flips true after mount and restarts everything.
+const getIsMobile = () =>
+  typeof window !== 'undefined' &&
+  (window.innerWidth < 768 || /iPad|iPhone|iPod|Android/i.test(navigator.userAgent || ''));
+
+// Module-level cache — survives Hero/DnaSequence unmounting on client-side nav.
+// Keyed by URL since mobile/desktop use different frame sets.
+const frameCache = new Map<string, HTMLImageElement>();
+let cachedTierReady: 'mobile' | 'desktop' | null = null;
 
 interface DnaSequenceProps {
   className?: string;
@@ -13,191 +24,208 @@ interface DnaSequenceProps {
 
 export default function DnaSequence({ className }: DnaSequenceProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
   const isMountedRef = useRef(true);
   const isVisibleRef = useRef(true);
   const animationFrameIdRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    isMountedRef.current = true;
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+  // Lazy initializer — computed synchronously before first paint, so this is
+  // correct immediately instead of flipping after mount and re-triggering everything.
+  const [isMobile] = useState(getIsMobile);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
 
-    // Set fixed canvas backing buffer size once to prevent WebKit GPU reallocations
-    canvas.width = CANVAS_WIDTH;
-    canvas.height = CANVAS_HEIGHT;
-
-    const ctx = canvas.getContext('2d', {
-      alpha: true,
-      desynchronized: true,
-    });
-    if (!ctx) return;
-
-    // Determine device tier: use step 2 (180 frames) on mobile/Safari for memory efficiency
-    const isMobile =
-      typeof window !== 'undefined' &&
-      (window.innerWidth < 768 ||
-        /iPad|iPhone|iPod|Android/i.test(navigator.userAgent || ''));
-
+  const framePaths = useMemo(() => {
+    const paths: string[] = [];
     const step = isMobile ? 2 : 1;
-    const fps = isMobile ? 24 : 30;
-    const frameDuration = 1000 / fps;
-
-    // Build frame indices
-    const frameIndices: number[] = [];
+    const assets = dnaGradientData.assets;
     for (let i = 0; i < TOTAL_FRAMES; i += step) {
-      frameIndices.push(START_INDEX + i);
+      if (assets[i]) paths.push(assets[i].u + assets[i].p);
     }
-    const frameCount = frameIndices.length;
+    return paths;
+  }, [isMobile]); // isMobile is now fixed for the component's lifetime — this never re-fires
 
-    // Image cache storage
-    const imageCache: (HTMLImageElement | null)[] = new Array(frameCount).fill(null);
-    let lastRenderedIndex = -1;
-    let currentFrameIdx = 0;
-    let loadedCount = 0;
+  useEffect(() => {
+    let cancelled = false;
+    isMountedRef.current = true;
 
-    const getSrc = (index: number) => `/dna-sequence/${frameIndices[index]}.webp`;
+    const tier = isMobile ? 'mobile' : 'desktop';
+    const images: HTMLImageElement[] = new Array(framePaths.length).fill(null as unknown as HTMLImageElement);
 
-    const renderFrame = (img: HTMLImageElement) => {
-      ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-      ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
-    };
-
-    // Animation Loop
-    let lastTime = performance.now();
-    let accumulatedTime = 0;
-    let loopStarted = false;
-
-    const startAnimationLoop = () => {
-      if (loopStarted) return;
-      loopStarted = true;
-      lastTime = performance.now();
-
-      const tick = (now: number) => {
-        if (!isMountedRef.current) return;
-
-        const delta = now - lastTime;
-        lastTime = now;
-
-        if (isVisibleRef.current) {
-          accumulatedTime += delta;
-
-          while (accumulatedTime >= frameDuration) {
-            accumulatedTime -= frameDuration;
-            currentFrameIdx = (currentFrameIdx + 1) % frameCount;
-          }
-
-          const candidateImg = imageCache[currentFrameIdx];
-          if (candidateImg && candidateImg.complete && candidateImg.naturalWidth > 0) {
-            if (lastRenderedIndex !== currentFrameIdx) {
-              renderFrame(candidateImg);
-              lastRenderedIndex = currentFrameIdx;
-            }
+    // Already loaded this tier earlier in the session — reuse instantly, skip the fetch dance.
+    if (cachedTierReady === tier) {
+      let allPresent = true;
+      framePaths.forEach((src, i) => {
+        const cached = frameCache.get(src);
+        if (cached) images[i] = cached;
+        else allPresent = false;
+      });
+      if (allPresent) {
+        imagesRef.current = images;
+        setImagesLoaded(true);
+        if (canvasRef.current) {
+          canvasRef.current.width = CANVAS_WIDTH;
+          canvasRef.current.height = CANVAS_HEIGHT;
+          const ctx = canvasRef.current.getContext('2d');
+          if (ctx && images[0]) {
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            ctx.drawImage(images[0], 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
           }
         }
+        window.dispatchEvent(
+          new CustomEvent('dna-progress', { detail: { progress: 100, isComplete: true } })
+        );
+        return () => {
+          cancelled = true;
+          isMountedRef.current = false;
+        };
+      }
+    }
 
-        animationFrameIdRef.current = requestAnimationFrame(tick);
+    setImagesLoaded(false);
+    let loaded = 0;
+
+    const notifyProgress = (currentLoaded: number) => {
+      const pct = Math.round((currentLoaded / framePaths.length) * 100);
+      window.dispatchEvent(
+        new CustomEvent('dna-progress', {
+          detail: { progress: pct, isComplete: currentLoaded >= framePaths.length },
+        })
+      );
+    };
+
+    const finishIfDone = () => {
+      if (loaded === framePaths.length && !cancelled && isMountedRef.current) {
+        imagesRef.current = images;
+        frameCache.forEach(() => {}); // no-op, keeps intent explicit
+        cachedTierReady = tier;
+        setImagesLoaded(true);
+      }
+    };
+
+    framePaths.forEach((src, i) => {
+      const existing = frameCache.get(src);
+      if (existing) {
+        images[i] = existing;
+        loaded++;
+        notifyProgress(loaded);
+        if (i === 0 && canvasRef.current) {
+          canvasRef.current.width = CANVAS_WIDTH;
+          canvasRef.current.height = CANVAS_HEIGHT;
+          const ctx = canvasRef.current.getContext('2d');
+          if (ctx) {
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            ctx.drawImage(existing, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+          }
+        }
+        finishIfDone();
+        return;
+      }
+
+      const img = new window.Image();
+      img.src = src;
+      img.onload = () => {
+        if (cancelled || !isMountedRef.current) return;
+        images[i] = img;
+        frameCache.set(src, img);
+        loaded++;
+        notifyProgress(loaded);
+
+        if (i === 0 && canvasRef.current) {
+          canvasRef.current.width = CANVAS_WIDTH;
+          canvasRef.current.height = CANVAS_HEIGHT;
+          const ctx = canvasRef.current.getContext('2d');
+          if (ctx) {
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+          }
+        }
+        finishIfDone();
       };
+      img.onerror = () => {
+        loaded++;
+        notifyProgress(loaded);
+        finishIfDone();
+      };
+    });
+
+    return () => {
+      cancelled = true;
+      isMountedRef.current = false;
+      images.forEach((img) => {
+        if (img) {
+          img.onload = null;
+          img.onerror = null;
+        }
+      });
+    };
+  }, [framePaths, isMobile]);
+
+  useEffect(() => {
+    if (!imagesLoaded) return;
+
+    let lastTime = performance.now();
+    let accumulatedTime = 0;
+    const fps = isMobile ? 24 : 30;
+    const frameDuration = 1000 / fps;
+    let currentFrameIdx = 0;
+
+    const tick = (now: number) => {
+      if (!isMountedRef.current) return;
+
+      const delta = now - lastTime;
+      lastTime = now;
+
+      if (isVisibleRef.current) {
+        accumulatedTime += delta;
+        while (accumulatedTime >= frameDuration) {
+          accumulatedTime -= frameDuration;
+          currentFrameIdx = (currentFrameIdx + 1) % framePaths.length;
+        }
+
+        const canvas = canvasRef.current;
+        const img = imagesRef.current[currentFrameIdx];
+        if (canvas && img && img.complete && img.naturalWidth > 0) {
+          const ctx = canvas.getContext('2d');
+          if (ctx) {
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+            ctx.drawImage(img, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+          }
+        }
+      }
 
       animationFrameIdRef.current = requestAnimationFrame(tick);
     };
 
-    // Preload frames progressively and notify global preloader
-    let nextToLoad = 0;
-    const CONCURRENCY = isMobile ? 4 : 8;
+    animationFrameIdRef.current = requestAnimationFrame(tick);
 
-    const loadNext = () => {
-      if (!isMountedRef.current || nextToLoad >= frameCount) return;
-      const idx = nextToLoad++;
-      const img = new window.Image();
-      img.src = getSrc(idx);
-
-      const handleDone = () => {
-        if (!isMountedRef.current) return;
-        imageCache[idx] = img;
-        loadedCount++;
-
-        const currentPct = Math.min(100, Math.round((loadedCount / frameCount) * 100));
-
-        // Dispatch global progress event for full page preloader
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(
-            new CustomEvent('dna-progress', {
-              detail: {
-                progress: currentPct,
-                isComplete: loadedCount >= frameCount,
-              },
-            })
-          );
-        }
-
-        // Render first frame immediately once available
-        if (idx === 0) {
-          renderFrame(img);
-          lastRenderedIndex = 0;
-        }
-
-        // When all images are loaded, start loop
-        if (loadedCount >= frameCount) {
-          startAnimationLoop();
-        } else {
-          loadNext();
-        }
-      };
-
-      img.onload = handleDone;
-      img.onerror = handleDone;
-    };
-
-    // Launch worker queue
-    for (let c = 0; c < CONCURRENCY; c++) {
-      loadNext();
-    }
-
-    // Safety fallback: start animation loop if network is slow after 4s
-    const fallbackTimeout = setTimeout(() => {
-      if (isMountedRef.current && loadedCount >= 20 && !loopStarted) {
-        startAnimationLoop();
-        if (typeof window !== 'undefined') {
-          window.dispatchEvent(
-            new CustomEvent('dna-progress', {
-              detail: { progress: 100, isComplete: true },
-            })
-          );
-        }
+    return () => {
+      if (animationFrameIdRef.current) {
+        cancelAnimationFrame(animationFrameIdRef.current);
       }
-    }, 4000);
+    };
+  }, [imagesLoaded, framePaths.length, isMobile]);
 
-    // IntersectionObserver to pause loop when offscreen
+  useEffect(() => {
+    const canvas = canvasRef.current;
     let observer: IntersectionObserver | null = null;
+
     if (typeof IntersectionObserver !== 'undefined' && canvas) {
       observer = new IntersectionObserver(
         ([entry]) => {
           isVisibleRef.current = entry.isIntersecting && !document.hidden;
         },
-        { threshold: 0.05 },
+        { threshold: 0.05 }
       );
       observer.observe(canvas);
     }
 
-    // Page Visibility listener for iOS tab-swapping
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        isVisibleRef.current = false;
-      } else if (canvas) {
-        isVisibleRef.current = true;
-      }
+      isVisibleRef.current = !document.hidden;
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
-      isMountedRef.current = false;
-      clearTimeout(fallbackTimeout);
-      if (animationFrameIdRef.current) {
-        cancelAnimationFrame(animationFrameIdRef.current);
-      }
-      if (observer) {
-        observer.disconnect();
-      }
+      if (observer) observer.disconnect();
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, []);
@@ -207,7 +235,7 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
       ref={canvasRef}
       className={
         className ||
-        'w-full h-auto aspect-[1920/1080] max-h-[900px] object-contain object-right opacity-95 scale-100 sm:scale-105 md:scale-110 origin-right-center'
+        'w-full h-auto aspect-1920/1080 max-h-[900px] object-contain object-right opacity-95 scale-100 sm:scale-105 md:scale-110 origin-right-center'
       }
       style={{
         display: 'block',

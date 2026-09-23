@@ -227,7 +227,7 @@ export default function YourPeople() {
                           {card.subtitle}
                         </span>
                       </div>
-                      <p className="text-xs sm:text-sm md:text-base font-light text-white leading-[1.3] drop-shadow">
+                      <p className="text-sm sm:text-sm md:text-base font-light text-white leading-[1.3] drop-shadow">
                         {card.desc}
                       </p>
                     </div>
