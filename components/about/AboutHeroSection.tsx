@@ -92,9 +92,9 @@ export default function AboutHeroSection() {
       </div>
 
       {/* Bottom gradient */}
-      <div className="absolute -bottom-14  md:-bottom-10 -left-10 right-0 h-7 sm:h-44 w-65 md:h-20
-                  bg-white to-transparent
-                  pointer-events-none blur-lg z-[10000000] rounded-3xl" />
+      <div className="absolute -bottom-10  md:-bottom-10 -left-5 md:-left-10 right-0 w-40 h-20 sm:h-44 md:w-65 md:h-20
+                  bg-[#f0f0f0] to-transparent
+                  pointer-events-none blur-lg z-[10000000] md:rounded-3xl" />
     </section>
   );
 }

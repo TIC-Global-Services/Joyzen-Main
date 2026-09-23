@@ -181,7 +181,8 @@ export default function LetsJoin() {
         ref={pinRef}
         id="lets-join"
         className="relative w-full h-screen flex flex-col items-center justify-between overflow-hidden select-none px-0 sm:px-6 lg:px-12 pt-16 sm:pt-20 lg:pt-24 pb-0"
-      >
+      > 
+      <div className="h-16 w-40 bg-[#f0f0f0] absolute -top-10  -right-5 z-40 blur-sm pointer-events-none"></div>
 
         {/* ─── Top-Right Flower ─── */}
         <motion.div

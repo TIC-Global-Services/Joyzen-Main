@@ -36,24 +36,24 @@
     0% {
       background-position: 0% 50%;
     }
+
     50% {
       background-position: 100% 50%;
     }
+
     100% {
       background-position: 0% 50%;
     }
   }
 
   .moving-bg-mesh {
-    background: linear-gradient(
-      90deg,
-      rgba(255, 170, 166, 0.7) 0%,
-      rgba(255, 197, 205, 0.6) 20%,
-      rgba(230, 211, 245, 0.55) 40%,
-      rgba(180, 236, 245, 0.65) 60%,
-      rgba(128, 222, 234, 0.7) 80%,
-      rgba(255, 170, 166, 0.7) 100%
-    );
+    background: linear-gradient(90deg,
+        rgba(255, 170, 166, 0.7) 0%,
+        rgba(255, 197, 205, 0.6) 20%,
+        rgba(230, 211, 245, 0.55) 40%,
+        rgba(180, 236, 245, 0.65) 60%,
+        rgba(128, 222, 234, 0.7) 80%,
+        rgba(255, 170, 166, 0.7) 100%);
     background-size: 300% 100%;
     animation: bgMeshShift 10s ease-in-out infinite;
   }
@@ -102,4 +102,49 @@
     75% {
       transform: scale(1.03, 0.98) translate(2px, 1px);
     }
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.16);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.5),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+      inset 0 0 8px 4px rgba(255, 255, 255, 0.4);
+    overflow: hidden;
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+     background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+
+  }
+
+  .glass-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+     background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8),
+    transparent,
+    rgba(255, 255, 255, 0.3)
+  );
   }

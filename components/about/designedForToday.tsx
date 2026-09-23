@@ -66,7 +66,7 @@ function RobotModel({
   headRollOffset,
 }: RobotModelProps) {
   const group = useRef<THREE.Group>(null);
-  const gltf = useGLTF('/joy-rob-1.glb');
+  const gltf = useGLTF('/jrob-1.glb');
   const { actions, names } = useAnimations(gltf.animations, group);
 
   const headBoneRef = useRef<THREE.Object3D | null>(null);
@@ -425,12 +425,12 @@ export default function DesignedForToday() {
             gl={{ antialias: true, alpha: true }}
             dpr={[1, 2]}
             style={{
-              filter: `contrast(${contrast}) saturate(${saturate}) brightness(${brightness}) hue-rotate(${hueRotate}deg)`,
+              filter: `contrast(1.2) saturate(1.3)`,
             }}
           >
             <ambientLight intensity={ambientIntensity} />
             <directionalLight position={[2, 18, 0]} intensity={dirIntensity} />
-            <directionalLight position={[-3, 4, -2]} intensity={rimIntensity} color="#b9adde" />
+            <directionalLight position={[-3, 4, -2]} intensity={rimIntensity} color="#e6ceed" />
 
             <Suspense fallback={<LoaderFallback />}>
               <RobotModel

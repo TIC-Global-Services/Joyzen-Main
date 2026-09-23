@@ -29,7 +29,7 @@ export default function Hero() {
             >
               <div className="relative w-full aspect-[16/9] transition-transform duration-500 hover:scale-[1.02]">
                 <Image
-                  src="/community-hero.png"
+                  src="/calender.png"
                   alt="Joyzen Robot with Appointments Calendar"
                   fill
                   priority
