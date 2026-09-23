@@ -455,15 +455,6 @@ const Reviews = ({
     const isTouch =
       typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
 
-    // GSAP's documented fix for pinned-section jank on iOS Safari, caused by
-    // its momentum/rubber-band scroll physics fighting the pin. This is a
-    // page-level scroll-physics change (not scoped to this section alone),
-    // so it's applied only on touch devices and reverted on unmount — test
-    // it against any other scroll-driven sections elsewhere on the page.
-    if (isTouch) {
-      ScrollTrigger.normalizeScroll(true);
-    }
-
     const ctx = gsap.context(() => {
       const mm = gsap.matchMedia();
 
@@ -581,9 +572,6 @@ const Reviews = ({
 
     return () => {
       ctx.revert();
-      if (isTouch) {
-        ScrollTrigger.normalizeScroll(false);
-      }
     };
   }, []);
 
