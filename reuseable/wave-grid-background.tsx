@@ -160,7 +160,7 @@ export function WaveGridBackground({
     children,
     className,
     gridSize = 40,
-    colorBase = "#fcf9f2",
+    colorBase = "#FFFFFF",
     colorHigh = "#EF8F60",
     waveAmplitude = 0.5,
     waveSpeed = 6.0,
@@ -257,10 +257,10 @@ export function WaveGridBackground({
         scene.add(camera);
 
         // ── Lighting ───────────────────────────────────────────────────────────
-        const ambientLight = new THREE.AmbientLight("#ffffff", isMobile ? 1.2 : 0.9);
+        const ambientLight = new THREE.AmbientLight("#ffffff", isMobile ? 1.2 : 0.8);
         scene.add(ambientLight);
 
-        const keyLight = new THREE.DirectionalLight("#ffffff", 3.0);
+        const keyLight = new THREE.DirectionalLight("#ffffff", 1.2);
         keyLight.position.set(-20, 15, 8);
         if (!isMobile) {
             keyLight.castShadow = true;
@@ -276,7 +276,7 @@ export function WaveGridBackground({
         }
         scene.add(keyLight);
 
-        const fillLight = new THREE.DirectionalLight("#ffffff", 1.0);
+        const fillLight = new THREE.DirectionalLight("#ffffff", 0.6);
         fillLight.position.set(10, 5, -3);
         scene.add(fillLight);
 
@@ -431,7 +431,10 @@ export function WaveGridBackground({
         const offsetAttribute = new THREE.InstancedBufferAttribute(new Float32Array(count * 2), 2);
         geometry.setAttribute("aOffset", offsetAttribute);
 
-        const material = new THREE.MeshPhongMaterial({ color: 0xffffff });
+        const material = new THREE.MeshPhongMaterial({
+            color: 0xffffff, shininess: 0,          // no specular falloff curve
+            specular: 0x000000
+        });
         material.onBeforeCompile = (shader) => {
             Object.assign(shader.uniforms, trailUniforms, colorUniforms);
             shader.vertexShader = overrideVertexShader(shader.vertexShader);
@@ -497,7 +500,7 @@ export function WaveGridBackground({
             powerPreference: "high-performance",
         });
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.95;
+        renderer.toneMappingExposure = 3.95;
         if (!isMobile) {
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFShadowMap;
@@ -581,8 +584,8 @@ export function WaveGridBackground({
     }, [gridSize, colorBase, colorHigh]);
 
     return (
-        <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden bg-[#fcf9f2] select-none", className)}>
-            <canvas ref={canvasRef} className="block h-full w-full bg-[#fcf9f2]" />
+        <div ref={containerRef} className={cn("relative h-full w-full overflow-hidden bg-white select-none", className)}>
+            <canvas ref={canvasRef} className="block h-full w-full bg-white" />
             {children != null && <div className="absolute inset-0">{children}</div>}
         </div>
     );

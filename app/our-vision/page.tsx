@@ -52,7 +52,7 @@ const page = () => {
       <HereItFrom />
       <Represents/>
       <Epharmacy />
-      <div className="h-16 w-full bg-[#f2f1f0] absolute bottom-0 translate-y-1/2 left-0 z-40 blur-sm pointer-events-none"></div>
+      <div className="h-16 w-full bg-[#f0f0f0] absolute bottom-0 translate-y-1/2 left-0 z-40 blur-sm pointer-events-none"></div>
     </main>
   );
 };

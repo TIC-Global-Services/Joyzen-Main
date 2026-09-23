@@ -5,12 +5,22 @@ import gsap from 'gsap';
 
 export default function Preloader() {
   const preloaderRef = useRef<HTMLDivElement>(null);
-  const [isComplete, setIsComplete] = useState(false);
+  const [isComplete, setIsComplete] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return sessionStorage.getItem('joyzen_preloaded') === 'true';
+    }
+    return false;
+  });
   const [progress, setProgress] = useState(0);
   const progressRef = useRef(0);
   const isFinishedRef = useRef(false);
 
   useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage.getItem('joyzen_preloaded') === 'true') {
+      setIsComplete(true);
+      return;
+    }
+
     isFinishedRef.current = false;
     let hasReceivedDnaEvent = false;
 
@@ -18,6 +28,12 @@ export default function Preloader() {
       if (isFinishedRef.current) return;
       isFinishedRef.current = true;
       setProgress(100);
+
+      try {
+        sessionStorage.setItem('joyzen_preloaded', 'true');
+      } catch (e) {
+        // Ignore quota or private mode errors
+      }
 
       // Smooth exit transition revealing the entire site
       gsap.to(preloaderRef.current, {

@@ -140,7 +140,7 @@ export default function RootLayout({
         <Preloader />
         {/* Full-site 3D Honeycomb background with localized #EF8F60 border glow */}
         <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden select-none">
-          <WaveGridBackground colorBase="#f2f1f0" colorHigh="#EF8F60" autoAnimate={false} waveAmplitude={0.5} waveMaxHeight={0.5} />
+          <WaveGridBackground colorBase="#ffffff" colorHigh="#EF8F60" autoAnimate={false} waveAmplitude={0.2} waveMaxHeight={0.2} />
         </div>
         <SmoothScroller>
           <Navbar />
