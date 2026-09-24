@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useLayoutEffect } from 'react';
 import Image from 'next/image';
 import gsap from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
@@ -8,6 +8,9 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
+
+const useIsoLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 
 
@@ -108,9 +111,35 @@ const Reviews = ({
   leftReviews = defaultLeftReviews,
   rightReviews = defaultRightReviews,
 }: ReviewsProps) => {
+  const sectionRef = useRef<HTMLElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const [lockedVh, setLockedVh] = useState<number | null>(null);
+
+  useIsoLayoutEffect(() => {
+    let lastWidth = window.innerWidth;
+    setLockedVh(window.innerHeight);
+
+    const onResize = () => {
+      if (window.innerWidth === lastWidth) return;
+      lastWidth = window.innerWidth;
+      setLockedVh(window.innerHeight);
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+    };
+
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+    };
+  }, []);
+
+  useIsoLayoutEffect(() => {
+    if (lockedVh === null) return;
+
+    const isTouch = ScrollTrigger.isTouch === 1;
+
     // Prevents iOS Safari's dynamic-toolbar resize events from forcing a
     // full ScrollTrigger.refresh() mid-scroll (which would reset every
     // card's gsap.set() offscreen position and read as a stutter/reset).
@@ -134,14 +163,13 @@ const Reviews = ({
         staggerStep: number,
         scrubSpeed: number
       ) => {
-        const vh = window.innerHeight;
+        const vh = lockedVh;
         // Travel distance safely past the viewport bounds (top & bottom)
         const travelDistance = Math.max(vh * 1.15, 800);
 
         // Initially hide all upcoming cards completely offscreen with 0 opacity
         gsap.set([...leftCards, ...rightCards], {
           y: travelDistance,
-          opacity: 0,
           autoAlpha: 0,
           force3D: true,
           willChange: 'transform, opacity',
@@ -150,12 +178,14 @@ const Reviews = ({
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current,
+            pin: containerRef.current,
             start: 'top top',
             end: `+=${scrollDistance}`,
             scrub: scrubSpeed,
-            pin: true,
             pinSpacing: true,
             anticipatePin: 1,
+            pinType: isTouch ? "transform" : "fixed",
+            fastScrollEnd: true,
             invalidateOnRefresh: true,
           },
         });
@@ -178,15 +208,15 @@ const Reviews = ({
             // Fade in as card enters bottom viewport
             tl.fromTo(
               leftCards[i],
-              { opacity: 0, autoAlpha: 0 },
-              { opacity: 1, autoAlpha: 1, duration: cardDuration * 0.22, ease: 'power1.out' },
+              { autoAlpha: 0 },
+              { autoAlpha: 1, duration: cardDuration * 0.22, ease: 'power1.out' },
               startTime
             );
 
             // Fade out as card exits top viewport
             tl.to(
               leftCards[i],
-              { opacity: 0, autoAlpha: 0, duration: cardDuration * 0.22, ease: 'power1.in' },
+              { autoAlpha: 0, duration: cardDuration * 0.22, ease: 'power1.in' },
               startTime + cardDuration * 0.78
             );
           }
@@ -206,15 +236,15 @@ const Reviews = ({
             // Fade in
             tl.fromTo(
               rightCards[i],
-              { opacity: 0, autoAlpha: 0 },
-              { opacity: 1, autoAlpha: 1, duration: cardDuration * 0.22, ease: 'power1.out' },
+              { autoAlpha: 0 },
+              { autoAlpha: 1, duration: cardDuration * 0.22, ease: 'power1.out' },
               rightStartTime
             );
 
             // Fade out
             tl.to(
               rightCards[i],
-              { opacity: 0, autoAlpha: 0, duration: cardDuration * 0.22, ease: 'power1.in' },
+              { autoAlpha: 0, duration: cardDuration * 0.22, ease: 'power1.in' },
               rightStartTime + cardDuration * 0.78
             );
           }
@@ -235,7 +265,7 @@ const Reviews = ({
         const rightCards = gsap.utils.toArray<HTMLElement>('.review-card-right');
         buildScrollTimeline(leftCards, rightCards, 3000, 2.4, 0.8, 1.0);
       });
-    }, containerRef);
+    }, sectionRef);
     }, 100);
 
     return () => {
@@ -244,16 +274,18 @@ const Reviews = ({
         ctx.revert();
       }
     };
-  }, []);
+  }, [lockedVh]);
 
   return (
     <section
+      ref={sectionRef}
       id="reviews-section"
-      className="relative w-full bg-transparent select-none overflow-hidden"
+      className="relative w-full bg-transparent select-none"
     >
       <div
         ref={containerRef}
-        className="h-screen w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
+        style={{ height: lockedVh ? `${lockedVh}px` : undefined }}
+        className="h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
       >
         {/* Background Ambient Spotlights */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] bg-gradient-to-tr from-[#EF8F60]/12 via-[#78C9CF]/12 to-transparent rounded-full blur-[140px] pointer-events-none" />
@@ -297,7 +329,7 @@ const Reviews = ({
             {leftReviews.map((card, i) => (
               <div
                 key={`rev-left-${card.id}-${i}`}
-                className="review-card-left opacity-0 absolute inset-0 flex items-center justify-start lg:justify-end pl-3 xs:pl-4 sm:pl-6 lg:pl-0 lg:pr-16 pointer-events-none"
+                className="review-card-left invisible absolute inset-0 flex items-center justify-start lg:justify-end pl-3 xs:pl-4 sm:pl-6 lg:pl-0 lg:pr-16 pointer-events-none"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
@@ -311,7 +343,7 @@ const Reviews = ({
             {rightReviews.map((card, i) => (
               <div
                 key={`rev-right-${card.id}-${i}`}
-                className="review-card-right opacity-0 absolute inset-0 flex items-center justify-end lg:justify-start pr-3 xs:pr-4 sm:pr-6 lg:pr-0 lg:pl-16 pointer-events-none"
+                className="review-card-right invisible absolute inset-0 flex items-center justify-end lg:justify-start pr-3 xs:pr-4 sm:pr-6 lg:pr-0 lg:pl-16 pointer-events-none"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
