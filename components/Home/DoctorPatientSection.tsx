@@ -127,7 +127,7 @@ export default function DoctorPatientSection() {
           {/* Central Image Card */}
           <div className="relative w-full max-w-[547px] aspect-[3/4] rounded-[32px] overflow-hidden shadow-2xl">
             <Image
-              src="/give-us-chance.jpg"
+              src="/give-us-chance-new.png"
               alt="Doctor Patient Connected Care"
               fill
               sizes="(max-width: 768px) 100vw, 480px"

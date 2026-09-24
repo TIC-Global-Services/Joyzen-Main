@@ -51,7 +51,7 @@ export default function Footer() {
       </div>
 
       {/* Top Header Contact & Social Links */}
-      <div className="flex flex-wrap justify-center pl-6 sm:pl-0  gap-1 sm:gap-12 text-sm lg:text-base font-medium relative z-50 tracking-tight md:mb-10">
+      <div className="flex flex-wrap justify-center pl-6 sm:pl-0  gap-4 sm:gap-12 text-sm lg:text-base font-medium relative z-50 tracking-tight md:mb-10">
         <a href="mailto:info@joyzen.in" className="hover:opacity-60 transition-opacity">Email: info@joyzen.in</a>
         <a href="tel:+911244962743" className="hover:opacity-60 transition-opacity">Phone: <span className="whitespace-nowrap">+91 124-4962743</span></a>
         <a href="https://www.instagram.com/joyzen.in" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity">Instagram: @joyzen.in</a>

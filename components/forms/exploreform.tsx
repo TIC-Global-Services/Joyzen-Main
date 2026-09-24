@@ -68,69 +68,97 @@ function GradientOptionWrapper({
   isSelected?: boolean;
   index?: number;
 }) {
-  // Staggered speed and negative delay per item for natural, asynchronous fluid movement
-  const duration = 7 + (index % 5) * 1.5;
-  const delay = -((index * 2.3) % 7);
-  const glowDuration = 6 + (index % 4) * 1.8;
+  // Staggered speed and direction per card for organic, asynchronous movement
+  const speeds = [3.0, 4.2, 3.6, 4.8, 3.3, 4.0, 4.6, 3.8, 4.4];
+  const duration = speeds[index % speeds.length];
+  const isReverse = index % 2 === 1;
+  const animName = isReverse ? 'gradientSweepRTL' : 'gradientSweepLTR';
+  const delaySec = ((index * 0.9) % duration).toFixed(2);
 
-  const gradientStyle = {
+  // High-contrast, vibrant Joyzen gradient: Orange -> Peach -> Cyan -> Amber -> Mint -> Orange
+  const gradientLayerStyle: React.CSSProperties = {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    width: '200%',
+    height: '100%',
     backgroundImage:
-      'linear-gradient(130deg, #F6D7C6 0%, #F9E0AE 22%, #AEDEE4 15%, #FFD4BF 12%, #B5ECF2 10%, #F6D7C6 10%)',
-    backgroundSize: '350% 350%',
-    animation: `dynamicGradientFlow ${duration}s ease-in-out infinite alternate`,
-    animationDelay: `${delay}s`,
+      'linear-gradient(90deg, #EF8F60 0%, #F6D7C6 14%, #AEDEE4 32%, #F9E0AE 50%, #B5ECF2 68%, #EF8F60 84%, #F6D7C6 100%)',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '100% 100%',
+    animation: `${animName} ${duration}s ease-in-out -${delaySec}s infinite`,
+    willChange: 'transform',
+    pointerEvents: 'none',
   };
 
   return (
     <div className={`relative group w-full ${className}`}>
-      {/* Soft Ambient Glow BEHIND the Option Pill with organic drifting motion */}
-      <div
-        className={`absolute -inset-[3px] rounded-[32px] blur-[7px] pointer-events-none transition-all duration-500 will-change-transform ${isSelected
-            ? 'opacity-90 scale-[1.01]'
-            : 'opacity-0 group-hover:opacity-75 group-focus-within:opacity-80'
-          }`}
-        style={{
-          ...gradientStyle,
-          animation: `dynamicGradientFlow ${duration}s ease-in-out infinite alternate, floatMeshGlow ${glowDuration}s ease-in-out infinite alternate`,
-          animationDelay: `${delay}s, ${delay * 0.7}s`,
-        }}
-      />
+      {/* Embedded CSS Keyframes guaranteeing zero dependency on external stylesheet caching */}
+      <style>{`
+        @keyframes gradientSweepLTR {
+          0% { transform: translate3d(0%, 0, 0); }
+          50% { transform: translate3d(-50%, 0, 0); }
+          100% { transform: translate3d(0%, 0, 0); }
+        }
+        @keyframes gradientSweepRTL {
+          0% { transform: translate3d(-50%, 0, 0); }
+          50% { transform: translate3d(0%, 0, 0); }
+          100% { transform: translate3d(-50%, 0, 0); }
+        }
+      `}</style>
 
-      {/* 1.5px Outer Frame forming the Gradient Border Stroke */}
+      {/* 1. Ambient Glow behind the pill - clearly visible, shifting colors */}
       <div
-        className={`relative p-[1.5px] rounded-[28px] overflow-hidden transition-all duration-300 ${isSelected
-            ? 'shadow-[0_4px_24px_rgba(246,215,198,0.45)]'
-            : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)]'
-          }`}
+        className={`absolute -inset-[4px] rounded-[32px] overflow-hidden blur-[2px] pointer-events-none transition-opacity duration-300 ${
+          isSelected
+            ? 'opacity-100 scale-[1.01]'
+            : 'opacity-100 group-hover:opacity-80'
+        }`}
       >
-        {/* Animated Moving Gradient Fill */}
-        <div
-          className={`absolute inset-0 rounded-[28px] transition-opacity duration-300 ${isSelected
-              ? 'opacity-100'
-              : 'opacity-0 group-hover:opacity-100 group-focus-within:opacity-100'
-            }`}
-          style={gradientStyle}
-        />
+        <div style={gradientLayerStyle} />
+      </div>
 
-        {/* Static Subtle Border (visible when idle / not hovered & not selected) */}
-        <div
-          className={`absolute inset-0 rounded-[28px] bg-white/80 border border-black/5 transition-opacity duration-300 ${isSelected ? 'opacity-0' : 'group-hover:opacity-0 group-focus-within:opacity-0'
-            }`}
-        />
+      {/* 2. 2.5px Outer Frame forming the animated Gradient Border Stroke */}
+      <div
+        className={`relative p-[2.5px] rounded-[28px] overflow-hidden transition-all duration-300 ${
+          isSelected
+            ? 'shadow-[0_4px_24px_rgba(239,143,96,0.35)]'
+            : 'shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
+        }`}
+      >
+        {/* Animated Moving Gradient Border Fill */}
+        <div style={gradientLayerStyle} />
 
-        {/* Inner Glassmorphic Pill Container */}
+        {/* 3. Inner Pill Container with Soft Moving Gradient Wash so motion is clearly visible on the body */}
         <div
-          className={`relative z-10 w-full h-full rounded-[26.5px] backdrop-blur-xs transition-all duration-300 ${isSelected
-              ? 'bg-[#FCFAF7]/95 text-zinc-900 font-bold'
-              : 'bg-white/90 group-hover:bg-[#FCFAF7]/95 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_4px_16px_rgba(0,0,0,0.02)]'
-            }`}
+          className={`relative z-10 w-full h-full rounded-[25.5px] overflow-hidden transition-all duration-300 ${
+            isSelected
+              ? 'bg-[#FCFAF7]/85 text-zinc-900'
+              : 'bg-white/70 group-hover:bg-white/60 text-zinc-800'
+          }`}
         >
-          {children}
+          {/* Moving Gradient Wash inside the Pill Body */}
+          <div
+            style={{
+              ...gradientLayerStyle,
+              opacity: isSelected ? 0.35 : 0.22,
+            }}
+          />
+
+          {/* Subtle top glass highlight */}
+          <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/60 to-transparent pointer-events-none" />
+
+          {/* Button Content */}
+          <div className="relative z-10 w-full h-full">
+            {children}
+          </div>
         </div>
       </div>
     </div>
   );
 }
+
 
 export default function ExploreForm() {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -213,15 +241,102 @@ export default function ExploreForm() {
         }}
       /> */}
 
-      {/* Soft Pastel Gradient Overlay covering full viewport */}
-      <div className="fixed inset-0 bg-gradient-to-br from-[#f8e780]/30 via-[#ddc4df]/30 to-[#b4def7]/40 pointer-events-none z-0" />
+      {/* Dynamic Animated Background: Vibrant Pastel, Full Edge-to-Edge Color Sweep */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#FCFAF7]/20">
+        {/* Full-width sweeping pastel base gradient */}
+        <motion.div
+          className="absolute top-0 -left-[60vw] w-[220vw] h-full opacity-60 blur-[35px]"
+          style={{
+            backgroundImage:
+              'linear-gradient(90deg, rgba(250,237,150,0.65) 0%, rgba(255,218,195,0.6) 25%, rgba(235,208,245,0.55) 50%, rgba(185,228,252,0.65) 75%, rgba(250,237,150,0.65) 100%)',
+            backgroundSize: '100% 100%',
+          }}
+          animate={{
+            x: ['0vw', '60vw', '0vw'],
+          }}
+          transition={{
+            duration: 13,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
 
-      {/* Glowing Ambient Mesh Blobs distributed across viewport */}
-      <div className="fixed -top-36 -left-36 w-[800px] h-[800px] bg-[#f8e780]/60 rounded-full blur-[130px] pointer-events-none z-0" />
-      <div className="fixed top-1/4 left-1/4 w-[700px] h-[700px] bg-[#ddc4df]/50 rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="fixed top-1/3 -right-24 w-[800px] h-[800px] bg-[#b4def7]/60 rounded-full blur-[120px] pointer-events-none z-0" />
-      <div className="fixed top-2/3 left-10 w-[750px] h-[750px] bg-[#f7f4ed]/80 rounded-full blur-[130px] pointer-events-none z-0" />
-      <div className="fixed -bottom-36 right-0 w-[800px] h-[800px] bg-[#b4def7]/50 rounded-full blur-[140px] pointer-events-none z-0" />
+        {/* LEFT COLOR WAVE (Vibrant Sunny Yellow / Peach) -> Moves COMPLETELY to the RIGHT */}
+        <motion.div
+          className="absolute top-1/6 -left-36 w-[880px] h-[880px] rounded-full blur-[130px]"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(250,237,150,0.7) 0%, rgba(255,218,195,0.55) 50%, transparent 75%)',
+          }}
+          animate={{
+            x: ['0vw', '75vw', '0vw'],
+            y: ['0vh', '14vh', '0vh'],
+            scale: [1, 1.1, 0.95, 1],
+          }}
+          transition={{
+            duration: 13,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+
+        {/* RIGHT COLOR WAVE (Vibrant Sky Blue / Lavender) -> Moves COMPLETELY to the LEFT */}
+        <motion.div
+          className="absolute top-1/4 -right-36 w-[920px] h-[920px] rounded-full blur-[130px]"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(185,228,252,0.7) 0%, rgba(235,208,245,0.55) 50%, transparent 75%)',
+          }}
+          animate={{
+            x: ['0vw', '-75vw', '0vw'],
+            y: ['0vh', '-12vh', '0vh'],
+            scale: [1, 0.95, 1.1, 1],
+          }}
+          transition={{
+            duration: 13,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+
+        {/* LOWER LEFT WAVE (Warm Coral Peach) -> Drifts across to the right */}
+        <motion.div
+          className="absolute top-2/3 -left-32 w-[780px] h-[780px] rounded-full blur-[130px]"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(255,208,185,0.6) 0%, rgba(250,237,150,0.45) 50%, transparent 75%)',
+          }}
+          animate={{
+            x: ['0vw', '70vw', '0vw'],
+            y: ['0vh', '-8vh', '0vh'],
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 0.8,
+          }}
+        />
+
+        {/* UPPER RIGHT WAVE (Fresh Aqua Mint / Lilac) -> Drifts across to the left */}
+        <motion.div
+          className="absolute -top-32 -right-32 w-[820px] h-[820px] rounded-full blur-[130px]"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(195,242,246,0.65) 0%, rgba(235,208,245,0.45) 50%, transparent 75%)',
+          }}
+          animate={{
+            x: ['0vw', '-70vw', '0vw'],
+            y: ['0vh', '10vh', '0vh'],
+          }}
+          transition={{
+            duration: 14,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: 1.2,
+          }}
+        />
+      </div>
 
       <div className="relative z-10 w-full max-w-2xl flex flex-col items-center mt-10">
         {/* Dynamic Heading & Subtitle */}
@@ -296,14 +411,28 @@ export default function ExploreForm() {
               </div>
             </div>
 
-            {/* Smooth Fill Progress Bar */}
-            <div className="w-full h-1.5 bg-zinc-200/80 rounded-full overflow-hidden">
+            {/* Smooth Fill Progress Bar with active moving gradient */}
+            <div className="w-full h-1.5 bg-zinc-200/80 rounded-full overflow-hidden relative">
               <motion.div
-                className="h-full bg-gradient-to-r from-[#F6D7C6] via-[#EF8F60] to-[#AEDEE4]"
+                className="h-full rounded-full overflow-hidden relative"
                 initial={{ width: '50%' }}
                 animate={{ width: currentStep === 1 ? '50%' : '100%' }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
-              />
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    width: '200%',
+                    height: '100%',
+                    backgroundImage:
+                      'linear-gradient(90deg, #EF8F60 0%, #F6D7C6 25%, #AEDEE4 50%, #EF8F60 75%, #F6D7C6 100%)',
+                    animation: 'gradientSweepLTR 3.5s linear infinite',
+                  }}
+                />
+              </motion.div>
             </div>
           </div>
         )}
