@@ -253,7 +253,7 @@ const Reviews = ({
     >
       <div
         ref={containerRef}
-        className="h-[100dvh] w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
+        className="h-screen w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
       >
         {/* Background Ambient Spotlights */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] bg-gradient-to-tr from-[#EF8F60]/12 via-[#78C9CF]/12 to-transparent rounded-full blur-[140px] pointer-events-none" />
@@ -285,7 +285,13 @@ const Reviews = ({
         </div>
 
         {/* FLOATING / SCROLLING REVIEW CARDS LAYER (Columns scroll past the pinned center) */}
-        <div className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-2 sm:px-4">
+        <div 
+          className="absolute inset-0 z-10 w-full flex justify-between h-full pointer-events-none px-2 sm:px-4"
+          style={{
+            WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)',
+            maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%)'
+          }}
+        >
           {/* Left Column of Floating Cards */}
           <div className="w-full lg:w-1/2 absolute inset-y-0 left-0 h-full pointer-events-none">
             {leftReviews.map((card, i) => (

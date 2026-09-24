@@ -101,7 +101,7 @@ export default function Gallery() {
           <div
             ref={scrollRef}
             onScroll={handleScroll}
-            className="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-2 -mx-4 px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden scroll-smooth"
+            className="flex overflow-x-auto gap-4 pb-2 -mx-4 px-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden scroll-smooth"
           >
             {ALL_GALLERY_ITEMS.map((item, idx) => (
               <motion.div
@@ -110,7 +110,7 @@ export default function Gallery() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.08 }}
-                className="relative shrink-0 w-[82vw] max-w-[300px] aspect-[6/9] rounded-[24px] overflow-hidden bg-zinc-100 shadow-lg border border-black/[0.04] snap-center"
+                className="relative shrink-0 w-[82vw] max-w-[300px] aspect-[6/9] rounded-[24px] overflow-hidden bg-zinc-100 shadow-lg border border-black/[0.04]"
               >
                 <Image
                   src={item.src}
