@@ -108,43 +108,63 @@ function GradientOptionWrapper({
         }
       `}</style>
 
-      {/* 1. Ambient Glow behind the pill - clearly visible, shifting colors */}
+      {/* 1. Soft Ambient Glow behind the pill - appears only on hover or when selected */}
       <div
-        className={`absolute -inset-[4px] rounded-[32px] overflow-hidden blur-[2px] pointer-events-none transition-opacity duration-300 ${
+        className={`absolute -inset-[4px] rounded-[32px] overflow-hidden blur-[10px] pointer-events-none transition-opacity duration-300 ${
           isSelected
-            ? 'opacity-100 scale-[1.01]'
-            : 'opacity-100 group-hover:opacity-80'
+            ? 'opacity-85 scale-[1.01]'
+            : 'opacity-0 group-hover:opacity-75'
         }`}
       >
         <div style={gradientLayerStyle} />
       </div>
 
-      {/* 2. 2.5px Outer Frame forming the animated Gradient Border Stroke */}
+      {/* 2. Outer Frame forming the Pill Stroke */}
       <div
-        className={`relative p-[2.5px] rounded-[28px] overflow-hidden transition-all duration-300 ${
+        className={`relative p-[2px] rounded-[28px] overflow-hidden transition-all duration-300 ${
           isSelected
             ? 'shadow-[0_4px_24px_rgba(239,143,96,0.35)]'
-            : 'shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
+            : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)]'
         }`}
       >
-        {/* Animated Moving Gradient Border Fill */}
-        <div style={gradientLayerStyle} />
-
-        {/* 3. Inner Pill Container with Soft Moving Gradient Wash so motion is clearly visible on the body */}
+        {/* Clean Static Border Layer (Default: visible when idle, hides on hover/selected) */}
         <div
-          className={`relative z-10 w-full h-full rounded-[25.5px] overflow-hidden transition-all duration-300 ${
+          className={`absolute inset-0 rounded-[28px] bg-white/80 border border-white/90 transition-opacity duration-300 ${
             isSelected
-              ? 'bg-[#FCFAF7]/85 text-zinc-900'
-              : 'bg-white/70 group-hover:bg-white/60 text-zinc-800'
+              ? 'opacity-0'
+              : 'opacity-100 group-hover:opacity-0'
+          }`}
+        />
+
+        {/* Animated Moving Gradient Stroke (Appears ONLY on hover or when selected) */}
+        <div
+          className={`transition-opacity duration-300 ${
+            isSelected
+              ? 'opacity-100'
+              : 'opacity-0 group-hover:opacity-100'
           }`}
         >
-          {/* Moving Gradient Wash inside the Pill Body */}
+          <div style={gradientLayerStyle} />
+        </div>
+
+        {/* 3. Inner Pill Container */}
+        <div
+          className={`relative z-10 w-full h-full rounded-[26px] overflow-hidden transition-all duration-300 ${
+            isSelected
+              ? 'bg-[#FCFAF7]/95 text-zinc-900 font-bold'
+              : 'bg-white/85 group-hover:bg-[#FCFAF7]/90 text-zinc-700'
+          }`}
+        >
+          {/* Subtle moving gradient wash inside pill - appears on hover or when selected */}
           <div
-            style={{
-              ...gradientLayerStyle,
-              opacity: isSelected ? 0.35 : 0.22,
-            }}
-          />
+            className={`transition-opacity duration-300 ${
+              isSelected
+                ? 'opacity-25'
+                : 'opacity-0 group-hover:opacity-20'
+            }`}
+          >
+            <div style={gradientLayerStyle} />
+          </div>
 
           {/* Subtle top glass highlight */}
           <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/60 to-transparent pointer-events-none" />
