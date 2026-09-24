@@ -20,9 +20,11 @@ let cachedTierReady: 'mobile' | 'desktop' | null = null;
 
 interface DnaSequenceProps {
   className?: string;
+  onProgress?: (progress: number) => void;
+  onLoaded?: () => void;
 }
 
-export default function DnaSequence({ className }: DnaSequenceProps) {
+export default function DnaSequence({ className, onProgress, onLoaded }: DnaSequenceProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const isMountedRef = useRef(true);
@@ -71,6 +73,8 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
             ctx.drawImage(images[0], 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
           }
         }
+        onProgress?.(100);
+        onLoaded?.();
         window.dispatchEvent(
           new CustomEvent('dna-progress', { detail: { progress: 100, isComplete: true } })
         );
@@ -85,7 +89,8 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
     let loaded = 0;
 
     const notifyProgress = (currentLoaded: number) => {
-      const pct = Math.round((currentLoaded / framePaths.length) * 100);
+      const pct = Math.min(100, Math.round((currentLoaded / framePaths.length) * 100));
+      onProgress?.(pct);
       window.dispatchEvent(
         new CustomEvent('dna-progress', {
           detail: { progress: pct, isComplete: currentLoaded >= framePaths.length },
@@ -94,11 +99,11 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
     };
 
     const finishIfDone = () => {
-      if (loaded === framePaths.length && !cancelled && isMountedRef.current) {
+      if (loaded >= framePaths.length && !cancelled && isMountedRef.current) {
         imagesRef.current = images;
-        frameCache.forEach(() => {}); // no-op, keeps intent explicit
         cachedTierReady = tier;
         setImagesLoaded(true);
+        onLoaded?.();
       }
     };
 
@@ -148,9 +153,19 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
       };
     });
 
+    const safetyTimer = setTimeout(() => {
+      if (!cancelled && isMountedRef.current) {
+        cachedTierReady = tier;
+        setImagesLoaded(true);
+        onProgress?.(100);
+        onLoaded?.();
+      }
+    }, 25000);
+
     return () => {
       cancelled = true;
       isMountedRef.current = false;
+      clearTimeout(safetyTimer);
       images.forEach((img) => {
         if (img) {
           img.onload = null;
@@ -158,7 +173,7 @@ export default function DnaSequence({ className }: DnaSequenceProps) {
         }
       });
     };
-  }, [framePaths, isMobile]);
+  }, [framePaths, isMobile, onProgress, onLoaded]);
 
   useEffect(() => {
     if (!imagesLoaded) return;

@@ -1,18 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Reveal from '@/reuseable/Reveal';
 
 import DnaSequence from './DnaSequence';
+import Preloader from '@/reuseable/loader';
 
 export default function HeroSection() {
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+
   return (
     <section className="relative w-full min-h-screen flex items-end pt-10 sm:pt-24 pb-20 sm:pb-28 px-6 sm:px-12 lg:px-16 overflow-hidden">
+      {/* Global Preloader - active until DNA sequence frames are downloaded */}
+      <Preloader manual progress={loadProgress} isComplete={isLoaded} />
+
       {/* 3D DNA Helix positioned on the right side */}
       <div className="absolute -top-35 lg:-top-[10%] -right-[60%] md:-right-[50%] lg:-left-[3%] w-[230%] md:w-[200%] lg:w-[100%] h-full pointer-events-none select-none z-0 flex items-center justify-end ">
         <div className="relative w-full">
-          <DnaSequence />
+          <DnaSequence onProgress={setLoadProgress} onLoaded={() => setIsLoaded(true)} />
         </div>
       </div>
 

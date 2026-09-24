@@ -3,9 +3,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import OnePlace from './onePlace';
+import Preloader from '@/reuseable/loader';
 
-const TOTAL_FRAMES = 389; // rename dna_00000.png to rename dna_00192.png
-const LOOP_END_FRAME = 259; // First 60 frames: 0 to 59
+const TOTAL_FRAMES = 363; // Total frames: 0 to 362
+const LOOP_END_FRAME = 233; // First 234 frames: 0 to 233 (looping when not scrolled)
+const SCATTER_START_FRAME = 234; // Remaining 129 frames: 234 to 362 (rendered on scroll)
+
+// Module-level frame cache to preserve decoded frames across client navigations
+const frameCache = new Map<number, HTMLImageElement>();
 
 // Hotspots configuration matching the scatter DNA layout
 const HOTSPOTS = [
@@ -28,6 +33,11 @@ const HOTSPOTS = [
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Sequence download progress & readiness state
+  const [loadProgress, setLoadProgress] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const isLoadedRef = useRef(false);
 
   // Scroll Progress across the pinned section
   const { scrollYProgress } = useScroll({
@@ -63,20 +73,26 @@ export default function Hero() {
   const currentFrameRef = useRef(0);
   const isScrubbingRef = useRef(false);
 
-  // Monitor scroll progress to toggle scrubbing vs looping
+  // Monitor scroll progress to toggle scrubbing vs looping - only active when fully loaded
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (!isLoadedRef.current) return;
+
     // Trigger OnePlace count animation when scrolling into the reveal phase (after 0.58)
     setIsOnePlaceVisible(latest > 0.58);
 
     if (latest < 0.08) {
       isScrubbingRef.current = false;
+      if (currentFrameRef.current > LOOP_END_FRAME) {
+        currentFrameRef.current = 0;
+        drawFrame(0);
+      }
     } else {
       isScrubbingRef.current = true;
-      // Map scroll progress 0.08 -> 0.58 to frames 60 -> 192 (scrubbing image sequence)
+      // Map scroll progress 0.08 -> 0.58 to scatter frames 234 -> 362
       const progressRatio = Math.min(1, Math.max(0, (latest - 0.08) / 0.50));
       const targetFrame = Math.min(
         TOTAL_FRAMES - 1,
-        Math.floor(260 + progressRatio * (TOTAL_FRAMES - 1 - 260))
+        Math.floor(SCATTER_START_FRAME + progressRatio * (TOTAL_FRAMES - 1 - SCATTER_START_FRAME))
       );
       currentFrameRef.current = targetFrame;
       drawFrame(targetFrame);
@@ -105,53 +121,90 @@ export default function Hero() {
       canvas.height = 1080;
     }
 
-    let loadedCount = 0;
+    let safetyTimer: NodeJS.Timeout | null = null;
 
-    // Helper to load single image frame
-    const loadFrame = (index: number) => {
-      if (imagesRef.current[index]) return;
-      const img = new Image();
-      const paddedIndex = String(index).padStart(8, '0');
-      img.src = `/new-dns-scatter/rename dna_${paddedIndex}.png`;
-      img.onload = () => {
-        if (!isMountedRef.current) return;
-        imagesRef.current[index] = img;
+    // If entire 363-image sequence is already cached, reuse immediately
+    if (frameCache.size >= TOTAL_FRAMES) {
+      for (let i = 0; i < TOTAL_FRAMES; i++) {
+        imagesRef.current[i] = frameCache.get(i) || null;
+      }
+      setLoadProgress(100);
+      setIsLoaded(true);
+      isLoadedRef.current = true;
+      drawFrame(0);
+    } else {
+      let loadedCount = 0;
+
+      // Restore any already cached frames
+      frameCache.forEach((img, idx) => {
+        imagesRef.current[idx] = img;
         loadedCount++;
+      });
 
-        // Dispatch load progress for the initial loop sequence (0-59)
-        if (index <= LOOP_END_FRAME && typeof window !== 'undefined') {
-          const pct = Math.min(100, Math.round((loadedCount / (LOOP_END_FRAME + 1)) * 100));
-          window.dispatchEvent(
-            new CustomEvent('dna-progress', {
-              detail: {
-                progress: pct,
-                isComplete: loadedCount >= (LOOP_END_FRAME + 1),
-              },
-            })
-          );
-        }
+      const initialPct = Math.min(100, Math.round((loadedCount / TOTAL_FRAMES) * 100));
+      setLoadProgress(initialPct);
 
-        // Render frame 0 as soon as it's ready
-        if (index === 0 && !isScrubbingRef.current) {
+      const checkComplete = () => {
+        if (loadedCount >= TOTAL_FRAMES) {
+          setIsLoaded(true);
+          isLoadedRef.current = true;
+          setLoadProgress(100);
           drawFrame(0);
         }
       };
-    };
 
-    // Preload loop frames (0-59) first
-    for (let i = 0; i <= LOOP_END_FRAME; i++) {
-      loadFrame(i);
-    }
+      // Helper to load single image frame and track progress across all 363 images
+      const loadFrame = (index: number) => {
+        if (frameCache.has(index)) return;
 
-    // Preload remaining frames (60-192) in background
-    setTimeout(() => {
-      if (!isMountedRef.current) return;
-      for (let i = LOOP_END_FRAME + 1; i < TOTAL_FRAMES; i++) {
+        const img = new Image();
+        const paddedIndex = String(index).padStart(8, '0');
+        img.src = `/new-dns-scatter/LOOP dna_${paddedIndex}.png`;
+
+        img.onload = () => {
+          if (!isMountedRef.current) return;
+          imagesRef.current[index] = img;
+          frameCache.set(index, img);
+          loadedCount++;
+
+          const pct = Math.min(100, Math.round((loadedCount / TOTAL_FRAMES) * 100));
+          setLoadProgress(pct);
+
+          // Render frame 0 as soon as it's ready
+          if (index === 0 && !isScrubbingRef.current) {
+            drawFrame(0);
+          }
+
+          checkComplete();
+        };
+
+        img.onerror = () => {
+          if (!isMountedRef.current) return;
+          loadedCount++;
+          const pct = Math.min(100, Math.round((loadedCount / TOTAL_FRAMES) * 100));
+          setLoadProgress(pct);
+          checkComplete();
+        };
+      };
+
+      // Dispatch load for all 363 frames (loop 0-233 and scatter 234-362)
+      for (let i = 0; i < TOTAL_FRAMES; i++) {
         loadFrame(i);
       }
-    }, 150);
 
-    // 60-frame Loop Animation Tick (24 fps)
+      // Safety timeout to prevent infinite blocking on unstable connections
+      safetyTimer = setTimeout(() => {
+        if (!isMountedRef.current) return;
+        if (!isLoadedRef.current) {
+          setIsLoaded(true);
+          isLoadedRef.current = true;
+          setLoadProgress(100);
+          drawFrame(0);
+        }
+      }, 25000);
+    }
+
+    // 234-frame Loop Animation Tick (24 fps) - runs only when fully loaded & ready
     let lastTime = performance.now();
     const fps = 24;
     const frameInterval = 1000 / fps;
@@ -159,7 +212,7 @@ export default function Hero() {
     const loopTick = (now: number) => {
       if (!isMountedRef.current) return;
 
-      if (!isScrubbingRef.current) {
+      if (isLoadedRef.current && !isScrubbingRef.current) {
         const delta = now - lastTime;
         if (delta >= frameInterval) {
           lastTime = now - (delta % frameInterval);
@@ -175,6 +228,7 @@ export default function Hero() {
 
     return () => {
       isMountedRef.current = false;
+      if (safetyTimer) clearTimeout(safetyTimer);
       if (animFrameIdRef.current) {
         cancelAnimationFrame(animFrameIdRef.current);
       }
@@ -183,6 +237,9 @@ export default function Hero() {
 
   return (
     <section ref={containerRef} className="relative w-full h-[280vh] select-none">
+      {/* Global Preloader - stays active until all 363 image frames are loaded and ready for scroll */}
+      <Preloader manual progress={loadProgress} isComplete={isLoaded} />
+
       {/* Sticky Hero Viewport */}
       <div className="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 px-[5%]">
         {/* DNA Sequence Canvas Layer */}

@@ -36,7 +36,7 @@ export default function HereItFrom() {
             {[...Array(6)].map((_, i) => (
               <div
                 key={i}
-                className="w-full h-[70px] relative shrink-0 bg-gradient-to-b from-black/5 via-black/10 to-black/25 shadow-[inset_0_1px_2px_rgba(255,255,255,0.4),inset_0_-1px_2px_rgba(0,0,0,0.2)] backdrop-blur-md"
+                className="w-full h-[70px] relative shrink-0 bg-gradient-to-b from-black/5 via-black/10 to-black/25 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.2)] backdrop-blur-md"
               />
             ))}
           </div>

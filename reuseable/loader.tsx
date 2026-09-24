@@ -2,22 +2,100 @@
 
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { usePathname } from 'next/navigation';
 
-export default function Preloader() {
+export interface PreloaderProps {
+  manual?: boolean;
+  progress?: number;
+  isComplete?: boolean;
+  onFinish?: () => void;
+}
+
+export default function Preloader({
+  manual = false,
+  progress: externalProgress,
+  isComplete: externalIsComplete,
+  onFinish,
+}: PreloaderProps) {
+  const pathname = usePathname();
   const preloaderRef = useRef<HTMLDivElement>(null);
-  const [isComplete, setIsComplete] = useState(() => {
+  const [internalIsComplete, setInternalIsComplete] = useState(() => {
+    if (manual) return false;
     if (typeof window !== 'undefined') {
       return sessionStorage.getItem('joyzen_preloaded') === 'true';
     }
     return false;
   });
-  const [progress, setProgress] = useState(0);
+
+  const [internalProgress, setInternalProgress] = useState(0);
   const progressRef = useRef(0);
   const isFinishedRef = useRef(false);
+  const [hasExited, setHasExited] = useState(false);
 
+  // If automatic mode and currently on / or /our-vision, yield to the page's dedicated sequence preloader
+  const shouldSkipAuto = !manual && (pathname === '/' || pathname === '/our-vision');
+
+  const currentProgress = manual
+    ? Math.min(100, Math.max(0, Math.round(externalProgress ?? 0)))
+    : internalProgress;
+
+  // -------------------------------------------------------------
+  // Manual mode exit handler
+  // -------------------------------------------------------------
   useEffect(() => {
+    if (!manual) return;
+
+    if (externalIsComplete && !isFinishedRef.current) {
+      isFinishedRef.current = true;
+
+      if (preloaderRef.current) {
+        gsap.to(preloaderRef.current, {
+          opacity: 0,
+          scale: 1.02,
+          duration: 0.7,
+          ease: 'power2.out',
+          delay: 0.2,
+          onComplete: () => {
+            setHasExited(true);
+            onFinish?.();
+          },
+        });
+      } else {
+        setHasExited(true);
+        onFinish?.();
+      }
+    }
+  }, [manual, externalIsComplete, onFinish]);
+
+  // Lock scroll while manual preloader is visible
+  useEffect(() => {
+    if (manual && !hasExited) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+
+      const handleScrollBlock = (e: Event) => {
+        e.preventDefault();
+      };
+
+      window.addEventListener('wheel', handleScrollBlock, { passive: false });
+      window.addEventListener('touchmove', handleScrollBlock, { passive: false });
+
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        window.removeEventListener('wheel', handleScrollBlock);
+        window.removeEventListener('touchmove', handleScrollBlock);
+      };
+    }
+  }, [manual, hasExited]);
+
+  // -------------------------------------------------------------
+  // Automatic mode (Global RootLayout preloader)
+  // -------------------------------------------------------------
+  useEffect(() => {
+    if (manual || shouldSkipAuto) return;
+
     if (typeof window !== 'undefined' && sessionStorage.getItem('joyzen_preloaded') === 'true') {
-      setIsComplete(true);
+      setInternalIsComplete(true);
       return;
     }
 
@@ -27,7 +105,7 @@ export default function Preloader() {
     const finishLoading = () => {
       if (isFinishedRef.current) return;
       isFinishedRef.current = true;
-      setProgress(100);
+      setInternalProgress(100);
 
       try {
         sessionStorage.setItem('joyzen_preloaded', 'true');
@@ -36,14 +114,22 @@ export default function Preloader() {
       }
 
       // Smooth exit transition revealing the entire site
-      gsap.to(preloaderRef.current, {
-        opacity: 0,
-        scale: 1.02,
-        duration: 0.7,
-        ease: 'power2.out',
-        delay: 0.2,
-        onComplete: () => setIsComplete(true),
-      });
+      if (preloaderRef.current) {
+        gsap.to(preloaderRef.current, {
+          opacity: 0,
+          scale: 1.02,
+          duration: 0.7,
+          ease: 'power2.out',
+          delay: 0.2,
+          onComplete: () => {
+            setInternalIsComplete(true);
+            setHasExited(true);
+          },
+        });
+      } else {
+        setInternalIsComplete(true);
+        setHasExited(true);
+      }
     };
 
     // 1. Listen for DNA sequence image download progress
@@ -54,7 +140,7 @@ export default function Preloader() {
       hasReceivedDnaEvent = true;
       const pct = Math.max(progressRef.current, customEvent.detail.progress);
       progressRef.current = pct;
-      setProgress(pct);
+      setInternalProgress(pct);
 
       if (customEvent.detail.isComplete || pct >= 100) {
         finishLoading();
@@ -80,7 +166,7 @@ export default function Preloader() {
       const imgPct = Math.round((loadedCount / imgs.length) * 100);
       if (imgPct > progressRef.current) {
         progressRef.current = imgPct;
-        setProgress(imgPct);
+        setInternalProgress(imgPct);
       }
 
       if (loadedCount === imgs.length && document.readyState === 'complete') {
@@ -88,7 +174,6 @@ export default function Preloader() {
       }
     };
 
-    // Attach listeners to images present in DOM
     const imgElements = Array.from(document.querySelectorAll<HTMLImageElement>('img'));
     imgElements.forEach((img) => {
       if (!img.complete) {
@@ -97,7 +182,6 @@ export default function Preloader() {
       }
     });
 
-    // Also listen to window load event
     const handleWindowLoad = () => {
       if (!hasReceivedDnaEvent) {
         trackPageImages();
@@ -111,7 +195,6 @@ export default function Preloader() {
       window.addEventListener('load', handleWindowLoad);
     }
 
-    // 3. Fallback smooth progression timer
     const interval = setInterval(() => {
       if (isFinishedRef.current) {
         clearInterval(interval);
@@ -121,7 +204,7 @@ export default function Preloader() {
       trackPageImages();
 
       if (!hasReceivedDnaEvent) {
-        setProgress((prev) => {
+        setInternalProgress((prev) => {
           if (prev >= 95 && document.readyState !== 'complete') {
             return prev;
           }
@@ -132,7 +215,6 @@ export default function Preloader() {
       }
     }, 150);
 
-    // Maximum cap to ensure preloader never hangs indefinitely
     const maxTimeout = setTimeout(() => {
       finishLoading();
     }, 6000);
@@ -147,9 +229,13 @@ export default function Preloader() {
       clearInterval(interval);
       clearTimeout(maxTimeout);
     };
-  }, []);
+  }, [manual, shouldSkipAuto]);
 
-  if (isComplete) return null;
+  if (manual) {
+    if (hasExited) return null;
+  } else {
+    if (shouldSkipAuto || internalIsComplete) return null;
+  }
 
   return (
     <div
@@ -202,13 +288,13 @@ export default function Preloader() {
           <div className="w-full h-1.5 bg-black/10 rounded-full overflow-hidden p-[0.5px]">
             <div
               className="h-full bg-gradient-to-r from-[#F6D7C6] via-[#EF8F60] to-[#036132] rounded-full transition-all duration-200 ease-out"
-              style={{ width: `${progress}%` }}
+              style={{ width: `${currentProgress}%` }}
             />
           </div>
 
           <div className="w-full flex items-center justify-between text-[11px] font-semibold tracking-wider text-zinc-500 uppercase">
             <span>Loading Experience</span>
-            <span className="font-bold text-[#EF8F60]">{progress}%</span>
+            <span className="font-bold text-[#EF8F60]">{currentProgress}%</span>
           </div>
         </div>
       </div>
