@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 import OnePlace from './onePlace';
 
-const TOTAL_FRAMES = 206; // rename dna_00000.png to rename dna_00192.png
-const LOOP_END_FRAME = 59; // First 60 frames: 0 to 59
+const TOTAL_FRAMES = 389; // rename dna_00000.png to rename dna_00192.png
+const LOOP_END_FRAME = 259; // First 60 frames: 0 to 59
 
 // Hotspots configuration matching the scatter DNA layout
 const HOTSPOTS = [
@@ -76,7 +76,7 @@ export default function Hero() {
       const progressRatio = Math.min(1, Math.max(0, (latest - 0.08) / 0.50));
       const targetFrame = Math.min(
         TOTAL_FRAMES - 1,
-        Math.floor(60 + progressRatio * (TOTAL_FRAMES - 1 - 60))
+        Math.floor(260 + progressRatio * (TOTAL_FRAMES - 1 - 260))
       );
       currentFrameRef.current = targetFrame;
       drawFrame(targetFrame);
@@ -112,7 +112,7 @@ export default function Hero() {
       if (imagesRef.current[index]) return;
       const img = new Image();
       const paddedIndex = String(index).padStart(8, '0');
-      img.src = `/scatter_dna/rename dna_${paddedIndex}.png`;
+      img.src = `/new-dns-scatter/rename dna_${paddedIndex}.png`;
       img.onload = () => {
         if (!isMountedRef.current) return;
         imagesRef.current[index] = img;
