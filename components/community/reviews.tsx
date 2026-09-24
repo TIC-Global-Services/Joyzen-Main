@@ -184,7 +184,7 @@ const Reviews = ({
             scrub: scrubSpeed,
             pinSpacing: true,
             anticipatePin: 1,
-            pinType: isTouch ? "transform" : "fixed",
+            pinType: "fixed",
             fastScrollEnd: true,
             invalidateOnRefresh: true,
           },
@@ -287,8 +287,13 @@ const Reviews = ({
         style={{ height: lockedVh ? `${lockedVh}px` : undefined }}
         className="h-[100svh] w-full flex flex-col items-center justify-center overflow-hidden relative px-0 sm:px-[5%]"
       >
-        {/* Background Ambient Spotlights */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[550px] bg-gradient-to-tr from-[#EF8F60]/12 via-[#78C9CF]/12 to-transparent rounded-full blur-[140px] pointer-events-none" />
+        {/* Background Ambient Spotlights (No blur filter for iOS Safari 60fps performance) */}
+        <div 
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full pointer-events-none" 
+          style={{
+            background: "radial-gradient(circle, rgba(239,143,96,0.08) 0%, rgba(120,201,207,0.06) 40%, rgba(0,0,0,0) 70%)"
+          }}
+        />
 
         {/* PINNED CENTER EMBLEM & TITLE LAYER (Fixed in Center during scroll) */}
         <div className="absolute inset-0 z-0 flex flex-col items-center justify-center pointer-events-none px-4 text-center select-none">
