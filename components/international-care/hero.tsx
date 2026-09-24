@@ -44,15 +44,16 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.95, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          className="w-full max-w-4xl flex justify-center items-start mt-12"
+          className="w-full  flex justify-center items-start mt-10"
         >
-          <div className="relative w-full aspect-[3/2]   transition-transform duration-500 hover:scale-[1.01]">
-            <Image
-              src="/internation-care-hero.png"
-              alt="Supporting Patients Across The Globe - Joyzen World Map"
-              fill
-              priority
-              className="object-contain drop-shadow-2xl"
+          <div className="relative w-full aspect-[4/2] h-full transition-transform  duration-500 hover:scale-[1.01] rounded-2xl">
+            <video
+              src="/world-map-up-2.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-contain   rounded-3xl"
             />
           </div>
         </motion.div>
