@@ -38,6 +38,14 @@ export default function Hero() {
   const [loadProgress, setLoadProgress] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const isLoadedRef = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Scroll Progress across the pinned section
   const { scrollYProgress } = useScroll({
@@ -241,7 +249,7 @@ export default function Hero() {
       <Preloader manual progress={loadProgress} isComplete={isLoaded} />
 
       {/* Sticky Hero Viewport */}
-      <div className="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 px-[5%]">
+      <div className="sticky -top-[10%] md:top-0 w-full h-screen overflow-hidden flex flex-col justify-between pt-0 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 px-[5%]">
         {/* DNA Sequence Canvas Layer */}
         <div className="absolute inset-0 w-full h-full pointer-events-none z-0 flex items-center justify-center">
           <canvas
@@ -270,6 +278,7 @@ export default function Hero() {
               className="absolute -translate-x-1/2 top-[80%] group cursor-pointer"
               onMouseEnter={() => setHoveredHotspot(hotspot.id)}
               onMouseLeave={() => setHoveredHotspot(null)}
+              onClick={() => setHoveredHotspot((prev) => (prev === hotspot.id ? null : hotspot.id))}
             >
               {/* Hotspot Target Marker Ring */}
               <div className="relative flex items-center justify-center w-8 h-8">
@@ -282,20 +291,23 @@ export default function Hero() {
                 </div>
               </div>
 
-              {/* Tooltip Content (Visible on Hover) */}
+              {/* Tooltip Content (Visible on Hover / Tap) */}
               <motion.div
                 initial={false}
                 animate={{
                   opacity: hoveredHotspot === hotspot.id ? 1 : 0,
                   scale: hoveredHotspot === hotspot.id ? 1 : 0.9,
-                  x: hotspot.alignRight ? 12 : -12,
+                  x: isMobile ? -8 : (hotspot.alignRight ? 12 : -12),
                 }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap pointer-events-none ${hotspot.alignRight ? 'left-full ml-2' : 'right-full mr-2 text-right'
-                  }`}
+                className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap pointer-events-none right-full mr-2 text-right ${
+                  hotspot.alignRight
+                    ? 'md:left-full md:right-auto md:ml-2 md:mr-0 md:text-left'
+                    : 'md:right-full md:mr-2 md:text-right'
+                }`}
               >
-                <div className=" py-1.5 rounded-lg backdrop-blur-md">
-                  <span className="text-sm md:text-xl font-bold tracking-tight text-[#EB7847] whitespace-pre">
+                <div className="py-0 sm:py-1.5 rounded-lg backdrop-blur-md">
+                  <span className="block text-sm md:text-xl font-bold tracking-tight text-[#EB7847] leading-[0.85] md:leading-[1.2] whitespace-pre">
                     {hotspot.text}
                   </span>
                 </div>
@@ -312,7 +324,7 @@ export default function Hero() {
             display: initialDisplay,
             pointerEvents: initialPointerEvents as unknown as 'auto' | 'none',
           }}
-          className="relative z-10 w-full max-w-5xl mt-auto"
+          className="relative z-10 w-full max-w-5xl mt-auto mb-10 sm:mb-0"
         >
           {/* Eyebrow / Sub-headline */}
           <motion.p
@@ -329,7 +341,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="text-[2.5rem] md:text-5xl lg:text-[50px] font-bold tracking-tight text-black leading-none sm:leading-[1.12]"
+            className="text-[2rem] md:text-5xl lg:text-[50px] font-bold tracking-tight text-black leading-none sm:leading-[1.12]"
           >
             It Should Feel Like Healthcare Finally <br className="hidden lg:inline" />
             Understands The Way You Live
