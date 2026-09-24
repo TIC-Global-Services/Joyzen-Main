@@ -83,12 +83,10 @@ export default function LunaMembership() {
           const isActive = activeIndex === index;
 
           return (
-            <motion.div
+            <div
               key={plan.id}
               onMouseEnter={() => setActiveIndex(index)}
               onClick={() => setActiveIndex(index)}
-              layout
-              transition={{ type: 'spring', stiffness: 220, damping: 25 }}
               style={
                 isActive
                   ? {
@@ -178,7 +176,7 @@ export default function LunaMembership() {
 
                 </div>
               </div>
-            </motion.div>
+            </div>
           );
         })}
       </div>

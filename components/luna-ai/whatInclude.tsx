@@ -13,7 +13,9 @@ const CARDS_DATA = [
     desktopInitial: { x: 0, y: 0, rotate: 0, opacity: 0.8 },
     desktopWhileInView: { x: '-68%', y: 15, rotate: -10, opacity: 1 },
     zIndex: 10,
-    bgClass: 'bg-white/20'
+    bgClass: 'bg-white/20',
+    imgPos: '70% 90%',
+    imgScale: 'scale-[1.5]'
   },
   {
     id: 'right',
@@ -23,7 +25,9 @@ const CARDS_DATA = [
     desktopInitial: { x: 0, y: 0, rotate: 0, opacity: 0.8 },
     desktopWhileInView: { x: '68%', y: 15, rotate: 10, opacity: 1 },
     zIndex: 10,
-    bgClass: 'bg-white/20'
+    bgClass: 'bg-white/20',
+    imgPos: '70% 105%',
+    imgScale: 'scale-[1.6]'
   },
   {
     id: 'center',
@@ -34,7 +38,9 @@ const CARDS_DATA = [
     desktopWhileInView: { y: 0, scale: 1 },
     zIndex: 20,
     bgClass: 'bg-white/5',
-    isCenter: true
+    isCenter: true,
+    imgPos: '50% 100%',
+    imgScale: 'scale-[1.6]'
   }
 ];
 
@@ -60,7 +66,7 @@ export default function WhatInclude() {
             style={{ zIndex: card.zIndex }}
           >
             <div className="relative w-full flex-1 rounded-2xl overflow-hidden shadow-inner mb-6">
-              <Image src={card.src} alt={card.alt} fill className="object-cover" />
+              <Image src={card.src} alt={card.alt} fill style={{objectPosition: card.imgPos, transformOrigin: card.imgPos}} className={`object-cover ${card.imgScale}`} />
             </div>
             <p className={`text-center text-lg leading-[1.3] px-2 pb-1 ${card.isCenter ? 'font-bold' : 'font-medium'} text-[#686873] whitespace-pre-line`}>
               {card.text}
@@ -82,7 +88,7 @@ export default function WhatInclude() {
             className={`${card.bgClass} backdrop-blur-xs shadow-xl rounded-[2rem] p-4 flex flex-col items-center w-full max-w-[320px] aspect-square`}
           >
             <div className="relative w-full flex-1 rounded-2xl overflow-hidden shadow-inner mb-4">
-              <Image src={card.src} alt={card.alt} fill className="object-cover" />
+              <Image src={card.src} alt={card.alt} fill style={{objectPosition: card.imgPos, transformOrigin: card.imgPos}} className={`object-cover ${card.imgScale}`} />
             </div>
             <p className={`text-center text-sm leading-[1.3] px-1 ${card.isCenter ? 'font-bold' : 'font-medium'} text-[#686873] whitespace-pre-line`}>
               {card.text}

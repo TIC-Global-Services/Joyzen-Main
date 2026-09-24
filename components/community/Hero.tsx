@@ -5,12 +5,19 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import CommunityHeroShowcase from './CommunityHeroShowcase';
+import RobotSequence from './RobotSequence';
 
 export default function Hero() {
   return (
     <section className="relative w-full min-h-[90vh] flex flex-col justify-between items-center pt-24 sm:pt-36 md:pt-40 pb-16 sm:pb-24 px-[5%] overflow-hidden select-none">
       {/* Top Split Content for Desktop / Reordered for Mobile */}
-      <div className="w-full grid grid-cols-1 lg:grid-cols-12 items-center justify-center gap-6 lg:gap-0">
+      <div className="relative w-full grid grid-cols-1 lg:grid-cols-12 items-center justify-center gap-6 lg:gap-0">
+        
+        {/* Absolute positioned Robot Sequence between text and calendar */}
+        <div className="absolute top-[20%] md:top-[30%] md:left-[15%] lg:top-1/2 left-[15%] lg:left-[50%] transform -translate-x-1/2 -translate-y-[40%] lg:-translate-y-[45%] w-[220px] sm:w-[280px] md:w-[350px] xl:w-[450px] aspect-square z-10 pointer-events-none">
+          <RobotSequence />
+        </div>
+
         {/* Right: 3D Robot & Appointment Dashboard Banner (1st on mobile, 2nd on desktop) */}
         <motion.div
           initial={{ opacity: 0, scale: 0.94, y: 30 }}

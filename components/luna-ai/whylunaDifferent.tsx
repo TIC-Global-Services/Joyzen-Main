@@ -21,7 +21,7 @@ export default function WhylunaDifferent() {
           
           {/* Left Image */}
           <div className="relative w-full h-full aspect-[4/3]  md:aspect-[2/4] md:max-w-[320px] max-h-[420px] shrink-0 rounded-3xl overflow-hidden shadow-inner">
-            <Image src="/doctor-guided.png" alt="Doctor guided support" fill className="object-cover" />
+            <Image src="/lunaAi/less-explanation.png" alt="Doctor guided support" fill style={{objectPosition: "50% 100%", transformOrigin:"50% 100%"}} className="object-cover scale-[1.5]" />
           </div>
 
           {/* Right Content */}
@@ -47,7 +47,7 @@ export default function WhylunaDifferent() {
           
           {/* Left Image */}
           <div className="relative w-full h-full aspect-[4/3]  md:aspect-[2/4] md:max-w-[320px] max-h-[420px] shrink-0 rounded-3xl overflow-hidden shadow-inner">
-            <Image src="/daily-chat.png" alt="For Parents" fill className="object-cover" />
+            <Image src="/lunaAi/for-parents.png" alt="For Parents" fill style={{objectPosition: "50% 100%", transformOrigin:"50% 100%"}} className="object-cover scale-[1.5]" />
           </div>
 
           {/* Right Content */}
