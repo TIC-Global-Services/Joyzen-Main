@@ -9,12 +9,12 @@ import RobotSequence from './RobotSequence';
 
 export default function Hero() {
   return (
-    <section className="relative w-full min-h-[90vh] flex flex-col justify-between items-center pt-24 sm:pt-36 md:pt-40 pb-16 sm:pb-24 px-[5%] overflow-hidden select-none">
+    <section className="relative w-full min-h-[90vh] flex flex-col justify-between items-center pt-24 sm:pt-36 md:pt-40 pb-16 sm:pb-24 px-[1%] overflow-hidden select-none">
       {/* Top Split Content for Desktop / Reordered for Mobile */}
-      <div className="relative w-full grid grid-cols-1 lg:grid-cols-12 items-center justify-center gap-6 lg:gap-20">
+      <div className="relative w-full grid grid-cols-1 lg:grid-cols-12 items-center justify-center gap-6 lg:gap-10">
         
         {/* Absolute positioned Robot Sequence between text and calendar */}
-        <div className="absolute top-[20%] md:top-[30%] md:left-[15%] lg:top-1/2 left-[15%] lg:left-[46%] transform -translate-x-1/2 -translate-y-[40%] lg:-translate-y-[45%] w-[220px] sm:w-[280px] md:w-[350px] xl:w-[450px] aspect-square z-10 pointer-events-none">
+        <div className="absolute top-[20%] md:top-[30%] md:left-[15%] lg:top-[40%] left-[15%] lg:left-[47%] transform -translate-x-1/2 -translate-y-[40%] lg:-translate-y-[45%] w-[220px] sm:w-[280px] md:w-[350px] xl:w-[450px] aspect-square z-10 pointer-events-none">
           <RobotSequence />
         </div>
 
@@ -23,7 +23,7 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.94, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-          className="order-1 lg:order-2 lg:col-span-7 flex justify-center lg:justify-end items-center"
+          className="order-1 lg:order-2 lg:col-span-7 flex justify-center lg:justify-center items-center"
         >
           <div className="relative w-full">
 
@@ -32,9 +32,9 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.94, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-              className="lg:col-span-7 flex justify-center lg:justify-end items-center"
+              className="lg:col-span-7 flex justify-center lg:justify-center items-center"
             >
-              <div className="relative w-full aspect-[16/8] transition-transform duration-500 hover:scale-[1.02]">
+              <div className="relative w-full aspect-[16/7] transition-transform duration-500 hover:scale-[1.02]">
                 <Image
                   src="/calender.png"
                   alt="Joyzen Robot with Appointments Calendar"
