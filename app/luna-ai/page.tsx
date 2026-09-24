@@ -54,15 +54,15 @@ export default function LunaAIPage() {
         }}
       />
 
-      {/* 2. Soft Pastel Gradient Overlay covering full page height */}
-      <div className="absolute inset-0 bg-gradient-to-br from-[#FFC5CD]/55 via-[#E6D3F5]/45 to-[#B4ECF5]/60 pointer-events-none z-0" />
+      {/* 2. Soft Pastel Gradient Overlay covering full viewport */}
+      <div className="fixed inset-0 bg-gradient-to-br from-[#f8e780]/30 via-[#ddc4df]/30 to-[#b4def7]/40 pointer-events-none z-0" />
 
-      {/* 3. Glowing Ambient Mesh Blobs distributed down the page */}
-      <div className="absolute -top-36 -left-36 w-[800px] h-[800px] bg-[#FFAAA6]/60 rounded-full blur-[130px] pointer-events-none z-0" />
-      <div className="absolute top-1/4 left-1/4 w-[700px] h-[700px] bg-[#FFDFD3]/50 rounded-full blur-[140px] pointer-events-none z-0" />
-      <div className="absolute top-1/3 -right-24 w-[800px] h-[800px] bg-[#B2EBF2]/75 rounded-full blur-[120px] pointer-events-none z-0" />
-      <div className="absolute top-2/3 left-10 w-[750px] h-[750px] bg-[#FFC5CD]/45 rounded-full blur-[130px] pointer-events-none z-0" />
-      <div className="absolute -bottom-36 right-0 w-[800px] h-[800px] bg-[#80DEEA]/50 rounded-full blur-[140px] pointer-events-none z-0" />
+      {/* 3. Glowing Ambient Mesh Blobs distributed across viewport */}
+      <div className="fixed -top-36 -left-36 w-[800px] h-[800px] bg-[#f8e780]/60 rounded-full blur-[130px] pointer-events-none z-0" />
+      <div className="fixed top-1/4 left-1/4 w-[700px] h-[700px] bg-[#ddc4df]/50 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="fixed top-1/3 -right-24 w-[800px] h-[800px] bg-[#b4def7]/60 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="fixed top-2/3 left-10 w-[750px] h-[750px] bg-[#f7f4ed]/80 rounded-full blur-[130px] pointer-events-none z-0" />
+      <div className="fixed -bottom-36 right-0 w-[800px] h-[800px] bg-[#b4def7]/50 rounded-full blur-[140px] pointer-events-none z-0" />
 
       {/* Page Content */}
       <div className="relative z-10 space-y-12 pb-16">

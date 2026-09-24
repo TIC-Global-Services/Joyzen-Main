@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { Ipad } from '@/reuseable/ipad';
 
 export default function Hero() {
   return (
@@ -46,15 +47,17 @@ export default function Hero() {
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
           className="w-full  flex justify-center items-start mt-10"
         >
-          <div className="relative w-full aspect-[4/2] h-full transition-transform  duration-500 hover:scale-[1.01] rounded-2xl">
-            <video
-              src="/world-map-up-2.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="w-full h-full object-contain   rounded-3xl"
-            />
+          <div className="relative w-full max-w-4xl transition-transform duration-500 hover:scale-[1.01]">
+            <Ipad width="100%" height="auto" className="drop-shadow-2xl text-zinc-900">
+              <video
+                src="/world-map-up-2.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-contain"
+              />
+            </Ipad>
           </div>
         </motion.div>
       </div>

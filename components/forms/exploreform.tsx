@@ -213,79 +213,15 @@ export default function ExploreForm() {
         }}
       /> */}
 
-      {/* 2. Soft Pastel Dynamic Moving Mesh Gradient Overlay */}
-      <div className="absolute inset-0 moving-bg-mesh pointer-events-none z-0" />
+      {/* Soft Pastel Gradient Overlay covering full viewport */}
+      <div className="fixed inset-0 bg-gradient-to-br from-[#f8e780]/30 via-[#ddc4df]/30 to-[#b4def7]/40 pointer-events-none z-0" />
 
-      {/* 3. Glowing Ambient Mesh Blobs crossing left-to-right & right-to-left */}
-      {/* Left Peach blob moves all the way to the Right */}
-      <motion.div
-        className="absolute top-0 -left-20 w-[650px] h-[650px] bg-[#FFAAA6]/75 rounded-full blur-[110px] pointer-events-none z-0"
-        animate={{
-          x: ['-5vw', '70vw', '-5vw'],
-          y: ['0vh', '30vh', '0vh'],
-          scale: [1, 1.25, 1],
-        }}
-        transition={{
-          duration: 14,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
-      {/* Right Cyan blob moves all the way to the Left */}
-      <motion.div
-        className="absolute top-1/4 -right-20 w-[650px] h-[650px] bg-[#80DEEA]/70 rounded-full blur-[110px] pointer-events-none z-0"
-        animate={{
-          x: ['5vw', '-70vw', '5vw'],
-          y: ['0vh', '-25vh', '0vh'],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 14,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
-      {/* Top Warm Champagne blob crosses left to right */}
-      <motion.div
-        className="absolute -top-32 left-10 w-[550px] h-[550px] bg-[#FFDFD3]/65 rounded-full blur-[120px] pointer-events-none z-0"
-        animate={{
-          x: ['0vw', '55vw', '0vw'],
-          y: ['0vh', '40vh', '0vh'],
-          scale: [0.9, 1.15, 0.9],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
-      {/* Bottom Aqua blob crosses right to left */}
-      <motion.div
-        className="absolute -bottom-32 right-10 w-[600px] h-[600px] bg-[#B2EBF2]/75 rounded-full blur-[120px] pointer-events-none z-0"
-        animate={{
-          x: ['0vw', '-55vw', '0vw'],
-          y: ['0vh', '-35vh', '0vh'],
-          scale: [1, 1.2, 1],
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
-      {/* Central Soft Lavender blending cloud */}
-      <motion.div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#E6D3F5]/55 rounded-full blur-[130px] pointer-events-none z-0"
-        animate={{
-          scale: [0.85, 1.25, 0.85],
-          rotate: [0, 180, 360],
-        }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-      />
+      {/* Glowing Ambient Mesh Blobs distributed across viewport */}
+      <div className="fixed -top-36 -left-36 w-[800px] h-[800px] bg-[#f8e780]/60 rounded-full blur-[130px] pointer-events-none z-0" />
+      <div className="fixed top-1/4 left-1/4 w-[700px] h-[700px] bg-[#ddc4df]/50 rounded-full blur-[140px] pointer-events-none z-0" />
+      <div className="fixed top-1/3 -right-24 w-[800px] h-[800px] bg-[#b4def7]/60 rounded-full blur-[120px] pointer-events-none z-0" />
+      <div className="fixed top-2/3 left-10 w-[750px] h-[750px] bg-[#f7f4ed]/80 rounded-full blur-[130px] pointer-events-none z-0" />
+      <div className="fixed -bottom-36 right-0 w-[800px] h-[800px] bg-[#b4def7]/50 rounded-full blur-[140px] pointer-events-none z-0" />
 
       <div className="relative z-10 w-full max-w-2xl flex flex-col items-center mt-10">
         {/* Dynamic Heading & Subtitle */}
