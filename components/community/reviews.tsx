@@ -82,7 +82,7 @@ const FiveStars = ({ rating = 5 }: { rating?: number }) => (
 
 const ReviewCard = ({ card }: { card: ReviewCardItem }) => {
   return (
-    <div className="glass-card w-[280px] xs:w-[300px] sm:w-[340px] md:w-[380px] lg:w-[437px] p-6 sm:p-7 md:p-8 rounded-[24px] sm:rounded-[32px] flex flex-col gap-2.5 sm:gap-2 hover:scale-[1.02] transition-transform duration-300">
+    <div className="glass-card backdrop-blur-xs w-[280px] xs:w-[300px] sm:w-[340px] md:w-[380px] lg:w-[437px] p-6 sm:p-7 md:p-8 rounded-[24px] sm:rounded-[32px] flex flex-col gap-2.5 sm:gap-2 hover:scale-[1.02] transition-transform duration-300">
       {/* 5 Golden Stars */}
       <FiveStars rating={card.rating} />
 
@@ -116,14 +116,17 @@ const Reviews = ({
     // card's gsap.set() offscreen position and read as a stutter/reset).
     ScrollTrigger.config({ ignoreMobileResize: true });
 
-    const isTouch =
-      typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+    let ctx: gsap.Context;
 
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
+    // Use a small delay to ensure DOM and route transitions are fully settled
+    // before calculating ScrollTrigger positions. This fixes the iOS blank page glitch
+    // when navigating back to the page.
+    const initTimer = setTimeout(() => {
+      ctx = gsap.context(() => {
+        const mm = gsap.matchMedia();
 
-      // Helper function to build a continuous, seamlessly fading flow of cards
-      const buildScrollTimeline = (
+        // Helper function to build a continuous, seamlessly fading flow of cards
+        const buildScrollTimeline = (
         leftCards: HTMLElement[],
         rightCards: HTMLElement[],
         scrollDistance: number,
@@ -233,9 +236,13 @@ const Reviews = ({
         buildScrollTimeline(leftCards, rightCards, 3000, 2.4, 0.8, 1.0);
       });
     }, containerRef);
+    }, 100);
 
     return () => {
-      ctx.revert();
+      clearTimeout(initTimer);
+      if (ctx) {
+        ctx.revert();
+      }
     };
   }, []);
 
@@ -284,7 +291,7 @@ const Reviews = ({
             {leftReviews.map((card, i) => (
               <div
                 key={`rev-left-${card.id}-${i}`}
-                className="review-card-left absolute inset-0 flex items-center justify-start lg:justify-end pl-3 xs:pl-4 sm:pl-6 lg:pl-0 lg:pr-16 pointer-events-none"
+                className="review-card-left opacity-0 absolute inset-0 flex items-center justify-start lg:justify-end pl-3 xs:pl-4 sm:pl-6 lg:pl-0 lg:pr-16 pointer-events-none"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
@@ -298,7 +305,7 @@ const Reviews = ({
             {rightReviews.map((card, i) => (
               <div
                 key={`rev-right-${card.id}-${i}`}
-                className="review-card-right absolute inset-0 flex items-center justify-end lg:justify-start pr-3 xs:pr-4 sm:pr-6 lg:pr-0 lg:pl-16 pointer-events-none"
+                className="review-card-right opacity-0 absolute inset-0 flex items-center justify-end lg:justify-start pr-3 xs:pr-4 sm:pr-6 lg:pr-0 lg:pl-16 pointer-events-none"
               >
                 <div className="pointer-events-auto">
                   <ReviewCard card={card} />
