@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
@@ -13,6 +13,57 @@ const MARQUEE_ITEMS = [
 ];
 
 export default function InsideLuna() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+
+    if (container.scrollLeft <= 20) {
+      setActiveIndex(0);
+      return;
+    }
+    if (container.scrollLeft + container.clientWidth >= container.scrollWidth - 20) {
+      setActiveIndex(MARQUEE_ITEMS.length - 1);
+      return;
+    }
+
+    const scrollCenter = container.scrollLeft + container.clientWidth / 2;
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    Array.from(container.children).forEach((child, index) => {
+      const htmlChild = child as HTMLElement;
+      const childCenter = htmlChild.offsetLeft + htmlChild.offsetWidth / 2;
+      const distance = Math.abs(childCenter - scrollCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = index;
+      }
+    });
+
+    setActiveIndex(closestIndex);
+  };
+
+  const scrollToCard = (index: number) => {
+    if (!scrollRef.current) return;
+    const container = scrollRef.current;
+
+    if (index === 0) {
+      container.scrollTo({ left: 0, behavior: 'smooth' });
+    } else if (index === MARQUEE_ITEMS.length - 1) {
+      container.scrollTo({ left: container.scrollWidth, behavior: 'smooth' });
+    } else {
+      const targetChild = container.children[index] as HTMLElement;
+      if (targetChild) {
+        const left = targetChild.offsetLeft - (container.clientWidth - targetChild.offsetWidth) / 2;
+        container.scrollTo({ left, behavior: 'smooth' });
+      }
+    }
+    setActiveIndex(index);
+  };
+
   return (
     <div className="w-full py-20 flex flex-col items-center overflow-hidden">
       
@@ -23,7 +74,11 @@ export default function InsideLuna() {
       </h2>
 
       {/* Mobile Slider (< md) */}
-      <div className="w-full flex md:hidden overflow-x-auto snap-x snap-mandatory gap-5 px-6 pb-6 scrollbar-hide [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+      <div 
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="w-full flex md:hidden overflow-x-auto snap-x snap-mandatory gap-5 px-6 pb-4 scrollbar-hide [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+      >
         {MARQUEE_ITEMS.map((item, idx) => (
           <div
             key={idx}
@@ -36,6 +91,22 @@ export default function InsideLuna() {
               {item.text}
             </p>
           </div>
+        ))}
+      </div>
+
+      {/* Mobile Scroll Indicator Dots */}
+      <div className="flex md:hidden items-center justify-center gap-2 mt-2">
+        {MARQUEE_ITEMS.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => scrollToCard(index)}
+            aria-label={`Go to slide ${index + 1}`}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              index === activeIndex
+                ? 'w-7 bg-[#EB7847]'
+                : 'w-2 bg-[#EB7847]/30 hover:bg-[#EB7847]/50'
+            }`}
+          />
         ))}
       </div>
 
