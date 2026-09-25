@@ -14,7 +14,7 @@ export default function Hero() {
       <div className="relative w-full grid grid-cols-1 lg:grid-cols-12 items-center justify-center gap-6 lg:gap-10">
         
         {/* Absolute positioned Robot Sequence between text and calendar */}
-        <div className="absolute top-[20%] md:top-[30%] md:left-[15%] lg:top-[40%] left-[15%] lg:left-[47%] transform -translate-x-1/2 -translate-y-[40%] lg:-translate-y-[45%] w-[220px] sm:w-[280px] md:w-[350px] xl:w-[450px] aspect-square z-10 pointer-events-none">
+        <div className="absolute top-[20%] md:top-[30%] md:left-[15%] lg:top-[40%] left-[18%] lg:left-[47%] transform -translate-x-1/2 -translate-y-[40%] lg:-translate-y-[45%] w-[220px] sm:w-[280px] md:w-[350px] xl:w-[450px] aspect-square z-10 pointer-events-none">
           <RobotSequence />
         </div>
 
@@ -34,7 +34,7 @@ export default function Hero() {
               transition={{ duration: 1.1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
               className="lg:col-span-7 flex justify-center lg:justify-center items-center"
             >
-              <div className="relative w-full aspect-[16/7] transition-transform duration-500 hover:scale-[1.02]">
+              <div className="relative w-full aspect-[16/7] transition-transform duration-500 hover:scale-[1.02] translate-x-12 md:translate-x-0">
                 <Image
                   src="/calender.png"
                   alt="Joyzen Robot with Appointments Calendar"
