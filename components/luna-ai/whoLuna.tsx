@@ -36,7 +36,7 @@ export default function WhoLuna() {
         </div>
 
         {/* Cards Section (Slider on Mobile, Grid on Desktop) */}
-        <div className="w-full lg:col-span-3 flex lg:grid lg:grid-cols-3 gap-6 overflow-x-auto snap-x snap-mandatory pb-6 lg:pb-0 px-4 sm:px-0 scrollbar-hide">
+        <div className="w-full lg:col-span-3 flex lg:grid lg:grid-cols-3 gap-6 overflow-x-auto snap-x snap-mandatory pb-6 lg:pb-0 px-4 sm:px-0 scrollbar-hide [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {SUPPORT_CARDS.map((card, index) => (
             <div 
               key={index}

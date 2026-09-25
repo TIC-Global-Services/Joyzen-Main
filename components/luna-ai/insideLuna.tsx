@@ -22,8 +22,25 @@ export default function InsideLuna() {
         &amp; How It Supports Every Stage of Growing Up
       </h2>
 
-      {/* Infinite Marquee Container */}
-      <div className="relative w-full flex overflow-hidden group">
+      {/* Mobile Slider (< md) */}
+      <div className="w-full flex md:hidden overflow-x-auto snap-x snap-mandatory gap-5 px-6 pb-6 scrollbar-hide [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        {MARQUEE_ITEMS.map((item, idx) => (
+          <div
+            key={idx}
+            className="w-[80vw] max-w-[320px] shrink-0 snap-center bg-white/40 backdrop-blur-xl shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.04)] rounded-[2rem] border-[3px] border-white/60 p-4 pb-6 flex flex-col items-center space-y-4"
+          >
+            <div className="relative w-full aspect-[16/12] rounded-[1.5rem] overflow-hidden shadow-inner bg-zinc-100">
+              <Image src={item.img} alt={item.text} fill style={{objectPosition: item.imgPos, transformOrigin: item.imgPos}} className={`object-cover ${item.imgScale}`} />
+            </div>
+            <p className="text-base sm:text-lg font-medium text-zinc-600 leading-[1.2] text-center whitespace-pre-wrap">
+              {item.text}
+            </p>
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop Infinite Marquee (>= md) */}
+      <div className="relative w-full hidden md:flex overflow-hidden group">
         <style>{`
           @keyframes marquee-half {
             0% { transform: translateX(0); }

@@ -17,11 +17,11 @@ export default function AboutHeroSection() {
       >
         <div className="relative w-[450px] sm:w-[480px] md:w-[480px] lg:w-[560px] xl:w-[800px] h-[700px] md:aspect-[436/1024]">
           <Image
-            src="https://ik.imagekit.io/gyg6yfnd5/ROBOT%20VINES%20TEST%20(2).gif"
+            src="/ROBOT VINES TEST-new.gif"
             alt="Joyzen Robot Hand with Wild Flowers"
             fill
             priority
-            unoptimized
+            
             className="object-contain object-right-top drop-shadow-sm"
           />
         </div>

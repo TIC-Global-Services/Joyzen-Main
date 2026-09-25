@@ -103,7 +103,7 @@ export default function LunaMembership() {
             >
               {/* Background Joyzen Logo Watermark */}
               <div
-                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-56 h-48 sm:h-56 pointer-events-none transition-opacity duration-300 ${
+                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-38 sm:w-56 h-48 sm:h-56 pointer-events-none transition-opacity duration-300 ${
                   isActive ? 'opacity-35 z-0' : 'opacity-15 z-0'
                 }`}
               >
@@ -128,9 +128,9 @@ export default function LunaMembership() {
                 )}
 
                 {/* Bottom Section */}
-                <div className={`${isActive ? 'flex flex-col sm:flex-row sm:items-end justify-between mt-auto pt-16 sm:pt-0' : 'space-y-1 mt-auto'}`}>
+                <div className={`${isActive ? 'flex flex-col sm:flex-row sm:items-end justify-between mt-auto pt-26 sm:pt-0' : 'space-y-1 mt-auto'}`}>
                   
-                  <div className="space-y-1">
+                  <div className="md:space-y-1">
                     {/* Label for Inactive Card (pushed to bottom) */}
                     {!isActive && (
                       <h3 className="text-[17px] sm:text-[28px] font-bold tracking-tight text-zinc-900 pb-1">
