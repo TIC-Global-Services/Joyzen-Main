@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { motion } from 'framer-motion';
 import SpecularButton from '@/reuseable/specularButton';
 
 interface PlanCardData {
@@ -87,66 +86,80 @@ export default function LunaMembership() {
               key={plan.id}
               onMouseEnter={() => setActiveIndex(index)}
               onClick={() => setActiveIndex(index)}
-              style={
+              style={{
+                flexGrow: isActive ? 2.2 : 1,
+                flexBasis: 0,
+                flexShrink: 1,
+              }}
+              className={`relative rounded-[2rem] p-5 sm:p-7 lg:p-8 flex flex-col justify-between overflow-hidden cursor-pointer border transition-[flex-grow,box-shadow,border-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[flex-grow] ${
                 isActive
-                  ? {
-                      background:
-                        'radial-gradient(circle at 100% 100%, rgba(143, 221, 243, 0.75) 0%, transparent 55%), radial-gradient(circle at 0% 100%, rgba(230, 205, 245, 0.75) 0%, transparent 55%), radial-gradient(circle at 90% 10%, rgba(254, 228, 212, 0.65) 0%, transparent 45%), linear-gradient(135deg, #ffffff 50%, #fffdfb 100%)',
-                    }
-                  : undefined
-              }
-              className={`relative rounded-[2rem]  p-6 sm:p-8 flex flex-col justify-between overflow-hidden cursor-pointer transition-all duration-500 ${
-                isActive
-                  ? 'flex-[2.2] shadow-[0_16px_48px_rgba(246,215,198,0.45),inset_0_1px_2px_rgba(255,255,255,0.9)] border-white'
-                  : 'flex-1 bg-white/10 backdrop-blur-xs shadow-[inset_0_1px_2px_rgba(255,255,255,0.7),0_8px_24px_rgba(0,0,0,0.02)] border-white/60 hover:bg-white/20'
+                  ? 'border-white shadow-[0_20px_50px_rgba(246,215,198,0.45),inset_0_1px_2px_rgba(255,255,255,0.95)]'
+                  : 'border-white/60 shadow-[inset_0_1px_2px_rgba(255,255,255,0.7),0_8px_24px_rgba(0,0,0,0.02)]'
               }`}
             >
-              {/* Background Joyzen Logo Watermark */}
+              {/* Active Card Gradient Background Layer with smooth opacity cross-fade */}
               <div
-                className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-38 sm:w-56 h-48 sm:h-56 pointer-events-none transition-opacity duration-300 ${
-                  isActive ? 'opacity-35 z-0' : 'opacity-15 z-0'
+                className={`absolute inset-0 rounded-[2rem] transition-opacity duration-300 ease-out pointer-events-none ${
+                  isActive ? 'opacity-100' : 'opacity-0'
                 }`}
-              >
-                <Image
-                  src="/joyzen-logo.png"
-                  alt="Joyzen Watermark"
-                  fill
-                  className="object-contain"
-                />
-              </div>
+                style={{
+                  background:
+                    'radial-gradient(ellipse 45% 48% at 100% 100%, rgba(143, 221, 243, 0.85) 0%, rgba(175, 226, 245, 0.35) 40%, transparent 70%), radial-gradient(ellipse 75% 48% at 20% 100%, rgba(246, 210, 238, 0.85) 0%, rgba(238, 205, 242, 0.5) 50%, transparent 75%), radial-gradient(circle at 95% 5%, rgba(254, 228, 212, 0.45) 0%, transparent 40%), linear-gradient(to bottom, #ffffff 58%, #fffdfc 100%)',
+                }}
+              />
+
+              {/* Inactive Card Frosted Layer with smooth opacity cross-fade (showing background honeycomb mesh) */}
+              <div
+                className={`absolute inset-0 rounded-[2rem] bg-white/10 backdrop-blur-xs transition-opacity duration-300 ease-out pointer-events-none ${
+                  isActive ? 'opacity-0' : 'opacity-100'
+                }`}
+              />
 
               {/* Card Content Container */}
               <div className={`relative z-10 flex flex-col h-full w-full ${isActive ? 'justify-between' : 'justify-end'}`}>
-                
-                {/* Top Section (Label for Active Card only) */}
+
+                {/* Top Section (Active Card only) */}
                 {isActive && (
                   <div>
-                    <h3 className="text-[17px] sm:text-[28px] font-bold tracking-tight text-zinc-900">
+                    <h3 className="text-[22px] sm:text-[28px] font-bold tracking-tight text-zinc-900">
                       {plan.label}
                     </h3>
                   </div>
                 )}
 
                 {/* Bottom Section */}
-                <div className={`${isActive ? 'flex flex-col sm:flex-row sm:items-end justify-between mt-auto pt-26 sm:pt-0' : 'space-y-1 mt-auto'}`}>
-                  
-                  <div className="md:space-y-1">
-                    {/* Label for Inactive Card (pushed to bottom) */}
+                <div
+                  className={`${
+                    isActive
+                      ? 'flex flex-col sm:flex-row sm:items-end justify-between mt-auto pt-6'
+                      : 'space-y-1 mt-auto'
+                  }`}
+                >
+                  <div className="space-y-1">
+                    {/* Label for Inactive Card (pushed to bottom, exactly as in screenshot) */}
                     {!isActive && (
-                      <h3 className="text-[17px] sm:text-[28px] font-bold tracking-tight text-zinc-900 pb-1">
+                      <h3 className="text-[24px] sm:text-[28px] font-bold tracking-tight text-zinc-900 pb-1.5">
                         {plan.label}
                       </h3>
                     )}
-                    
+
                     {/* Pricing Details */}
-                    <div className="text-[32px] sm:text-[40px] font-bold text-zinc-900 tracking-tight leading-[1.1]">
-                      {plan.prefixTitle && <span className="block sm:inline">{plan.prefixTitle} </span>}
+                    <div className="text-[28px] sm:text-[36px] lg:text-[40px] font-bold text-zinc-900 tracking-tight leading-[1.1]">
+                      {plan.prefixTitle && (
+                        <span className={isActive ? 'block xl:inline' : 'block'}>
+                          {plan.prefixTitle}{' '}
+                        </span>
+                      )}
                       {plan.prefixSubtitle && <span>{plan.prefixSubtitle}</span>}
                       <span className="text-[#EF8F60] font-extrabold">{plan.highlightPrice}</span>
-                      {plan.suffixTitle && <span className="font-bold text-zinc-900">{plan.suffixTitle}</span>}
+                      {plan.suffixTitle && (
+                        <span className="font-bold text-zinc-900">
+                          {plan.suffixTitle}
+                        </span>
+                      )}
                     </div>
 
-                    <p className="text-[19px] sm:text-xl font-bold text-black leading-[1.2]">
+                    <p className="text-[17px] sm:text-xl font-bold text-black leading-[1.2]">
                       {plan.subPrice}
                     </p>
 
@@ -157,7 +170,7 @@ export default function LunaMembership() {
 
                   {/* Action Button (Active Card only) */}
                   {isActive && (
-                    <div className="flex justify-start sm:justify-end mt-6 sm:mt-0">
+                    <div className="flex justify-start sm:justify-end mt-4 sm:mt-0 min-h-[38px] items-center">
                       <SpecularButton
                         type="button"
                         size="md"
@@ -181,16 +194,15 @@ export default function LunaMembership() {
         })}
       </div>
 
+
       {/* Footer Text and Logo */}
       <div className="w-full  flex flex-col md:flex-row items-center justify-between mt-10 gap-6">
-        <p className="text-sm sm:text-lg font-bold text-black text-center md:text-left md:max-w-xl leading-[1.3]">
+        <p className="text-sm sm:text-2xl font-bold text-black text-center md:text-left md:max-w-3xl leading-[1.3]">
           After enrollment, our care team will contact you within 24 hours to begin your LUNA program.
         </p>
         <div className="flex items-center justify-center gap-2">
-          <span className="text-sm sm:text-base font-bold text-black tracking-tight">Powered by</span>
-          <div className="relative w-[100px] h-[32px]">
-            <Image src="/joyzen-logo.png" alt="Joyzen Logo" fill className="object-contain object-left md:object-right" />
-          </div>
+          <span className="text-sm sm:text-2xl font-bold text-black tracking-tight">Powered by</span>
+          <span className='text-[44px] text-[#EF8F60] font-bold tracking-tight'>Joyzen</span>
         </div>
       </div>
     </div>

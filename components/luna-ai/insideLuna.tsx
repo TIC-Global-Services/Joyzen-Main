@@ -119,15 +119,20 @@ export default function InsideLuna() {
           }
           .animate-marquee-half {
             animation: marquee-half 35s linear infinite;
+            will-change: transform;
+          }
+          .group:hover .animate-marquee-half,
+          .animate-marquee-half:hover {
+            animation-play-state: paused;
           }
         `}</style>
         
-        <div className="flex whitespace-nowrap gap-6 pl-6 animate-marquee-half group-hover:[animation-play-state:paused]">
+        <div className="flex whitespace-nowrap gap-6 pl-6 animate-marquee-half">
           {/* Render the items twice to create the infinite loop effect */}
           {[...MARQUEE_ITEMS, ...MARQUEE_ITEMS].map((item, idx) => (
             <div
               key={idx}
-              className="w-[280px] sm:w-[320px] shrink-0 bg-white/40 backdrop-blur-xl shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.04)] rounded-[2rem] border-[3px] border-white/60 p-4 pb-6 flex flex-col items-center space-y-4 transition-all duration-300 group-hover:opacity-75 hover:!opacity-100"
+              className="w-[280px] sm:w-[320px] shrink-0 bg-white/40 backdrop-blur-xl shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.04)] rounded-[2rem] border-[3px] border-white/60 p-4 pb-6 flex flex-col items-center space-y-4 transition-all duration-300 group-hover:opacity-75 hover:!opacity-100 cursor-pointer"
             >
               <div className="relative w-full aspect-[16/12] rounded-[1.5rem] overflow-hidden shadow-inner bg-zinc-100">
                 <Image src={item.img} alt={item.text} fill style={{objectPosition: item.imgPos, transformOrigin: item.imgPos}} className={`object-cover ${item.imgScale}`} />
