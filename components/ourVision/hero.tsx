@@ -1,13 +1,30 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { motion, useScroll, useTransform, useMotionValueEvent, MotionValue } from 'framer-motion';
 import OnePlace from './onePlace';
 import Preloader from '@/reuseable/loader';
 
 const TOTAL_FRAMES = 363; // Total frames: 0 to 362
 const LOOP_END_FRAME = 233; // First 234 frames: 0 to 233 (looping when not scrolled)
 const SCATTER_START_FRAME = 234; // Remaining 129 frames: 234 to 362 (rendered on scroll)
+const FRAME_PATH_PREFIX = '/new-dns-scatter-q95/LOOP dna_';
+const CANVAS_WIDTH = 1920;
+const CANVAS_HEIGHT = 1080;
+const LOOP_FPS = 24;
+const LOOP_FRAME_INTERVAL_MS = 1000 / LOOP_FPS;
+const SAFETY_TIMEOUT_MS = 25000;
+
+// Scroll-progress timeline constants (fractions of the pinned section's scroll range)
+const HOTSPOT_FADE_END = 0.08; // initial content/hotspots fully faded out by this point
+const SCRUB_START = 0.08; // scatter scrubbing begins
+const SCRUB_END = 0.58; // scatter scrubbing ends / reveal phase begins
+const ONE_PLACE_REVEAL_START = 0.58;
+const ONE_PLACE_REVEAL_END = 0.72;
+const ONE_PLACE_VISIBLE_THRESHOLD = 0.58;
+const ONE_PLACE_DISPLAY_THRESHOLD = 0.55;
+const ONE_PLACE_Y_OFFSET = 30;
+const HOTSPOT_Y_OFFSET = -20;
 
 declare global {
   interface Window {
@@ -33,6 +50,35 @@ const getInFlightSet = (): Set<number> => {
   return window.__joyzen_vision_in_flight;
 };
 
+const SESSION_CACHE_KEY = 'joyzen_vision_loaded';
+
+/**
+ * Whether the full 363-frame sequence is genuinely available right now.
+ *
+ * This is the single source of truth for "fully loaded." It intentionally
+ * does NOT trust sessionStorage on its own: sessionStorage survives a hard
+ * page reload, but the in-memory Map of decoded HTMLImageElements
+ * (window.__joyzen_vision_frame_cache) does not. Trusting the flag alone
+ * previously let the component believe it was fully loaded (hiding the
+ * preloader / unlocking scrubbing) immediately after a hard reload, while
+ * the real image cache was actually empty.
+ */
+const isFullyCached = (): boolean => {
+  if (typeof window === 'undefined') return false;
+  return window.__joyzen_vision_loaded === true || getFrameCache().size >= TOTAL_FRAMES;
+};
+
+const markSessionLoaded = (): void => {
+  if (typeof window === 'undefined') return;
+  window.__joyzen_vision_loaded = true;
+  try {
+    // Best-effort hint only (see isFullyCached) - not treated as authoritative on read.
+    sessionStorage.setItem(SESSION_CACHE_KEY, 'true');
+  } catch {
+    // Graceful fallback for restricted storage environments
+  }
+};
+
 // Hotspots configuration matching the scatter DNA layout
 const HOTSPOTS = [
   {
@@ -51,28 +97,32 @@ const HOTSPOTS = [
   },
 ];
 
+// Small typed helper so we don't repeat the `as unknown as 'auto' | 'none'` cast
+// every time we derive a pointer-events value from a MotionValue<number>.
+const usePointerEventsFromProgress = (
+  scrollYProgress: MotionValue<number>,
+  threshold: number,
+  belowThreshold: 'auto' | 'none',
+  atOrAboveThreshold: 'auto' | 'none'
+) =>
+  useTransform(scrollYProgress, (v) =>
+    v < threshold ? belowThreshold : atOrAboveThreshold
+  ) as unknown as MotionValue<'auto' | 'none'>;
+
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Sequence download progress & readiness state - initialized directly from persistent cache
+  // Sequence download progress & readiness state - initialized directly from
+  // the real frame cache (see isFullyCached for why sessionStorage alone isn't trusted).
   const [loadProgress, setLoadProgress] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const cache = getFrameCache();
-      if (window.__joyzen_vision_loaded || cache.size >= TOTAL_FRAMES) return 100;
-      return Math.min(100, Math.round((cache.size / TOTAL_FRAMES) * 100));
-    }
-    return 0;
+    if (typeof window === 'undefined') return 0;
+    if (isFullyCached()) return 100;
+    return Math.min(100, Math.round((getFrameCache().size / TOTAL_FRAMES) * 100));
   });
 
-  const [isLoaded, setIsLoaded] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const cache = getFrameCache();
-      return window.__joyzen_vision_loaded === true || cache.size >= TOTAL_FRAMES;
-    }
-    return false;
-  });
-  const isLoadedRef = useRef(false);
+  const [isLoaded, setIsLoaded] = useState(() => isFullyCached());
+  const isLoadedRef = useRef(isFullyCached());
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -90,20 +140,28 @@ export default function Hero() {
 
   // Fade & Display transforms
   // Initial content & dots fade out completely as soon as scroll begins (before scattering)
-  const initialContentOpacity = useTransform(scrollYProgress, [0.0, 0.08], [1, 0]);
-  const initialContentY = useTransform(scrollYProgress, [0.0, 0.08], [0, -20]);
-  const initialDisplay = useTransform(scrollYProgress, (v) => (v >= 0.08 ? 'none' : 'block'));
-  const initialPointerEvents = useTransform(scrollYProgress, (v) => (v < 0.08 ? 'auto' : 'none'));
+  const initialContentOpacity = useTransform(scrollYProgress, [0.0, HOTSPOT_FADE_END], [1, 0]);
+  const initialContentY = useTransform(scrollYProgress, [0.0, HOTSPOT_FADE_END], [0, HOTSPOT_Y_OFFSET]);
+  const initialDisplay = useTransform(scrollYProgress, (v) => (v >= HOTSPOT_FADE_END ? 'none' : 'block'));
+  const initialPointerEvents = usePointerEventsFromProgress(scrollYProgress, HOTSPOT_FADE_END, 'auto', 'none');
 
   // OnePlace component reveals after image sequence scattering (holds strictly visible at opacity 1 at the end)
   const onePlaceOpacity = useTransform(scrollYProgress, (v) =>
-    v < 0.58 ? 0 : v < 0.72 ? (v - 0.58) / 0.14 : 1
+    v < ONE_PLACE_REVEAL_START
+      ? 0
+      : v < ONE_PLACE_REVEAL_END
+        ? (v - ONE_PLACE_REVEAL_START) / (ONE_PLACE_REVEAL_END - ONE_PLACE_REVEAL_START)
+        : 1
   );
   const onePlaceY = useTransform(scrollYProgress, (v) =>
-    v < 0.58 ? 30 : v < 0.72 ? 30 * (1 - (v - 0.58) / 0.14) : 0
+    v < ONE_PLACE_REVEAL_START
+      ? ONE_PLACE_Y_OFFSET
+      : v < ONE_PLACE_REVEAL_END
+        ? ONE_PLACE_Y_OFFSET * (1 - (v - ONE_PLACE_REVEAL_START) / (ONE_PLACE_REVEAL_END - ONE_PLACE_REVEAL_START))
+        : 0
   );
-  const onePlaceDisplay = useTransform(scrollYProgress, (v) => (v < 0.55 ? 'none' : 'flex'));
-  const onePlacePointerEvents = useTransform(scrollYProgress, (v) => (v < 0.55 ? 'none' : 'auto'));
+  const onePlaceDisplay = useTransform(scrollYProgress, (v) => (v < ONE_PLACE_DISPLAY_THRESHOLD ? 'none' : 'flex'));
+  const onePlacePointerEvents = usePointerEventsFromProgress(scrollYProgress, ONE_PLACE_DISPLAY_THRESHOLD, 'none', 'auto');
 
   // Reactive state for rendering logic
   const [isOnePlaceVisible, setIsOnePlaceVisible] = useState(false);
@@ -116,33 +174,9 @@ export default function Hero() {
   const currentFrameRef = useRef(0);
   const isScrubbingRef = useRef(false);
 
-  // Monitor scroll progress to toggle scrubbing vs looping - only active when fully loaded
-  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
-    if (!isLoadedRef.current) return;
-
-    // Trigger OnePlace count animation when scrolling into the reveal phase (after 0.58)
-    setIsOnePlaceVisible(latest > 0.58);
-
-    if (latest < 0.08) {
-      isScrubbingRef.current = false;
-      if (currentFrameRef.current > LOOP_END_FRAME) {
-        currentFrameRef.current = 0;
-        drawFrame(0);
-      }
-    } else {
-      isScrubbingRef.current = true;
-      // Map scroll progress 0.08 -> 0.58 to scatter frames 234 -> 362
-      const progressRatio = Math.min(1, Math.max(0, (latest - 0.08) / 0.50));
-      const targetFrame = Math.min(
-        TOTAL_FRAMES - 1,
-        Math.floor(SCATTER_START_FRAME + progressRatio * (TOTAL_FRAMES - 1 - SCATTER_START_FRAME))
-      );
-      currentFrameRef.current = targetFrame;
-      drawFrame(targetFrame);
-    }
-  });
-
-  // Render frame to canvas
+  // Render frame to canvas. Declared before first use (previously referenced
+  // inside useMotionValueEvent above its own declaration later in the file -
+  // functionally fine due to closure timing, but confusing to read top-to-bottom).
   const drawFrame = (frameIdx: number) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -156,41 +190,69 @@ export default function Hero() {
     }
   };
 
+  // Monitor scroll progress to toggle scrubbing vs looping - only active when fully loaded
+  useMotionValueEvent(scrollYProgress, 'change', (latest) => {
+    if (!isLoadedRef.current) return;
+
+    // Trigger OnePlace count animation when scrolling into the reveal phase
+    setIsOnePlaceVisible(latest > ONE_PLACE_VISIBLE_THRESHOLD);
+
+    if (latest < SCRUB_START) {
+      isScrubbingRef.current = false;
+      if (currentFrameRef.current > LOOP_END_FRAME) {
+        currentFrameRef.current = 0;
+        drawFrame(0);
+      }
+    } else {
+      isScrubbingRef.current = true;
+      // Map scroll progress SCRUB_START -> SCRUB_END to scatter frames SCATTER_START_FRAME -> TOTAL_FRAMES-1
+      const progressRatio = Math.min(1, Math.max(0, (latest - SCRUB_START) / (SCRUB_END - SCRUB_START)));
+      const targetFrame = Math.min(
+        TOTAL_FRAMES - 1,
+        Math.floor(SCATTER_START_FRAME + progressRatio * (TOTAL_FRAMES - 1 - SCATTER_START_FRAME))
+      );
+      currentFrameRef.current = targetFrame;
+      drawFrame(targetFrame);
+    }
+  });
+
   useEffect(() => {
     isMountedRef.current = true;
     const canvas = canvasRef.current;
     if (canvas) {
-      canvas.width = 1920;
-      canvas.height = 1080;
+      canvas.width = CANVAS_WIDTH;
+      canvas.height = CANVAS_HEIGHT;
     }
 
     const frameCache = getFrameCache();
     const inFlight = getInFlightSet();
     let safetyTimer: NodeJS.Timeout | null = null;
 
-    // If entire 363-image sequence is already cached, reuse immediately
-    const isAlreadyFullyCached =
-      (typeof window !== 'undefined' && window.__joyzen_vision_loaded === true) ||
-      frameCache.size >= TOTAL_FRAMES;
+    // Tracks every frame that has SETTLED - loaded OR errored - so completion
+    // is based on "nothing left in flight," not on a counter that conflated
+    // successes and failures (the previous `loadedCount` bug: an errored frame
+    // incremented loadedCount without ever being added to frameCache, so
+    // completion could be declared while frames were genuinely missing).
+    const settledIndices = new Set<number>();
 
-    if (isAlreadyFullyCached) {
+    // If entire 363-image sequence is already genuinely cached, reuse immediately
+    if (isFullyCached()) {
       for (let i = 0; i < TOTAL_FRAMES; i++) {
         imagesRef.current[i] = frameCache.get(i) || null;
       }
-      if (typeof window !== 'undefined') window.__joyzen_vision_loaded = true;
+      markSessionLoaded();
       setLoadProgress(100);
       setIsLoaded(true);
       isLoadedRef.current = true;
       drawFrame(0);
     } else {
-      let loadedCount = frameCache.size;
-
       // Restore any already cached frames into current ref
       frameCache.forEach((img, idx) => {
         imagesRef.current[idx] = img;
+        settledIndices.add(idx);
       });
 
-      const initialPct = Math.min(100, Math.round((loadedCount / TOTAL_FRAMES) * 100));
+      const initialPct = Math.min(100, Math.round((frameCache.size / TOTAL_FRAMES) * 100));
       setLoadProgress(initialPct);
 
       // Render frame 0 as soon as available
@@ -199,18 +261,17 @@ export default function Hero() {
       }
 
       const checkComplete = () => {
-        if (loadedCount >= TOTAL_FRAMES || frameCache.size >= TOTAL_FRAMES) {
-          if (typeof window !== 'undefined') window.__joyzen_vision_loaded = true;
-          if (isMountedRef.current) {
-            setIsLoaded(true);
-            isLoadedRef.current = true;
-            setLoadProgress(100);
-            drawFrame(0);
-          }
+        if (settledIndices.size < TOTAL_FRAMES) return;
+        markSessionLoaded();
+        if (isMountedRef.current) {
+          setIsLoaded(true);
+          isLoadedRef.current = true;
+          setLoadProgress(100);
+          drawFrame(0);
         }
       };
 
-      // Helper to load single image frame and track progress across all 363 images
+      // Helper to load a single image frame and track progress across all 363 images
       const loadFrame = (index: number) => {
         if (frameCache.has(index)) return;
         if (inFlight.has(index)) return;
@@ -218,18 +279,18 @@ export default function Hero() {
 
         const img = new Image();
         const paddedIndex = String(index).padStart(8, '0');
-        img.src = `/new-dns-scatter/LOOP dna_${paddedIndex}.png`;
+        img.src = `${FRAME_PATH_PREFIX}${paddedIndex}.webp`;
 
         img.onload = () => {
           inFlight.delete(index);
           // CRITICAL: Always persist to global cache regardless of whether component is mounted
           frameCache.set(index, img);
+          settledIndices.add(index);
 
           if (!isMountedRef.current) return;
           imagesRef.current[index] = img;
-          loadedCount = frameCache.size;
 
-          const pct = Math.min(100, Math.round((loadedCount / TOTAL_FRAMES) * 100));
+          const pct = Math.min(100, Math.round((frameCache.size / TOTAL_FRAMES) * 100));
           setLoadProgress(pct);
 
           // Render frame 0 as soon as it's ready
@@ -242,9 +303,10 @@ export default function Hero() {
 
         img.onerror = () => {
           inFlight.delete(index);
+          settledIndices.add(index); // settled (failed), but never added to frameCache
           if (!isMountedRef.current) return;
-          loadedCount++;
-          const pct = Math.min(100, Math.round((loadedCount / TOTAL_FRAMES) * 100));
+
+          const pct = Math.min(100, Math.round((frameCache.size / TOTAL_FRAMES) * 100));
           setLoadProgress(pct);
           checkComplete();
         };
@@ -259,27 +321,25 @@ export default function Hero() {
       safetyTimer = setTimeout(() => {
         if (!isMountedRef.current) return;
         if (!isLoadedRef.current) {
-          if (typeof window !== 'undefined') window.__joyzen_vision_loaded = true;
+          markSessionLoaded();
           setIsLoaded(true);
           isLoadedRef.current = true;
           setLoadProgress(100);
           drawFrame(0);
         }
-      }, 25000);
+      }, SAFETY_TIMEOUT_MS);
     }
 
     // 234-frame Loop Animation Tick (24 fps) - runs only when fully loaded & ready
     let lastTime = performance.now();
-    const fps = 24;
-    const frameInterval = 1000 / fps;
 
     const loopTick = (now: number) => {
       if (!isMountedRef.current) return;
 
       if (isLoadedRef.current && !isScrubbingRef.current) {
         const delta = now - lastTime;
-        if (delta >= frameInterval) {
-          lastTime = now - (delta % frameInterval);
+        if (delta >= LOOP_FRAME_INTERVAL_MS) {
+          lastTime = now - (delta % LOOP_FRAME_INTERVAL_MS);
           currentFrameRef.current = (currentFrameRef.current + 1) % (LOOP_END_FRAME + 1);
           drawFrame(currentFrameRef.current);
         }
@@ -323,7 +383,7 @@ export default function Hero() {
           style={{
             opacity: initialContentOpacity,
             display: initialDisplay,
-            pointerEvents: initialPointerEvents as unknown as 'auto' | 'none',
+            pointerEvents: initialPointerEvents,
           }}
           className="absolute inset-0 z-20"
         >
@@ -357,8 +417,8 @@ export default function Hero() {
                 }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
                 className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap pointer-events-none right-full mr-2 text-right ${hotspot.alignRight
-                    ? 'md:left-full md:right-auto md:ml-2 md:mr-0 md:text-left'
-                    : 'md:right-full md:mr-2 md:text-right'
+                  ? 'md:left-full md:right-auto md:ml-2 md:mr-0 md:text-left'
+                  : 'md:right-full md:mr-2 md:text-right'
                   }`}
               >
                 <div className="py-0 sm:py-1.5 rounded-lg backdrop-blur-md">
@@ -377,7 +437,7 @@ export default function Hero() {
             opacity: initialContentOpacity,
             y: initialContentY,
             display: initialDisplay,
-            pointerEvents: initialPointerEvents as unknown as 'auto' | 'none',
+            pointerEvents: initialPointerEvents,
           }}
           className="relative z-10 w-full max-w-5xl mt-auto mb-10 sm:mb-0"
         >
@@ -409,7 +469,7 @@ export default function Hero() {
             opacity: onePlaceOpacity,
             y: onePlaceY,
             display: onePlaceDisplay,
-            pointerEvents: onePlacePointerEvents as unknown as 'auto' | 'none',
+            pointerEvents: onePlacePointerEvents,
           }}
           className="absolute inset-0 z-30 flex items-center justify-center"
         >
