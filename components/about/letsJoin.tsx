@@ -13,23 +13,99 @@ import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-import tabSequenceData from '@/data/tabSequence.json';
-import mobSequenceData from '@/data/mobSequence.json';
-
-import {
-  preloadFrameSequence,
-  areFramesInMemory,
-  getFramesFromMemory,
-} from '@/lib/frameCache';
-
 gsap.registerPlugin(ScrollTrigger);
 
 /* ─── constants ─── */
-const DESKTOP_TOTAL_FRAMES = tabSequenceData.assets.length; // 387 frames from ImageKit
+const TAB_FRAME_PREFIX = '/tab-sequence-q95/JOYZEN IPAD FINAL RENDER_';
+const MOB_FRAME_PREFIX = '/mob-sequence-q95/PNG MOBILE JOYZEN_';
+
+const DESKTOP_TOTAL_FRAMES = 387; // Total frames: 0 to 386 in /tab-sequence-q95
 const DESKTOP_FRAME_STEP = 2; // use every 2nd frame for optimal performance
 
-const MOBILE_TOTAL_FRAMES = mobSequenceData.assets.length; // 121 frames from ImageKit
+const MOBILE_TOTAL_FRAMES = 121; // Total frames: 0 to 120 in /mob-sequence-q95
 const MOBILE_FRAME_STEP = 1;
+
+const DESKTOP_FRAME_COUNT = Math.ceil(DESKTOP_TOTAL_FRAMES / DESKTOP_FRAME_STEP); // 194 frames
+const MOBILE_FRAME_COUNT = Math.ceil(MOBILE_TOTAL_FRAMES / MOBILE_FRAME_STEP); // 121 frames
+
+const CANVAS_WIDTH = 1920;
+const CANVAS_HEIGHT = 1080;
+const SAFETY_TIMEOUT_MS = 15000;
+
+const SESSION_CACHE_KEY_TAB = 'joyzen_letsjoin_tab_loaded';
+const SESSION_CACHE_KEY_MOB = 'joyzen_letsjoin_mob_loaded';
+
+declare global {
+  interface Window {
+    __joyzen_letsjoin_tab_cache?: Map<number, HTMLImageElement>;
+    __joyzen_letsjoin_mob_cache?: Map<number, HTMLImageElement>;
+    __joyzen_letsjoin_tab_in_flight?: Set<number>;
+    __joyzen_letsjoin_mob_in_flight?: Set<number>;
+    __joyzen_letsjoin_tab_loaded?: boolean;
+    __joyzen_letsjoin_mob_loaded?: boolean;
+  }
+}
+
+const getFrameCache = (isMobile: boolean): Map<number, HTMLImageElement> => {
+  if (typeof window === 'undefined') return new Map();
+  if (isMobile) {
+    if (!window.__joyzen_letsjoin_mob_cache) {
+      window.__joyzen_letsjoin_mob_cache = new Map();
+    }
+    return window.__joyzen_letsjoin_mob_cache;
+  }
+  if (!window.__joyzen_letsjoin_tab_cache) {
+    window.__joyzen_letsjoin_tab_cache = new Map();
+  }
+  return window.__joyzen_letsjoin_tab_cache;
+};
+
+const getInFlightSet = (isMobile: boolean): Set<number> => {
+  if (typeof window === 'undefined') return new Set();
+  if (isMobile) {
+    if (!window.__joyzen_letsjoin_mob_in_flight) {
+      window.__joyzen_letsjoin_mob_in_flight = new Set();
+    }
+    return window.__joyzen_letsjoin_mob_in_flight;
+  }
+  if (!window.__joyzen_letsjoin_tab_in_flight) {
+    window.__joyzen_letsjoin_tab_in_flight = new Set();
+  }
+  return window.__joyzen_letsjoin_tab_in_flight;
+};
+
+/**
+ * Single source of truth for full sequence cached in memory.
+ * Does not trust sessionStorage alone because sessionStorage survives
+ * a hard page refresh, but decoded in-memory Image elements do not.
+ */
+const isFullyCached = (isMobile: boolean): boolean => {
+  if (typeof window === 'undefined') return false;
+  const isLoadedFlag = isMobile
+    ? window.__joyzen_letsjoin_mob_loaded === true
+    : window.__joyzen_letsjoin_tab_loaded === true;
+  const targetCount = isMobile ? MOBILE_FRAME_COUNT : DESKTOP_FRAME_COUNT;
+  return isLoadedFlag || getFrameCache(isMobile).size >= targetCount;
+};
+
+const markSessionLoaded = (isMobile: boolean): void => {
+  if (typeof window === 'undefined') return;
+  if (isMobile) {
+    window.__joyzen_letsjoin_mob_loaded = true;
+    try {
+      sessionStorage.setItem(SESSION_CACHE_KEY_MOB, 'true');
+    } catch {
+      // Fallback for restricted storage environments
+    }
+  } else {
+    window.__joyzen_letsjoin_tab_loaded = true;
+    try {
+      sessionStorage.setItem(SESSION_CACHE_KEY_TAB, 'true');
+    } catch {
+      // Fallback for restricted storage environments
+    }
+  }
+};
 
 /* ─── dynamic text content for before & after frame 270 (~70% progress) ─── */
 const INITIAL_CONTENT = {
@@ -50,8 +126,9 @@ export default function LetsJoin() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const imagesRef = useRef<HTMLImageElement[]>([]);
+  const imagesRef = useRef<(HTMLImageElement | null)[]>([]);
   const frameIndexRef = useRef(-1);
+  const isMountedRef = useRef(true);
 
   const [isMobile, setIsMobile] = useState(getIsMobile);
   const [isAfter270, setIsAfter270] = useState(false);
@@ -63,18 +140,18 @@ export default function LetsJoin() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  /* ─── memoised frame paths (desktop vs mobile) ─── */
+  /* ─── memoised frame paths (desktop/tab vs mobile) ─── */
   const framePaths = useMemo(() => {
     const paths: string[] = [];
     if (isMobile) {
-      const mobAssets = mobSequenceData.assets;
       for (let i = 0; i < MOBILE_TOTAL_FRAMES; i += MOBILE_FRAME_STEP) {
-        if (mobAssets[i]) paths.push(mobAssets[i].u + mobAssets[i].p);
+        const paddedIndex = String(i).padStart(5, '0');
+        paths.push(`${MOB_FRAME_PREFIX}${paddedIndex}.webp`);
       }
     } else {
-      const tabAssets = tabSequenceData.assets;
       for (let i = 0; i < DESKTOP_TOTAL_FRAMES; i += DESKTOP_FRAME_STEP) {
-        if (tabAssets[i]) paths.push(tabAssets[i].u + tabAssets[i].p);
+        const paddedIndex = String(i).padStart(5, '0');
+        paths.push(`${TAB_FRAME_PREFIX}${paddedIndex}.webp`);
       }
     }
     return paths;
@@ -83,60 +160,136 @@ export default function LetsJoin() {
   const frameCount = framePaths.length;
 
   // Check if frames are already resident in memory
-  const [imagesLoaded, setImagesLoaded] = useState(() => areFramesInMemory(framePaths));
+  const [imagesLoaded, setImagesLoaded] = useState(() => isFullyCached(getIsMobile()));
+  const isLoadedRef = useRef(isFullyCached(getIsMobile()));
 
   /* ─── draw a specific frame on the canvas ─── */
   const drawFrame = useCallback((index: number) => {
     const canvas = canvasRef.current;
+    if (!canvas) return;
     const img = imagesRef.current[index];
-    if (!canvas || !img || img.naturalWidth === 0) return;
+    if (!img || !img.complete || img.naturalWidth === 0) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    if (canvas.width !== img.naturalWidth || canvas.height !== img.naturalHeight) {
-      canvas.width = img.naturalWidth;
-      canvas.height = img.naturalHeight;
+    if (canvas.width !== CANVAS_WIDTH || canvas.height !== CANVAS_HEIGHT) {
+      canvas.width = CANVAS_WIDTH;
+      canvas.height = CANVAS_HEIGHT;
     }
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0);
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
   }, []);
 
-  /* ─── preload sequence with browser persistent Cache Storage ─── */
+  /* ─── session & persistent memory caching (mirrors hero.tsx) ─── */
   useEffect(() => {
-    const abortController = new AbortController();
+    isMountedRef.current = true;
     frameIndexRef.current = -1;
 
-    // 1. Check if already in memory
-    const memoryFrames = getFramesFromMemory(framePaths);
-    if (memoryFrames) {
-      imagesRef.current = memoryFrames;
+    const canvas = canvasRef.current;
+    if (canvas) {
+      canvas.width = CANVAS_WIDTH;
+      canvas.height = CANVAS_HEIGHT;
+    }
+
+    const frameCache = getFrameCache(isMobile);
+    const inFlight = getInFlightSet(isMobile);
+    const count = framePaths.length;
+    let safetyTimer: NodeJS.Timeout | null = null;
+    const settledIndices = new Set<number>();
+
+    // 1. If sequence is already genuinely cached in memory, reuse immediately
+    if (isFullyCached(isMobile)) {
+      imagesRef.current = new Array(count);
+      for (let i = 0; i < count; i++) {
+        imagesRef.current[i] = frameCache.get(i) || null;
+      }
+      markSessionLoaded(isMobile);
+      isLoadedRef.current = true;
       setImagesLoaded(true);
       drawFrame(0);
       return;
     }
 
-    // 2. Load with persistent browser Cache Storage
-    preloadFrameSequence(framePaths, {
-      concurrency: 8,
-      signal: abortController.signal,
-      onFirstFrame: (firstImg) => {
-        if (!abortController.signal.aborted) {
-          imagesRef.current[0] = firstImg;
-          drawFrame(0);
-        }
-      },
-    }).then((loadedImages) => {
-      if (!abortController.signal.aborted && loadedImages.length > 0) {
-        imagesRef.current = loadedImages;
-        setImagesLoaded(true);
-        drawFrame(0);
+    // 2. Otherwise restore already-cached frames into current ref
+    imagesRef.current = new Array(count);
+    frameCache.forEach((img, idx) => {
+      if (idx < count) {
+        imagesRef.current[idx] = img;
+        settledIndices.add(idx);
       }
     });
 
-    return () => {
-      abortController.abort();
+    // Render frame 0 as soon as available in cache
+    if (frameCache.has(0)) {
+      drawFrame(0);
+    }
+
+    const checkComplete = () => {
+      if (settledIndices.size < count) return;
+      markSessionLoaded(isMobile);
+      if (isMountedRef.current) {
+        isLoadedRef.current = true;
+        setImagesLoaded(true);
+        drawFrame(0);
+      }
     };
-  }, [framePaths, drawFrame]);
+
+    // Helper to load single image frame and save to global window cache
+    const loadFrame = (index: number) => {
+      if (frameCache.has(index)) {
+        settledIndices.add(index);
+        checkComplete();
+        return;
+      }
+      if (inFlight.has(index)) return;
+      inFlight.add(index);
+
+      const img = new window.Image();
+      img.src = framePaths[index];
+
+      img.onload = () => {
+        inFlight.delete(index);
+        // Persist to global window cache regardless of component unmount
+        frameCache.set(index, img);
+        settledIndices.add(index);
+
+        if (!isMountedRef.current) return;
+        imagesRef.current[index] = img;
+
+        if (index === 0) {
+          drawFrame(0);
+        }
+        checkComplete();
+      };
+
+      img.onerror = () => {
+        inFlight.delete(index);
+        settledIndices.add(index);
+        if (!isMountedRef.current) return;
+        checkComplete();
+      };
+    };
+
+    // Dispatch load for all frames in this sequence
+    for (let i = 0; i < count; i++) {
+      loadFrame(i);
+    }
+
+    safetyTimer = setTimeout(() => {
+      if (!isMountedRef.current) return;
+      if (!isLoadedRef.current) {
+        markSessionLoaded(isMobile);
+        isLoadedRef.current = true;
+        setImagesLoaded(true);
+        drawFrame(0);
+      }
+    }, SAFETY_TIMEOUT_MS);
+
+    return () => {
+      isMountedRef.current = false;
+      if (safetyTimer) clearTimeout(safetyTimer);
+    };
+  }, [isMobile, framePaths, drawFrame]);
 
 
   /* ─── GSAP ScrollTrigger pin + scrub ─── */

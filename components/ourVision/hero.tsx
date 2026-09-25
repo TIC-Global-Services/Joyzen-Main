@@ -421,8 +421,8 @@ export default function Hero() {
                   : 'md:right-full md:mr-2 md:text-right'
                   }`}
               >
-                <div className="py-0 sm:py-1.5 rounded-lg backdrop-blur-md">
-                  <span className="block text-sm md:text-xl font-bold tracking-tight text-[#EB7847] leading-[0.85] md:leading-[1.2] whitespace-pre">
+                <div className="py-0 sm:py-1.5"> 
+                  <span className="block text-sm md:text-xl font-bold tracking-tight text-[#EB7847] leading-[0.95] md:leading-[1.2] whitespace-pre">
                     {hotspot.text}
                   </span>
                 </div>
