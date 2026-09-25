@@ -16,14 +16,20 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import tabSequenceData from '@/data/tabSequence.json';
 import mobSequenceData from '@/data/mobSequence.json';
 
+import {
+  preloadFrameSequence,
+  areFramesInMemory,
+  getFramesFromMemory,
+} from '@/lib/frameCache';
+
 gsap.registerPlugin(ScrollTrigger);
 
 /* ─── constants ─── */
 const DESKTOP_TOTAL_FRAMES = tabSequenceData.assets.length; // 387 frames from ImageKit
-const DESKTOP_FRAME_STEP = 2;     // use every 2nd frame for faster loading
+const DESKTOP_FRAME_STEP = 2; // use every 2nd frame for optimal performance
 
-const MOBILE_TOTAL_FRAMES = mobSequenceData.assets.length;  // 121 frames from ImageKit
-const MOBILE_FRAME_STEP = 1;      // step 1 for mobile animation
+const MOBILE_TOTAL_FRAMES = mobSequenceData.assets.length; // 121 frames from ImageKit
+const MOBILE_FRAME_STEP = 1;
 
 /* ─── dynamic text content for before & after frame 270 (~70% progress) ─── */
 const INITIAL_CONTENT = {
@@ -36,29 +42,25 @@ const POST_270_CONTENT = {
   paragraph: "Begin your personalized healthcare journey today. Speak with our experts and experience seamless, doctor-guided care.",
 };
 
+const getIsMobile = () =>
+  typeof window !== 'undefined' && window.innerWidth < 768;
 
 /* ─── main component ─── */
 export default function LetsJoin() {
-  /* refs */
   const wrapperRef = useRef<HTMLDivElement>(null);
   const pinRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const frameIndexRef = useRef(-1);
 
-  /* state */
-  const [isMobile, setIsMobile] = useState(false);
-  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(getIsMobile);
   const [isAfter270, setIsAfter270] = useState(false);
 
   /* ─── detect mobile viewport ─── */
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   /* ─── memoised frame paths (desktop vs mobile) ─── */
@@ -67,16 +69,12 @@ export default function LetsJoin() {
     if (isMobile) {
       const mobAssets = mobSequenceData.assets;
       for (let i = 0; i < MOBILE_TOTAL_FRAMES; i += MOBILE_FRAME_STEP) {
-        if (mobAssets[i]) {
-          paths.push(mobAssets[i].u + mobAssets[i].p);
-        }
+        if (mobAssets[i]) paths.push(mobAssets[i].u + mobAssets[i].p);
       }
     } else {
       const tabAssets = tabSequenceData.assets;
       for (let i = 0; i < DESKTOP_TOTAL_FRAMES; i += DESKTOP_FRAME_STEP) {
-        if (tabAssets[i]) {
-          paths.push(tabAssets[i].u + tabAssets[i].p);
-        }
+        if (tabAssets[i]) paths.push(tabAssets[i].u + tabAssets[i].p);
       }
     }
     return paths;
@@ -84,67 +82,62 @@ export default function LetsJoin() {
 
   const frameCount = framePaths.length;
 
-  /* ─── preload images ─── */
-  useEffect(() => {
-    let cancelled = false;
-    setImagesLoaded(false);
-    frameIndexRef.current = -1;
-    const images: HTMLImageElement[] = [];
-    let loaded = 0;
+  // Check if frames are already resident in memory
+  const [imagesLoaded, setImagesLoaded] = useState(() => areFramesInMemory(framePaths));
 
-    framePaths.forEach((src, i) => {
-      const img = new window.Image();
-      img.src = src;
-      img.onload = () => {
-        if (cancelled) return;
-        images[i] = img;
-        loaded++;
-        /* draw first frame as soon as it loads */
-        if (i === 0 && canvasRef.current) {
-          const ctx = canvasRef.current.getContext('2d');
-          if (ctx) {
-            canvasRef.current.width = img.naturalWidth;
-            canvasRef.current.height = img.naturalHeight;
-            ctx.drawImage(img, 0, 0);
-          }
+  /* ─── draw a specific frame on the canvas ─── */
+  const drawFrame = useCallback((index: number) => {
+    const canvas = canvasRef.current;
+    const img = imagesRef.current[index];
+    if (!canvas || !img || img.naturalWidth === 0) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    if (canvas.width !== img.naturalWidth || canvas.height !== img.naturalHeight) {
+      canvas.width = img.naturalWidth;
+      canvas.height = img.naturalHeight;
+    }
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+  }, []);
+
+  /* ─── preload sequence with browser persistent Cache Storage ─── */
+  useEffect(() => {
+    const abortController = new AbortController();
+    frameIndexRef.current = -1;
+
+    // 1. Check if already in memory
+    const memoryFrames = getFramesFromMemory(framePaths);
+    if (memoryFrames) {
+      imagesRef.current = memoryFrames;
+      setImagesLoaded(true);
+      drawFrame(0);
+      return;
+    }
+
+    // 2. Load with persistent browser Cache Storage
+    preloadFrameSequence(framePaths, {
+      concurrency: 8,
+      signal: abortController.signal,
+      onFirstFrame: (firstImg) => {
+        if (!abortController.signal.aborted) {
+          imagesRef.current[0] = firstImg;
+          drawFrame(0);
         }
-        if (loaded === framePaths.length) {
-          imagesRef.current = images;
-          setImagesLoaded(true);
-        }
-      };
-      img.onerror = () => {
-        loaded++;
-        if (loaded === framePaths.length && !cancelled) {
-          imagesRef.current = images;
-          setImagesLoaded(true);
-        }
-      };
+      },
+    }).then((loadedImages) => {
+      if (!abortController.signal.aborted && loadedImages.length > 0) {
+        imagesRef.current = loadedImages;
+        setImagesLoaded(true);
+        drawFrame(0);
+      }
     });
 
     return () => {
-      cancelled = true;
+      abortController.abort();
     };
-  }, [framePaths]);
+  }, [framePaths, drawFrame]);
 
-  /* ─── draw a specific frame on the canvas ─── */
-  const drawFrame = useCallback(
-    (index: number) => {
-      const canvas = canvasRef.current;
-      const img = imagesRef.current[index];
-      if (!canvas || !img) return;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return;
-
-      if (canvas.width !== img.naturalWidth || canvas.height !== img.naturalHeight) {
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-      }
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.drawImage(img, 0, 0);
-    },
-    [],
-  );
 
   /* ─── GSAP ScrollTrigger pin + scrub ─── */
   useEffect(() => {

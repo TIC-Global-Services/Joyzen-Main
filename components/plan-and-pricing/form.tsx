@@ -107,7 +107,7 @@ export default function PricingForms() {
   const [activeTab, setActiveTab] = useState<'reproductive' | 'general'>('reproductive');
 
   return (
-    <section className="relative w-full py-10 sm:py-20 md:px-[5%] select-none overflow-hidden">
+    <section className="relative w-full py-10 sm:py-20 px-[5%] select-none overflow-hidden">
       {/* Ambient Glass Glow Behind Forms */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-radial from-[#AEDEE4]/35 via-[#F6D7C6]/20 to-transparent blur-3xl pointer-events-none -z-10" />
 

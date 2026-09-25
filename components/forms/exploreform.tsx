@@ -7,27 +7,81 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import SpecularButton from '@/reuseable/specularButton';
+import Consultant from '@/components/q-form-2/conseltent';
 
+export const exploreFormSchema = z
+  .object({
+    // Step 1
+    fullName: z
+      .string()
+      .min(2, 'Full name must be at least 2 characters')
+      .max(50, 'Full name must not exceed 50 characters')
+      .regex(/^[a-zA-Z\s.'-]+$/, 'Name cannot contain numbers'),
+    age: z
+      .string()
+      .min(1, 'Age is required')
+      .max(3, 'Age cannot exceed 3 digits')
+      .refine((val) => {
+        const num = Number(val);
+        return !isNaN(num) && num > 0 && num < 120;
+      }, 'Please enter a valid age (1-119)'),
+    gender: z.string().min(1, 'Please select your gender'),
 
-export const exploreFormSchema = z.object({
-  fullName: z
-    .string()
-    .min(2, 'Full name must be at least 2 characters')
-    .regex(/^[a-zA-Z\s.'-]+$/, 'Name cannot contain numbers'),
-  age: z
-    .string()
-    .min(1, 'Age is required')
-    .regex(/^\d+$/, 'Age must be a number')
-    .refine((val) => {
-      const num = Number(val);
-      return !isNaN(num) && num > 0 && num < 120;
-    }, 'Please enter a valid age'),
-  gender: z.string().min(1, 'Please select your gender'),
-  selectedOption: z.string().optional(),
-});
+    // Step 2
+    selectedOption: z.string().optional(),
+    concern: z.string().optional(),
+
+    // Step 3 (from q-form-2)
+    phoneNumber: z
+      .string()
+      .length(10, 'Phone number must be exactly 10 digits')
+      .regex(/^[0-9]+$/, 'Phone number must contain only digits'),
+    email: z
+      .string()
+      .min(1, 'Email is required')
+      .email('Please enter a valid email address'),
+    city: z
+      .string()
+      .min(3, 'City must be at least 3 characters')
+      .max(50, 'City must not exceed 50 characters'),
+    country: z
+      .string()
+      .min(3, 'Country must be at least 3 characters')
+      .max(50, 'Country must not exceed 50 characters'),
+    occupation: z
+      .string()
+      .min(3, 'Occupation must be at least 3 characters')
+      .max(50, 'Occupation must not exceed 50 characters'),
+    periodCycleRegular: z.string().optional().or(z.literal('')),
+    pcos: z.string().optional().or(z.literal('')),
+    hormonal: z.string().min(1, 'Please select Yes or No'),
+    thyroid: z.string().min(1, 'Please select Yes or No'),
+    tryingToConceive: z
+      .string()
+      .max(500, 'Answer must not exceed 500 characters')
+      .optional()
+      .or(z.literal('')),
+  })
+  .superRefine((data, ctx) => {
+    if (data.gender === 'Female') {
+      if (!data.periodCycleRegular || data.periodCycleRegular.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['periodCycleRegular'],
+          message: 'Please select Yes or No',
+        });
+      }
+      if (!data.pcos || data.pcos.trim() === '') {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['pcos'],
+          message: 'Please select Yes or No',
+        });
+      }
+    }
+  });
 
 export type ExploreFormData = z.infer<typeof exploreFormSchema>;
-
 
 const femaleOptions = [
   'I am a teenager and want to understand my body and periods',
@@ -68,14 +122,12 @@ function GradientOptionWrapper({
   isSelected?: boolean;
   index?: number;
 }) {
-  // Staggered speed and direction per card for organic, asynchronous movement
   const speeds = [3.0, 4.2, 3.6, 4.8, 3.3, 4.0, 4.6, 3.8, 4.4];
   const duration = speeds[index % speeds.length];
   const isReverse = index % 2 === 1;
   const animName = isReverse ? 'gradientSweepRTL' : 'gradientSweepLTR';
   const delaySec = ((index * 0.9) % duration).toFixed(2);
 
-  // High-contrast, vibrant Joyzen gradient: Orange -> Peach -> Cyan -> Amber -> Mint -> Orange
   const gradientLayerStyle: React.CSSProperties = {
     position: 'absolute',
     top: 0,
@@ -94,7 +146,6 @@ function GradientOptionWrapper({
 
   return (
     <div className={`relative group w-full ${className}`}>
-      {/* Embedded CSS Keyframes guaranteeing zero dependency on external stylesheet caching */}
       <style>{`
         @keyframes gradientSweepLTR {
           0% { transform: translate3d(0%, 0, 0); }
@@ -108,18 +159,16 @@ function GradientOptionWrapper({
         }
       `}</style>
 
-      {/* 1. Soft Ambient Glow behind the pill - appears only on hover or when selected */}
+      {/* 1. Soft Ambient Glow */}
       <div
         className={`absolute -inset-[4px] rounded-[32px] overflow-hidden blur-[10px] pointer-events-none transition-opacity duration-300 ${
-          isSelected
-            ? 'opacity-85 scale-[1.01]'
-            : 'opacity-0 group-hover:opacity-75'
+          isSelected ? 'opacity-85 scale-[1.01]' : 'opacity-0 group-hover:opacity-75'
         }`}
       >
         <div style={gradientLayerStyle} />
       </div>
 
-      {/* 2. Outer Frame forming the Pill Stroke */}
+      {/* 2. Outer Frame */}
       <div
         className={`relative p-[2px] rounded-[28px] overflow-hidden transition-all duration-300 ${
           isSelected
@@ -127,27 +176,21 @@ function GradientOptionWrapper({
             : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)]'
         }`}
       >
-        {/* Clean Static Border Layer (Default: visible when idle, hides on hover/selected) */}
         <div
           className={`absolute inset-0 rounded-[28px] bg-white/80 border border-white/90 transition-opacity duration-300 ${
-            isSelected
-              ? 'opacity-0'
-              : 'opacity-100 group-hover:opacity-0'
+            isSelected ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
           }`}
         />
 
-        {/* Animated Moving Gradient Stroke (Appears ONLY on hover or when selected) */}
         <div
           className={`transition-opacity duration-300 ${
-            isSelected
-              ? 'opacity-100'
-              : 'opacity-0 group-hover:opacity-100'
+            isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
           }`}
         >
           <div style={gradientLayerStyle} />
         </div>
 
-        {/* 3. Inner Pill Container */}
+        {/* 3. Inner Pill */}
         <div
           className={`relative z-10 w-full h-full rounded-[26px] overflow-hidden transition-all duration-300 ${
             isSelected
@@ -155,30 +198,96 @@ function GradientOptionWrapper({
               : 'bg-white/85 group-hover:bg-[#FCFAF7]/90 text-zinc-700'
           }`}
         >
-          {/* Subtle moving gradient wash inside pill - appears on hover or when selected */}
           <div
             className={`transition-opacity duration-300 ${
-              isSelected
-                ? 'opacity-25'
-                : 'opacity-0 group-hover:opacity-20'
+              isSelected ? 'opacity-25' : 'opacity-0 group-hover:opacity-20'
             }`}
           >
             <div style={gradientLayerStyle} />
           </div>
 
-          {/* Subtle top glass highlight */}
           <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/60 to-transparent pointer-events-none" />
 
-          {/* Button Content */}
-          <div className="relative z-10 w-full h-full">
-            {children}
-          </div>
+          <div className="relative z-10 w-full h-full">{children}</div>
         </div>
       </div>
     </div>
   );
 }
 
+// ----------------------------------------------------------------------
+// GlassDropdown component for Yes/No selections
+// ----------------------------------------------------------------------
+function GlassDropdown({
+  label,
+  value,
+  onChange,
+  error,
+}: {
+  label: string;
+  value: string;
+  onChange: (val: string) => void;
+  error?: string;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div>
+      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setIsOpen(!isOpen)}
+          className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none cursor-pointer"
+        >
+          <span className={value ? 'font-medium text-zinc-900' : 'text-zinc-500'}>
+            {value ? `${label} — ${value}` : label}
+          </span>
+          <span className="text-zinc-500 hover:text-zinc-800 transition-colors">
+            {isOpen ? (
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            )}
+          </span>
+        </button>
+
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="px-6 pb-4 pt-1 space-y-1 border-t border-white/60 bg-white/40 backdrop-blur-md"
+            >
+              {['Yes', 'No'].map((option) => (
+                <div
+                  key={option}
+                  onClick={() => {
+                    onChange(option);
+                    setIsOpen(false);
+                  }}
+                  className={`text-sm sm:text-base cursor-pointer py-2 px-3 rounded-xl transition-colors ${
+                    value === option
+                      ? 'font-bold text-zinc-900 bg-white/60'
+                      : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-white/30'
+                  }`}
+                >
+                  {option}
+                </div>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      {error && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{error}</p>}
+    </div>
+  );
+}
 
 export default function ExploreForm() {
   const [currentStep, setCurrentStep] = useState<number>(1);
@@ -191,6 +300,7 @@ export default function ExploreForm() {
     setValue,
     watch,
     trigger,
+    reset,
     formState: { errors },
   } = useForm<ExploreFormData>({
     resolver: zodResolver(exploreFormSchema),
@@ -199,11 +309,26 @@ export default function ExploreForm() {
       age: '',
       gender: '',
       selectedOption: '',
+      concern: '',
+      phoneNumber: '',
+      email: '',
+      city: '',
+      country: '',
+      occupation: '',
+      periodCycleRegular: '',
+      pcos: '',
+      hormonal: '',
+      thyroid: '',
+      tryingToConceive: '',
     },
   });
 
   const selectedGender = watch('gender');
   const selectedOption = watch('selectedOption');
+  const periodCycleValue = watch('periodCycleRegular');
+  const pcosValue = watch('pcos');
+  const hormonalValue = watch('hormonal');
+  const thyroidValue = watch('thyroid');
 
   // Options are shown based on gender selection
   const currentOptions =
@@ -213,26 +338,30 @@ export default function ExploreForm() {
         ? femaleOptions
         : null;
 
-  const handleNextStep = async () => {
+  const handleNextStep1 = async () => {
     const isStep1Valid = await trigger(['fullName', 'age', 'gender']);
     if (isStep1Valid) {
       setCurrentStep(2);
     }
   };
 
+  const handleNextStep2 = () => {
+    setCurrentStep(3);
+  };
+
   const handlePrevStep = () => {
-    setCurrentStep(1);
+    setCurrentStep((prev) => Math.max(1, prev - 1));
   };
 
   const onSubmit = (data: ExploreFormData) => {
-    console.log('Explore Form Submitted:', data);
+    console.log('Explore Form Submitted (Step 3 Save):', data);
     setSubmitted(true);
   };
 
   const resetForm = () => {
+    reset();
     setSubmitted(false);
     setCurrentStep(1);
-    setValue('selectedOption', '');
   };
 
   const stepVariants = {
@@ -252,18 +381,8 @@ export default function ExploreForm() {
 
   return (
     <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden ">
-      {/* 1. Existing Background Hexagon Grid Mesh */}
-      {/* <div
-        className="absolute inset-0 pointer-events-none opacity-25 z-0"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='56' height='97' viewBox='0 0 56 97' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M28 0l28 16v32L28 64 0 48V16zm0 97l28-16V49L28 33 0 49v32z' fill='%2000000' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E")`,
-          backgroundSize: '56px 97px',
-        }}
-      /> */}
-
       {/* Dynamic Animated Background: Vibrant Pastel, Full Edge-to-Edge Color Sweep */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#FCFAF7]/20">
-        {/* Full-width sweeping pastel base gradient */}
         <motion.div
           className="absolute top-0 -left-[60vw] w-[220vw] h-full opacity-60 blur-[35px]"
           style={{
@@ -281,7 +400,6 @@ export default function ExploreForm() {
           }}
         />
 
-        {/* LEFT COLOR WAVE (Vibrant Sunny Yellow / Peach) -> Moves COMPLETELY to the RIGHT */}
         <motion.div
           className="absolute top-1/6 -left-36 w-[880px] h-[880px] rounded-full blur-[130px]"
           style={{
@@ -300,7 +418,6 @@ export default function ExploreForm() {
           }}
         />
 
-        {/* RIGHT COLOR WAVE (Vibrant Sky Blue / Lavender) -> Moves COMPLETELY to the LEFT */}
         <motion.div
           className="absolute top-1/4 -right-36 w-[920px] h-[920px] rounded-full blur-[130px]"
           style={{
@@ -319,7 +436,6 @@ export default function ExploreForm() {
           }}
         />
 
-        {/* LOWER LEFT WAVE (Warm Coral Peach) -> Drifts across to the right */}
         <motion.div
           className="absolute top-2/3 -left-32 w-[780px] h-[780px] rounded-full blur-[130px]"
           style={{
@@ -338,7 +454,6 @@ export default function ExploreForm() {
           }}
         />
 
-        {/* UPPER RIGHT WAVE (Fresh Aqua Mint / Lilac) -> Drifts across to the left */}
         <motion.div
           className="absolute -top-32 -right-32 w-[820px] h-[820px] rounded-full blur-[130px]"
           style={{
@@ -362,7 +477,25 @@ export default function ExploreForm() {
         {/* Dynamic Heading & Subtitle */}
         <div className="text-center max-w-2xl mx-auto mb-8 space-y-3">
           <AnimatePresence mode="wait">
-            {currentStep === 2 ? (
+            {currentStep === 1 && (
+              <motion.div
+                key="heading-step1"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 10 }}
+                className="space-y-3"
+              >
+                <h1 className="text-[40px] sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.18]">
+                  Explore <br className="sm:hidden" />
+                  <span className="text-[#EF8F60]">Joyzen</span> models
+                </h1>
+                <p className="text-sm sm:text-base lg:text-lg text-zinc-600 font-normal leading-[1.4] max-w-xl mx-auto">
+                  Discover personalized care programs designed around your journey, with structured guidance, continuous support, and plans that adapt as you progress.
+                </p>
+              </motion.div>
+            )}
+
+            {currentStep === 2 && (
               <motion.div
                 key="heading-step2"
                 initial={{ opacity: 0, y: -10 }}
@@ -374,22 +507,26 @@ export default function ExploreForm() {
                   What best describes you right now?
                 </h2>
                 <p className="text-sm sm:text-base text-zinc-600 font-medium">
-                  Select the option that matches your current health goals &amp; needs.
+                  {selectedGender === 'Prefer not to say'
+                    ? 'Help us understand your health concerns so we can guide you effectively.'
+                    : 'Select the option that matches your current health goals & needs.'}
                 </p>
               </motion.div>
-            ) : (
+            )}
+
+            {currentStep === 3 && (
               <motion.div
-                key="heading-step1"
+                key="heading-step3"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="space-y-3"
+                className="space-y-2"
               >
-                <h1 className="text-[40px] sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.18]">
-                  Explore <br className='sm:hidden' /><span className="text-[#EF8F60]">Joyzen</span> models
-                </h1>
-                <p className="text-sm sm:text-base lg:text-lg text-zinc-600 font-normal leading-[1.4] max-w-xl mx-auto">
-                  Discover personalized care programs designed around your journey, with structured guidance, continuous support, and plans that adapt as you progress.
+                <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-black leading-[1.18]">
+                  To know more about you
+                </h2>
+                <p className="text-sm sm:text-base text-zinc-600 font-medium">
+                  Share your health details so our specialized care team can tailor the best personalized plan for you.
                 </p>
               </motion.div>
             )}
@@ -400,33 +537,57 @@ export default function ExploreForm() {
         {!submitted && (
           <div className="w-full mb-6 p-4 rounded-3xl bg-white/50 backdrop-blur-xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)] space-y-3">
             <div className="flex items-center justify-between px-2">
+              {/* Step 1 */}
               <div className="flex items-center space-x-2">
                 <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 1
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                    currentStep === 1
                       ? 'bg-[#EF8F60] text-white shadow-sm'
                       : 'bg-[#AEDEE4] text-[#036132]'
-                    }`}
+                  }`}
                 >
                   1
                 </span>
                 <span className={`text-xs sm:text-sm font-semibold ${currentStep === 1 ? 'text-zinc-900' : 'text-zinc-500'}`}>
-                  Basic Information
+                  Basic Info
                 </span>
               </div>
 
-              <div className="w-8 h-[1px] bg-zinc-300 mx-2 hidden sm:block" />
+              <div className="w-4 sm:w-8 h-[1px] bg-zinc-300 mx-1 sm:mx-2" />
 
+              {/* Step 2 */}
               <div className="flex items-center space-x-2">
                 <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 2
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                    currentStep === 2
                       ? 'bg-[#EF8F60] text-white shadow-sm'
-                      : 'bg-zinc-200 text-zinc-500'
-                    }`}
+                      : currentStep > 2
+                        ? 'bg-[#AEDEE4] text-[#036132]'
+                        : 'bg-zinc-200 text-zinc-500'
+                  }`}
                 >
                   2
                 </span>
                 <span className={`text-xs sm:text-sm font-semibold ${currentStep === 2 ? 'text-zinc-900' : 'text-zinc-500'}`}>
                   Tailored Needs
+                </span>
+              </div>
+
+              <div className="w-4 sm:w-8 h-[1px] bg-zinc-300 mx-1 sm:mx-2" />
+
+              {/* Step 3 */}
+              <div className="flex items-center space-x-2">
+                <span
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                    currentStep === 3
+                      ? 'bg-[#EF8F60] text-white shadow-sm'
+                      : 'bg-zinc-200 text-zinc-500'
+                  }`}
+                >
+                  3
+                </span>
+                <span className={`text-xs sm:text-sm font-semibold ${currentStep === 3 ? 'text-zinc-900' : 'text-zinc-500'}`}>
+                  Health Profile
                 </span>
               </div>
             </div>
@@ -435,8 +596,10 @@ export default function ExploreForm() {
             <div className="w-full h-1.5 bg-zinc-200/80 rounded-full overflow-hidden relative">
               <motion.div
                 className="h-full rounded-full overflow-hidden relative"
-                initial={{ width: '50%' }}
-                animate={{ width: currentStep === 1 ? '50%' : '100%' }}
+                initial={{ width: '33.33%' }}
+                animate={{
+                  width: currentStep === 1 ? '33.33%' : currentStep === 2 ? '66.66%' : '100%',
+                }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
               >
                 <div
@@ -481,9 +644,9 @@ export default function ExploreForm() {
                 </svg>
               </div>
               <div className="space-y-1">
-                <h3 className="text-2xl font-bold text-zinc-900">Form Submitted Successfully!</h3>
+                <h3 className="text-2xl font-bold text-zinc-900">Form Saved Successfully!</h3>
                 <p className="text-sm text-zinc-600 max-w-md mx-auto">
-                  Thank you, <span className="font-semibold text-zinc-800">{watch('fullName')}</span>. Our specialized care team will review your responses and reach out shortly.
+                  Thank you, <span className="font-semibold text-zinc-800">{watch('fullName')}</span>. We have saved your information and our specialists will review your profile and reach out shortly.
                 </p>
               </div>
               <button
@@ -496,6 +659,7 @@ export default function ExploreForm() {
             </motion.div>
           ) : (
             <AnimatePresence mode="wait" custom={currentStep}>
+              {/* STEP 1: Basic Information */}
               {currentStep === 1 && (
                 <motion.div
                   key="step1"
@@ -550,7 +714,7 @@ export default function ExploreForm() {
                       <button
                         type="button"
                         onClick={() => setGenderOpen(!genderOpen)}
-                        className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
+                        className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none cursor-pointer"
                       >
                         <span>{selectedGender || 'Gender'}</span>
                         <span className="text-zinc-500 hover:text-zinc-800 transition-colors">
@@ -581,13 +745,15 @@ export default function ExploreForm() {
                                 key={option}
                                 onClick={() => {
                                   setValue('gender', option, { shouldValidate: true });
-                                  setValue('selectedOption', ''); // Reset option when gender changes
+                                  setValue('selectedOption', '');
+                                  setValue('concern', '');
                                   setGenderOpen(false);
                                 }}
-                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${selectedGender === option
+                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
+                                  selectedGender === option
                                     ? 'font-bold text-zinc-900'
                                     : 'font-medium text-zinc-500 hover:text-zinc-900'
-                                  }`}
+                                }`}
                               >
                                 {option}
                               </div>
@@ -603,7 +769,7 @@ export default function ExploreForm() {
                   <div className="flex justify-end pt-4">
                     <button
                       type="button"
-                      onClick={handleNextStep}
+                      onClick={handleNextStep1}
                       className="inline-flex items-center gap-2 px-8 py-3.5 rounded-[24px] text-sm font-bold uppercase tracking-tight text-black bg-[#AEDEE44D] border border-[#AEDEE4] backdrop-blur-xs shadow-md hover:bg-[#AEDEE4]/60 transition-all cursor-pointer"
                     >
                       <span>Continue</span>
@@ -615,6 +781,7 @@ export default function ExploreForm() {
                 </motion.div>
               )}
 
+              {/* STEP 2: Tailored Needs */}
               {currentStep === 2 && (
                 <motion.div
                   key="step2"
@@ -626,8 +793,8 @@ export default function ExploreForm() {
                   transition={{ duration: 0.35 }}
                   className="relative z-10 space-y-4"
                 >
-                  {/* Dynamic Options List */}
-                  {currentOptions && currentOptions.length > 0 ? (
+                  {/* Dynamic Options List (for Female and Male) */}
+                  {currentOptions && currentOptions.length > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between px-2 mb-1">
                         <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
@@ -643,8 +810,9 @@ export default function ExploreForm() {
                               onClick={() => {
                                 setValue('selectedOption', isItemChosen ? '' : option, { shouldValidate: true });
                               }}
-                              className={`w-full text-center sm:text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] ${isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-zinc-700 hover:text-zinc-900'
-                                }`}
+                              className={`w-full text-center sm:text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] ${
+                                isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-zinc-700 hover:text-zinc-900'
+                              }`}
                             >
                               {option}
                             </button>
@@ -652,14 +820,235 @@ export default function ExploreForm() {
                         );
                       })}
                     </div>
-                  ) : (
-                    <div className="p-6 text-center rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 text-zinc-600 text-sm">
-                      No specific options required for your gender selection. You can submit the form directly.
-                    </div>
                   )}
+
+                  {/* "Don't know what happening?" extra input text area for BOTH men and female (and prefer not to say) */}
+                  <div className="space-y-3 pt-2">
+                    <div className="px-2 mb-1">
+                      <h3 className="text-base sm:text-lg font-bold text-zinc-900">
+                        Don&apos;t know what happening?
+                      </h3>
+                      <p className="text-xs sm:text-sm text-zinc-500 font-medium mt-0.5">
+                        Tell us in your own words what you are experiencing.
+                      </p>
+                    </div>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <textarea
+                        {...register('concern')}
+                        rows={4}
+                        placeholder="tell us what happening"
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px] resize-none"
+                      />
+                    </div>
+                  </div>
 
                   {/* Step 2 Action Buttons */}
                   <div className="flex items-center justify-between pt-4">
+                    <button
+                      type="button"
+                      onClick={handlePrevStep}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-[24px] text-sm font-semibold text-zinc-700 bg-white/60 border border-white hover:bg-white transition-all cursor-pointer shadow-xs"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                      </svg>
+                      <span>Back</span>
+                    </button>
+
+                    <SpecularButton
+                      type="button"
+                      onClick={handleNextStep2}
+                      size="md"
+                      tint="#AEDEE44D"
+                      tintOpacity={0.35}
+                      textColor="#000000"
+                      lineColor="#ffffff"
+                      baseColor="#AEDEE44D"
+                      radius={24}
+                      className="font-bold text-sm uppercase tracking-tight px-8 py-3.5 shadow-md"
+                    >
+                      CONTINUE
+                    </SpecularButton>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* STEP 3: Complete Health Profile Questionnaire (from q-form-2/form.tsx) */}
+              {currentStep === 3 && (
+                <motion.div
+                  key="step3"
+                  custom={3}
+                  variants={stepVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  transition={{ duration: 0.35 }}
+                  className="relative z-10 space-y-4"
+                >
+                  {/* Full Name Input (pre-filled from Step 1) */}
+                  <div>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <input
+                        {...register('fullName', {
+                          onChange: (e) => {
+                            e.target.value = e.target.value.replace(/[0-9]/g, '');
+                          },
+                        })}
+                        type="text"
+                        placeholder="Full Name"
+                        maxLength={50}
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                      />
+                    </div>
+                    {errors.fullName && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.fullName.message}</p>}
+                  </div>
+
+                  {/* Age Input (pre-filled from Step 1) */}
+                  <div>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <input
+                        {...register('age', {
+                          onChange: (e) => {
+                            e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
+                          },
+                        })}
+                        type="text"
+                        inputMode="numeric"
+                        pattern="[0-9]*"
+                        maxLength={3}
+                        placeholder="Age"
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                      />
+                    </div>
+                    {errors.age && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.age.message}</p>}
+                  </div>
+
+                  {/* Phone Number Input */}
+                  <div>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <input
+                        {...register('phoneNumber')}
+                        type="tel"
+                        placeholder="Phone number"
+                        maxLength={10}
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                      />
+                    </div>
+                    {errors.phoneNumber && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.phoneNumber.message}</p>}
+                  </div>
+
+                  {/* Email Input */}
+                  <div>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <input
+                        {...register('email')}
+                        type="email"
+                        placeholder="Email"
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                      />
+                    </div>
+                    {errors.email && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.email.message}</p>}
+                  </div>
+
+                  {/* City Input */}
+                  <div>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <input
+                        {...register('city')}
+                        type="text"
+                        placeholder="city"
+                        maxLength={50}
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                      />
+                    </div>
+                    {errors.city && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.city.message}</p>}
+                  </div>
+
+                  {/* Country Input */}
+                  <div>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <input
+                        {...register('country')}
+                        type="text"
+                        placeholder="Country"
+                        maxLength={50}
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                      />
+                    </div>
+                    {errors.country && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.country.message}</p>}
+                  </div>
+
+                  {/* Occupation Input */}
+                  <div>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <input
+                        {...register('occupation')}
+                        type="text"
+                        placeholder="Occupation"
+                        maxLength={50}
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                      />
+                    </div>
+                    {errors.occupation && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.occupation.message}</p>}
+                  </div>
+
+                  {/* Dropdown 1: Period cycle regular? */}
+                  {selectedGender !== 'Male' && (
+                    <GlassDropdown
+                      label="Period cycle regular?"
+                      value={periodCycleValue || ''}
+                      onChange={(val) => setValue('periodCycleRegular', val, { shouldValidate: true })}
+                      error={errors.periodCycleRegular?.message}
+                    />
+                  )}
+
+                  {/* Dropdown 2: PCOS */}
+                  {selectedGender !== 'Male' && (
+                    <GlassDropdown
+                      label="PCOS"
+                      value={pcosValue || ''}
+                      onChange={(val) => setValue('pcos', val, { shouldValidate: true })}
+                      error={errors.pcos?.message}
+                    />
+                  )}
+
+                  {/* Dropdown 3: Hormonal */}
+                  <GlassDropdown
+                    label="Hormonal"
+                    value={hormonalValue || ''}
+                    onChange={(val) => setValue('hormonal', val, { shouldValidate: true })}
+                    error={errors.hormonal?.message}
+                  />
+
+                  {/* Dropdown 4: Thyroid */}
+                  <GlassDropdown
+                    label="Thyroid"
+                    value={thyroidValue || ''}
+                    onChange={(val) => setValue('thyroid', val, { shouldValidate: true })}
+                    error={errors.thyroid?.message}
+                  />
+
+                  {/* Section 2: Trying to Conceive? How long */}
+                  <div className="pt-4 space-y-3">
+                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black">
+                      Trying to Conceive? How long
+                    </h2>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <input
+                        {...register('tryingToConceive')}
+                        type="text"
+                        placeholder="Your Answer"
+                        maxLength={500}
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                      />
+                    </div>
+                    {errors.tryingToConceive && (
+                      <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.tryingToConceive.message}</p>
+                    )}
+                  </div>
+
+                  {/* Step 3 Action Buttons */}
+                  <div className="flex items-center justify-between pt-6">
                     <button
                       type="button"
                       onClick={handlePrevStep}
@@ -682,7 +1071,7 @@ export default function ExploreForm() {
                       radius={24}
                       className="font-bold text-sm uppercase tracking-tight px-8 py-3.5 shadow-md"
                     >
-                      SUBMIT FORM
+                      SAVE
                     </SpecularButton>
                   </div>
                 </motion.div>
@@ -691,6 +1080,18 @@ export default function ExploreForm() {
           )}
         </form>
       </div>
+
+      {/* Consultant Calendar Section appears below when Step 3 is reached */}
+      {currentStep === 3 && (
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
+          className="relative z-10 w-full  mt-12 sm:mt-16"
+        >
+          <Consultant />
+        </motion.div>
+      )}
     </section>
   );
 }

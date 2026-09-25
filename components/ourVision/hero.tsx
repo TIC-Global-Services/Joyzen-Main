@@ -9,8 +9,29 @@ const TOTAL_FRAMES = 363; // Total frames: 0 to 362
 const LOOP_END_FRAME = 233; // First 234 frames: 0 to 233 (looping when not scrolled)
 const SCATTER_START_FRAME = 234; // Remaining 129 frames: 234 to 362 (rendered on scroll)
 
-// Module-level frame cache to preserve decoded frames across client navigations
-const frameCache = new Map<number, HTMLImageElement>();
+declare global {
+  interface Window {
+    __joyzen_vision_frame_cache?: Map<number, HTMLImageElement>;
+    __joyzen_vision_in_flight?: Set<number>;
+    __joyzen_vision_loaded?: boolean;
+  }
+}
+
+const getFrameCache = (): Map<number, HTMLImageElement> => {
+  if (typeof window === 'undefined') return new Map();
+  if (!window.__joyzen_vision_frame_cache) {
+    window.__joyzen_vision_frame_cache = new Map();
+  }
+  return window.__joyzen_vision_frame_cache;
+};
+
+const getInFlightSet = (): Set<number> => {
+  if (typeof window === 'undefined') return new Set();
+  if (!window.__joyzen_vision_in_flight) {
+    window.__joyzen_vision_in_flight = new Set();
+  }
+  return window.__joyzen_vision_in_flight;
+};
 
 // Hotspots configuration matching the scatter DNA layout
 const HOTSPOTS = [
@@ -34,9 +55,23 @@ export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Sequence download progress & readiness state
-  const [loadProgress, setLoadProgress] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
+  // Sequence download progress & readiness state - initialized directly from persistent cache
+  const [loadProgress, setLoadProgress] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const cache = getFrameCache();
+      if (window.__joyzen_vision_loaded || cache.size >= TOTAL_FRAMES) return 100;
+      return Math.min(100, Math.round((cache.size / TOTAL_FRAMES) * 100));
+    }
+    return 0;
+  });
+
+  const [isLoaded, setIsLoaded] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const cache = getFrameCache();
+      return window.__joyzen_vision_loaded === true || cache.size >= TOTAL_FRAMES;
+    }
+    return false;
+  });
   const isLoadedRef = useRef(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -129,51 +164,70 @@ export default function Hero() {
       canvas.height = 1080;
     }
 
+    const frameCache = getFrameCache();
+    const inFlight = getInFlightSet();
     let safetyTimer: NodeJS.Timeout | null = null;
 
     // If entire 363-image sequence is already cached, reuse immediately
-    if (frameCache.size >= TOTAL_FRAMES) {
+    const isAlreadyFullyCached =
+      (typeof window !== 'undefined' && window.__joyzen_vision_loaded === true) ||
+      frameCache.size >= TOTAL_FRAMES;
+
+    if (isAlreadyFullyCached) {
       for (let i = 0; i < TOTAL_FRAMES; i++) {
         imagesRef.current[i] = frameCache.get(i) || null;
       }
+      if (typeof window !== 'undefined') window.__joyzen_vision_loaded = true;
       setLoadProgress(100);
       setIsLoaded(true);
       isLoadedRef.current = true;
       drawFrame(0);
     } else {
-      let loadedCount = 0;
+      let loadedCount = frameCache.size;
 
-      // Restore any already cached frames
+      // Restore any already cached frames into current ref
       frameCache.forEach((img, idx) => {
         imagesRef.current[idx] = img;
-        loadedCount++;
       });
 
       const initialPct = Math.min(100, Math.round((loadedCount / TOTAL_FRAMES) * 100));
       setLoadProgress(initialPct);
 
+      // Render frame 0 as soon as available
+      if (frameCache.has(0) && !isScrubbingRef.current) {
+        drawFrame(0);
+      }
+
       const checkComplete = () => {
-        if (loadedCount >= TOTAL_FRAMES) {
-          setIsLoaded(true);
-          isLoadedRef.current = true;
-          setLoadProgress(100);
-          drawFrame(0);
+        if (loadedCount >= TOTAL_FRAMES || frameCache.size >= TOTAL_FRAMES) {
+          if (typeof window !== 'undefined') window.__joyzen_vision_loaded = true;
+          if (isMountedRef.current) {
+            setIsLoaded(true);
+            isLoadedRef.current = true;
+            setLoadProgress(100);
+            drawFrame(0);
+          }
         }
       };
 
       // Helper to load single image frame and track progress across all 363 images
       const loadFrame = (index: number) => {
         if (frameCache.has(index)) return;
+        if (inFlight.has(index)) return;
+        inFlight.add(index);
 
         const img = new Image();
         const paddedIndex = String(index).padStart(8, '0');
         img.src = `/new-dns-scatter/LOOP dna_${paddedIndex}.png`;
 
         img.onload = () => {
+          inFlight.delete(index);
+          // CRITICAL: Always persist to global cache regardless of whether component is mounted
+          frameCache.set(index, img);
+
           if (!isMountedRef.current) return;
           imagesRef.current[index] = img;
-          frameCache.set(index, img);
-          loadedCount++;
+          loadedCount = frameCache.size;
 
           const pct = Math.min(100, Math.round((loadedCount / TOTAL_FRAMES) * 100));
           setLoadProgress(pct);
@@ -187,6 +241,7 @@ export default function Hero() {
         };
 
         img.onerror = () => {
+          inFlight.delete(index);
           if (!isMountedRef.current) return;
           loadedCount++;
           const pct = Math.min(100, Math.round((loadedCount / TOTAL_FRAMES) * 100));
@@ -195,7 +250,7 @@ export default function Hero() {
         };
       };
 
-      // Dispatch load for all 363 frames (loop 0-233 and scatter 234-362)
+      // Dispatch load for all 363 frames (skips already cached and in-flight)
       for (let i = 0; i < TOTAL_FRAMES; i++) {
         loadFrame(i);
       }
@@ -204,6 +259,7 @@ export default function Hero() {
       safetyTimer = setTimeout(() => {
         if (!isMountedRef.current) return;
         if (!isLoadedRef.current) {
+          if (typeof window !== 'undefined') window.__joyzen_vision_loaded = true;
           setIsLoaded(true);
           isLoadedRef.current = true;
           setLoadProgress(100);
@@ -251,7 +307,7 @@ export default function Hero() {
       {/* Sticky Hero Viewport */}
       <div className="sticky -top-[10%] md:top-0 w-full h-screen overflow-hidden flex flex-col justify-between pt-0 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 px-[5%]">
         {/* DNA Sequence Canvas Layer */}
-        <div className="absolute inset-0 w-full h-full pointer-events-none z-0 flex items-center justify-center">
+        <div className="absolute inset-0 sm:w-full h-full pointer-events-none z-0 flex items-center justify-center">
           <canvas
             ref={canvasRef}
             className="w-full h-full object-cover object-center mix-blend-multiply opacity-95"
@@ -300,11 +356,10 @@ export default function Hero() {
                   x: isMobile ? -8 : (hotspot.alignRight ? 12 : -12),
                 }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap pointer-events-none right-full mr-2 text-right ${
-                  hotspot.alignRight
+                className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap pointer-events-none right-full mr-2 text-right ${hotspot.alignRight
                     ? 'md:left-full md:right-auto md:ml-2 md:mr-0 md:text-left'
                     : 'md:right-full md:mr-2 md:text-right'
-                }`}
+                  }`}
               >
                 <div className="py-0 sm:py-1.5 rounded-lg backdrop-blur-md">
                   <span className="block text-sm md:text-xl font-bold tracking-tight text-[#EB7847] leading-[0.85] md:leading-[1.2] whitespace-pre">

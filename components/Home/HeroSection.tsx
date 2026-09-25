@@ -4,12 +4,25 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Reveal from '@/reuseable/Reveal';
 
-import DnaSequence from './DnaSequence';
+import DnaSequence, { isDnaCached } from './DnaSequence';
 import Preloader from '@/reuseable/loader';
 
 export default function HeroSection() {
-  const [loadProgress, setLoadProgress] = useState(0);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const isMobile = window.innerWidth < 768;
+      return isDnaCached(isMobile);
+    }
+    return false;
+  });
+
+  const [loadProgress, setLoadProgress] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const isMobile = window.innerWidth < 768;
+      if (isDnaCached(isMobile)) return 100;
+    }
+    return 0;
+  });
 
   return (
     <section className="relative w-full min-h-screen flex items-end pt-10 sm:pt-24 pb-20 sm:pb-28 px-6 sm:px-12 lg:px-16 overflow-hidden">

@@ -19,31 +19,36 @@ export default function Preloader({
 }: PreloaderProps) {
   const pathname = usePathname();
   const preloaderRef = useRef<HTMLDivElement>(null);
-  const [internalIsComplete, setInternalIsComplete] = useState(() => {
-    if (manual) return false;
-    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem('joyzen_preloaded') === 'true';
-    }
-    return false;
-  });
+
+  // If manual mode starts with isComplete already true (images already cached in memory),
+  // skip immediately so returning users see the content right away with zero flash.
+  const [initialComplete] = useState(() => manual && Boolean(externalIsComplete));
+  const [hasExited, setHasExited] = useState(initialComplete);
 
   const [internalProgress, setInternalProgress] = useState(0);
   const progressRef = useRef(0);
   const isFinishedRef = useRef(false);
-  const [hasExited, setHasExited] = useState(false);
 
-  // If automatic mode and currently on / or /our-vision, yield to the page's dedicated sequence preloader
-  const shouldSkipAuto = !manual && (pathname === '/' || pathname === '/our-vision');
+  // Only allowed to ever display on Home ('/') or Our Vision ('/our-vision')
+  const isAllowedPath = pathname === '/' || pathname === '/our-vision';
+
+  // Skip if not on an allowed path OR if already cached and completed on mount
+  const shouldSkip = !isAllowedPath || initialComplete;
 
   const currentProgress = manual
     ? Math.min(100, Math.max(0, Math.round(externalProgress ?? 0)))
     : internalProgress;
 
-  // -------------------------------------------------------------
-  // Manual mode exit handler
-  // -------------------------------------------------------------
+  // If skipped immediately, trigger onFinish if provided
   useEffect(() => {
-    if (!manual) return;
+    if (shouldSkip) {
+      onFinish?.();
+    }
+  }, [shouldSkip, onFinish]);
+
+  // When images finish downloading and caching, animate loader out and reveal content
+  useEffect(() => {
+    if (!manual || shouldSkip) return;
 
     if (externalIsComplete && !isFinishedRef.current) {
       isFinishedRef.current = true;
@@ -65,39 +70,32 @@ export default function Preloader({
         onFinish?.();
       }
     }
-  }, [manual, externalIsComplete, onFinish]);
+  }, [manual, shouldSkip, externalIsComplete, onFinish]);
 
-  // Lock scroll while manual preloader is visible
+  // Lock scroll while loader is active, restore scroll once loader hides
   useEffect(() => {
-    if (manual && !hasExited) {
-      const originalOverflow = document.body.style.overflow;
-      document.body.style.overflow = 'hidden';
+    if (shouldSkip || hasExited) return;
 
-      const handleScrollBlock = (e: Event) => {
-        e.preventDefault();
-      };
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
 
-      window.addEventListener('wheel', handleScrollBlock, { passive: false });
-      window.addEventListener('touchmove', handleScrollBlock, { passive: false });
+    const handleScrollBlock = (e: Event) => {
+      e.preventDefault();
+    };
 
-      return () => {
-        document.body.style.overflow = originalOverflow;
-        window.removeEventListener('wheel', handleScrollBlock);
-        window.removeEventListener('touchmove', handleScrollBlock);
-      };
-    }
-  }, [manual, hasExited]);
+    window.addEventListener('wheel', handleScrollBlock, { passive: false });
+    window.addEventListener('touchmove', handleScrollBlock, { passive: false });
 
-  // -------------------------------------------------------------
-  // Automatic mode (Global RootLayout preloader)
-  // -------------------------------------------------------------
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('wheel', handleScrollBlock);
+      window.removeEventListener('touchmove', handleScrollBlock);
+    };
+  }, [shouldSkip, hasExited]);
+
+  // Automatic fallback mode (for pages without manual progress tracking)
   useEffect(() => {
-    if (manual || shouldSkipAuto) return;
-
-    if (typeof window !== 'undefined' && sessionStorage.getItem('joyzen_preloaded') === 'true') {
-      setInternalIsComplete(true);
-      return;
-    }
+    if (manual || shouldSkip) return;
 
     isFinishedRef.current = false;
     let hasReceivedDnaEvent = false;
@@ -107,13 +105,6 @@ export default function Preloader({
       isFinishedRef.current = true;
       setInternalProgress(100);
 
-      try {
-        sessionStorage.setItem('joyzen_preloaded', 'true');
-      } catch (e) {
-        // Ignore quota or private mode errors
-      }
-
-      // Smooth exit transition revealing the entire site
       if (preloaderRef.current) {
         gsap.to(preloaderRef.current, {
           opacity: 0,
@@ -122,13 +113,13 @@ export default function Preloader({
           ease: 'power2.out',
           delay: 0.2,
           onComplete: () => {
-            setInternalIsComplete(true);
             setHasExited(true);
+            onFinish?.();
           },
         });
       } else {
-        setInternalIsComplete(true);
         setHasExited(true);
+        onFinish?.();
       }
     };
 
@@ -229,13 +220,9 @@ export default function Preloader({
       clearInterval(interval);
       clearTimeout(maxTimeout);
     };
-  }, [manual, shouldSkipAuto]);
+  }, [manual, shouldSkip, onFinish]);
 
-  if (manual) {
-    if (hasExited) return null;
-  } else {
-    if (shouldSkipAuto || internalIsComplete) return null;
-  }
+  if (shouldSkip || hasExited) return null;
 
   return (
     <div

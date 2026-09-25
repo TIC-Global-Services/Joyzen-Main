@@ -9,7 +9,7 @@ import RobotSequence from './RobotSequence';
 
 export default function Hero() {
   return (
-    <section className="relative w-full min-h-[90vh] flex flex-col justify-between items-center pt-24 sm:pt-36 md:pt-40 pb-16 sm:pb-24 px-[1%] overflow-hidden select-none">
+    <section className="relative w-full min-h-[90vh] flex flex-col justify-between items-center pt-24 sm:pt-36 md:pt-40 pb-16 sm:pb-24 px-[5%] sm:px-[1%] overflow-hidden select-none">
       {/* Top Split Content for Desktop / Reordered for Mobile */}
       <div className="relative w-full grid grid-cols-1 lg:grid-cols-12 items-center justify-center gap-6 lg:gap-10">
         

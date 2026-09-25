@@ -18,6 +18,18 @@ const getIsMobile = () =>
 const frameCache = new Map<string, HTMLImageElement>();
 let cachedTierReady: 'mobile' | 'desktop' | null = null;
 
+declare global {
+  interface Window {
+    __joyzen_dna_tier_ready?: 'mobile' | 'desktop' | null;
+  }
+}
+
+export const isDnaCached = (isMobile: boolean): boolean => {
+  if (typeof window === 'undefined') return false;
+  const tier = isMobile ? 'mobile' : 'desktop';
+  return cachedTierReady === tier || window.__joyzen_dna_tier_ready === tier;
+};
+
 interface DnaSequenceProps {
   className?: string;
   onProgress?: (progress: number) => void;
@@ -102,6 +114,9 @@ export default function DnaSequence({ className, onProgress, onLoaded }: DnaSequ
       if (loaded >= framePaths.length && !cancelled && isMountedRef.current) {
         imagesRef.current = images;
         cachedTierReady = tier;
+        if (typeof window !== 'undefined') {
+          window.__joyzen_dna_tier_ready = tier;
+        }
         setImagesLoaded(true);
         onLoaded?.();
       }
