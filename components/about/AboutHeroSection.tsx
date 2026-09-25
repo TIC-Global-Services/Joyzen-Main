@@ -21,6 +21,7 @@ export default function AboutHeroSection() {
             alt="Joyzen Robot Hand with Wild Flowers"
             fill
             priority
+            unoptimized
             className="object-contain object-right-top drop-shadow-sm"
           />
         </div>

@@ -14,10 +14,10 @@ export default function HereItFrom() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full rounded-3xl overflow-hidden shadow-2xl bg-[#C3C3C5] aspect-[9/18] sm:aspect-[4/4] lg:aspect-[16/8]"
+        className="relative w-full rounded-3xl overflow-hidden shadow-2xl bg-[#C3C3C5] sm:aspect-[4/4] lg:aspect-[16/8]"
       >
         {/* Founder & CEO Image - Half in clear top area, half under blurred glass overlay */}
-        <div className="absolute -top-1 sm:-top-30 lg:top-0 lg:-right-[30%]  inset-x-0 h-[350px] sm:h-full z-0 pointer-events-none">
+        <div className="absolute -top-1 sm:-top-30 lg:top-0 lg:-right-[30%] inset-x-0 h-[350px] sm:h-full z-0 pointer-events-none">
           <Image
             src="/founder-ceo.png"
             alt="Founder & CEO"
@@ -29,17 +29,9 @@ export default function HereItFrom() {
         </div>
 
         {/* Ribbed / Fluted Glass Frosted Banner Overlay */}
-        <div className="relative z-10 mt-[65%] sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 overflow-hidden  sm:rounded-none sm:rounded-b-3xl">
-          {/* Reeded / Fluted Cylindrical Glass Texture Effect */}
-          <div className="absolute inset-0 pointer-events-none flex flex-col justify-start overflow-hidden">
-            <div className="absolute inset-0 backdrop-blur-xs bg-black/5" />
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className="w-full h-[70px] relative shrink-0 bg-gradient-to-b from-black/5 via-black/10 to-black/25 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.2)] backdrop-blur-md"
-              />
-            ))}
-          </div>
+        <div className="relative z-10 mt-[65%] sm:mt-0 sm:absolute sm:bottom-0 sm:inset-x-0 overflow-hidden sm:rounded-none sm:rounded-b-3xl">
+          {/* Plain Blurred Background */}
+          <div className="absolute inset-0 backdrop-blur-md bg-black/30 pointer-events-none" />
 
           {/* Glass Content */}
           <div className="relative z-10 px-6 sm:px-10 md:px-12 py-7 sm:py-9 md:py-10 flex flex-col justify-between">

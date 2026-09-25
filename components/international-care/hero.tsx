@@ -6,6 +6,16 @@ import { motion } from 'framer-motion';
 import { Ipad } from '@/reuseable/ipad';
 
 export default function Hero() {
+  const videoRef = React.useRef<HTMLVideoElement>(null);
+
+  React.useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
+
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center lg:justify-start pt-28 sm:pt-36 md:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8  overflow-hidden select-none">
       {/* Honeycomb Background Overlay */}
@@ -50,12 +60,14 @@ export default function Hero() {
           <div className="relative w-full max-w-4xl transition-transform duration-500 hover:scale-[1.01]">
             <Ipad width="100%" height="auto" className="drop-shadow-2xl text-zinc-900">
               <video
+                ref={videoRef}
                 src="/world-map-up-2.mp4"
                 autoPlay
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-contain"
+                preload="auto"
+                className="w-full h-full object-contain pointer-events-none"
               />
             </Ipad>
           </div>
