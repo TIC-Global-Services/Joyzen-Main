@@ -17,7 +17,7 @@ export default function AboutHeroSection() {
       >
         <div className="relative w-[450px] sm:w-[480px] md:w-[480px] lg:w-[560px] xl:w-[800px] h-[700px] md:aspect-[436/1024]">
           <Image
-            src="/ROBOT VINES TEST-new.gif"
+            src="/ROBOT VINES TEST-new.original.gif"
             alt="Joyzen Robot Hand with Wild Flowers"
             fill
             priority
