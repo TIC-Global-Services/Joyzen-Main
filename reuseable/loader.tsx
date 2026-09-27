@@ -35,8 +35,15 @@ export default function Preloader({
   // Skip if not on an allowed path OR if already cached and completed on mount
   const shouldSkip = !isAllowedPath || initialComplete;
 
+  // Determine whether loading is truly finished
+  const isDone = manual ? Boolean(externalIsComplete) : internalProgress >= 100;
+
+  // In manual mode, only show 100% when everything is genuinely downloaded and completed.
+  // Otherwise, cap the display at 99% while downloads are still in-flight.
   const currentProgress = manual
-    ? Math.min(100, Math.max(0, Math.round(externalProgress ?? 0)))
+    ? isDone
+      ? 100
+      : Math.min(99, Math.max(0, Math.floor(externalProgress ?? 0)))
     : internalProgress;
 
   // If skipped immediately, trigger onFinish if provided
@@ -46,20 +53,19 @@ export default function Preloader({
     }
   }, [shouldSkip, onFinish]);
 
-  // When images finish downloading and caching, animate loader out and reveal content
+  // When images finish downloading and caching, immediately animate loader out and reveal content
   useEffect(() => {
     if (!manual || shouldSkip) return;
 
-    if (externalIsComplete && !isFinishedRef.current) {
+    if (isDone && !isFinishedRef.current) {
       isFinishedRef.current = true;
 
       if (preloaderRef.current) {
         gsap.to(preloaderRef.current, {
           opacity: 0,
           scale: 1.02,
-          duration: 0.7,
+          duration: 0.35,
           ease: 'power2.out',
-          delay: 0.2,
           onComplete: () => {
             setHasExited(true);
             onFinish?.();
@@ -70,7 +76,7 @@ export default function Preloader({
         onFinish?.();
       }
     }
-  }, [manual, shouldSkip, externalIsComplete, onFinish]);
+  }, [manual, shouldSkip, isDone, onFinish]);
 
   // Lock scroll while loader is active, restore scroll once loader hides
   useEffect(() => {
@@ -109,9 +115,8 @@ export default function Preloader({
         gsap.to(preloaderRef.current, {
           opacity: 0,
           scale: 1.02,
-          duration: 0.7,
+          duration: 0.35,
           ease: 'power2.out',
-          delay: 0.2,
           onComplete: () => {
             setHasExited(true);
             onFinish?.();

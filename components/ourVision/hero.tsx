@@ -118,7 +118,7 @@ export default function Hero() {
   const [loadProgress, setLoadProgress] = useState(() => {
     if (typeof window === 'undefined') return 0;
     if (isFullyCached()) return 100;
-    return Math.min(100, Math.round((getFrameCache().size / TOTAL_FRAMES) * 100));
+    return Math.min(99, Math.floor((getFrameCache().size / TOTAL_FRAMES) * 100));
   });
 
   const [isLoaded, setIsLoaded] = useState(() => isFullyCached());
@@ -252,7 +252,7 @@ export default function Hero() {
         settledIndices.add(idx);
       });
 
-      const initialPct = Math.min(100, Math.round((frameCache.size / TOTAL_FRAMES) * 100));
+      const initialPct = Math.min(99, Math.floor((frameCache.size / TOTAL_FRAMES) * 100));
       setLoadProgress(initialPct);
 
       // Render frame 0 as soon as available
@@ -290,7 +290,7 @@ export default function Hero() {
           if (!isMountedRef.current) return;
           imagesRef.current[index] = img;
 
-          const pct = Math.min(100, Math.round((frameCache.size / TOTAL_FRAMES) * 100));
+          const pct = Math.min(99, Math.floor((frameCache.size / TOTAL_FRAMES) * 100));
           setLoadProgress(pct);
 
           // Render frame 0 as soon as it's ready
@@ -306,7 +306,7 @@ export default function Hero() {
           settledIndices.add(index); // settled (failed), but never added to frameCache
           if (!isMountedRef.current) return;
 
-          const pct = Math.min(100, Math.round((frameCache.size / TOTAL_FRAMES) * 100));
+          const pct = Math.min(99, Math.floor((frameCache.size / TOTAL_FRAMES) * 100));
           setLoadProgress(pct);
           checkComplete();
         };

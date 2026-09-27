@@ -183,11 +183,14 @@ export default function DnaSequence({ className, onProgress, onLoaded }: DnaSequ
     }
 
     const notifyProgress = () => {
-      const pct = Math.min(100, Math.round((settledIndices.size / count) * 100));
+      const isComplete = settledIndices.size >= count;
+      const pct = isComplete
+        ? 100
+        : Math.min(99, Math.floor((settledIndices.size / count) * 100));
       onProgress?.(pct);
       window.dispatchEvent(
         new CustomEvent('dna-progress', {
-          detail: { progress: pct, isComplete: settledIndices.size >= count },
+          detail: { progress: pct, isComplete },
         })
       );
     };
