@@ -14,7 +14,7 @@ export const exploreFormSchema = z
     // Step 1
     fullName: z
       .string()
-      .min(2, 'Full name must be at least 2 characters')
+      .min(3, 'Full name must be at least 3 characters')
       .max(50, 'Full name must not exceed 50 characters')
       .regex(/^[a-zA-Z\s.'-]+$/, 'Name cannot contain numbers'),
     age: z
@@ -122,92 +122,66 @@ function GradientOptionWrapper({
   isSelected?: boolean;
   index?: number;
 }) {
-  const speeds = [3.0, 4.2, 3.6, 4.8, 3.3, 4.0, 4.6, 3.8, 4.4];
+  const speeds = [3.2, 4.4, 3.6, 4.8, 3.4, 4.0, 4.6, 3.8, 4.2];
   const duration = speeds[index % speeds.length];
   const isReverse = index % 2 === 1;
-  const animName = isReverse ? 'gradientSweepRTL' : 'gradientSweepLTR';
-  const delaySec = ((index * 0.9) % duration).toFixed(2);
+  const animName = isReverse ? 'exploreGradientFlowReverse' : 'exploreGradientFlow';
+  const delaySec = ((index * 0.7) % duration).toFixed(2);
 
-  const gradientLayerStyle: React.CSSProperties = {
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    left: 0,
-    width: '200%',
-    height: '100%',
-    backgroundImage:
-      'linear-gradient(90deg, #EF8F60 0%, #F6D7C6 14%, #AEDEE4 32%, #F9E0AE 50%, #B5ECF2 68%, #EF8F60 84%, #F6D7C6 100%)',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: '100% 100%',
-    animation: `${animName} ${duration}s ease-in-out -${delaySec}s infinite`,
-    willChange: 'transform',
-    pointerEvents: 'none',
-  };
+  const gradientString =
+    'linear-gradient(90deg, #EF8F60 0%, #F6D7C6 14%, #AEDEE4 32%, #F9E0AE 50%, #B5ECF2 68%, #EF8F60 84%, #F6D7C6 100%)';
 
   return (
     <div className={`relative group w-full ${className}`}>
-      <style>{`
-        @keyframes gradientSweepLTR {
-          0% { transform: translate3d(0%, 0, 0); }
-          50% { transform: translate3d(-50%, 0, 0); }
-          100% { transform: translate3d(0%, 0, 0); }
-        }
-        @keyframes gradientSweepRTL {
-          0% { transform: translate3d(-50%, 0, 0); }
-          50% { transform: translate3d(0%, 0, 0); }
-          100% { transform: translate3d(-50%, 0, 0); }
-        }
-      `}</style>
-
-      {/* 1. Soft Ambient Glow */}
+      {/* Outer Frame with moving gradient border */}
       <div
-        className={`absolute -inset-[4px] rounded-[32px] overflow-hidden blur-[10px] pointer-events-none transition-opacity duration-300 ${
-          isSelected ? 'opacity-85 scale-[1.01]' : 'opacity-0 group-hover:opacity-75'
-        }`}
-      >
-        <div style={gradientLayerStyle} />
-      </div>
-
-      {/* 2. Outer Frame */}
-      <div
-        className={`relative p-[2px] rounded-[28px] overflow-hidden transition-all duration-300 ${
+        className={`relative p-[2px] rounded-[28px] transition-all duration-300 ${
           isSelected
-            ? 'shadow-[0_4px_24px_rgba(239,143,96,0.35)]'
-            : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)]'
+            ? 'shadow-[0_4px_22px_rgba(239,143,96,0.35),0_0_12px_rgba(174,222,228,0.25)]'
+            : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)] group-hover:shadow-[0_4px_20px_rgba(239,143,96,0.22)]'
         }`}
+        style={{
+          backgroundImage: gradientString,
+          backgroundSize: '200% 100%',
+          animation: `${animName} ${duration}s ease-in-out -${delaySec}s infinite`,
+          WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+          isolation: 'isolate',
+        }}
       >
+        {/* Soft default border overlay when not selected or hovered */}
         <div
-          className={`absolute inset-0 rounded-[28px] bg-white/80 border border-white/90 transition-opacity duration-300 ${
+          className={`absolute inset-0 rounded-[28px] bg-white/80 border border-white/90 transition-opacity duration-300 pointer-events-none ${
             isSelected ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
           }`}
         />
 
-        <div
-          className={`transition-opacity duration-300 ${
-            isSelected ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
-          }`}
-        >
-          <div style={gradientLayerStyle} />
-        </div>
-
-        {/* 3. Inner Pill */}
+        {/* Inner Pill */}
         <div
           className={`relative z-10 w-full h-full rounded-[26px] overflow-hidden transition-all duration-300 ${
             isSelected
               ? 'bg-[#FCFAF7]/95 text-zinc-900 font-bold'
-              : 'bg-white/85 group-hover:bg-[#FCFAF7]/90 text-zinc-700'
+              : 'bg-white/90 group-hover:bg-[#FCFAF7]/95 text-zinc-700'
           }`}
+          style={{
+            WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+          }}
         >
+          {/* Subtle moving pastel gradient tint inside pill */}
           <div
-            className={`transition-opacity duration-300 ${
-              isSelected ? 'opacity-25' : 'opacity-0 group-hover:opacity-20'
+            className={`absolute inset-0 transition-opacity duration-300 pointer-events-none ${
+              isSelected ? 'opacity-25' : 'opacity-0 group-hover:opacity-15'
             }`}
-          >
-            <div style={gradientLayerStyle} />
-          </div>
+            style={{
+              backgroundImage: gradientString,
+              backgroundSize: '200% 100%',
+              animation: `${animName} ${duration}s ease-in-out -${delaySec}s infinite`,
+            }}
+          />
 
-          <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/60 to-transparent pointer-events-none" />
+          {/* Top highlight reflection */}
+          <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-t-[26px]" />
 
+          {/* Pill content */}
           <div className="relative z-10 w-full h-full">{children}</div>
         </div>
       </div>
@@ -215,9 +189,7 @@ function GradientOptionWrapper({
   );
 }
 
-// ----------------------------------------------------------------------
-// GlassDropdown component for Yes/No selections
-// ----------------------------------------------------------------------
+
 function GlassDropdown({
   label,
   value,
@@ -233,7 +205,7 @@ function GlassDropdown({
 
   return (
     <div>
-      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
+      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
@@ -262,7 +234,7 @@ function GlassDropdown({
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="px-6 pb-4 pt-1 space-y-1 border-t border-white/60 bg-white/40 backdrop-blur-md"
+              className="px-6 pb-4 pt-1 space-y-1 border-t border-white/60 bg-white/80 backdrop-blur-md"
             >
               {['Yes', 'No'].map((option) => (
                 <div
@@ -380,15 +352,33 @@ export default function ExploreForm() {
   };
 
   return (
-    <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden ">
-      {/* Dynamic Animated Background: Vibrant Pastel, Full Edge-to-Edge Color Sweep */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#FCFAF7]/20">
+    <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden">
+      {/* iOS-Safe Gradient Flow Keyframes */}
+      <style>{`
+        @keyframes exploreGradientFlow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes exploreGradientFlowReverse {
+          0% { background-position: 100% 50%; }
+          50% { background-position: 0% 50%; }
+          100% { background-position: 100% 50%; }
+        }
+      `}</style>
+
+      {/* Dynamic Animated Background: Vibrant Pastel, Full Edge-to-Edge Color Sweep (iOS GPU Optimized) */}
+      <div
+        className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#FCFAF7]/20"
+        style={{ transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)', isolation: 'isolate' }}
+      >
         <motion.div
-          className="absolute top-0 -left-[60vw] w-[220vw] h-full opacity-60 blur-[35px]"
+          className="absolute top-0 -left-[60vw] w-[220vw] h-full opacity-60 blur-[30px]"
           style={{
             backgroundImage:
               'linear-gradient(90deg, rgba(250,237,150,0.65) 0%, rgba(255,218,195,0.6) 25%, rgba(235,208,245,0.55) 50%, rgba(185,228,252,0.65) 75%, rgba(250,237,150,0.65) 100%)',
             backgroundSize: '100% 100%',
+            willChange: 'transform',
           }}
           animate={{
             x: ['0vw', '60vw', '0vw'],
@@ -401,50 +391,53 @@ export default function ExploreForm() {
         />
 
         <motion.div
-          className="absolute top-1/6 -left-36 w-[880px] h-[880px] rounded-full blur-[130px]"
+          className="absolute top-1/6 -left-20 sm:-left-36 w-[340px] h-[340px] sm:w-[680px] sm:h-[680px] lg:w-[880px] lg:h-[880px] rounded-full blur-[45px] sm:blur-[80px] lg:blur-[120px]"
           style={{
             background:
-              'radial-gradient(circle, rgba(250,237,150,0.7) 0%, rgba(255,218,195,0.55) 50%, transparent 75%)',
-          }}
-          animate={{
-            x: ['0vw', '75vw', '0vw'],
-            y: ['0vh', '14vh', '0vh'],
-            scale: [1, 1.1, 0.95, 1],
-          }}
-          transition={{
-            duration: 13,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        <motion.div
-          className="absolute top-1/4 -right-36 w-[920px] h-[920px] rounded-full blur-[130px]"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(185,228,252,0.7) 0%, rgba(235,208,245,0.55) 50%, transparent 75%)',
-          }}
-          animate={{
-            x: ['0vw', '-75vw', '0vw'],
-            y: ['0vh', '-12vh', '0vh'],
-            scale: [1, 0.95, 1.1, 1],
-          }}
-          transition={{
-            duration: 13,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        <motion.div
-          className="absolute top-2/3 -left-32 w-[780px] h-[780px] rounded-full blur-[130px]"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(255,208,185,0.6) 0%, rgba(250,237,150,0.45) 50%, transparent 75%)',
+              'radial-gradient(circle, rgba(250,237,150,0.7) 0%, rgba(255,218,195,0.55) 45%, rgba(255,218,195,0) 75%)',
+            willChange: 'transform',
           }}
           animate={{
             x: ['0vw', '70vw', '0vw'],
-            y: ['0vh', '-8vh', '0vh'],
+            y: ['0vh', '12vh', '0vh'],
+            scale: [1, 1.08, 0.95, 1],
+          }}
+          transition={{
+            duration: 13,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+
+        <motion.div
+          className="absolute top-1/4 -right-20 sm:-right-36 w-[360px] h-[360px] sm:w-[700px] sm:h-[700px] lg:w-[920px] lg:h-[920px] rounded-full blur-[45px] sm:blur-[80px] lg:blur-[120px]"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(185,228,252,0.7) 0%, rgba(235,208,245,0.55) 45%, rgba(235,208,245,0) 75%)',
+            willChange: 'transform',
+          }}
+          animate={{
+            x: ['0vw', '-70vw', '0vw'],
+            y: ['0vh', '-10vh', '0vh'],
+            scale: [1, 0.95, 1.08, 1],
+          }}
+          transition={{
+            duration: 13,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
+
+        <motion.div
+          className="absolute top-2/3 -left-16 sm:-left-32 w-[320px] h-[320px] sm:w-[620px] sm:h-[620px] lg:w-[780px] lg:h-[780px] rounded-full blur-[45px] sm:blur-[80px] lg:blur-[120px]"
+          style={{
+            background:
+              'radial-gradient(circle, rgba(255,208,185,0.6) 0%, rgba(250,237,150,0.45) 45%, rgba(250,237,150,0) 75%)',
+            willChange: 'transform',
+          }}
+          animate={{
+            x: ['0vw', '65vw', '0vw'],
+            y: ['0vh', '-7vh', '0vh'],
           }}
           transition={{
             duration: 15,
@@ -455,14 +448,15 @@ export default function ExploreForm() {
         />
 
         <motion.div
-          className="absolute -top-32 -right-32 w-[820px] h-[820px] rounded-full blur-[130px]"
+          className="absolute -top-20 sm:-top-32 -right-16 sm:-right-32 w-[340px] h-[340px] sm:w-[640px] sm:h-[640px] lg:w-[820px] lg:h-[820px] rounded-full blur-[45px] sm:blur-[80px] lg:blur-[120px]"
           style={{
             background:
-              'radial-gradient(circle, rgba(195,242,246,0.65) 0%, rgba(235,208,245,0.45) 50%, transparent 75%)',
+              'radial-gradient(circle, rgba(195,242,246,0.65) 0%, rgba(235,208,245,0.45) 45%, rgba(235,208,245,0) 75%)',
+            willChange: 'transform',
           }}
           animate={{
-            x: ['0vw', '-70vw', '0vw'],
-            y: ['0vh', '10vh', '0vh'],
+            x: ['0vw', '-65vw', '0vw'],
+            y: ['0vh', '9vh', '0vh'],
           }}
           transition={{
             duration: 14,
@@ -595,27 +589,19 @@ export default function ExploreForm() {
             {/* Smooth Fill Progress Bar with active moving gradient */}
             <div className="w-full h-1.5 bg-zinc-200/80 rounded-full overflow-hidden relative">
               <motion.div
-                className="h-full rounded-full overflow-hidden relative"
+                className="h-full rounded-full"
                 initial={{ width: '33.33%' }}
                 animate={{
                   width: currentStep === 1 ? '33.33%' : currentStep === 2 ? '66.66%' : '100%',
                 }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
-              >
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    bottom: 0,
-                    left: 0,
-                    width: '200%',
-                    height: '100%',
-                    backgroundImage:
-                      'linear-gradient(90deg, #EF8F60 0%, #F6D7C6 25%, #AEDEE4 50%, #EF8F60 75%, #F6D7C6 100%)',
-                    animation: 'gradientSweepLTR 3.5s linear infinite',
-                  }}
-                />
-              </motion.div>
+                style={{
+                  backgroundImage:
+                    'linear-gradient(90deg, #EF8F60 0%, #F6D7C6 25%, #AEDEE4 50%, #EF8F60 75%, #F6D7C6 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'exploreGradientFlow 3.5s ease-in-out infinite',
+                }}
+              />
             </div>
           </div>
         )}
@@ -673,7 +659,7 @@ export default function ExploreForm() {
                 >
                   {/* Full Name Input */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('fullName', {
                           onChange: (e) => {
@@ -690,7 +676,7 @@ export default function ExploreForm() {
 
                   {/* Age Input */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('age', {
                           onChange: (e) => {
@@ -710,7 +696,7 @@ export default function ExploreForm() {
 
                   {/* Gender Custom Dropdown */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
                       <button
                         type="button"
                         onClick={() => setGenderOpen(!genderOpen)}
@@ -738,7 +724,7 @@ export default function ExploreForm() {
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.25 }}
-                            className="px-6 pb-5 pt-2 space-y-2 border-t border-white/60 bg-white/5 backdrop-blur-xs"
+                            className="px-6 pb-5 pt-2 space-y-2 border-t border-white/60 bg-white/80 backdrop-blur-md"
                           >
                             {['Female', 'Male', 'Prefer not to say'].map((option) => (
                               <div
@@ -770,7 +756,7 @@ export default function ExploreForm() {
                     <button
                       type="button"
                       onClick={handleNextStep1}
-                      className="inline-flex items-center gap-2 px-8 py-3.5 rounded-[24px] text-sm font-bold uppercase tracking-tight text-black bg-[#AEDEE44D] border border-[#AEDEE4] backdrop-blur-xs shadow-md hover:bg-[#AEDEE4]/60 transition-all cursor-pointer"
+                      className="inline-flex items-center gap-2 px-8 py-3.5 rounded-[24px] text-sm font-bold uppercase tracking-tight text-black bg-[#AEDEE44D] border border-[#AEDEE4] backdrop-blur-sm shadow-md hover:bg-[#AEDEE4]/60 transition-all cursor-pointer"
                     >
                       <span>Continue</span>
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
@@ -832,7 +818,7 @@ export default function ExploreForm() {
                         Tell us in your own words what you are experiencing.
                       </p>
                     </div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <textarea
                         {...register('concern')}
                         rows={4}
@@ -887,7 +873,7 @@ export default function ExploreForm() {
                 >
                   {/* Full Name Input (pre-filled from Step 1) */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('fullName', {
                           onChange: (e) => {
@@ -905,7 +891,7 @@ export default function ExploreForm() {
 
                   {/* Age Input (pre-filled from Step 1) */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('age', {
                           onChange: (e) => {
@@ -925,7 +911,7 @@ export default function ExploreForm() {
 
                   {/* Phone Number Input */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('phoneNumber')}
                         type="tel"
@@ -939,7 +925,7 @@ export default function ExploreForm() {
 
                   {/* Email Input */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('email')}
                         type="email"
@@ -952,7 +938,7 @@ export default function ExploreForm() {
 
                   {/* City Input */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('city')}
                         type="text"
@@ -966,7 +952,7 @@ export default function ExploreForm() {
 
                   {/* Country Input */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('country')}
                         type="text"
@@ -980,7 +966,7 @@ export default function ExploreForm() {
 
                   {/* Occupation Input */}
                   <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('occupation')}
                         type="text"
@@ -1033,7 +1019,7 @@ export default function ExploreForm() {
                     <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black">
                       Trying to Conceive? How long
                     </h2>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-xs border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('tryingToConceive')}
                         type="text"

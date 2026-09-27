@@ -98,7 +98,7 @@ export default function TrustedBy() {
                                 <div className="w-full sm:w-1/2 lg:w-[240px] xl:w-[350px] h-24 sm:h-40 lg:h-50 rounded-2xl bg-[#DDC5DF80] hover:bg-[#DDC5DF80] transition-colors duration-300 p-3 flex items-center justify-center relative overflow-hidden group shrink-0">
                                     <div className="relative w-full h-full">
                                         <Image
-                                            src="/digital_india.png"
+                                            src="https://ik.imagekit.io/gyg6yfnd5/digital_india.png?updatedAt=1790409635444"
                                             alt="Digital India"
                                             fill
                                             className="object-contain p-1 group-hover:scale-105 transition-transform duration-300"
@@ -110,7 +110,7 @@ export default function TrustedBy() {
                                 <div className="w-full sm:w-1/2 lg:w-[200px] xl:w-[260px] h-24 sm:h-40 lg:h-50 rounded-2xl bg-[#DDC5DF80] hover:bg-[#DDC5DF80] transition-colors duration-300 p-3 flex items-center justify-center relative overflow-hidden group shrink-0">
                                     <div className="relative w-full h-full">
                                         <Image
-                                            src="/digital_mission.png"
+                                            src="https://ik.imagekit.io/gyg6yfnd5/digital_mission.png?updatedAt=1790409636329"
                                             alt="Ayushman Bharat Digital Mission"
                                             fill
                                             className="object-contain group-hover:scale-105 transition-transform duration-300"

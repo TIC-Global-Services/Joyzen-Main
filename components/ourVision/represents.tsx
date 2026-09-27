@@ -9,8 +9,7 @@ interface SliceData {
   shortLabel: string;
   value: number;
   percentage: string;
-  startColor: string;
-  endColor: string;
+  className: string;
 }
 
 const slicesData: SliceData[] = [
@@ -20,8 +19,7 @@ const slicesData: SliceData[] = [
     shortLabel: 'Diagnosis & Assessment',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#ef8f60',
-    endColor: '#ef8f60',
+    className: 'diagnosis',
   },
   {
     id: 'treatment',
@@ -29,8 +27,7 @@ const slicesData: SliceData[] = [
     shortLabel: 'Treatment',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#f8e780',
-    endColor: '#f8e780',
+    className: 'treatment',
   },
   {
     id: 'medicine',
@@ -38,8 +35,7 @@ const slicesData: SliceData[] = [
     shortLabel: 'Medicine',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#036132',
-    endColor: '#036132',
+    className: 'medicine',
   },
   {
     id: 'lifestyle',
@@ -47,8 +43,7 @@ const slicesData: SliceData[] = [
     shortLabel: 'Lifestyle',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#b4def7',
-    endColor: '#b4def7',
+    className: 'lifeStyle',
   },
   {
     id: 'monitoring',
@@ -56,8 +51,7 @@ const slicesData: SliceData[] = [
     shortLabel: 'Monitoring',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#ddc4df',
-    endColor: '#ddc4df',
+    className: 'monitoring',
   },
   {
     id: 'prevention',
@@ -65,8 +59,7 @@ const slicesData: SliceData[] = [
     shortLabel: 'Prevention',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#212121',
-    endColor: '#212121',
+    className: 'prevention',
   },
   {
     id: 'longevity',
@@ -74,8 +67,7 @@ const slicesData: SliceData[] = [
     shortLabel: 'Longevity',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#f7f4ed',
-    endColor: '#ddc4df',
+    className: 'longevity',
   },
   {
     id: 'consultation',
@@ -83,10 +75,53 @@ const slicesData: SliceData[] = [
     shortLabel: 'Consultation',
     value: 12.5,
     percentage: '12.5%',
-    startColor: '#036132',
-    endColor: '#036132',
+    className: 'consultation',
   },
 ];
+
+// Gradient stops and accent colors corresponding to globals.css classes
+const sliceGradients: Record<string, { start: string; end: string; accent: string }> = {
+  diagnosis: {
+    start: 'hsla(202, 81%, 84%, 1)',
+    end: 'hsla(42, 38%, 95%, 1)',
+    accent: '#7bbde8',
+  },
+  treatment: {
+    start: 'hsla(0, 0%, 100%, 1)',
+    end: 'hsla(296, 30%, 82%, 1)',
+    accent: '#C084FC',
+  },
+  medicine: {
+    start: 'hsla(0, 0%, 100%, 1)',
+    end: 'hsla(20, 82%, 66%, 1)',
+    accent: '#EF8F60',
+  },
+  lifestyle: {
+    start: 'hsla(0, 0%, 100%, 1)',
+    end: 'hsla(52, 90%, 74%, 1)',
+    accent: '#F59E0B',
+  },
+  monitoring: {
+    start: 'hsla(0, 0%, 100%, 1)',
+    end: 'hsla(150, 94%, 20%, 1)',
+    accent: '#036132',
+  },
+  prevention: {
+    start: 'hsla(0, 0%, 100%, 1)',
+    end: 'hsla(0, 0%, 13%, 1)',
+    accent: '#212121',
+  },
+  longevity: {
+    start: '#f7f4ed',
+    end: '#ddc4df',
+    accent: '#A855F7',
+  },
+  consultation: {
+    start: '#036132',
+    end: '#f7f4ed',
+    accent: '#036132',
+  },
+};
 
 const stats = [
   {
@@ -257,8 +292,10 @@ export default function Represents() {
               className="w-full h-full drop-shadow-sm overflow-visible"
             >
               <defs>
-                {/* Custom Gradient Filters & Linear Gradients for Slices */}
+                {/* SVG linear gradients mapped from globals.css colors */}
                 {slicesGeometry.map((slice) => {
+                  const grad = sliceGradients[slice.id];
+                  if (!grad) return null;
                   const rad = toRad(slice.midAngle);
                   const x1 = Math.round(50 - 45 * Math.cos(rad));
                   const y1 = Math.round(50 - 45 * Math.sin(rad));
@@ -274,8 +311,8 @@ export default function Represents() {
                       x2={`${x2}%`}
                       y2={`${y2}%`}
                     >
-                      <stop offset="0%" stopColor={slice.startColor} />
-                      <stop offset="100%" stopColor={slice.endColor} />
+                      <stop offset="0%" stopColor={grad.start} />
+                      <stop offset="100%" stopColor={grad.end} />
                     </linearGradient>
                   );
                 })}
@@ -326,7 +363,7 @@ export default function Represents() {
                       d={pathD}
                       fill={`url(#donut-grad-${slice.id})`}
                       filter={isHovered ? 'url(#slice-glow)' : undefined}
-                      className="transition-all duration-300"
+                      className={`transition-all duration-300 ${slice.className}`}
                     />
                   </motion.g>
                 );
@@ -364,6 +401,7 @@ export default function Represents() {
                 const isHovered = hoveredIndex === idx;
                 const isAnyHovered = hoveredIndex !== null;
                 const sliceOffset = isHovered ? 24 : 10;
+                const accentColor = sliceGradients[slice.id]?.accent || '#9CA3AF';
 
                 const rad = toRad(slice.midAngle);
                 const cos = Math.cos(rad);
@@ -416,7 +454,7 @@ export default function Represents() {
                     <path
                       d={lineD}
                       fill="none"
-                      stroke={isHovered ? slice.startColor : '#9CA3AF'}
+                      stroke={isHovered ? accentColor : '#9CA3AF'}
                       strokeWidth={isHovered ? 2.5 : 1.5}
                       className="transition-all duration-300"
                     />
@@ -426,7 +464,7 @@ export default function Represents() {
                       cx={xStart}
                       cy={yStart}
                       r={isHovered ? 4.5 : 3}
-                      fill={slice.startColor}
+                      fill={accentColor}
                       className="transition-all duration-300"
                     />
 
@@ -435,7 +473,7 @@ export default function Represents() {
                       cx={xEnd}
                       cy={yEnd}
                       r={isHovered ? 3.5 : 2}
-                      fill={slice.startColor}
+                      fill={accentColor}
                       className="transition-all duration-300"
                     />
 

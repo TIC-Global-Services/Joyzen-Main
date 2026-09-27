@@ -12,7 +12,7 @@ const MOBILE_FRAME_STEP = 2;
 const DESKTOP_TOTAL_FRAMES = 360;
 const MOBILE_TOTAL_FRAMES = 180;
 
-const FRAME_PATH_PREFIX = '/dna-gradient-compressed/';
+const FRAME_PATH_PREFIX = '/dna-gradient-webp/';
 const SAFETY_TIMEOUT_MS = 20000;
 const SESSION_CACHE_KEY = 'joyzen_dna_loaded';
 

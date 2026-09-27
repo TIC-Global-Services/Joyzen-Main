@@ -36,7 +36,7 @@ export default function Hero() {
             >
               <div className="relative w-full aspect-[16/7] transition-transform duration-500 hover:scale-[1.02] translate-x-12 md:translate-x-0">
                 <Image
-                  src="/calender.png"
+                  src="https://ik.imagekit.io/gyg6yfnd5/calender.webp"
                   alt="Joyzen Robot with Appointments Calendar"
                   fill
                   priority

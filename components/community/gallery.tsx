@@ -15,12 +15,12 @@ const GALLERY_COLUMNS: GalleryItem[][] = [
   [
     {
       id: 1,
-      src: '/gallery-1.png',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-1.png',
       alt: "Women's Health, Our Priority Workshop Presentation",
     },
     {
       id: 2,
-      src: '/gallery-2.png',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-2.png?updatedAt=1790409655901',
       alt: 'Medical professionals collaborating in corridor',
     },
   ],
@@ -28,12 +28,12 @@ const GALLERY_COLUMNS: GalleryItem[][] = [
   [
     {
       id: 3,
-      src: '/gallery-3.png',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-3.png?updatedAt=1790409659736',
       alt: 'Doctor and senior patient discussing consultation on laptop',
     },
     {
       id: 4,
-      src: '/gallery-4.png',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-4.png?updatedAt=1790409657260',
       alt: 'Joyzen community wellness circle discussion',
     },
   ],
@@ -41,12 +41,12 @@ const GALLERY_COLUMNS: GalleryItem[][] = [
   [
     {
       id: 5,
-      src: '/gallery-5.png',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-5.png?updatedAt=1790409657498',
       alt: 'Doctor in lab coat having a warm conversation with patient in clinic lounge',
     },
     {
       id: 6,
-      src: '/gallery-6.png',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-6.png?updatedAt=1790409660132',
       alt: 'Patient in waiting area during checkup',
     },
   ],
@@ -54,12 +54,12 @@ const GALLERY_COLUMNS: GalleryItem[][] = [
   [
     {
       id: 7,
-      src: '/gallery-7.png',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-7.png?updatedAt=1790409657232',
       alt: 'Senior physician reviewing charts and prescribing care plan',
     },
     {
       id: 8,
-      src: '/gallery-8.png',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-8.png?updatedAt=1790409659108',
       alt: 'Joyzen community meetup gathering',
     },
   ],

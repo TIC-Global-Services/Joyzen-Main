@@ -20,7 +20,7 @@ const consultationCards: CardItem[] = [
         id: 1,
         title: 'Indian Specialists',
         description: 'Access Experienced Healthcare Professionals Across Multiple Specialties.',
-        image: '/indian-specialist.png',
+        image: 'https://ik.imagekit.io/gyg6yfnd5/indian-specialist.webp',
         isOffset: false,
         objectPosition:"object-right"
     },
@@ -28,7 +28,7 @@ const consultationCards: CardItem[] = [
         id: 2,
         title: 'Personalised Care',
         description: 'Treatment Plans Tailored To Your Individual Health Needs.',
-        image: '/personalised-care.png',
+        image: 'https://ik.imagekit.io/gyg6yfnd5/personalised-care.webp',
         isOffset: true,
         objectPosition:""
     },
@@ -36,7 +36,7 @@ const consultationCards: CardItem[] = [
         id: 3,
         title: 'Secure Online Consultations',
         description: 'Consult From Anywhere Through Safe And Convenient Virtual Appointments.',
-        image: '/secure-online.png',
+        image: 'https://ik.imagekit.io/gyg6yfnd5/secure-online.webp',
         isOffset: false,
         objectPosition:"object-left"
     },
@@ -44,7 +44,7 @@ const consultationCards: CardItem[] = [
         id: 4,
         title: 'Continuous Support',
         description: 'Receive Follow-Ups And Ongoing Care Beyond Your Consultation.',
-        image: '/continues-support.png',
+        image: 'https://ik.imagekit.io/gyg6yfnd5/continues-support.webp',
         isOffset: true,
         objectPosition:""
     },

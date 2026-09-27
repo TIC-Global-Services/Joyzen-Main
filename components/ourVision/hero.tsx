@@ -8,7 +8,7 @@ import Preloader from '@/reuseable/loader';
 const TOTAL_FRAMES = 363; // Total frames: 0 to 362
 const LOOP_END_FRAME = 233; // First 234 frames: 0 to 233 (looping when not scrolled)
 const SCATTER_START_FRAME = 234; // Remaining 129 frames: 234 to 362 (rendered on scroll)
-const FRAME_PATH_PREFIX = '/new-dns-scatter-q95/LOOP dna_';
+const FRAME_PATH_PREFIX = '/new-dns-scatter-webp/LOOP dna_';
 const CANVAS_WIDTH = 1920;
 const CANVAS_HEIGHT = 1080;
 const LOOP_FPS = 24;

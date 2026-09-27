@@ -62,6 +62,7 @@
     0% {
       background-position: 0% 50%;
     }
+
     100% {
       background-position: 100% 50%;
     }
@@ -71,9 +72,11 @@
     0% {
       transform: translate3d(0%, 0, 0);
     }
+
     50% {
       transform: translate3d(-50%, 0, 0);
     }
+
     100% {
       transform: translate3d(0%, 0, 0);
     }
@@ -83,9 +86,11 @@
     0% {
       transform: translate3d(-50%, 0, 0);
     }
+
     50% {
       transform: translate3d(0%, 0, 0);
     }
+
     100% {
       transform: translate3d(-50%, 0, 0);
     }
@@ -124,6 +129,78 @@
       inset 0 -1px 0 rgba(255, 255, 255, 0.1),
       inset 0 0 8px 4px rgba(255, 255, 255, 0.4);
     overflow: hidden;
+  }
+
+  .diagnosis {
+    background: hsla(202, 81%, 84%, 1);
+
+    background: linear-gradient(90deg, hsla(202, 81%, 84%, 1) 0%, hsla(42, 38%, 95%, 1) 100%);
+
+    background: -moz-linear-gradient(90deg, hsla(202, 81%, 84%, 1) 0%, hsla(42, 38%, 95%, 1) 100%);
+
+    background: -webkit-linear-gradient(90deg, hsla(202, 81%, 84%, 1) 0%, hsla(42, 38%, 95%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#B4DEF7", endColorstr="#F7F4ED", GradientType=1);
+  }
+
+  .treatment {
+    background: hsla(0, 0%, 100%, 1);
+
+    background: linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(296, 30%, 82%, 1) 100%);
+
+    background: -moz-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(296, 30%, 82%, 1) 100%);
+
+    background: -webkit-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(296, 30%, 82%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#DDC3DF", GradientType=1);
+  }
+
+  .medicine {
+    background: hsla(0, 0%, 100%, 1);
+
+    background: linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(20, 82%, 66%, 1) 100%);
+
+    background: -moz-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(20, 82%, 66%, 1) 100%);
+
+    background: -webkit-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(20, 82%, 66%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#EF8F60", GradientType=1);
+  }
+
+  .lifeStyle {
+    background: hsla(0, 0%, 100%, 1);
+
+    background: linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(52, 90%, 74%, 1) 100%);
+
+    background: -moz-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(52, 90%, 74%, 1) 100%);
+
+    background: -webkit-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(52, 90%, 74%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#F8E780", GradientType=1);
+  }
+
+  .monitoring {
+    background: hsla(0, 0%, 100%, 1);
+
+    background: linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(150, 94%, 20%, 1) 100%);
+
+    background: -moz-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(150, 94%, 20%, 1) 100%);
+
+    background: -webkit-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(150, 94%, 20%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#036132", GradientType=1);
+  }
+
+  .prevention {
+    background: hsla(0, 0%, 100%, 1);
+
+    background: linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(0, 0%, 13%, 1) 100%);
+
+    background: -moz-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(0, 0%, 13%, 1) 100%);
+
+    background: -webkit-linear-gradient(90deg, hsla(0, 0%, 100%, 1) 0%, hsla(0, 0%, 13%, 1) 100%);
+
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#ffffff", endColorstr="#212121", GradientType=1);
   }
 
   .scrollbar-hide {

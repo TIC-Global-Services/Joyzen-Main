@@ -17,7 +17,7 @@ interface SlideData {
 const slides: SlideData[] = [
   {
     id: 1,
-    image: '/book-an-appointment.png',
+    image: 'https://ik.imagekit.io/gyg6yfnd5/book-an-appointment.webp',
     prefixText: 'Book an',
     highlightText: 'Appointment',
     highlightColor: 'text-[#DDC5DF]',
@@ -25,7 +25,7 @@ const slides: SlideData[] = [
   },
   {
     id: 2,
-    image: '/medical-history.png',
+    image: 'https://ik.imagekit.io/gyg6yfnd5/medical-history.webp',
     prefixText: 'Share Your',
     highlightText: 'Medical History',
     highlightColor: 'text-[#DDC5DF]',
@@ -33,7 +33,7 @@ const slides: SlideData[] = [
   },
   {
     id: 3,
-    image: '/specialist-online.png',
+    image: 'https://ik.imagekit.io/gyg6yfnd5/specialist-online.webp',
     prefixText: 'Meet your',
     highlightText: 'Specialist Online',
     highlightColor: 'text-[#DDC5DF]',
@@ -41,7 +41,7 @@ const slides: SlideData[] = [
   },
   {
     id: 4,
-    image: '/care-plan.png',
+    image: 'https://ik.imagekit.io/gyg6yfnd5/secure-online.webp',
     prefixText: 'Receive your personalised',
     highlightText: 'Care plan',
     highlightColor: 'text-[#DDC5DF]',

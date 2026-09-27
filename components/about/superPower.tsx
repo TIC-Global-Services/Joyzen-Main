@@ -14,32 +14,32 @@ const row1Items: SuperpowerItem[] = [
   {
     id: 'personal-doctor',
     title: 'Personal Doctor',
-    icon: '/superpowers/personal-doctor.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/personal_docter.PNG',
   },
   {
     id: 'diet-cycle-tracking',
     title: 'Diet & Cycle tracking',
-    icon: '/superpowers/diet_plan.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/diet-cycle.PNG',
   },
   {
     id: 'followup-reminder',
     title: 'Follow-ups & Reminders',
-    icon: '/superpowers/follow-up.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/followup.PNG',
   },
   {
     id: 'clarity-call',
     title: 'Clarity Call',
-    icon: '/superpowers/clarity-call.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/clarity.PNG',
   },
   {
     id: 'mental-health',
     title: 'Mental health support',
-    icon: '/superpowers/mental-health.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/mental-health-new.PNG',
   },
   {
     id: 'life-care',
     title: 'Life care',
-    icon: '/superpowers/life-care.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/life-care-new.PNG',
   },
 ];
 
@@ -47,27 +47,27 @@ const row2Items: SuperpowerItem[] = [
   {
     id: 'community-joyzen-club',
     title: 'Community & Joyzen club',
-    icon: '/superpowers/community.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/joyzen-community.PNG',
   },
   {
     id: 'internation-acess',
     title: 'International Access',
-    icon: '/superpowers/international-accesses.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/international.PNG',
   },
   {
     id: 'reprodective-care',
     title: 'reproductive care program',
-    icon: '/superpowers/reproductive-care.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/reproductive.PNG',
   },
   {
     id: 'fertility-care',
     title: 'Fertility care',
-    icon: '/superpowers/fertility-care.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/fertility.PNG',
   },
   {
     id: 'pregnancy-care',
     title: 'Pregnancy care',
-    icon: '/superpowers/pregnancy-care.png',
+    icon: 'https://ik.imagekit.io/gyg6yfnd5/pregnancy.PNG',
   },
 ];
 

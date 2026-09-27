@@ -69,7 +69,7 @@ export default function CareRight() {
           >
             <div className="relative w-[280px] sm:w-[320px] lg:w-[340px] aspect-[1/2] max-h-[650px]">
               <Image
-                src="/care-right.png"
+                src="https://ik.imagekit.io/gyg6yfnd5/mobie-mockup-new.png"
                 alt="Joyzen Medical Chat Consultation on Smartphone"
                 fill
                 priority
@@ -124,7 +124,7 @@ export default function CareRight() {
             className="relative w-[260px] sm:w-[300px] aspect-[1/2] my-4"
           >
             <Image
-              src="/care-right.png"
+              src="https://ik.imagekit.io/gyg6yfnd5/mobie-mockup-new.png"
               alt="Joyzen Medical Chat Consultation on Smartphone"
               fill
               priority
