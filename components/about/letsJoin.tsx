@@ -340,7 +340,7 @@ export default function LetsJoin() {
         >
           <div className="relative w-[220px] sm:w-[280px] md:w-[340px] lg:w-[400px] aspect-[499/566]">
             <Image
-              src="/flowers.svg"
+              src="https://ik.imagekit.io/gyg6yfnd5/flowers.webp?updatedAt=1790412346332"
               alt="Decorative flowers top right"
               fill
               className="object-contain drop-shadow-xs"
@@ -358,7 +358,7 @@ export default function LetsJoin() {
         >
           <div className="relative w-[200px] sm:w-[260px] md:w-[320px] lg:w-[580px] aspect-[499/566]">
             <Image
-              src="/flowers.svg"
+              src="https://ik.imagekit.io/gyg6yfnd5/flowers.webp?updatedAt=1790412346332"
               alt="Decorative flowers bottom left"
               fill
               className="object-contain object-left-bottom drop-shadow-xs"

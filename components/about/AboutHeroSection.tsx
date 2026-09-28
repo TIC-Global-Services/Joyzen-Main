@@ -36,7 +36,7 @@ export default function AboutHeroSection() {
       >
         <div className="relative w-[280px] sm:w-[260px] md:w-[340px] lg:w-[400px] xl:w-[460px] aspect-[499/566]">
           <Image
-            src="/flowers.svg"
+            src="https://ik.imagekit.io/gyg6yfnd5/flowers.webp?updatedAt=1790412346332"
             alt="Joyzen Wild Flowers"
             fill
             priority

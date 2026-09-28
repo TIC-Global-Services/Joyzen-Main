@@ -79,46 +79,54 @@ const slicesData: SliceData[] = [
   },
 ];
 
-// Gradient stops and accent colors corresponding to globals.css classes
-const sliceGradients: Record<string, { start: string; end: string; accent: string }> = {
+// Gradient stops and accent colors corresponding to globals.css classes (original exact colors with gradient depth)
+const sliceGradients: Record<string, { start: string; color: string; end: string; accent: string }> = {
   diagnosis: {
-    start: 'hsla(202, 81%, 84%, 1)',
-    end: 'hsla(42, 38%, 95%, 1)',
+    start: 'hsla(202, 85%, 88%, 1)',
+    color: 'hsla(202, 81%, 84%, 1)',
+    end: 'hsla(202, 81%, 74%, 1)',
     accent: '#7bbde8',
   },
   treatment: {
-    start: 'hsla(0, 0%, 100%, 1)',
-    end: 'hsla(296, 30%, 82%, 1)',
+    start: 'hsla(296, 35%, 88%, 1)',
+    color: 'hsla(296, 30%, 82%, 1)',
+    end: 'hsla(296, 30%, 75%, 1)',
     accent: '#C084FC',
   },
   medicine: {
-    start: 'hsla(0, 0%, 100%, 1)',
-    end: 'hsla(20, 82%, 66%, 1)',
+    start: 'hsla(20, 85%, 72%, 1)',
+    color: 'hsla(20, 82%, 66%, 1)',
+    end: 'hsla(20, 82%, 58%, 1)',
     accent: '#EF8F60',
   },
   lifestyle: {
-    start: 'hsla(0, 0%, 100%, 1)',
-    end: 'hsla(52, 90%, 74%, 1)',
+    start: 'hsla(52, 92%, 80%, 1)',
+    color: 'hsla(52, 90%, 74%, 1)',
+    end: 'hsla(48, 88%, 66%, 1)',
     accent: '#F59E0B',
   },
   monitoring: {
-    start: 'hsla(0, 0%, 100%, 1)',
-    end: 'hsla(150, 94%, 20%, 1)',
+    start: 'hsla(150, 75%, 32%, 1)',
+    color: 'hsla(150, 94%, 20%, 1)',
+    end: 'hsla(150, 94%, 16%, 1)',
     accent: '#036132',
   },
   prevention: {
-    start: 'hsla(0, 0%, 100%, 1)',
-    end: 'hsla(0, 0%, 13%, 1)',
+    start: 'hsla(0, 0%, 28%, 1)',
+    color: 'hsla(0, 0%, 18%, 1)',
+    end: 'hsla(0, 0%, 12%, 1)',
     accent: '#212121',
   },
   longevity: {
-    start: '#f7f4ed',
-    end: '#ddc4df',
+    start: '#f0e2f1',
+    color: '#ddc4df',
+    end: '#caa7cc',
     accent: '#A855F7',
   },
   consultation: {
-    start: '#036132',
-    end: '#f7f4ed',
+    start: '#047d42',
+    color: '#036132',
+    end: '#024a26',
     accent: '#036132',
   },
 };
@@ -149,7 +157,7 @@ const stats = [
 // Helper to convert degrees to radians
 const toRad = (deg: number) => (deg * Math.PI) / 180;
 
-// Helper to calculate SVG arc path for a donut slice with offset
+// Helper to calculate SVG arc path for a donut slice with 3px rounded corners and offset
 function getArcPath(
   cx: number,
   cy: number,
@@ -158,7 +166,8 @@ function getArcPath(
   startAngleDeg: number,
   endAngleDeg: number,
   offset: number,
-  midAngleDeg: number
+  midAngleDeg: number,
+  rc = 3
 ) {
   const ox = Math.cos(toRad(midAngleDeg)) * offset;
   const oy = Math.sin(toRad(midAngleDeg)) * offset;
@@ -169,21 +178,53 @@ function getArcPath(
   const a1 = toRad(startAngleDeg);
   const a2 = toRad(endAngleDeg);
 
-  const x1 = cX + rOut * Math.cos(a1);
-  const y1 = cY + rOut * Math.sin(a1);
+  // Angular offset for the 3px corner radius along outer and inner arcs
+  const span = a2 - a1;
+  const safeDOut = Math.min(rc / rOut, span / 2);
+  const safeDIn = Math.min(rc / rIn, span / 2);
 
-  const x2 = cX + rOut * Math.cos(a2);
-  const y2 = cY + rOut * Math.sin(a2);
+  // Outer Arc points (clockwise from safeDOut after a1 to safeDOut before a2)
+  const a1Out = a1 + safeDOut;
+  const a2Out = a2 - safeDOut;
+  const xOut1 = cX + rOut * Math.cos(a1Out);
+  const yOut1 = cY + rOut * Math.sin(a1Out);
+  const xOut2 = cX + rOut * Math.cos(a2Out);
+  const yOut2 = cY + rOut * Math.sin(a2Out);
 
-  const x3 = cX + rIn * Math.cos(a2);
-  const y3 = cY + rIn * Math.sin(a2);
+  // Radial 2 edge points (at a2, between rOut - rc and rIn + rc)
+  const xRad2Out = cX + (rOut - rc) * Math.cos(a2);
+  const yRad2Out = cY + (rOut - rc) * Math.sin(a2);
+  const xRad2In = cX + (rIn + rc) * Math.cos(a2);
+  const yRad2In = cY + (rIn + rc) * Math.sin(a2);
 
-  const x4 = cX + rIn * Math.cos(a1);
-  const y4 = cY + rIn * Math.sin(a1);
+  // Inner Arc points (counter-clockwise from safeDIn before a2 to safeDIn after a1)
+  const a2In = a2 - safeDIn;
+  const a1In = a1 + safeDIn;
+  const xIn2 = cX + rIn * Math.cos(a2In);
+  const yIn2 = cY + rIn * Math.sin(a2In);
+  const xIn1 = cX + rIn * Math.cos(a1In);
+  const yIn1 = cY + rIn * Math.sin(a1In);
+
+  // Radial 1 edge points (at a1, between rIn + rc and rOut - rc)
+  const xRad1In = cX + (rIn + rc) * Math.cos(a1);
+  const yRad1In = cY + (rIn + rc) * Math.sin(a1);
+  const xRad1Out = cX + (rOut - rc) * Math.cos(a1);
+  const yRad1Out = cY + (rOut - rc) * Math.sin(a1);
 
   const largeArc = endAngleDeg - startAngleDeg > 180 ? 1 : 0;
 
-  return `M ${x1} ${y1} A ${rOut} ${rOut} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${rIn} ${rIn} 0 ${largeArc} 0 ${x4} ${y4} Z`;
+  return [
+    `M ${xOut1} ${yOut1}`,
+    `A ${rOut} ${rOut} 0 ${largeArc} 1 ${xOut2} ${yOut2}`,
+    `A ${rc} ${rc} 0 0 1 ${xRad2Out} ${yRad2Out}`,
+    `L ${xRad2In} ${yRad2In}`,
+    `A ${rc} ${rc} 0 0 1 ${xIn2} ${yIn2}`,
+    `A ${rIn} ${rIn} 0 ${largeArc} 0 ${xIn1} ${yIn1}`,
+    `A ${rc} ${rc} 0 0 1 ${xRad1In} ${yRad1In}`,
+    `L ${xRad1Out} ${yRad1Out}`,
+    `A ${rc} ${rc} 0 0 1 ${xOut1} ${yOut1}`,
+    'Z',
+  ].join(' ');
 }
 
 export default function Represents() {
@@ -292,7 +333,7 @@ export default function Represents() {
               className="w-full h-full drop-shadow-sm overflow-visible"
             >
               <defs>
-                {/* SVG linear gradients mapped from globals.css colors */}
+                {/* Unified Master Glass Gradient for each slice: 20% white frost on inner curve, 80% original color */}
                 {slicesGeometry.map((slice) => {
                   const grad = sliceGradients[slice.id];
                   if (!grad) return null;
@@ -305,20 +346,76 @@ export default function Represents() {
                   return (
                     <linearGradient
                       key={slice.id}
-                      id={`donut-grad-${slice.id}`}
+                      id={`glass-slice-${slice.id}`}
                       x1={`${x1}%`}
                       y1={`${y1}%`}
                       x2={`${x2}%`}
                       y2={`${y2}%`}
                     >
-                      <stop offset="0%" stopColor={grad.start} />
-                      <stop offset="100%" stopColor={grad.end} />
+                      {/* 20% Milky White Frosted Sheen on Inner Curve */}
+                      <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+                      <stop offset="8%" stopColor="#ffffff" stopOpacity="0.70" />
+                      <stop offset="18%" stopColor={grad.start} stopOpacity="0.92" />
+                      {/* 80% Rich Original Color extending to outer rim */}
+                      <stop offset="55%" stopColor={grad.color} stopOpacity="1" />
+                      <stop offset="100%" stopColor={grad.end} stopOpacity="1" />
                     </linearGradient>
                   );
                 })}
 
-                <filter id="slice-glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feDropShadow dx="0" dy="8" stdDeviation="12" floodColor="#000000" floodOpacity="0.25" />
+                {/* Unified Glass Filter: 3D Elevation Drop Shadow + Border Glow + Inset White Shadow */}
+                <filter id="glass-effect" x="-30%" y="-30%" width="160%" height="160%">
+                  {/* 3D Elevation Drop Shadows */}
+                  <feDropShadow in="SourceAlpha" dx="0" dy="7" stdDeviation="10" floodColor="#000000" floodOpacity="0.12" result="dropShadow" />
+                  <feDropShadow in="SourceAlpha" dx="0" dy="2" stdDeviation="3" floodColor="#000000" floodOpacity="0.05" result="contactShadow" />
+
+                  {/* Ambient White Border Glow */}
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="1.5" result="strokeGlow" />
+                  <feFlood floodColor="#ffffff" floodOpacity="0.45" result="glowColor" />
+                  <feComposite in="glowColor" in2="strokeGlow" operator="in" result="whiteBorderGlow" />
+
+                  {/* Figma Inset White Shadow (Inner Shadow: X:0, Y:2, Blur:4, Color:#FFFFFF) */}
+                  <feOffset in="SourceAlpha" dx="0" dy="2.5" result="offsetAlpha" />
+                  <feGaussianBlur in="offsetAlpha" stdDeviation="2.5" result="blurredAlpha" />
+                  <feComposite in="SourceAlpha" in2="blurredAlpha" operator="out" result="innerHighlight" />
+                  <feFlood floodColor="#ffffff" floodOpacity="0.85" result="innerWhite" />
+                  <feComposite in="innerWhite" in2="innerHighlight" operator="in" result="innerWhiteShadow" />
+
+                  {/* Composite all into ONE single element */}
+                  <feMerge>
+                    <feMergeNode in="dropShadow" />
+                    <feMergeNode in="contactShadow" />
+                    <feMergeNode in="whiteBorderGlow" />
+                    <feMergeNode in="SourceGraphic" />
+                    <feMergeNode in="innerWhiteShadow" />
+                  </feMerge>
+                </filter>
+
+                <filter id="glass-effect-hover" x="-40%" y="-40%" width="180%" height="180%">
+                  {/* Elevated Hover Drop Shadows */}
+                  <feDropShadow in="SourceAlpha" dx="0" dy="12" stdDeviation="16" floodColor="#000000" floodOpacity="0.20" result="dropShadow" />
+                  <feDropShadow in="SourceAlpha" dx="0" dy="4" stdDeviation="5" floodColor="#000000" floodOpacity="0.08" result="contactShadow" />
+
+                  {/* Brighter White Border Glow on Hover */}
+                  <feGaussianBlur in="SourceAlpha" stdDeviation="2.5" result="strokeGlow" />
+                  <feFlood floodColor="#ffffff" floodOpacity="0.65" result="glowColor" />
+                  <feComposite in="glowColor" in2="strokeGlow" operator="in" result="whiteBorderGlow" />
+
+                  {/* Figma Inset White Shadow for Hover */}
+                  <feOffset in="SourceAlpha" dx="0" dy="3" result="offsetAlpha" />
+                  <feGaussianBlur in="offsetAlpha" stdDeviation="3" result="blurredAlpha" />
+                  <feComposite in="SourceAlpha" in2="blurredAlpha" operator="out" result="innerHighlight" />
+                  <feFlood floodColor="#ffffff" floodOpacity="0.95" result="innerWhite" />
+                  <feComposite in="innerWhite" in2="innerHighlight" operator="in" result="innerWhiteShadow" />
+
+                  {/* Composite all into ONE single element */}
+                  <feMerge>
+                    <feMergeNode in="dropShadow" />
+                    <feMergeNode in="contactShadow" />
+                    <feMergeNode in="whiteBorderGlow" />
+                    <feMergeNode in="SourceGraphic" />
+                    <feMergeNode in="innerWhiteShadow" />
+                  </feMerge>
                 </filter>
               </defs>
 
@@ -359,11 +456,16 @@ export default function Represents() {
                     onMouseEnter={() => setHoveredIndex(idx)}
                     onMouseLeave={() => setHoveredIndex(null)}
                   >
+                    {/* ONE SINGLE MERGED GLASS SLICE: Fill + Border + Inner Shadow + Drop Shadow */}
                     <path
                       d={pathD}
-                      fill={`url(#donut-grad-${slice.id})`}
-                      filter={isHovered ? 'url(#slice-glow)' : undefined}
-                      className={`transition-all duration-300 ${slice.className}`}
+                      fill={`url(#glass-slice-${slice.id})`}
+                      stroke="rgba(255, 255, 255, 0.88)"
+                      strokeWidth={isHovered ? 2 : 1.4}
+                      strokeLinejoin="round"
+                      strokeLinecap="round"
+                      filter={isHovered ? 'url(#glass-effect-hover)' : 'url(#glass-effect)'}
+                      className="transition-all duration-300"
                     />
                   </motion.g>
                 );
