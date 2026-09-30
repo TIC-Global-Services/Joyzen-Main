@@ -72,7 +72,7 @@ export default function HeroSection() {
           </Reveal>
         </div>
       </div>
-              <div className='h-20 w-full hidden lg:block -right-10 bg-[#f2f2f2] absolute bottom-0 z-100 blur-md'></div>
+              <div className='h-20 w-full hidden lg:block -right-10 bg-white absolute bottom-0 z-100 blur-md'></div>
     </section>
   );
 }

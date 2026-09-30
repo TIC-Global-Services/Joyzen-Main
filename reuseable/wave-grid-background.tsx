@@ -132,7 +132,7 @@ export interface WaveGridBackgroundProps {
     gridSize?: number;
     /** Base hexagon color. Defaults to white. */
     colorBase?: string;
-    /** Glow/hover color. Defaults to #EF8F60. */
+    /** Glow/hover color. Defaults to #F4A27E. */
     colorHigh?: string;
     /** Peak displacement multiplier. Defaults to 0.5. */
     waveAmplitude?: number;
@@ -161,7 +161,7 @@ export function WaveGridBackground({
     className,
     gridSize = 40,
     colorBase = "#FFFFFF",
-    colorHigh = "#EF8F60",
+    colorHigh = "#F4A27E",
     waveAmplitude = 0.5,
     waveSpeed = 6.0,
     waveFrequency = 1.2,
@@ -216,8 +216,8 @@ export function WaveGridBackground({
         const effectiveGridSize = isMobile ? Math.min(gridSize, 22) : gridSize;
 
         const hexRadius = 0.45;
-        const cubeHeight = 3;
-        const gap = 0.01;
+        const cubeHeight = 2.2;
+        const gap = 0.0065;
         const bounds = effectiveGridSize * (Math.sqrt(3) * hexRadius + gap);
 
         // ── Sizes ────────────────────────────────────────────────────────────────
@@ -257,15 +257,15 @@ export function WaveGridBackground({
         scene.add(camera);
 
         // ── Lighting ───────────────────────────────────────────────────────────
-        const ambientLight = new THREE.AmbientLight("#ffffff", isMobile ? 1.2 : 0.8);
+        const ambientLight = new THREE.AmbientLight("#ffffff", isMobile ? 1.3 : 2.3);
         scene.add(ambientLight);
 
-        const keyLight = new THREE.DirectionalLight("#ffffff", 1.2);
+        const keyLight = new THREE.DirectionalLight("#ffffff", 1.8);
         keyLight.position.set(-20, 15, 8);
         if (!isMobile) {
             keyLight.castShadow = true;
             keyLight.shadow.mapSize.set(1024, 1024);
-            keyLight.shadow.radius = 6;
+            keyLight.shadow.radius = 4;
             keyLight.shadow.camera.near = 0.1;
             keyLight.shadow.camera.far = 60;
             keyLight.shadow.camera.left = -22;
@@ -276,7 +276,7 @@ export function WaveGridBackground({
         }
         scene.add(keyLight);
 
-        const fillLight = new THREE.DirectionalLight("#ffffff", 0.6);
+        const fillLight = new THREE.DirectionalLight("#ffffff", 0.75);
         fillLight.position.set(10, 5, -3);
         scene.add(fillLight);
 
@@ -499,8 +499,7 @@ export function WaveGridBackground({
             alpha: true,
             powerPreference: "high-performance",
         });
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 3.95;
+        renderer.toneMapping = THREE.NoToneMapping;
         if (!isMobile) {
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFShadowMap;

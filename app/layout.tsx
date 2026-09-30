@@ -136,9 +136,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col relative bg-white text-foreground font-sans">
-        {/* Full-site 3D Honeycomb background with localized #EF8F60 border glow */}
+        {/* Full-site 3D Honeycomb background with localized #F4A27E border glow */}
         <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden select-none">
-          <WaveGridBackground colorBase="#ffffff" colorHigh="#EF8F60" autoAnimate={false} waveAmplitude={0.2} waveMaxHeight={0.2} />
+          <WaveGridBackground colorBase="#ffffff" colorHigh="#F4A27E" autoAnimate={false} waveAmplitude={0.2} waveMaxHeight={0.2} />
         </div>
         <SmoothScroller>
           <Navbar />
