@@ -19,26 +19,26 @@ interface PillData {
   id: string; label: string; baseX: number; baseY: number; mobileX?: number; mobileY?: number; angle: number; driftX: number[]; driftY: number[]; rotateRange: number[]; duration: number;
 }
 const PILLS: PillData[] = [
-  { id: 'pcos', label: 'PCOS Care', baseX: 0, baseY: -250, mobileX: 200, mobileY: -160, angle: -90, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 4.8 },
-  { id: 'fertility', label: 'Fertility Readiness', baseX: -265, baseY: -185, mobileX: -200, mobileY: -160, angle: -140, driftX: [0, 8, -6, 3, 0], driftY: [0, 6, -8, 2, 0], rotateRange: [0, -2, 1.5, -1, 0], duration: 5.2 },
-  { id: 'ongoing', label: 'Ongoing Care', baseX: -490, baseY: 15, mobileX: -260, mobileY: 0, angle: 180, driftX: [0, 9, -7, 3, 0], driftY: [0, -6, 7, -3, 0], rotateRange: [0, 2, -1.5, 1, 0], duration: 5.6 },
-  { id: 'pms', label: 'PMS Support', baseX: -250, baseY: 190, mobileX: -200, mobileY: 160, angle: 140, driftX: [0, 6, -8, 2, 0], driftY: [0, -8, 6, -2, 0], rotateRange: [0, -1.8, 2, -1, 0], duration: 4.9 },
-  { id: 'ovulation', label: 'Ovulation Tracking', baseX: 0, baseY: 255, mobileX: 0, mobileY: -280, angle: 90, driftX: [0, -5, 6, -2, 0], driftY: [0, -9, 7, -3, 0], rotateRange: [0, 1.2, -1.5, 0.8, 0], duration: 5.4 },
-  { id: 'care-team', label: 'Real Care Team', baseX: 225, baseY: 190, mobileX: 200, mobileY: 160, angle: 40, driftX: [0, -7, 8, -3, 0], driftY: [0, -7, 8, -2, 0], rotateRange: [0, 2, -2, 1, 0], duration: 5.0 },
-  { id: 'cycle', label: 'Cycle Health', baseX: 490, baseY: 65, mobileX: 260, mobileY: 0, angle: 0, driftX: [0, -9, 7, -3, 0], driftY: [0, 6, -7, 2, 0], rotateRange: [0, -2, 1.5, -0.8, 0], duration: 5.5 },
-  { id: 'hormone', label: 'Hormone Health', baseX: 265, baseY: -185, mobileX: 0, mobileY: 280, angle: -40, driftX: [0, -7, 5, -2, 0], driftY: [0, 7, -6, 2, 0], rotateRange: [0, 1.8, -1.2, 0.6, 0], duration: 5.1 },
+  { id: 'fatherhood', label: 'Fatherhood', baseX: 0, baseY: -250, mobileX: 200, mobileY: -160, angle: -90, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'sperm-health', label: 'Sperm health', baseX: -265, baseY: -185, mobileX: -200, mobileY: -160, angle: -140, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'hormones', label: 'Hormones', baseX: -490, baseY: 15, mobileX: -260, mobileY: 0, angle: 180, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'performance', label: 'Performance', baseX: -250, baseY: 190, mobileX: -200, mobileY: 160, angle: 140, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'conception', label: 'Conception', baseX: 0, baseY: 255, mobileX: 0, mobileY: -280, angle: 90, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'fertility-readiness', label: 'Fertility readiness', baseX: 225, baseY: 190, mobileX: 200, mobileY: 160, angle: 40, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'semen-quality', label: 'Semen quality', baseX: 490, baseY: 65, mobileX: 260, mobileY: 0, angle: 0, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'emotional-support', label: 'Emotional support', baseX: 265, baseY: -185, mobileX: 0, mobileY: 280, angle: -40, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
 ];
 
 interface ChatItem {
-  id: string; sender: string; isCala: boolean; avatarType: 'orange-dot' | 'cala-orb'; message: string; time: string; side: 'left' | 'right'; offsetX: number; offsetY: number; driftX: number[]; driftY: number[]; duration: number;
+  id: string; sender: string; isCala: boolean; avatarType: 'orange-dot' | 'Genesis-orb'; message: string; time: string; side: 'left' | 'right'; offsetX: number; offsetY: number; driftX: number[]; driftY: number[]; duration: number;
 }
 const CHAT_SEQUENCE: ChatItem[] = [
-  { id: 'megha-1', sender: 'Megha', isCala: false, avatarType: 'orange-dot', message: 'I have PCOS. How do I know if things are improving?', time: '10:24 AM', side: 'left', offsetX: -220, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.2 },
-  { id: 'cala-1', sender: 'CALA Care Team', isCala: true, avatarType: 'cala-orb', message: "We'll track your symptoms, cycle patterns and progress over time so your care plan can be adjusted when needed.", time: '10:25 AM', side: 'left', offsetX: -150, offsetY: 15, driftX: [0, -6, 5, -2, 0], driftY: [0, -7, 6, -2, 0], duration: 5.6 },
-  { id: 'megha-2', sender: 'Megha', isCala: false, avatarType: 'orange-dot', message: 'Thank You, CALA', time: '10:26 AM', side: 'left', offsetX: -270, offsetY: 180, driftX: [0, 4, -5, 3, 0], driftY: [0, 5, -6, 2, 0], duration: 4.8 },
-  { id: 'ananya-1', sender: 'Ananya', isCala: false, avatarType: 'orange-dot', message: 'My periods have become really irregular. Is something wrong?', time: '10:28 AM', side: 'right', offsetX: 520, offsetY: -145, driftX: [0, -8, 4, -2, 0], driftY: [0, 6, -6, 2, 0], duration: 5.0 },
-  { id: 'cala-2', sender: 'CALA Care Team', isCala: true, avatarType: 'cala-orb', message: "Let's look at your cycle pattern together. Your care team can help you track changes and understand what may need attention.", time: '10:29 AM', side: 'right', offsetX: 420, offsetY: 20, driftX: [0, 7, -6, 2, 0], driftY: [0, -5, 7, -3, 0], duration: 5.4 },
-  { id: 'ananya-2', sender: 'Ananya', isCala: false, avatarType: 'orange-dot', message: 'Thank You, CALA', time: '10:30 AM', side: 'right', offsetX: 370, offsetY: 185, driftX: [0, -4, 5, -2, 0], driftY: [0, -6, 5, -2, 0], duration: 5.1 },
+  { id: 'msg-1', sender: 'Siddharth', isCala: false, avatarType: 'orange-dot', message: "I want to prepare for fatherhood.", time: '10:24 AM', side: 'left', offsetX: -220, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
+  { id: 'msg-2', sender: 'GENESIS Care Team', isCala: true, avatarType: 'Genesis-orb', message: "We can guide sperm health, hormones, lifestyle, and reproductive health.", time: '10:25 AM', side: 'left', offsetX: -150, offsetY: 15, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
+  { id: 'msg-3', sender: 'Siddharth', isCala: false, avatarType: 'orange-dot', message: "Thank You, GENESIS", time: '10:26 AM', side: 'left', offsetX: -270, offsetY: 180, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
+  { id: 'msg-4', sender: 'Varun', isCala: false, avatarType: 'orange-dot', message: "Can someone stay with me through the process?", time: '10:28 AM', side: 'right', offsetX: 520, offsetY: -145, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
+  { id: 'msg-5', sender: 'GENESIS Care Team', isCala: true, avatarType: 'Genesis-orb', message: "Yes. Your program includes weekly follow-ups and daily private chat.", time: '10:29 AM', side: 'right', offsetX: 420, offsetY: 20, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
+  { id: 'msg-6', sender: 'Varun', isCala: false, avatarType: 'orange-dot', message: "Thank You, GENESIS", time: '10:30 AM', side: 'right', offsetX: 370, offsetY: 185, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
 ];
 
 interface FaqItem {
@@ -49,28 +49,28 @@ interface FaqItem {
 const FAQ_SEQUENCE: FaqItem[] = [
   {
     id: 1,
-    question: '1. Why are my periods so irregular?',
-    answer: 'Your cycle, symptoms and progress can be followed over time, with ongoing guidance from your doctor and care team.',
+    question: '31. How can I prepare for fatherhood?',
+    answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 2,
-    question: '2. How do I know if my PCOS is improving?',
-    answer: 'We track your hormonal markers, symptom patterns and ovulation cues over time so your personalized care plan continuously adapts to your progress.',
+    question: '32. How can I track sperm health?',
+    answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 3,
-    question: '3. Why do my symptoms keep changing?',
-    answer: 'Hormonal fluctuations across follicular and luteal phases naturally shift symptoms. CALA maps your unique patterns to provide clear, targeted insights.',
+    question: '33. Can hormones affect fertility?',
+    answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 4,
-    question: '4. Can I get help between consultations?',
-    answer: 'Yes! Your dedicated care team is available daily via private chat for guidance, symptom logging, questions, and ongoing emotional support.',
+    question: '34. How can I improve reproductive health?',
+    answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 5,
-    question: '5. What can I do to support my hormones every day?',
-    answer: 'CALA provides daily personalized nutrition protocols, cycle-synced workouts, restorative sleep guidelines, and lifestyle coaching built around your biology.',
+    question: '35. Can I get support throughout the journey?',
+    answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
 ];
 
@@ -159,7 +159,7 @@ function OuterChatPill({ item, scaleFactor, clickedId, setClickedId, className }
         <LiquidGlass borderRadius={26} blur={1.8} contrast={1.12} brightness={1.04} saturation={1.15} shadowIntensity={0.06} displacementScale={0.8} elasticity={0.4} zIndex={20} className="transition-all duration-300 border border-white/70 hover:border-white/95 bg-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.06),_0_2px_8px_rgba(0,0,0,0.03)]">
           <div className="relative flex items-start gap-3 rounded-3xl" style={{ padding: `${Math.max(10, 14 * scaleFactor)}px ${Math.max(14, 20 * scaleFactor)}px`, maxWidth: `clamp(210px, ${310 * scaleFactor}px, 345px)` }}>
             {clickedId === item.id && <motion.div initial={{ scale: 0.8, opacity: 0.9 }} animate={{ scale: 1.4, opacity: 0 }} transition={{ duration: 0.45, ease: 'easeOut' }} className="absolute inset-0 rounded-3xl border-2 border-cyan-400 pointer-events-none" />}
-            {item.avatarType === 'cala-orb' ? (
+            {item.avatarType === 'Genesis-orb' ? (
               <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden shrink-0 mt-0.5 border border-teal-300/80 shadow-[0_2px_8px_rgba(36,168,184,0.35)]">
                 <CalaThreeCircle interactive={false} className="w-full h-full" />
               </div>
@@ -240,7 +240,6 @@ export default function CalaScrollSequence() {
     gsap.set('.mobile-watermark', { xPercent: -50, yPercent: -50 });
     gsap.set('.mobile-3d-orb', { xPercent: -50, yPercent: -50 });
     gsap.set('.outer-pill', { xPercent: -50, yPercent: -50 });
-    gsap.set('.faq-orb-halo', { xPercent: -50, yPercent: -50 });
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -257,14 +256,14 @@ export default function CalaScrollSequence() {
 
     // Phase 2: 1.0 to 2.5s - Hero fades out sequentially
     tl.to('.hero-pills', { opacity: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit")
-      .to(['.hero-cala-text', '.hero-orb-container'], { y: -60, duration: 1.5, ease: 'power1.inOut' }, "hero-exit")
-      .to('.hero-cala-text', { opacity: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=0.5")
+      .to(['.hero-Genesis-text', '.hero-orb-container'], { y: -60, duration: 1.5, ease: 'power1.inOut' }, "hero-exit")
+      .to('.hero-Genesis-text', { opacity: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=0.5")
       .to('.hero-orb-container', { opacity: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=1.0");
 
     // Phase 3: 2.5 to 3.5s - TalkWithCala fades in from bottom
-    tl.fromTo('.talk-with-cala', { opacity: 0, y: 80, scale: 1 }, { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' }, "phase3");
+    tl.fromTo('.talk-with-Genesis', { opacity: 0, y: 80, scale: 1 }, { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' }, "phase3");
 
-    // Phase 4: 3.0 to 5.0s - CALA CARE TEAM text moving from right and stops in the middle
+    // Phase 4: 3.0 to 5.0s - GENESIS CARE TEAM text moving from right and stops in the middle
     tl.fromTo('.care-team-text',
       { x: '100vw', opacity: 0 },
       { x: '0', opacity: 1, duration: 2.0, ease: 'power1.out' },
@@ -278,7 +277,7 @@ export default function CalaScrollSequence() {
       .to('.talk-button-ring', { opacity: 0, duration: 0.2 }, "phase3+=2.0");
 
     // Phase 5: 5.0 to 5.5s - TalkWithCala fades out (leaving the stopped scrolling text behind)
-    tl.to('.talk-with-cala', { opacity: 0, scale: 0.9, duration: 0.5, ease: 'power2.in' }, "phase5");
+    tl.to('.talk-with-Genesis', { opacity: 0, scale: 0.9, duration: 0.5, ease: 'power2.in' }, "phase5");
 
     // Phase 6: 5.5 to 6.0s - Mobile Phone container fades in
     tl.fromTo('.mobile-phone-container', { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out' }, "phase6");
@@ -315,7 +314,7 @@ export default function CalaScrollSequence() {
     );
 
     // Phase 8: 8.0 to 9.5s - Mobile UI elements fade out, 3D orb zooms, text fades out
-    tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator', { opacity: 0, duration: 0.2 }, "phase8");
+    tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-Genesis-text, .chat-message, .typing-indicator', { opacity: 0, duration: 0.2 }, "phase8");
     tl.to('.mobile-3d-orb', { scale: 15, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
 
     // Phase 9: 9.5 to 10.5s - Final full-screen content fades in
@@ -356,12 +355,7 @@ export default function CalaScrollSequence() {
     const faqStart = "phase15+=1.4";
     tl.to('.faq-container', { opacity: 1, duration: 0.2 }, faqStart);
 
-    // Halo ring illuminates around the central 3D orb
-    tl.fromTo('.faq-orb-halo',
-      { opacity: 0, scale: 0.85 },
-      { opacity: 1, scale: 1, duration: 1.0, ease: 'power2.out' },
-      `${faqStart}+=0.2`
-    );
+
 
     // Header slides down from top & fades in
     tl.fromTo('.faq-header',
@@ -443,24 +437,7 @@ export default function CalaScrollSequence() {
         }
       );
 
-      handoffTl.fromTo('.faq-orb-halo',
-        { x: 0, y: 0, scale: 1, opacity: 1 },
-        {
-          x: getDx,
-          y: getDy,
-          scale: () => {
-            const slot = document.querySelector('[data-orb-slot]');
-            const halo = document.querySelector('.faq-orb-halo') as HTMLElement;
-            if (!slot || !halo) return 1;
-            return slot.clientWidth / halo.offsetWidth;
-          },
-          opacity: 0,
-          ease: 'power2.inOut',
-          duration: 0.75,
-          immediateRender: false,
-        },
-        "<"
-      );
+
 
       handoffTl.fromTo('[data-orb-ring]',
         { opacity: 0 },
@@ -506,7 +483,7 @@ export default function CalaScrollSequence() {
         >
           <h1
             className="
-    hero-cala-text
+    hero-Genesis-text
     absolute
     z-0
     flex
@@ -519,11 +496,11 @@ export default function CalaScrollSequence() {
     tracking-[-0.035em]
     text-[#72B2AA]
     whitespace-nowrap
-    text-[clamp(140px,35vw,490px)]
+    text-[clamp(140px,30vw,300px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
   "
           >
-            CALA
+            GENESIS
           </h1>
 
           <div className="hero-orb-container relative z-10 flex items-center justify-center">
@@ -610,21 +587,21 @@ export default function CalaScrollSequence() {
           </div>
         </div>
 
-        {/* --- PHASE 3/4: CALA CARE TEAM TEXT (Moves continuously behind TalkWithCala and Phone) --- */}
+        {/* --- PHASE 3/4: GENESIS CARE TEAM TEXT (Moves continuously behind TalkWithCala and Phone) --- */}
         <div className="care-team-text absolute inset-x-0 bottom-4 sm:bottom-8 lg:bottom-12 flex items-center justify-center pointer-events-none select-none z-10 opacity-0">
           <h1 className="text-[#008080] font-black uppercase text-center flex items-center justify-center leading-none tracking-[-0.015em] whitespace-nowrap" style={{ fontSize: 'clamp(70px, 12.5vw, 195px)' }}>
-            CALA CARE TEAM
+            GENESIS CARE TEAM
           </h1>
         </div>
 
-        {/* --- PHASE 2: TALK WITH CALA SECTION --- */}
-        <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
+        {/* --- PHASE 2: TALK TO CARE TEAM SECTION --- */}
+        <div className="talk-with-Genesis absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]">
-              <span className="text-[#7EBDB9]">CALA</span> is a Hormone &amp; PCOS<br className="hidden sm:inline" /> Care, Guided Over Time.
+              <span className="text-[#7EBDB9]">GENESIS</span> is Men’s Fatherhood Preparation Program.
             </h2>
             <p className="mt-4 sm:mt-5 text-[#27272C] text-sm sm:text-base md:text-[18px] leading-[1.2] max-w-xl font-medium">
-              A structured care program for women who want to<br className="hidden sm:inline" /> understand their hormones, rebuild healthier cycles and<br className="hidden sm:inline" /> receive ongoing support.
+              For men preparing for fatherhood with structured fertility, hormone, sexual health, lifestyle, and emotional support.
             </p>
             <div className="mt-8 sm:mt-10 pointer-events-auto relative">
               <button className="talk-button group relative inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/90 backdrop-blur-md border-[2px] border-white/90 shadow-[0_12px_32px_rgba(0,0,0,0.06),_0_2px_8px_rgba(0,0,0,0.03)] cursor-pointer select-none transition-shadow">
@@ -632,7 +609,7 @@ export default function CalaScrollSequence() {
                   <CalaThreeCircle interactive={false} className="w-full h-full" />
                 </div>
                 <span className="font-semibold text-base tracking-tight text-[#1E2822] uppercase whitespace-nowrap">
-                  TALK WITH CALA
+                  TALK TO CARE TEAM
                 </span>
               </button>
               <div className="talk-button-ring absolute inset-[-4px] rounded-full border-2 border-cyan-400 pointer-events-none opacity-0" />
@@ -647,15 +624,15 @@ export default function CalaScrollSequence() {
             <div className="relative z-10 flex flex-col items-center justify-center pointer-events-auto">
               <div className="relative aspect-[872/1804] flex items-center justify-center select-none" style={{ width: `clamp(270px, ${325 * scaleFactor}px, 355px)` }}>
 
-                <img src="/mobile-cala.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
+                <img src="/mobile-cala.png" alt="Genesis Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
 
                 <div className="mobile-watermark mobile-ui absolute z-10 pointer-events-none select-none flex items-center justify-center" style={{ top: '40%', left: '50%' }}>
-                  <span className="text-[52px] sm:text-[92px] font-black tracking-widest text-[#72B2AA] uppercase">CALA</span>
+                  <span className="text-[42px] sm:text-[60px] font-black tracking-tight text-[#72B2AA] uppercase">GENESIS</span>
                 </div>
 
                 {/* ZOOMABLE 3D ORB */}
                 <div
-                  className="mobile-3d-orb absolute z-20 pointer-events-none rounded-full flex items-center justify-center overflow-hidden"
+                  className="mobile-3d-orb absolute z-20 pointer-events-none rounded-full flex items-center justify-center"
                   style={{
                     top: '50%', left: '50%',
                     width: `clamp(150px, ${168 * scaleFactor}px, 190px)`,
@@ -672,12 +649,32 @@ export default function CalaScrollSequence() {
                     displacementScale={1.2}
                     elasticity={0.5}
                     zIndex={10}
-                    className="w-full h-full rounded-full p-1.5 sm:p-2 pointer-events-auto border-[1.5px] border-white/60 bg-white/5 shadow-[0_20px_70px_rgba(36,168,184,0.35),_inset_0_2px_4px_rgba(255,255,255,0.7)]"
+                    className="
+      w-full
+      h-full
+      rounded-full
+      p-2.5
+      sm:p-4
+      pointer-events-auto
+      border
+      border-white/60
+
+      shadow-[0_20px_70px_rgba(36,168,184,0.35),inset_0_2px_4px_rgba(255,255,255,0.7)]
+    "
                   >
-                    <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
-                      <div className="absolute inset-0 w-[450%] h-[500%] flex items-center justify-center -translate-x-[37.5%] -translate-y-[37.5%]">
-                        <CalaThreeCircle interactive={false} className="w-full h-full scale-[0.25]" />
-                      </div>
+                    <div
+                      className="
+        relative
+        w-full
+        h-full
+        rounded-full
+        overflow-hidden
+        flex
+        items-center
+        justify-center
+      "
+                    >
+                      <CalaThreeCircle interactive={false} className="w-full h-full" />
                     </div>
                   </LiquidGlass>
                 </div>
@@ -707,7 +704,7 @@ export default function CalaScrollSequence() {
                 <div className="mobile-ui absolute z-35 inset-x-[7%] flex items-center justify-between pointer-events-none md:hidden" style={{ bottom: '4.8%' }}>
                   <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/85 backdrop-blur-sm border border-teal-100 shadow-[0_2px_6px_rgba(0,0,0,0.04)]">
                     <div className="w-2.5 h-2.5 rounded-full overflow-hidden shrink-0 border border-teal-300"><CalaThreeCircle interactive={false} className="w-full h-full" /></div>
-                    <span className="text-[8.5px] font-medium text-teal-800 tracking-tight">CALA Care</span>
+                    <span className="text-[8.5px] font-medium text-teal-800 tracking-tight">GENESIS Care</span>
                   </div>
                   <div className="typing-indicator flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/85 backdrop-blur-sm border border-orange-100 shadow-[0_2px_6px_rgba(0,0,0,0.04)] opacity-0">
                     <div className="flex items-center gap-0.5"><span className="w-1.5 h-1.5 rounded-full bg-[#E5855E] animate-pulse" /><span className="w-1.5 h-1.5 rounded-full bg-[#E5855E] animate-pulse delay-75" /><span className="w-1.5 h-1.5 rounded-full bg-[#E5855E] animate-pulse delay-150" /></div>
@@ -738,153 +735,112 @@ export default function CalaScrollSequence() {
                 What's Inside The Membership
               </h3>
               <h2 className="text-3xl sm:text-4xl md:text-3xl lg:text-[32px] font-bold text-white tracking-tight drop-shadow-md leading-[1.1]">
-                Care that looks at the whole<br className="hidden sm:inline" /> picture.
+                Pre-conception preparation and andrology guidance for future fathers.
               </h2>
             </div>
 
             {/* Grid of Cards */}
-            <div className="w-full grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-6">
-              
-              {/* Card 1 */}
-              <div className="col-span-1 md:col-span-2">
+            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+              <div className="col-span-1">
                 <LiquidGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 bg-white/5 shadow-2xl h-full w-full group">
-                  <div className="p-4 md:p-8 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-xs md:text-lg font-semibold mb-3 md:mb-5 drop-shadow-sm group-hover:drop-shadow-md transition-all">Medical Care</h4>
-                    <ul className="space-y-1.5 md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Same gynecologist</span>
+                  <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
+                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Medical & Fertility Guidance</h4>
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Dedicated andrologist</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Monthly detailed consultations</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Monthly deep fertility consultations</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Weekly care-team check-ins</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Weekly follow-ups</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Daily private chat support</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Daily private men’s health chat</span>
                       </li>
                     </ul>
                   </div>
                 </LiquidGlass>
               </div>
-
-              {/* Card 2 */}
-              <div className="col-span-1 md:col-span-2">
+              <div className="col-span-1">
                 <LiquidGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 bg-white/5 shadow-2xl h-full w-full group">
-                  <div className="p-4 md:p-8 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-xs md:text-lg font-semibold mb-3 md:mb-5 drop-shadow-sm group-hover:drop-shadow-md transition-all">Hormone & Cycle Restoration</h4>
-                    <ul className="space-y-1.5 md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Hormone tracking</span>
+                  <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
+                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Male Fertility Optimization</h4>
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Sperm health tracking</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Cycle rebuilding</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Hormone optimization</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Ovulation tracking</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Fertility readiness index</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>PCOS progress tracking</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Semen quality strategy</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Fertility readiness tracking</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Conception timing</span>
+                      </li>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Fertility roadmap</span>
                       </li>
                     </ul>
                   </div>
                 </LiquidGlass>
               </div>
-
-              {/* Card 3 */}
-              <div className="col-span-1 md:col-span-2">
+              <div className="col-span-1">
                 <LiquidGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 bg-white/5 shadow-2xl h-full w-full group">
-                  <div className="p-4 md:p-8 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-xs md:text-lg font-semibold mb-3 md:mb-5 drop-shadow-sm group-hover:drop-shadow-md transition-all">Intimate Health Care</h4>
-                    <ul className="space-y-1.5 md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Vaginal & uterine health guidance</span>
+                  <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
+                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Sexual, Lifestyle & Emotional Support</h4>
+                    <ul className="space-y-2">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Libido & performance support</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Period pain & PMS support</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Erectile health guidance</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Infection prevention guidance</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Infection prevention</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Pelvic health awareness</span>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Testicular health awareness</span>
+                      </li>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Personalized diet & workout plan</span>
+                      </li>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Lifestyle coaching & care companion</span>
+                      </li>
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                        <span>Emotional wellbeing & stress support</span>
                       </li>
                     </ul>
                   </div>
                 </LiquidGlass>
               </div>
-
-              {/* Card 4 */}
-              <div className="col-span-1 md:col-span-2 md:col-start-2">
-                <LiquidGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 bg-white/5 shadow-2xl h-full w-full group">
-                  <div className="p-4 md:p-8 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-xs md:text-lg font-semibold mb-3 md:mb-5 drop-shadow-sm group-hover:drop-shadow-md transition-all">Emotional Support</h4>
-                    <ul className="space-y-1.5 md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Dedicated care companion</span>
-                      </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Stress & wellbeing tracking</span>
-                      </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Monthly emotional health review</span>
-                      </li>
-                    </ul>
-                  </div>
-                </LiquidGlass>
-              </div>
-
-              {/* Card 5 */}
-              <div className="col-span-2 md:col-span-2">
-                <LiquidGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 bg-white/5 shadow-2xl h-full w-full group">
-                  <div className="p-4 md:p-8 text-left flex flex-col h-full items-start relative z-10">
-                    <h4 className="text-white text-xs md:text-lg font-semibold mb-3 md:mb-5 drop-shadow-sm group-hover:drop-shadow-md transition-all">Lifestyle Support</h4>
-                    <ul className="space-y-1.5 md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Personalized diet</span>
-                      </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Home / gym workout plan</span>
-                      </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Monthly plan adjustments</span>
-                      </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[10px] md:text-lg leading-snug font-medium">
-                        <span className="w-1 h-1 md:w-1.5 md:h-1.5 rounded-full bg-white mt-1 md:mt-2 shrink-0 shadow-sm" />
-                        <span>Lifestyle habit coaching</span>
-                      </li>
-                    </ul>
-                  </div>
-                </LiquidGlass>
-              </div>
-
             </div>
 
             {/* Footer Text */}
             <p className="mt-10 sm:mt-12 text-white font-medium text-sm sm:text-base md:text-[17px] drop-shadow max-w-4xl leading-[1.2]">
-              CALA brings medical, hormonal, intimate, emotional and lifestyle support together<br className="hidden sm:inline" /> in one ongoing care program.
+              GENESIS prepares men for fatherhood before conception begins.
             </p>
           </div>
         </div>
@@ -894,78 +850,65 @@ export default function CalaScrollSequence() {
           {/* Texts */}
           <div className="benefits-text-1 absolute inset-0 flex flex-col items-center justify-center opacity-0">
             <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-4">BENEFITS</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-white tracking-tight drop-shadow-md">Understand your cycles.</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-white tracking-tight drop-shadow-md">Prepare for fatherhood.</h2>
           </div>
           <div className="benefits-text-2 absolute inset-0 flex flex-col items-center justify-center opacity-0">
             <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-4">BENEFITS</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Track your progress.</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Improve reproductive health.</h2>
           </div>
           <div className="benefits-text-3 absolute inset-0 flex flex-col items-center justify-center opacity-0">
             <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-2">BENEFITS</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Stay supported.</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Stay guided.</h2>
           </div>
 
           {/* Pills (All appear together at the end) */}
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[45%] md:top-[40%] right-[calc(60%+10px)] sm:right-[calc(50%+90px)] md:right-[calc(50%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <LiquidGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Track hormone patterns</span>
+                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Sperm health</span>
               </LiquidGlass>
             </div>
           </div>
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] md:top-[65%] right-[calc(70%+20px)] sm:right-[calc(50%+60px)] md:right-[calc(50%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <LiquidGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Follow ovulation</span>
+                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Hormone optimization</span>
               </LiquidGlass>
             </div>
           </div>
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[40%] md:top-[42%] left-[calc(50%+30px)] sm:left-[calc(50%+90px)] md:left-[calc(50%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <LiquidGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Prepare for future fertility</span>
+                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Fertility readiness</span>
               </LiquidGlass>
             </div>
           </div>
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] left-[calc(60%+20px)] sm:left-[calc(50%+60px)] md:left-[calc(50%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <LiquidGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Build sustainable habits</span>
+                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Semen quality</span>
               </LiquidGlass>
             </div>
           </div>
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[calc(50%+130px)] md:top-[calc(50%+230px)] left-1/2">
             <div className="-translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
               <LiquidGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Monitor PCOS progress</span>
+                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Dedicated andrologist</span>
               </LiquidGlass>
             </div>
           </div>
         </div>
         {/* --- PHASE 16: FAQ Let's Figure Out Together --- */}
         <div className="faq-container absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none opacity-0 select-none">
-          {/* Luminous Halo Ring around the central 3D Orb */}
-          <div
-            className="faq-orb-halo hidden md:block absolute rounded-full pointer-events-none opacity-0 z-10"
-            style={{
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: `clamp(320px, ${495 * scaleFactor}px, 510px)`,
-              height: `clamp(320px, ${495 * scaleFactor}px, 510px)`,
-              borderRadius: '9999px',
-              border: '7px solid rgba(255, 255, 255, 0.75)',
-              boxShadow: '0 0 50px rgba(255, 255, 255, 0.85), 0 20px 60px rgba(36, 168, 184, 0.3), inset 0 0 25px rgba(255, 255, 255, 0.4)',
-            }}
-          />
+
 
           {/* Top Header */}
           <div className="faq-header text-center absolute top-6 sm:top-8 md:top-10 lg:top-12 pointer-events-auto z-30 flex flex-col items-center">
             <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-tight">
-              Let’s Figure Out Together with
+              {"Questions you shouldn't have to figure out alone."}
             </h2>
-            <span className="text-[#7EBDB9] font-bold uppercase tracking-tight text-2xl sm:text-3xl md:text-[34px] lg:text-[32px] mt-0.5 ">
-              CALA
+            <span className="text-[#7EBDB9] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
+              GENESIS
             </span>
           </div>
 
@@ -1058,7 +1001,7 @@ export default function CalaScrollSequence() {
                       <CalaThreeCircle interactive={false} className="w-full h-full scale-[1.3]" />
                     </div>
                     <span className="text-[10px] sm:text-[13px] font-bold text-[#2A857D] tracking-wide">
-                      CALA Care Team
+                      GENESIS Care Team
                     </span>
                   </div>
 
@@ -1083,7 +1026,7 @@ export default function CalaScrollSequence() {
 
           {/* Mobile Layout (< md) */}
           <div className="flex md:hidden absolute inset-x-0 bottom-4 top-[100px] flex-col justify-start items-center px-4 pointer-events-auto z-40 overflow-y-auto pt-2 pb-6">
-            
+
             {/* Answer Box (TOP) */}
             <div className="faq-right-box w-full max-w-[340px] mb-auto relative z-10 shrink-0">
               <div className="p-5 rounded-3xl border border-white/80 bg-white/95 shadow-xl backdrop-blur-xl text-left relative overflow-hidden">
@@ -1091,7 +1034,7 @@ export default function CalaScrollSequence() {
                   <div className="w-5 h-5 rounded-full overflow-hidden border border-teal-300 shadow-[0_2px_8px_rgba(36,168,184,0.35)] shrink-0">
                     <CalaThreeCircle interactive={false} className="w-full h-full scale-[1.3]" />
                   </div>
-                  <span className="text-[12px] font-bold text-[#2A857D] tracking-wide">CALA Care Team</span>
+                  <span className="text-[12px] font-bold text-[#2A857D] tracking-wide">GENESIS Care Team</span>
                 </div>
                 <AnimatePresence mode="wait">
                   <motion.p

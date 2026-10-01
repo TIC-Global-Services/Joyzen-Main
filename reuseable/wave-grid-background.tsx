@@ -493,12 +493,21 @@ export function WaveGridBackground({
         offsetAttribute.needsUpdate = true;
 
         // ── Direct WebGL Renderer ─────────────────────────────────────────────
-        const renderer = new THREE.WebGLRenderer({
-            canvas,
-            antialias: !isMobile, // Disable MSAA on mobile for huge performance gain
-            alpha: true,
-            powerPreference: "high-performance",
-        });
+        let renderer: THREE.WebGLRenderer;
+        try {
+            renderer = new THREE.WebGLRenderer({
+                canvas,
+                antialias: !isMobile, // Disable MSAA on mobile for huge performance gain
+                alpha: true,
+                powerPreference: "default",
+            });
+        } catch (err) {
+            console.warn("WaveGridBackground: WebGL context creation failed or WebGL unavailable.", err);
+            return;
+        }
+
+        if (!renderer) return;
+
         renderer.toneMapping = THREE.NoToneMapping;
         if (!isMobile) {
             renderer.shadowMap.enabled = true;
@@ -563,7 +572,9 @@ export function WaveGridBackground({
         }
 
         return () => {
-            renderer.setAnimationLoop(null);
+            if (renderer) {
+                renderer.setAnimationLoop(null);
+            }
             if (!isMobile) {
                 window.removeEventListener("mousemove", onMouseMove);
                 window.removeEventListener("pointermove", onPointerMove);
@@ -578,7 +589,9 @@ export function WaveGridBackground({
             rayPlane.geometry.dispose();
             (rayPlane.material as THREE.Material).dispose();
             trailTexture.dispose();
-            renderer.dispose();
+            if (renderer) {
+                renderer.dispose();
+            }
         };
     }, [gridSize, colorBase, colorHigh]);
 
