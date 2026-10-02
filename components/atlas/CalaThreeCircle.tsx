@@ -62,6 +62,10 @@ export default function CalaThreeCircle({
       textureUrl ||
       '/cala-planet-texture.png';
 
+    const isMobileDevice =
+      typeof window !== 'undefined' &&
+      (window.innerWidth < 768 || 'ontouchstart' in window);
+
     // 1. Scene setup
     const scene = new THREE.Scene();
 
@@ -69,14 +73,24 @@ export default function CalaThreeCircle({
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
     camera.position.set(0, 0, 5.2);
 
-    // 3. Renderer with high-DPI and alpha transparency
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance',
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // 3. Renderer with high-DPI and alpha transparency (optimized for mobile)
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: !isMobileDevice, // Disable MSAA on mobile for huge fill-rate boost
+        powerPreference: 'high-performance',
+      });
+    } catch (err) {
+      console.warn('CalaThreeCircle: WebGL initialization failed', err);
+      return;
+    }
+
+    const pixelRatio = isMobileDevice
+      ? Math.min(window.devicePixelRatio || 1, 1.3)
+      : Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(pixelRatio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.1;
 
@@ -84,7 +98,8 @@ export default function CalaThreeCircle({
 
     // 5. 3D Planet Globe Model (True 3D Sphere, not flat 2D)
     const PLANET_RADIUS = 1.8;
-    const sphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS, 64, 64);
+    const sphereSegments = isMobileDevice ? 36 : 64;
+    const sphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS, sphereSegments, sphereSegments);
 
     // Load seamless 360-degree planetary texture
     const textureLoader = new THREE.TextureLoader();
@@ -128,7 +143,7 @@ export default function CalaThreeCircle({
     const planetMesh = new THREE.Mesh(sphereGeometry, planetMaterial);
 
     // 6. Atmospheric Fresnel Rim Glow (Glowing planetary limb / halo)
-    const atmosphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.02, 64, 64);
+    const atmosphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.02, sphereSegments, sphereSegments);
     const atmosphereMaterial = new THREE.ShaderMaterial({
       vertexShader: `
         varying vec3 vNormal;
@@ -218,7 +233,22 @@ export default function CalaThreeCircle({
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(container);
 
-    // 10. Animation, Planetary Physics & User Drag Controls
+    // 10. Visibility detection & render throttling
+    let isVisible = true;
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            isVisible = entry.isIntersecting;
+          }
+        },
+        { rootMargin: '120px' }
+      );
+      observer.observe(container);
+    }
+
+    // 11. Animation, Planetary Physics & User Drag Controls
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
@@ -298,6 +328,11 @@ export default function CalaThreeCircle({
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
+      // Skip render pass completely when off-screen or element is visually hidden
+      if (!isVisible || container.offsetParent === null) {
+        return;
+      }
+
       const delta = Math.min(clock.getDelta(), 0.1);
 
       // Read motion values if provided, else use local pointer
@@ -352,10 +387,13 @@ export default function CalaThreeCircle({
 
     animate();
 
-    // 11. Cleanup
+    // 12. Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
       resizeObserver.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
       if (interactive) {
         container.removeEventListener('pointerdown', onPointerDown);
         container.removeEventListener('pointermove', onPointerMove);

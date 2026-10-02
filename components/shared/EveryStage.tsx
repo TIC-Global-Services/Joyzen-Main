@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -134,6 +134,51 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
     return pathname === prog.href || pathname.startsWith(prog.href + '/');
   };
 
+  // Find active program index
+  const activeIndex = ALL_PROGRAMS.findIndex((prog) => isProgramActive(prog));
+  const initialIndex = activeIndex >= 0 ? activeIndex : 0;
+  const [mobileIndex, setMobileIndex] = useState<number>(initialIndex);
+
+  useEffect(() => {
+    const idx = ALL_PROGRAMS.findIndex((prog) => isProgramActive(prog));
+    if (idx >= 0) {
+      setMobileIndex(idx);
+    }
+  }, [pathname, activeId]);
+
+  // Touch swipe support for mobile
+  const [touchStartX, setTouchStartX] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStartX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX === null) return;
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (diff > 45) {
+      // Swiped left -> next
+      setMobileIndex((prev) => (prev + 1) % ALL_PROGRAMS.length);
+    } else if (diff < -45) {
+      // Swiped right -> prev
+      setMobileIndex((prev) => (prev - 1 + ALL_PROGRAMS.length) % ALL_PROGRAMS.length);
+    }
+    setTouchStartX(null);
+  };
+
+  const handlePrev = () => {
+    setMobileIndex((prev) => (prev - 1 + ALL_PROGRAMS.length) % ALL_PROGRAMS.length);
+  };
+
+  const handleNext = () => {
+    setMobileIndex((prev) => (prev + 1) % ALL_PROGRAMS.length);
+  };
+
+  // 3 programs for mobile view
+  const prevProg = ALL_PROGRAMS[(mobileIndex - 1 + ALL_PROGRAMS.length) % ALL_PROGRAMS.length];
+  const currProg = ALL_PROGRAMS[mobileIndex];
+  const nextProg = ALL_PROGRAMS[(mobileIndex + 1) % ALL_PROGRAMS.length];
+
   return (
     <footer
       className={`w-full bg-[#FAF8F5] border-t border-[#EAE6DE]/60 pt-20 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 select-none overflow-hidden ${className}`}
@@ -160,9 +205,138 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
           From prevention to parenthood — care that evolves with you.
         </motion.p>
 
-        {/* 9 3D Planets Navigation Row */}
-        <div className="mt-14 sm:mt-20 w-full overflow-x-auto no-scrollbar scroll-smooth py-6">
-          <div className="flex items-center justify-start lg:justify-between min-w-max lg:min-w-0 mx-auto px-4 gap-4 sm:gap-6 lg:gap-3">
+        {/* MOBILE: Focused 3-Item View with Active 3D Model in Center */}
+        <div
+          className="block lg:hidden mt-12 w-full max-w-sm mx-auto px-1 select-none"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="relative flex items-center justify-between gap-1 sm:gap-2">
+            {/* Prev Chevron Button */}
+            <button
+              type="button"
+              onClick={handlePrev}
+              aria-label="Previous Program"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-zinc-200/80 shadow-sm flex items-center justify-center text-zinc-600 hover:text-zinc-900 active:scale-90 transition-all shrink-0 z-20 cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            {/* 3-Item Flex Row */}
+            <div className="flex-1 flex items-center justify-center gap-3 sm:gap-5 py-3">
+              {/* Previous Item (Left) */}
+              <Link
+                href={prevProg.href}
+                className="flex flex-col items-center opacity-85 active:scale-95 transition-all text-center max-w-[76px]"
+              >
+                <div className="w-14 h-14 sm:w-16 sm:h-16 relative rounded-full overflow-hidden shadow-sm border border-white/80 shrink-0">
+                  <Image
+                    src={prevProg.image}
+                    alt={prevProg.title}
+                    width={96}
+                    height={96}
+                    priority={false}
+                    className="w-full h-full object-cover select-none pointer-events-none"
+                  />
+                </div>
+                <span className="mt-2 text-[10px] sm:text-[11px] font-medium text-zinc-600 line-clamp-1 leading-tight">
+                  {prevProg.title}
+                </span>
+              </Link>
+
+              {/* Active Item (Center - 3D Model) */}
+              <Link
+                href={currProg.href}
+                className="flex flex-col items-center transition-all text-center z-10 max-w-[110px]"
+              >
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center shrink-0">
+                  {/* Active Outer Luminous Glow & Ring */}
+                  <div
+                    className="absolute -inset-2.5 rounded-full pointer-events-none blur-md opacity-70 animate-pulse"
+                    style={{
+                      background: `radial-gradient(circle, ${currProg.glowColor}50 0%, ${currProg.glowColor}15 70%, transparent 100%)`,
+                    }}
+                  />
+                  <div className="absolute -inset-1 rounded-full pointer-events-none border-2 border-white/90 shadow-[0_0_20px_rgba(255,255,255,0.7)]" />
+
+                  {/* 3D WebGL Model */}
+                  <div className="w-full h-full relative z-10 flex items-center justify-center rounded-full overflow-hidden">
+                    <currProg.Component interactive={false} className="w-full h-full" />
+                  </div>
+
+                  {/* Active Brand Name Overlay */}
+                  <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none select-none">
+                    <span className="font-extrabold text-white text-xs sm:text-sm tracking-wider drop-shadow-[0_2px_6px_rgba(0,0,0,0.75)] uppercase">
+                      {currProg.name}
+                    </span>
+                  </div>
+                </div>
+
+                <span className="mt-2.5 text-xs sm:text-[13px] font-bold text-[#1E2822] line-clamp-1 leading-tight">
+                  {currProg.title}
+                </span>
+              </Link>
+
+              {/* Next Item (Right) */}
+              <Link
+                href={nextProg.href}
+                className="flex flex-col items-center opacity-85 active:scale-95 transition-all text-center max-w-[76px]"
+              >
+                <div className="w-14 h-14 sm:w-16 sm:h-16 relative rounded-full overflow-hidden shadow-sm border border-white/80 shrink-0">
+                  <Image
+                    src={nextProg.image}
+                    alt={nextProg.title}
+                    width={96}
+                    height={96}
+                    priority={false}
+                    className="w-full h-full object-cover select-none pointer-events-none"
+                  />
+                </div>
+                <span className="mt-2 text-[10px] sm:text-[11px] font-medium text-zinc-600 line-clamp-1 leading-tight">
+                  {nextProg.title}
+                </span>
+              </Link>
+            </div>
+
+            {/* Next Chevron Button */}
+            <button
+              type="button"
+              onClick={handleNext}
+              aria-label="Next Program"
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-zinc-200/80 shadow-sm flex items-center justify-center text-zinc-600 hover:text-zinc-900 active:scale-90 transition-all shrink-0 z-20 cursor-pointer"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+
+          {/* 9 Stage Dots Pagination */}
+          <div className="flex items-center justify-center gap-1.5 mt-5">
+            {ALL_PROGRAMS.map((prog, i) => {
+              const isCurrent = i === mobileIndex;
+              return (
+                <button
+                  key={`dot-${prog.id}`}
+                  type="button"
+                  onClick={() => setMobileIndex(i)}
+                  aria-label={`Go to stage ${prog.name}`}
+                  className={`transition-all duration-300 rounded-full cursor-pointer ${
+                    isCurrent
+                      ? 'w-5 h-1.5 bg-[#E5855E]'
+                      : 'w-1.5 h-1.5 bg-zinc-300 hover:bg-zinc-400'
+                  }`}
+                />
+              );
+            })}
+          </div>
+        </div>
+
+        {/* DESKTOP: 9 3D Planets Navigation Row */}
+        <div className="hidden lg:block mt-14 sm:mt-20 w-full overflow-x-auto no-scrollbar scroll-smooth py-6">
+          <div className="flex items-center justify-between min-w-0 mx-auto px-4 gap-3">
             {ALL_PROGRAMS.map((prog) => {
               const active = isProgramActive(prog);
               const isHovered = hoveredId === prog.id;

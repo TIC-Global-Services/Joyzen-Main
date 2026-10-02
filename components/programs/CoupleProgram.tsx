@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 import type { MotionValue } from 'framer-motion';
 
@@ -15,6 +17,306 @@ export interface CoupleProgramProps {
   interactive?: boolean;
 }
 
+const PLANET_RADIUS = 1.8;
+const BASE_ROTATION_SPEED = 0.35;
+
+// Shaders for Atmospheric Fresnel Rim Glow (Glowing planetary limb / halo)
+const ATMOSPHERE_VERTEX_SHADER = `
+  varying vec3 vNormal;
+  void main() {
+    vNormal = normalize(normalMatrix * normal);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const ATMOSPHERE_FRAGMENT_SHADER = `
+  varying vec3 vNormal;
+  uniform vec3 uGlowColor;
+  uniform float uIntensity;
+  void main() {
+    float rim = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
+    float glow = pow(rim, 2.8) * uIntensity;
+    gl_FragColor = vec4(uGlowColor, glow * 0.85);
+  }
+`;
+
+// Shaders for Outer Atmospheric Space Aura (Subtle soft space haze)
+const OUTER_AURA_VERTEX_SHADER = `
+  varying vec3 vNormal;
+  void main() {
+    vNormal = normalize(normalMatrix * normal);
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+
+const OUTER_AURA_FRAGMENT_SHADER = `
+  varying vec3 vNormal;
+  uniform vec3 uAuraColor;
+  uniform float uIntensity;
+  void main() {
+    float rim = max(0.0, 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))));
+    float glow = pow(rim, 3.2) * 0.55 * uIntensity;
+    gl_FragColor = vec4(uAuraColor, glow);
+  }
+`;
+
+// Fallback sphere shown during texture load or error
+function PlanetFallback({
+  planetMeshRef,
+}: {
+  planetMeshRef: React.RefObject<THREE.Mesh | null>;
+}) {
+  return (
+    <mesh ref={planetMeshRef}>
+      <sphereGeometry args={[PLANET_RADIUS, 64, 64]} />
+      <meshBasicMaterial color="#fcd34d" />
+    </mesh>
+  );
+}
+
+// Error Boundary for safe texture loading
+interface ErrorBoundaryProps {
+  fallback: React.ReactNode;
+  children: React.ReactNode;
+}
+
+interface ErrorBoundaryState {
+  hasError: boolean;
+}
+
+class TextureErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+  constructor(props: ErrorBoundaryProps) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    console.warn('CoupleProgram: Texture loading fallback activated:', error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
+// 3D Planet Globe Model (True 3D Sphere with seamless planetary texture)
+function PlanetGlobe({
+  textureUrl,
+  planetMeshRef,
+}: {
+  textureUrl: string;
+  planetMeshRef: React.RefObject<THREE.Mesh | null>;
+}) {
+  const texture = useTexture(textureUrl);
+
+  useEffect(() => {
+    if (texture) {
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.wrapS = THREE.RepeatWrapping;
+      texture.wrapT = THREE.ClampToEdgeWrapping;
+      texture.generateMipmaps = true;
+      texture.minFilter = THREE.LinearMipmapLinearFilter;
+      texture.magFilter = THREE.LinearFilter;
+      texture.needsUpdate = true;
+    }
+  }, [texture]);
+
+  return (
+    <mesh ref={planetMeshRef}>
+      <sphereGeometry args={[PLANET_RADIUS, 64, 64]} />
+      <meshBasicMaterial map={texture} />
+    </mesh>
+  );
+}
+
+// Preload default planetary texture
+if (typeof window !== 'undefined') {
+  try {
+    useTexture.preload('/programs/Couple-Program-planet.png');
+  } catch {
+    // Silently continue if preload fails
+  }
+}
+
+interface InteractionState {
+  localMouseX: number;
+  localMouseY: number;
+  isDragging: boolean;
+  lastPointerX: number;
+  lastPointerY: number;
+  currentSpinVelocity: number;
+  pitchVelocity: number;
+  curTiltX: number;
+  curTiltY: number;
+  curShockScale: number;
+  curGlowIntensity: number;
+}
+
+interface PlanetOrbProps {
+  textureUrl: string;
+  glowColor: string | number;
+  auraColor: string | number;
+  isShocked: boolean;
+  mouseX?: MotionValue<number>;
+  mouseY?: MotionValue<number>;
+  interactionRef: React.RefObject<InteractionState>;
+  planetMeshRef: React.RefObject<THREE.Mesh | null>;
+  axialTiltGroupRef: React.RefObject<THREE.Group | null>;
+}
+
+function PlanetOrb({
+  textureUrl,
+  glowColor,
+  auraColor,
+  isShocked,
+  mouseX,
+  mouseY,
+  interactionRef,
+  planetMeshRef,
+  axialTiltGroupRef,
+}: PlanetOrbProps) {
+  const orbGroupRef = useRef<THREE.Group>(null);
+  const atmosphereMeshRef = useRef<THREE.Mesh>(null);
+  const outerAuraMeshRef = useRef<THREE.Mesh>(null);
+  const atmosphereMatRef = useRef<THREE.ShaderMaterial>(null);
+  const outerAuraMatRef = useRef<THREE.ShaderMaterial>(null);
+  const isShockedRef = useRef(isShocked);
+
+  useEffect(() => {
+    isShockedRef.current = isShocked;
+  }, [isShocked]);
+
+  const atmosphereUniforms = useMemo(
+    () => ({
+      uGlowColor: { value: new THREE.Color(glowColor as THREE.ColorRepresentation) },
+      uIntensity: { value: 1.0 },
+    }),
+    []
+  );
+
+  const outerAuraUniforms = useMemo(
+    () => ({
+      uAuraColor: { value: new THREE.Color(auraColor as THREE.ColorRepresentation) },
+      uIntensity: { value: 1.0 },
+    }),
+    []
+  );
+
+  useEffect(() => {
+    atmosphereUniforms.uGlowColor.value.set(glowColor as THREE.ColorRepresentation);
+  }, [glowColor, atmosphereUniforms]);
+
+  useEffect(() => {
+    outerAuraUniforms.uAuraColor.value.set(auraColor as THREE.ColorRepresentation);
+  }, [auraColor, outerAuraUniforms]);
+
+  useFrame((_, delta) => {
+    const d = Math.min(delta, 0.1);
+    const interaction = interactionRef.current;
+    if (!interaction) return;
+
+    let normX = interaction.localMouseX;
+    let normY = interaction.localMouseY;
+
+    if (mouseX && mouseY) {
+      const mx = mouseX.get();
+      const my = mouseY.get();
+      if (mx !== 0 || my !== 0) {
+        normX = Math.max(-1, Math.min(1, mx / 380));
+        normY = Math.max(-1, Math.min(1, my / 380));
+      }
+    }
+
+    if (!interaction.isDragging) {
+      interaction.currentSpinVelocity *= 0.94;
+      interaction.pitchVelocity *= 0.94;
+
+      if (axialTiltGroupRef.current) {
+        axialTiltGroupRef.current.rotation.x = Math.max(
+          -0.5,
+          Math.min(0.5, axialTiltGroupRef.current.rotation.x + interaction.pitchVelocity)
+        );
+      }
+
+      if (planetMeshRef.current) {
+        planetMeshRef.current.rotation.y +=
+          (BASE_ROTATION_SPEED + interaction.currentSpinVelocity * 60) * d;
+      }
+    }
+
+    const MAX_TILT = 0.22;
+    const targetTiltY = normX * MAX_TILT;
+    const targetTiltX = -normY * MAX_TILT;
+
+    interaction.curTiltX += (targetTiltX - interaction.curTiltX) * 0.07;
+    interaction.curTiltY += (targetTiltY - interaction.curTiltY) * 0.07;
+
+    const targetShock = isShockedRef.current ? 1.08 : 1.0;
+    const targetGlow = isShockedRef.current ? 1.6 : 1.0;
+    interaction.curShockScale += (targetShock - interaction.curShockScale) * 0.14;
+    interaction.curGlowIntensity += (targetGlow - interaction.curGlowIntensity) * 0.12;
+
+    atmosphereUniforms.uIntensity.value = interaction.curGlowIntensity;
+    outerAuraUniforms.uIntensity.value = interaction.curGlowIntensity;
+
+    if (orbGroupRef.current) {
+      orbGroupRef.current.rotation.x = interaction.curTiltX;
+      orbGroupRef.current.rotation.y = interaction.curTiltY;
+      orbGroupRef.current.scale.setScalar(interaction.curShockScale);
+    }
+  });
+
+  return (
+    <group ref={orbGroupRef}>
+      {/* Axial Tilt Group Hierarchy */}
+      <group ref={axialTiltGroupRef} rotation={[0.12, 0, 0.38]}>
+        <TextureErrorBoundary fallback={<PlanetFallback planetMeshRef={planetMeshRef} />}>
+          <Suspense fallback={<PlanetFallback planetMeshRef={planetMeshRef} />}>
+            <PlanetGlobe textureUrl={textureUrl} planetMeshRef={planetMeshRef} />
+          </Suspense>
+        </TextureErrorBoundary>
+
+        {/* Atmospheric Fresnel Rim Glow */}
+        <mesh ref={atmosphereMeshRef}>
+          <sphereGeometry args={[PLANET_RADIUS * 1.02, 64, 64]} />
+          <shaderMaterial
+            ref={atmosphereMatRef}
+            vertexShader={ATMOSPHERE_VERTEX_SHADER}
+            fragmentShader={ATMOSPHERE_FRAGMENT_SHADER}
+            uniforms={atmosphereUniforms}
+            blending={THREE.AdditiveBlending}
+            transparent
+            side={THREE.FrontSide}
+            depthWrite={false}
+          />
+        </mesh>
+      </group>
+
+      {/* Outer Atmospheric Space Aura */}
+      <mesh ref={outerAuraMeshRef}>
+        <sphereGeometry args={[PLANET_RADIUS * 1.12, 48, 48]} />
+        <shaderMaterial
+          ref={outerAuraMatRef}
+          vertexShader={OUTER_AURA_VERTEX_SHADER}
+          fragmentShader={OUTER_AURA_FRAGMENT_SHADER}
+          uniforms={outerAuraUniforms}
+          blending={THREE.AdditiveBlending}
+          side={THREE.BackSide}
+          transparent
+          depthWrite={false}
+        />
+      </mesh>
+    </group>
+  );
+}
+
 export default function CoupleProgram({
   className = 'w-full h-full',
   mouseX,
@@ -25,348 +327,142 @@ export default function CoupleProgram({
   auraColor = 0xf59e0b,
   interactive = true,
 }: CoupleProgramProps) {
+  const [mounted, setMounted] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const isShockedRef = useRef(isShocked);
+  const planetMeshRef = useRef<THREE.Mesh>(null);
+  const axialTiltGroupRef = useRef<THREE.Group>(null);
 
-  // Keep ref in sync without triggering re-creation of Three.js scene
+  const interactionRef = useRef<InteractionState>({
+    localMouseX: 0,
+    localMouseY: 0,
+    isDragging: false,
+    lastPointerX: 0,
+    lastPointerY: 0,
+    currentSpinVelocity: 0,
+    pitchVelocity: 0,
+    curTiltX: 0,
+    curTiltY: 0,
+    curShockScale: 1.0,
+    curGlowIntensity: 1.0,
+  });
+
   useEffect(() => {
-    isShockedRef.current = isShocked;
-  }, [isShocked]);
+    setMounted(true);
+  }, []);
 
-  useEffect(() => {
-    const container = containerRef.current;
-    const canvas = canvasRef.current;
-    if (!container || !canvas) return;
+  const resolvedTextureUrl =
+    !textureUrl ||
+    textureUrl === '/programs/Couple-Program.svg' ||
+    textureUrl === '/programs/Couple-Program.png'
+      ? '/programs/Couple-Program-planet.png'
+      : textureUrl;
 
-    // Resolve to seamless 360-degree equirectangular planetary texture so the texture completely fills the model
-    const resolvedTextureUrl =
-      !textureUrl ||
-      textureUrl === '/programs/Couple-Program.svg' ||
-      textureUrl === '/programs/Couple-Program.png'
-        ? '/programs/Couple-Program-planet.png'
-        : textureUrl;
-
-    // 1. Scene setup
-    const scene = new THREE.Scene();
-
-    // 2. Camera setup fitted for 3D planetary sphere
-    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
-    camera.position.set(0, 0, 5.85);
-
-    // 3. Renderer with high-DPI and alpha transparency
-    let renderer: THREE.WebGLRenderer;
+  const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!interactive) return;
+    const interaction = interactionRef.current;
+    interaction.isDragging = true;
+    interaction.lastPointerX = e.clientX;
+    interaction.lastPointerY = e.clientY;
     try {
-      renderer = new THREE.WebGLRenderer({
-        canvas,
-        alpha: true,
-        antialias: true,
-        powerPreference: 'default',
-      });
-    } catch (err) {
-      console.warn('CoupleProgram: WebGL unavailable', err);
-      return;
-    }
+      e.currentTarget.setPointerCapture(e.pointerId);
+    } catch {}
+  };
 
-    if (!renderer) return;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+  const handlePointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!interactive) return;
+    const container = containerRef.current;
+    if (!container) return;
+    const interaction = interactionRef.current;
 
-    // 4. 3D Planet Globe Model (True 3D Sphere, not flat 2D)
-    const PLANET_RADIUS = 1.8;
-    const sphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS, 64, 64);
+    const rect = container.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    interaction.localMouseX = (e.clientX - cx) / (rect.width / 2);
+    interaction.localMouseY = (e.clientY - cy) / (rect.height / 2);
 
-    // Load seamless planetary texture
-    const textureLoader = new THREE.TextureLoader();
-    const texture = textureLoader.load(
-      resolvedTextureUrl,
-      (tex) => {
-        tex.colorSpace = THREE.SRGBColorSpace;
-        tex.wrapS = THREE.RepeatWrapping;
-        tex.wrapT = THREE.ClampToEdgeWrapping;
-        tex.generateMipmaps = true;
-        tex.minFilter = THREE.LinearMipmapLinearFilter;
-        tex.magFilter = THREE.LinearFilter;
-        tex.needsUpdate = true;
-      },
-      undefined,
-      (err) => {
-        console.warn('Error loading Couple Program texture, fallback to svg:', err);
-        textureLoader.load('/programs/Couple-Program.svg', (fallbackTex) => {
-          fallbackTex.colorSpace = THREE.SRGBColorSpace;
-          fallbackTex.wrapS = THREE.RepeatWrapping;
-          fallbackTex.wrapT = THREE.ClampToEdgeWrapping;
-          fallbackTex.needsUpdate = true;
-          planetMaterial.map = fallbackTex;
-          planetMaterial.needsUpdate = true;
-        });
+    if (interaction.isDragging) {
+      const dx = e.clientX - interaction.lastPointerX;
+      const dy = e.clientY - interaction.lastPointerY;
+      interaction.lastPointerX = e.clientX;
+      interaction.lastPointerY = e.clientY;
+
+      if (planetMeshRef.current) {
+        planetMeshRef.current.rotation.y += dx * 0.007;
       }
-    );
+      interaction.currentSpinVelocity = dx * 0.007;
 
-    texture.colorSpace = THREE.SRGBColorSpace;
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.ClampToEdgeWrapping;
-    texture.generateMipmaps = true;
-    texture.minFilter = THREE.LinearMipmapLinearFilter;
-    texture.magFilter = THREE.LinearFilter;
-
-    // Pure unlit planetary surface material (preserves pure texture colors with zero light glare or harsh shadows)
-    const planetMaterial = new THREE.MeshBasicMaterial({
-      map: texture,
-    });
-
-    const planetMesh = new THREE.Mesh(sphereGeometry, planetMaterial);
-
-    // 5. Atmospheric Fresnel Rim Glow (Glowing planetary limb / halo)
-    const atmosphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.02, 64, 64);
-    const atmosphereMaterial = new THREE.ShaderMaterial({
-      vertexShader: `
-        varying vec3 vNormal;
-        void main() {
-          vNormal = normalize(normalMatrix * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying vec3 vNormal;
-        uniform vec3 uGlowColor;
-        uniform float uIntensity;
-        void main() {
-          float rim = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
-          float glow = pow(rim, 2.8) * uIntensity;
-          gl_FragColor = vec4(uGlowColor, glow * 0.85);
-        }
-      `,
-      uniforms: {
-        uGlowColor: { value: new THREE.Color(glowColor) },
-        uIntensity: { value: 1.0 },
-      },
-      blending: THREE.AdditiveBlending,
-      transparent: true,
-      side: THREE.FrontSide,
-      depthWrite: false,
-    });
-    const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-
-    // 6. Outer Atmospheric Space Aura (Subtle soft space haze)
-    const outerAuraGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.12, 48, 48);
-    const outerAuraMaterial = new THREE.ShaderMaterial({
-      vertexShader: `
-        varying vec3 vNormal;
-        void main() {
-          vNormal = normalize(normalMatrix * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying vec3 vNormal;
-        uniform vec3 uAuraColor;
-        uniform float uIntensity;
-        void main() {
-          float rim = max(0.0, 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))));
-          float glow = pow(rim, 3.2) * 0.55 * uIntensity;
-          gl_FragColor = vec4(uAuraColor, glow);
-        }
-      `,
-      uniforms: {
-        uAuraColor: { value: new THREE.Color(auraColor) },
-        uIntensity: { value: 1.0 },
-      },
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
-      transparent: true,
-      depthWrite: false,
-    });
-    const outerAuraMesh = new THREE.Mesh(outerAuraGeometry, outerAuraMaterial);
-
-    // 7. Axial Tilt Group Hierarchy
-    const axialTiltGroup = new THREE.Group();
-    axialTiltGroup.rotation.z = 0.38;
-    axialTiltGroup.rotation.x = 0.12;
-    axialTiltGroup.add(planetMesh);
-    axialTiltGroup.add(atmosphereMesh);
-
-    // Master Planet Group
-    const orbGroup = new THREE.Group();
-    orbGroup.add(axialTiltGroup);
-    orbGroup.add(outerAuraMesh);
-    scene.add(orbGroup);
-
-    // 8. Resize handler
-    const handleResize = () => {
-      if (!container || !renderer) return;
-      const width = container.clientWidth || 360;
-      const height = container.clientHeight || 360;
-      camera.aspect = width / height;
-      camera.updateProjectionMatrix();
-      renderer.setSize(width, height, false);
-    };
-
-    handleResize();
-    const resizeObserver = new ResizeObserver(handleResize);
-    resizeObserver.observe(container);
-
-    // 9. Animation, Planetary Physics & User Drag Controls
-    let animationFrameId: number;
-    const clock = new THREE.Clock();
-
-    const BASE_ROTATION_SPEED = 0.35;
-    let currentSpinVelocity = 0;
-    let pitchVelocity = 0;
-
-    let curTiltX = 0;
-    let curTiltY = 0;
-    let curShockScale = 1.0;
-    let curGlowIntensity = 1.0;
-
-    // Pointer tracking & drag state
-    let localMouseX = 0;
-    let localMouseY = 0;
-    let isDragging = false;
-    let lastPointerX = 0;
-    let lastPointerY = 0;
-
-    const onPointerDown = (e: PointerEvent) => {
-      isDragging = true;
-      lastPointerX = e.clientX;
-      lastPointerY = e.clientY;
-      try {
-        container.setPointerCapture(e.pointerId);
-      } catch { }
-    };
-
-    const onPointerMove = (e: PointerEvent) => {
-      const rect = container.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      localMouseX = (e.clientX - cx) / (rect.width / 2);
-      localMouseY = (e.clientY - cy) / (rect.height / 2);
-
-      if (isDragging) {
-        const dx = e.clientX - lastPointerX;
-        const dy = e.clientY - lastPointerY;
-        lastPointerX = e.clientX;
-        lastPointerY = e.clientY;
-
-        planetMesh.rotation.y += dx * 0.007;
-        currentSpinVelocity = dx * 0.007;
-
-        axialTiltGroup.rotation.x = Math.max(
+      if (axialTiltGroupRef.current) {
+        axialTiltGroupRef.current.rotation.x = Math.max(
           -0.5,
-          Math.min(0.5, axialTiltGroup.rotation.x + dy * 0.004)
+          Math.min(0.5, axialTiltGroupRef.current.rotation.x + dy * 0.004)
         );
-        pitchVelocity = dy * 0.004;
       }
-    };
-
-    const onPointerUp = (e: PointerEvent) => {
-      isDragging = false;
-      try {
-        container.releasePointerCapture(e.pointerId);
-      } catch { }
-    };
-
-    const onPointerLeave = () => {
-      if (!isDragging) {
-        localMouseX = 0;
-        localMouseY = 0;
-      }
-    };
-
-    if (interactive) {
-      container.addEventListener('pointerdown', onPointerDown);
-      container.addEventListener('pointermove', onPointerMove);
-      container.addEventListener('pointerup', onPointerUp);
-      container.addEventListener('pointercancel', onPointerUp);
-      container.addEventListener('pointerleave', onPointerLeave);
+      interaction.pitchVelocity = dy * 0.004;
     }
+  };
 
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate);
+  const handlePointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!interactive) return;
+    interactionRef.current.isDragging = false;
+    try {
+      e.currentTarget.releasePointerCapture(e.pointerId);
+    } catch {}
+  };
 
-      const delta = Math.min(clock.getDelta(), 0.1);
-
-      let normX = localMouseX;
-      let normY = localMouseY;
-
-      if (mouseX && mouseY) {
-        const mx = mouseX.get();
-        const my = mouseY.get();
-        if (mx !== 0 || my !== 0) {
-          normX = Math.max(-1, Math.min(1, mx / 380));
-          normY = Math.max(-1, Math.min(1, my / 380));
-        }
-      }
-
-      if (!isDragging) {
-        currentSpinVelocity *= 0.94;
-        pitchVelocity *= 0.94;
-        axialTiltGroup.rotation.x += pitchVelocity;
-
-        planetMesh.rotation.y += (BASE_ROTATION_SPEED + currentSpinVelocity * 60) * delta;
-      }
-
-      const MAX_TILT = 0.22;
-      const targetTiltY = normX * MAX_TILT;
-      const targetTiltX = -normY * MAX_TILT;
-
-      curTiltX += (targetTiltX - curTiltX) * 0.07;
-      curTiltY += (targetTiltY - curTiltY) * 0.07;
-
-      const targetShock = isShockedRef.current ? 1.08 : 1.0;
-      const targetGlow = isShockedRef.current ? 1.6 : 1.0;
-      curShockScale += (targetShock - curShockScale) * 0.14;
-      curGlowIntensity += (targetGlow - curGlowIntensity) * 0.12;
-
-      atmosphereMaterial.uniforms.uIntensity.value = curGlowIntensity;
-      outerAuraMaterial.uniforms.uIntensity.value = curGlowIntensity;
-
-      orbGroup.rotation.x = curTiltX;
-      orbGroup.rotation.y = curTiltY;
-      orbGroup.position.set(0, 0, 0);
-      orbGroup.scale.setScalar(curShockScale);
-
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    // 10. Cleanup
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      resizeObserver.disconnect();
-      if (interactive) {
-        container.removeEventListener('pointerdown', onPointerDown);
-        container.removeEventListener('pointermove', onPointerMove);
-        container.removeEventListener('pointerup', onPointerUp);
-        container.removeEventListener('pointercancel', onPointerUp);
-        container.removeEventListener('pointerleave', onPointerLeave);
-      }
-
-      sphereGeometry.dispose();
-      atmosphereGeometry.dispose();
-      outerAuraGeometry.dispose();
-
-      planetMaterial.dispose();
-      atmosphereMaterial.dispose();
-      outerAuraMaterial.dispose();
-      texture.dispose();
-
-      if (renderer) {
-        renderer.dispose();
-      }
-    };
-  }, [textureUrl, glowColor, auraColor, mouseX, mouseY, interactive]);
+  const handlePointerLeave = () => {
+    if (!interactive) return;
+    const interaction = interactionRef.current;
+    if (!interaction.isDragging) {
+      interaction.localMouseX = 0;
+      interaction.localMouseY = 0;
+    }
+  };
 
   return (
     <div
       ref={containerRef}
+      onPointerDown={handlePointerDown}
+      onPointerMove={handlePointerMove}
+      onPointerUp={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      onPointerLeave={handlePointerLeave}
       className={`relative w-full h-full flex items-center justify-center select-none ${
         interactive ? 'cursor-grab active:cursor-grabbing touch-none' : 'pointer-events-none'
       } ${className}`}
     >
-      <canvas ref={canvasRef} className="w-full h-full block" />
+      {mounted && (
+        <Canvas
+          camera={{
+            position: [0, 0, 5.85],
+            fov: 40,
+            near: 0.1,
+            far: 50,
+          }}
+          gl={{
+            alpha: true,
+            antialias: true,
+            powerPreference: 'default',
+          }}
+          dpr={[1, 2]}
+          onCreated={({ gl }) => {
+            gl.toneMapping = THREE.ACESFilmicToneMapping;
+            gl.toneMappingExposure = 1.1;
+          }}
+          className="w-full h-full block"
+        >
+          <PlanetOrb
+            textureUrl={resolvedTextureUrl}
+            glowColor={glowColor}
+            auraColor={auraColor}
+            isShocked={isShocked}
+            mouseX={mouseX}
+            mouseY={mouseY}
+            interactionRef={interactionRef}
+            planetMeshRef={planetMeshRef}
+            axialTiltGroupRef={axialTiltGroupRef}
+          />
+        </Canvas>
+      )}
     </div>
   );
 }

@@ -54,13 +54,17 @@ export default function MaleFertility({
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
     camera.position.set(0, 0, 5.85);
 
+    const isMobileDevice =
+      typeof window !== 'undefined' &&
+      (window.innerWidth < 768 || 'ontouchstart' in window);
+
     // 3. Renderer with high-DPI and alpha transparency
     let renderer: THREE.WebGLRenderer;
     try {
       renderer = new THREE.WebGLRenderer({
         canvas,
         alpha: true,
-        antialias: true,
+        antialias: !isMobileDevice,
         powerPreference: 'default',
       });
     } catch (err) {
@@ -69,13 +73,17 @@ export default function MaleFertility({
     }
 
     if (!renderer) return;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    const pixelRatio = isMobileDevice
+      ? Math.min(window.devicePixelRatio || 1, 1.3)
+      : Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(pixelRatio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.1;
 
     // 4. 3D Planet Globe Model (True 3D Sphere, not flat 2D)
     const PLANET_RADIUS = 1.8;
-    const sphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS, 64, 64);
+    const sphereSegments = isMobileDevice ? 36 : 64;
+    const sphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS, sphereSegments, sphereSegments);
 
     // Load seamless planetary texture
     const textureLoader = new THREE.TextureLoader();
@@ -207,7 +215,22 @@ export default function MaleFertility({
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(container);
 
-    // 9. Animation, Planetary Physics & User Drag Controls
+    // 9. Visibility detection & render throttling
+    let isVisible = true;
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            isVisible = entry.isIntersecting;
+          }
+        },
+        { rootMargin: '120px' }
+      );
+      observer.observe(container);
+    }
+
+    // 10. Animation, Planetary Physics & User Drag Controls
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
@@ -285,6 +308,10 @@ export default function MaleFertility({
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
+      if (!isVisible || container.offsetParent === null) {
+        return;
+      }
+
       const delta = Math.min(clock.getDelta(), 0.1);
 
       let normX = localMouseX;
@@ -332,10 +359,13 @@ export default function MaleFertility({
 
     animate();
 
-    // 10. Cleanup
+    // 11. Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
       resizeObserver.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
       if (interactive) {
         container.removeEventListener('pointerdown', onPointerDown);
         container.removeEventListener('pointermove', onPointerMove);
