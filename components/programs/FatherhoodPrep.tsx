@@ -69,15 +69,22 @@ function configureTexture(tex: THREE.Texture) {
 
 /** Returns null instead of throwing when WebGL is unavailable (iOS context limit, blocked GPU, etc.) */
 function createRenderer(canvas: HTMLCanvasElement): THREE.WebGLRenderer | null {
+  const isMobileDevice =
+    typeof window !== 'undefined' &&
+    (window.innerWidth < 768 || 'ontouchstart' in window);
   try {
     const renderer = new THREE.WebGLRenderer({
       canvas,
       alpha: true,
-      antialias: true,
+      antialias: !isMobileDevice,
       powerPreference: 'default', // 'high-performance' gives no benefit on iPhone
     });
-    // Cap at 2: a 3x iPhone would otherwise render 2.25x more pixels for no visible gain
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // Cap at 1.3 on mobile, 2 on desktop
+    renderer.setPixelRatio(
+      isMobileDevice
+        ? Math.min(window.devicePixelRatio || 1, 1.3)
+        : Math.min(window.devicePixelRatio || 1, 2)
+    );
     return renderer;
   } catch (err) {
     console.warn('FatherhoodPrep: WebGL unavailable, showing static fallback.', err);
@@ -139,8 +146,13 @@ export default function FatherhoodPrep({
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
     camera.position.set(0, 0, 5.85);
 
+    const isMobileDevice =
+      typeof window !== 'undefined' &&
+      (window.innerWidth < 768 || 'ontouchstart' in window);
+
     // 3. Planet sphere (~20k triangles, trivial for phone GPUs)
-    const sphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS, 64, 64);
+    const sphereSegments = isMobileDevice ? 36 : 64;
+    const sphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS, sphereSegments, sphereSegments);
 
     // GPU memory = width x height x 4 bytes (+ ~33% for mipmaps).
     // Aim for 2048x1024 for a ~360px orb; 4096x2048 costs ~43MB and risks iOS killing the tab.
@@ -172,48 +184,14 @@ export default function FatherhoodPrep({
     });
     const planetMesh = new THREE.Mesh(sphereGeometry, planetMaterial);
 
-    // 4. Atmospheric Fresnel rim glow
-    const atmosphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.02, 64, 64);
-    const atmosphereMaterial = new THREE.ShaderMaterial({
-      vertexShader: GLOW_VERTEX_SHADER,
-      fragmentShader: ATMOSPHERE_FRAGMENT_SHADER,
-      uniforms: {
-        uGlowColor: { value: new THREE.Color(glowColor) },
-        uIntensity: { value: 1.0 },
-      },
-      blending: THREE.AdditiveBlending,
-      transparent: true,
-      side: THREE.FrontSide,
-      depthWrite: false,
-    });
-    const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-
-    // 5. Outer aura (soft space haze)
-    const outerAuraGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.12, 48, 48);
-    const outerAuraMaterial = new THREE.ShaderMaterial({
-      vertexShader: GLOW_VERTEX_SHADER,
-      fragmentShader: AURA_FRAGMENT_SHADER,
-      uniforms: {
-        uAuraColor: { value: new THREE.Color(auraColor) },
-        uIntensity: { value: 1.0 },
-      },
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
-      transparent: true,
-      depthWrite: false,
-    });
-    const outerAuraMesh = new THREE.Mesh(outerAuraGeometry, outerAuraMaterial);
-
     // 6. Hierarchy: axial tilt group inside the master orb group
     const axialTiltGroup = new THREE.Group();
     axialTiltGroup.rotation.z = 0.38;
     axialTiltGroup.rotation.x = 0.12;
     axialTiltGroup.add(planetMesh);
-    axialTiltGroup.add(atmosphereMesh);
 
     const orbGroup = new THREE.Group();
     orbGroup.add(axialTiltGroup);
-    orbGroup.add(outerAuraMesh);
     scene.add(orbGroup);
 
     // 7. Resize (also fires on phone rotation and iOS address-bar changes)
@@ -356,12 +334,7 @@ export default function FatherhoodPrep({
       curTiltY += (targetTiltY - curTiltY) * damp(4.4, delta);
 
       const targetShock = isShockedRef.current ? 1.08 : 1.0;
-      const targetGlow = isShockedRef.current ? 1.6 : 1.0;
       curShockScale += (targetShock - curShockScale) * damp(9, delta);
-      curGlowIntensity += (targetGlow - curGlowIntensity) * damp(7.7, delta);
-
-      atmosphereMaterial.uniforms.uIntensity.value = curGlowIntensity;
-      outerAuraMaterial.uniforms.uIntensity.value = curGlowIntensity;
 
       orbGroup.rotation.x = curTiltX;
       orbGroup.rotation.y = curTiltY;
@@ -419,12 +392,7 @@ export default function FatherhoodPrep({
       }
 
       sphereGeometry.dispose();
-      atmosphereGeometry.dispose();
-      outerAuraGeometry.dispose();
-
       planetMaterial.dispose();
-      atmosphereMaterial.dispose();
-      outerAuraMaterial.dispose();
       texture.dispose();
       fallbackTexture?.dispose();
 

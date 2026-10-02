@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useRef, useState } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
 import * as THREE from 'three';
@@ -20,55 +20,17 @@ export interface CoupleProgramProps {
 const PLANET_RADIUS = 1.8;
 const BASE_ROTATION_SPEED = 0.35;
 
-// Shaders for Atmospheric Fresnel Rim Glow (Glowing planetary limb / halo)
-const ATMOSPHERE_VERTEX_SHADER = `
-  varying vec3 vNormal;
-  void main() {
-    vNormal = normalize(normalMatrix * normal);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const ATMOSPHERE_FRAGMENT_SHADER = `
-  varying vec3 vNormal;
-  uniform vec3 uGlowColor;
-  uniform float uIntensity;
-  void main() {
-    float rim = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
-    float glow = pow(rim, 2.8) * uIntensity;
-    gl_FragColor = vec4(uGlowColor, glow * 0.85);
-  }
-`;
-
-// Shaders for Outer Atmospheric Space Aura (Subtle soft space haze)
-const OUTER_AURA_VERTEX_SHADER = `
-  varying vec3 vNormal;
-  void main() {
-    vNormal = normalize(normalMatrix * normal);
-    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-  }
-`;
-
-const OUTER_AURA_FRAGMENT_SHADER = `
-  varying vec3 vNormal;
-  uniform vec3 uAuraColor;
-  uniform float uIntensity;
-  void main() {
-    float rim = max(0.0, 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))));
-    float glow = pow(rim, 3.2) * 0.55 * uIntensity;
-    gl_FragColor = vec4(uAuraColor, glow);
-  }
-`;
-
 // Fallback sphere shown during texture load or error
 function PlanetFallback({
   planetMeshRef,
+  sphereSegments = 64,
 }: {
   planetMeshRef: React.RefObject<THREE.Mesh | null>;
+  sphereSegments?: number;
 }) {
   return (
     <mesh ref={planetMeshRef}>
-      <sphereGeometry args={[PLANET_RADIUS, 64, 64]} />
+      <sphereGeometry args={[PLANET_RADIUS, sphereSegments, sphereSegments]} />
       <meshBasicMaterial color="#fcd34d" />
     </mesh>
   );
@@ -110,9 +72,11 @@ class TextureErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
 function PlanetGlobe({
   textureUrl,
   planetMeshRef,
+  sphereSegments = 64,
 }: {
   textureUrl: string;
   planetMeshRef: React.RefObject<THREE.Mesh | null>;
+  sphereSegments?: number;
 }) {
   const texture = useTexture(textureUrl);
 
@@ -130,7 +94,7 @@ function PlanetGlobe({
 
   return (
     <mesh ref={planetMeshRef}>
-      <sphereGeometry args={[PLANET_RADIUS, 64, 64]} />
+      <sphereGeometry args={[PLANET_RADIUS, sphereSegments, sphereSegments]} />
       <meshBasicMaterial map={texture} />
     </mesh>
   );
@@ -156,13 +120,12 @@ interface InteractionState {
   curTiltX: number;
   curTiltY: number;
   curShockScale: number;
-  curGlowIntensity: number;
 }
 
 interface PlanetOrbProps {
   textureUrl: string;
-  glowColor: string | number;
-  auraColor: string | number;
+  glowColor?: string | number;
+  auraColor?: string | number;
   isShocked: boolean;
   mouseX?: MotionValue<number>;
   mouseY?: MotionValue<number>;
@@ -173,8 +136,6 @@ interface PlanetOrbProps {
 
 function PlanetOrb({
   textureUrl,
-  glowColor,
-  auraColor,
   isShocked,
   mouseX,
   mouseY,
@@ -183,39 +144,11 @@ function PlanetOrb({
   axialTiltGroupRef,
 }: PlanetOrbProps) {
   const orbGroupRef = useRef<THREE.Group>(null);
-  const atmosphereMeshRef = useRef<THREE.Mesh>(null);
-  const outerAuraMeshRef = useRef<THREE.Mesh>(null);
-  const atmosphereMatRef = useRef<THREE.ShaderMaterial>(null);
-  const outerAuraMatRef = useRef<THREE.ShaderMaterial>(null);
   const isShockedRef = useRef(isShocked);
 
   useEffect(() => {
     isShockedRef.current = isShocked;
   }, [isShocked]);
-
-  const atmosphereUniforms = useMemo(
-    () => ({
-      uGlowColor: { value: new THREE.Color(glowColor as THREE.ColorRepresentation) },
-      uIntensity: { value: 1.0 },
-    }),
-    []
-  );
-
-  const outerAuraUniforms = useMemo(
-    () => ({
-      uAuraColor: { value: new THREE.Color(auraColor as THREE.ColorRepresentation) },
-      uIntensity: { value: 1.0 },
-    }),
-    []
-  );
-
-  useEffect(() => {
-    atmosphereUniforms.uGlowColor.value.set(glowColor as THREE.ColorRepresentation);
-  }, [glowColor, atmosphereUniforms]);
-
-  useEffect(() => {
-    outerAuraUniforms.uAuraColor.value.set(auraColor as THREE.ColorRepresentation);
-  }, [auraColor, outerAuraUniforms]);
 
   useFrame((_, delta) => {
     const d = Math.min(delta, 0.1);
@@ -259,12 +192,7 @@ function PlanetOrb({
     interaction.curTiltY += (targetTiltY - interaction.curTiltY) * 0.07;
 
     const targetShock = isShockedRef.current ? 1.08 : 1.0;
-    const targetGlow = isShockedRef.current ? 1.6 : 1.0;
     interaction.curShockScale += (targetShock - interaction.curShockScale) * 0.14;
-    interaction.curGlowIntensity += (targetGlow - interaction.curGlowIntensity) * 0.12;
-
-    atmosphereUniforms.uIntensity.value = interaction.curGlowIntensity;
-    outerAuraUniforms.uIntensity.value = interaction.curGlowIntensity;
 
     if (orbGroupRef.current) {
       orbGroupRef.current.rotation.x = interaction.curTiltX;
@@ -273,46 +201,21 @@ function PlanetOrb({
     }
   });
 
+  const isMobileDevice =
+    typeof window !== 'undefined' &&
+    (window.innerWidth < 768 || 'ontouchstart' in window);
+  const sphereSegments = isMobileDevice ? 36 : 64;
+
   return (
     <group ref={orbGroupRef}>
-      {/* Axial Tilt Group Hierarchy */}
+      {/* Axial Tilt Group Hierarchy - Pure planet model with no glow */}
       <group ref={axialTiltGroupRef} rotation={[0.12, 0, 0.38]}>
-        <TextureErrorBoundary fallback={<PlanetFallback planetMeshRef={planetMeshRef} />}>
-          <Suspense fallback={<PlanetFallback planetMeshRef={planetMeshRef} />}>
-            <PlanetGlobe textureUrl={textureUrl} planetMeshRef={planetMeshRef} />
+        <TextureErrorBoundary fallback={<PlanetFallback planetMeshRef={planetMeshRef} sphereSegments={sphereSegments} />}>
+          <Suspense fallback={<PlanetFallback planetMeshRef={planetMeshRef} sphereSegments={sphereSegments} />}>
+            <PlanetGlobe textureUrl={textureUrl} planetMeshRef={planetMeshRef} sphereSegments={sphereSegments} />
           </Suspense>
         </TextureErrorBoundary>
-
-        {/* Atmospheric Fresnel Rim Glow */}
-        <mesh ref={atmosphereMeshRef}>
-          <sphereGeometry args={[PLANET_RADIUS * 1.02, 64, 64]} />
-          <shaderMaterial
-            ref={atmosphereMatRef}
-            vertexShader={ATMOSPHERE_VERTEX_SHADER}
-            fragmentShader={ATMOSPHERE_FRAGMENT_SHADER}
-            uniforms={atmosphereUniforms}
-            blending={THREE.AdditiveBlending}
-            transparent
-            side={THREE.FrontSide}
-            depthWrite={false}
-          />
-        </mesh>
       </group>
-
-      {/* Outer Atmospheric Space Aura */}
-      <mesh ref={outerAuraMeshRef}>
-        <sphereGeometry args={[PLANET_RADIUS * 1.12, 48, 48]} />
-        <shaderMaterial
-          ref={outerAuraMatRef}
-          vertexShader={OUTER_AURA_VERTEX_SHADER}
-          fragmentShader={OUTER_AURA_FRAGMENT_SHADER}
-          uniforms={outerAuraUniforms}
-          blending={THREE.AdditiveBlending}
-          side={THREE.BackSide}
-          transparent
-          depthWrite={false}
-        />
-      </mesh>
     </group>
   );
 }
@@ -323,14 +226,19 @@ export default function CoupleProgram({
   mouseY,
   isShocked = false,
   textureUrl = '/programs/Couple-Program-planet.png',
-  glowColor = 0xfcd34d,
-  auraColor = 0xf59e0b,
+  glowColor,
+  auraColor,
   interactive = true,
 }: CoupleProgramProps) {
   const [mounted, setMounted] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const planetMeshRef = useRef<THREE.Mesh>(null);
   const axialTiltGroupRef = useRef<THREE.Group>(null);
+
+  const isMobileDevice =
+    typeof window !== 'undefined' &&
+    (window.innerWidth < 768 || 'ontouchstart' in window);
 
   const interactionRef = useRef<InteractionState>({
     localMouseX: 0,
@@ -343,11 +251,26 @@ export default function CoupleProgram({
     curTiltX: 0,
     curTiltY: 0,
     curShockScale: 1.0,
-    curGlowIntensity: 1.0,
   });
 
   useEffect(() => {
     setMounted(true);
+    const container = containerRef.current;
+    if (!container || typeof IntersectionObserver === 'undefined') return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          setIsVisible(entry.isIntersecting);
+        }
+      },
+      { rootMargin: '120px' }
+    );
+    observer.observe(container);
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   const resolvedTextureUrl =
@@ -432,6 +355,7 @@ export default function CoupleProgram({
     >
       {mounted && (
         <Canvas
+          frameloop={isVisible ? 'always' : 'never'}
           camera={{
             position: [0, 0, 5.85],
             fov: 40,
@@ -440,10 +364,10 @@ export default function CoupleProgram({
           }}
           gl={{
             alpha: true,
-            antialias: true,
+            antialias: !isMobileDevice,
             powerPreference: 'default',
           }}
-          dpr={[1, 2]}
+          dpr={isMobileDevice ? [1, 1.3] : [1, 2]}
           onCreated={({ gl }) => {
             gl.toneMapping = THREE.ACESFilmicToneMapping;
             gl.toneMappingExposure = 1.1;

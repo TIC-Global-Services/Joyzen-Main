@@ -36,12 +36,35 @@ export default function CalaThreeCircle({
     if (!container || !canvas) return;
 
     // Use the 360-degree seamless equirectangular planetary texture
+    const PLANET_TEXTURE_MAP: Record<string, string> = {
+      '/programs/Pregnancy-Prep.svg': '/programs/Pregnancy-Prep-planet.png',
+      '/programs/Pregnancy-Prep.png': '/programs/Pregnancy-Prep-planet.png',
+      '/programs/Natural-Conception.svg': '/programs/Natural-Conception-planet.png',
+      '/programs/Natural-Conception.png': '/programs/Natural-Conception-planet.png',
+      '/programs/Teen-Health.svg': '/programs/Teen-Health-planet.png',
+      '/programs/Teen-Health.png': '/programs/Teen-Health-planet.png',
+      '/programs/Women-Health.svg': '/programs/Women-Health-planet.png',
+      '/programs/Women-Health.png': '/programs/Women-Health-planet.png',
+      '/programs/Men-Health.svg': '/programs/Men-Health-planet.png',
+      '/programs/Men-Health.png': '/programs/Men-Health-planet.png',
+      '/programs/Male-Fertility.svg': '/programs/Male-Fertility-planet.png',
+      '/programs/Male-Fertility.png': '/programs/Male-Fertility-planet.png',
+      '/programs/Fatherhood-Prep.svg': '/programs/Fatherhood-Prep-planet.png',
+      '/programs/Fatherhood-Prep.png': '/programs/Fatherhood-Prep-planet.png',
+      '/programs/Couple-Program.svg': '/programs/Couple-Program-planet.png',
+      '/programs/Couple-Program.png': '/programs/Couple-Program-planet.png',
+      '/cala-orb.png': '/cala-planet-texture.png',
+      '/cala-orb.svg': '/cala-planet-texture.png',
+      '/cala-orb-new.svg': '/cala-planet-texture.png',
+    };
     const resolvedTextureUrl =
-      textureUrl === '/cala-orb.png' ||
-        textureUrl === '/cala-orb.svg' ||
-        textureUrl === '/cala-orb-new.svg'
-        ? '/cala-planet-texture.png'
-        : textureUrl;
+      (textureUrl && PLANET_TEXTURE_MAP[textureUrl]) ||
+      textureUrl ||
+      '/cala-planet-texture.png';
+
+    const isMobileDevice =
+      typeof window !== 'undefined' &&
+      (window.innerWidth < 768 || 'ontouchstart' in window);
 
     // 1. Scene setup
     const scene = new THREE.Scene();
@@ -50,22 +73,31 @@ export default function CalaThreeCircle({
     const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
     camera.position.set(0, 0, 5.2);
 
-    // 3. Renderer with high-DPI and alpha transparency
-    const renderer = new THREE.WebGLRenderer({
-      canvas,
-      alpha: true,
-      antialias: true,
-      powerPreference: 'high-performance',
-    });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    // 3. Renderer with high-DPI and alpha transparency (optimized for mobile)
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: !isMobileDevice, // Disable MSAA on mobile for huge fill-rate boost
+        powerPreference: 'high-performance',
+      });
+    } catch (err) {
+      console.warn('CalaThreeCircle: WebGL initialization failed', err);
+      return;
+    }
+
+    const pixelRatio = isMobileDevice
+      ? Math.min(window.devicePixelRatio || 1, 1.3)
+      : Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(pixelRatio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.1;
 
-    // 4. Lighting - Removed as requested (unlit material displays pristine texture without glare or shadows)
-
-    // 5. 3D Planet Globe Model (True 3D Sphere, not flat 2D)
+    // 4. 3D Planet Globe Model (True 3D Sphere, not flat 2D)
     const PLANET_RADIUS = 1.8;
-    const sphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS, 64, 64);
+    const sphereSegments = isMobileDevice ? 36 : 64;
+    const sphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS, sphereSegments, sphereSegments);
 
     // Load seamless 360-degree planetary texture
     const textureLoader = new THREE.TextureLoader();
@@ -101,7 +133,7 @@ export default function CalaThreeCircle({
     texture.minFilter = THREE.LinearMipmapLinearFilter;
     texture.magFilter = THREE.LinearFilter;
 
-    // Pure unlit planetary surface material (preserves pure texture colors with zero light glare or harsh shadows)
+    // Pure unlit planetary surface material
     const planetMaterial = new THREE.MeshBasicMaterial({
       map: texture,
     });
@@ -109,7 +141,7 @@ export default function CalaThreeCircle({
     const planetMesh = new THREE.Mesh(sphereGeometry, planetMaterial);
 
     // 6. Atmospheric Fresnel Rim Glow (Glowing planetary limb / halo)
-    const atmosphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.02, 64, 64);
+    const atmosphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.02, sphereSegments, sphereSegments);
     const atmosphereMaterial = new THREE.ShaderMaterial({
       vertexShader: `
         varying vec3 vNormal;
@@ -172,10 +204,9 @@ export default function CalaThreeCircle({
     const outerAuraMesh = new THREE.Mesh(outerAuraGeometry, outerAuraMaterial);
 
     // 8. Axial Tilt Group Hierarchy
-    // Real planets rotate on an axial tilt (e.g. Earth 23.4 degrees)
     const axialTiltGroup = new THREE.Group();
-    axialTiltGroup.rotation.z = 0.38; // ~22 degrees axial tilt
-    axialTiltGroup.rotation.x = 0.12; // ~7 degrees pitch tilt
+    axialTiltGroup.rotation.z = 0.38;
+    axialTiltGroup.rotation.x = 0.12;
     axialTiltGroup.add(planetMesh);
     axialTiltGroup.add(atmosphereMesh);
 
@@ -199,11 +230,26 @@ export default function CalaThreeCircle({
     const resizeObserver = new ResizeObserver(handleResize);
     resizeObserver.observe(container);
 
-    // 10. Animation, Planetary Physics & User Drag Controls
+    // 10. Visibility detection & render throttling
+    let isVisible = true;
+    let observer: IntersectionObserver | null = null;
+    if (typeof IntersectionObserver !== 'undefined') {
+      observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            isVisible = entry.isIntersecting;
+          }
+        },
+        { rootMargin: '120px' }
+      );
+      observer.observe(container);
+    }
+
+    // 11. Animation, Planetary Physics & User Drag Controls
     let animationFrameId: number;
     const clock = new THREE.Clock();
 
-    const BASE_ROTATION_SPEED = 0.35; // Natural serene planet spin speed (rad/sec)
+    const BASE_ROTATION_SPEED = 0.35;
     let currentSpinVelocity = 0;
     let pitchVelocity = 0;
 
@@ -241,11 +287,9 @@ export default function CalaThreeCircle({
         lastPointerX = e.clientX;
         lastPointerY = e.clientY;
 
-        // Spin the planet with pointer drag
         planetMesh.rotation.y += dx * 0.007;
         currentSpinVelocity = dx * 0.007;
 
-        // Slight pitch adjustment with drag
         axialTiltGroup.rotation.x = Math.max(
           -0.5,
           Math.min(0.5, axialTiltGroup.rotation.x + dy * 0.004)
@@ -279,9 +323,12 @@ export default function CalaThreeCircle({
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
+      if (!isVisible || container.offsetParent === null) {
+        return;
+      }
+
       const delta = Math.min(clock.getDelta(), 0.1);
 
-      // Read motion values if provided, else use local pointer
       let normX = localMouseX;
       let normY = localMouseY;
 
@@ -294,9 +341,7 @@ export default function CalaThreeCircle({
         }
       }
 
-      // Continuous planetary rotation around its polar axis
       if (!isDragging) {
-        // Smoothly decay drag momentum back to natural planetary rotation
         currentSpinVelocity *= 0.94;
         pitchVelocity *= 0.94;
         axialTiltGroup.rotation.x += pitchVelocity;
@@ -304,28 +349,24 @@ export default function CalaThreeCircle({
         planetMesh.rotation.y += (BASE_ROTATION_SPEED + currentSpinVelocity * 60) * delta;
       }
 
-      // Smooth 3D parallax tilt towards cursor
-      const MAX_TILT = 0.22; // subtle parallax tilt
+      const MAX_TILT = 0.22;
       const targetTiltY = normX * MAX_TILT;
       const targetTiltX = -normY * MAX_TILT;
 
       curTiltX += (targetTiltX - curTiltX) * 0.07;
       curTiltY += (targetTiltY - curTiltY) * 0.07;
 
-      // Shockwave reaction (pill collision)
       const targetShock = isShockedRef.current ? 1.08 : 1.0;
       const targetGlow = isShockedRef.current ? 1.6 : 1.0;
       curShockScale += (targetShock - curShockScale) * 0.14;
       curGlowIntensity += (targetGlow - curGlowIntensity) * 0.12;
 
-      // Update shader uniforms
       atmosphereMaterial.uniforms.uIntensity.value = curGlowIntensity;
       outerAuraMaterial.uniforms.uIntensity.value = curGlowIntensity;
 
-      // Fixed absolute position transforms - zero floating drift or scale breathing
       orbGroup.rotation.x = curTiltX;
       orbGroup.rotation.y = curTiltY;
-      orbGroup.position.set(0, 0, 0); // Strictly fixed in absolute position
+      orbGroup.position.set(0, 0, 0);
       orbGroup.scale.setScalar(curShockScale);
 
       renderer.render(scene, camera);
@@ -333,10 +374,12 @@ export default function CalaThreeCircle({
 
     animate();
 
-    // 11. Cleanup
     return () => {
       cancelAnimationFrame(animationFrameId);
       resizeObserver.disconnect();
+      if (observer) {
+        observer.disconnect();
+      }
       if (interactive) {
         container.removeEventListener('pointerdown', onPointerDown);
         container.removeEventListener('pointermove', onPointerMove);

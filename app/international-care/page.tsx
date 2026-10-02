@@ -53,7 +53,8 @@ export default function InternationalCarePage() {
       <Consultation />
       <FAQ />
       <StartYourHealth/>
-      <div className="h-16 w-full bg-[#f2f1f0] absolute bottom-0 translate-y-1/2 left-0 z-40 blur-sm pointer-events-none"></div>
+           <div className='h-20 w-full bg-white absolute -bottom-[0.8%] left-0 z-100 blur-lg'></div>
+     <div className='h-5 w-full bg-[#fffcf7] absolute -bottom-[0.7%] left-0 z-100 blur-lg'></div>
     </main>
   );
 }

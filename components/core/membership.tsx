@@ -52,7 +52,7 @@ export default function CalaMembership() {
     const [activeIndex, setActiveIndex] = useState<number>(0);
 
     return (
-        <div className="w-full  px-4 sm:px-6 lg:px-[5%] pt-20 sm:pt-32 pb-40 flex flex-col items-center select-none">
+        <div className="w-full px-4 sm:px-6 lg:px-[5%] pt-20 sm:pt-32 pb-40 flex flex-col items-center select-none">
             {/* Orb Logo Slot */}
             <div
                 data-orb-slot
@@ -80,7 +80,7 @@ export default function CalaMembership() {
             {/* Interactive Expandable Cards Container */}
             <div
                 onMouseLeave={() => setActiveIndex(0)}
-                className="w-full flex flex-col lg:flex-row items-stretch justify-center gap-4 sm:gap-6 min-h-[380px]"
+                className="w-full flex flex-col lg:flex-row items-stretch justify-center gap-4 sm:gap-6 lg:min-h-[380px] max-w-md lg:max-w-none mx-auto"
             >
                 {plans.map((plan, index) => {
                     const isActive = activeIndex === index;
@@ -90,13 +90,9 @@ export default function CalaMembership() {
                             key={plan.id}
                             onMouseEnter={() => setActiveIndex(index)}
                             onClick={() => setActiveIndex(index)}
-                            style={{
-                                flexBasis: 0,
-                                flexShrink: 1,
-                            }}
-                            className={`relative rounded-[2rem] p-5 sm:p-7 lg:p-8 flex flex-col justify-between overflow-hidden cursor-pointer border transition-[flex-grow,box-shadow,border-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[flex-grow] lg:flex-1 ${isActive
+                            className={`relative rounded-[2rem] p-6 sm:p-7 lg:p-8 flex flex-col justify-between overflow-hidden cursor-pointer border transition-[flex-grow,box-shadow,border-color] duration-400 ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[flex-grow] w-full lg:flex-1 lg:basis-0 lg:shrink ${isActive
                                 ? 'lg:grow-[2.2] border-white shadow-[0_20px_50px_rgba(246,215,198,0.45),inset_0_1px_2px_rgba(255,255,255,0.95)]'
-                                : 'lg:grow-1 border-white/60 shadow-[inset_0_1px_2px_rgba(255,255,255,0.7),0_8px_24px_rgba(0,0,0,0.02)]'
+                                : 'lg:grow-1 border-white/80 shadow-[0_10px_30px_rgba(0,0,0,0.03),inset_0_1px_2px_rgba(255,255,255,0.7)]'
                                 }`}
                         >
                             {/* Active Card Gradient Background Layer with smooth opacity cross-fade */}
@@ -109,97 +105,144 @@ export default function CalaMembership() {
                                 }}
                             />
 
-                            {/* Inactive Card Frosted Layer with smooth opacity cross-fade (showing background honeycomb mesh) */}
+                            {/* Inactive Card Layer (Clean off-white on mobile, Frosted mesh on desktop) */}
                             <div
-                                className={`absolute inset-0 rounded-[2rem] bg-white/10 backdrop-blur-xs transition-opacity duration-300 ease-out pointer-events-none ${isActive ? 'opacity-0' : 'opacity-100'
+                                className={`absolute inset-0 rounded-[2rem] bg-[#FCFAF8] lg:bg-white/10 lg:backdrop-blur-xs transition-opacity duration-300 ease-out pointer-events-none ${isActive ? 'opacity-0' : 'opacity-100'
                                     }`}
                             />
 
                             {/* Card Content Container */}
-                            <div className={`relative z-10 flex flex-col h-full w-full ${isActive ? 'lg:justify-between' : 'lg:justify-end'}`}>
+                            <div className="relative z-10 flex flex-col h-full w-full">
 
-                                {/* Mobile Top Labels */}
-                                <div className="block lg:hidden mb-1.5">
+                                {/* MOBILE PRESENTATION (< lg) */}
+                                <div className="flex flex-col lg:hidden">
                                     {isActive ? (
-                                        <span className="text-[12px] font-medium text-[#EF8F60]">{plan.label}</span>
+                                        <>
+                                            <span className="text-[13px] font-semibold text-[#EF8F60] block mb-2">
+                                                {plan.label}
+                                            </span>
+                                            <div className="text-[26px] sm:text-[28px] font-bold tracking-tight text-zinc-900 leading-tight">
+                                                {plan.prefixTitle && <span>{plan.prefixTitle} </span>}
+                                                {plan.prefixSubtitle && <span>{plan.prefixSubtitle}</span>}
+                                                <span className="text-[#036132] font-bold">{plan.highlightPrice}</span>
+                                                {plan.suffixTitle && <span>{plan.suffixTitle}</span>}
+                                            </div>
+                                            <p className="text-[15px] sm:text-[16px] font-bold text-zinc-900 mt-1 leading-snug">
+                                                {plan.subPrice}
+                                            </p>
+                                            <p className="text-[13px] text-zinc-500 font-normal mt-0.5">
+                                                {plan.cancelTag}
+                                            </p>
+                                            <div className="flex justify-start mt-6">
+                                                <SpecularButton
+                                                    type="button"
+                                                    size="md"
+                                                    tint="#AEDEE44D"
+                                                    tintOpacity={0.35}
+                                                    textColor="#000000"
+                                                    lineColor="#ffffff"
+                                                    baseColor="#AEDEE44D"
+                                                    radius={20}
+                                                    className="font-bold text-[11px] uppercase tracking-wider px-6 py-2.5 shadow-sm"
+                                                >
+                                                    {plan.buttonText}
+                                                </SpecularButton>
+                                            </div>
+                                        </>
                                     ) : (
-                                        <h3 className="text-[16px] font-bold text-zinc-900 leading-none">{plan.label}</h3>
+                                        <>
+                                            <h3 className="text-[22px] sm:text-[24px] font-bold text-zinc-900 tracking-tight mb-3 leading-tight">
+                                                {plan.label}
+                                            </h3>
+                                            <div className="text-[26px] sm:text-[28px] font-bold tracking-tight text-zinc-900 leading-tight">
+                                                <span className="text-[#036132] font-bold">{plan.highlightPrice}</span>
+                                                {plan.suffixTitle && <span>{plan.suffixTitle}</span>}
+                                            </div>
+                                            <p className="text-[15px] sm:text-[16px] font-bold text-zinc-900 mt-1 leading-snug">
+                                                {plan.subPrice}
+                                            </p>
+                                            <p className="text-[13px] text-zinc-500 font-normal mt-0.5">
+                                                {plan.cancelTag}
+                                            </p>
+                                        </>
                                     )}
                                 </div>
 
-                                {/* Desktop Top Label (Active Card only) */}
-                                <div className={`hidden lg:block ${isActive ? '' : 'hidden'}`}>
-                                    <h3 className="text-[28px] font-bold tracking-tight text-zinc-900">
-                                        {plan.label}
-                                    </h3>
-                                </div>
-
-                                {/* Bottom Section */}
-                                <div
-                                    className={`flex flex-col flex-1 ${isActive
-                                        ? 'lg:flex-row lg:items-end justify-between mt-auto lg:pt-6'
-                                        : 'space-y-0.5 lg:space-y-1 mt-auto'
-                                        }`}
-                                >
-                                    <div className="space-y-0.5 lg:space-y-1 flex flex-col justify-center">
-                                        {/* Desktop Label for Inactive Card (pushed to bottom) */}
-                                        <h3 className={`hidden lg:block ${!isActive ? '' : 'hidden'} text-[28px] font-bold tracking-tight text-zinc-900 pb-1.5`}>
+                                {/* DESKTOP PRESENTATION (>= lg) */}
+                                <div className={`hidden lg:flex flex-col h-full w-full ${isActive ? 'justify-between' : 'justify-end'}`}>
+                                    {/* Desktop Top Label (Active Card only) */}
+                                    <div className={isActive ? '' : 'hidden'}>
+                                        <h3 className="text-[28px] font-bold tracking-tight text-zinc-900">
                                             {plan.label}
                                         </h3>
-
-                                        {/* Pricing Details */}
-                                        <div className={`font-bold text-zinc-900 tracking-tight flex items-center flex-wrap gap-x-1 lg:block leading-[1.2] lg:leading-[1.1] ${isActive ? 'text-[22px] lg:text-[40px]' : 'text-[20px] lg:text-[40px]'}`}>
-                                            {plan.prefixTitle && (
-                                                <span className={`inline lg:${isActive ? 'block xl:inline' : 'block'}`}>
-                                                    {plan.prefixTitle}
-                                                </span>
-                                            )}
-                                            {plan.prefixSubtitle && <span className="inline lg:inline">{plan.prefixSubtitle}</span>}
-                                            <span className="text-[#036132] lg:text-[#EF8F60] font-extrabold inline lg:inline">{plan.highlightPrice}</span>
-                                            {plan.suffixTitle && (
-                                                <span className="font-bold text-zinc-900 inline lg:inline">
-                                                    {plan.suffixTitle}
-                                                </span>
-                                            )}
-                                        </div>
-
-                                        <p className={`font-bold text-black leading-[1.2] ${isActive ? 'text-[13px] lg:text-xl' : 'text-[12px] lg:text-xl'}`}>
-                                            {plan.subPrice}
-                                        </p>
-
-                                        <p className="text-[10px] lg:text-base font-medium tracking-tight text-zinc-500 lg:text-[#036132] pt-1.5 lg:pt-1">
-                                            {plan.cancelTag}
-                                        </p>
                                     </div>
 
-                                    {/* Action Button (Active Card only) */}
-                                    {isActive && (
-                                        <div className="flex justify-start lg:justify-end mt-4 lg:mt-0 min-h-[34px] items-center">
-                                            <SpecularButton
-                                                type="button"
-                                                size="md"
-                                                tint="#AEDEE44D"
-                                                tintOpacity={0.35}
-                                                textColor="#000000"
-                                                lineColor="#ffffff"
-                                                baseColor="#AEDEE44D"
-                                                radius={20}
-                                                className="font-bold text-[10px] lg:text-sm uppercase tracking-tight px-5 py-2 shadow-sm"
-                                            >
-                                                {plan.buttonText}
-                                            </SpecularButton>
-                                        </div>
-                                    )}
+                                    {/* Bottom Section */}
+                                    <div
+                                        className={`flex flex-col flex-1 ${isActive
+                                            ? 'lg:flex-row lg:items-end justify-between mt-auto lg:pt-6'
+                                            : 'space-y-0.5 lg:space-y-1 mt-auto'
+                                            }`}
+                                    >
+                                        <div className="space-y-0.5 lg:space-y-1 flex flex-col justify-center">
+                                            {/* Desktop Label for Inactive Card (pushed to bottom) */}
+                                            <h3 className={`${!isActive ? '' : 'hidden'} text-[28px] font-bold tracking-tight text-zinc-900 pb-1.5`}>
+                                                {plan.label}
+                                            </h3>
 
+                                            {/* Pricing Details */}
+                                            <div className="font-bold text-zinc-900 tracking-tight block leading-[1.1] text-[40px]">
+                                                {plan.prefixTitle && (
+                                                    <span className={isActive ? 'block xl:inline' : 'block'}>
+                                                        {plan.prefixTitle}{' '}
+                                                    </span>
+                                                )}
+                                                {plan.prefixSubtitle && <span className="inline">{plan.prefixSubtitle}</span>}
+                                                <span className="text-[#036132] lg:text-[#EF8F60] font-extrabold inline">{plan.highlightPrice}</span>
+                                                {plan.suffixTitle && (
+                                                    <span className="font-bold text-zinc-900 inline">
+                                                        {plan.suffixTitle}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            <p className="font-bold text-black leading-[1.2] text-xl">
+                                                {plan.subPrice}
+                                            </p>
+
+                                            <p className="text-base font-medium tracking-tight text-[#036132] pt-1">
+                                                {plan.cancelTag}
+                                            </p>
+                                        </div>
+
+                                        {/* Action Button (Active Card only) */}
+                                        {isActive && (
+                                            <div className="flex justify-end mt-0 min-h-[34px] items-center">
+                                                <SpecularButton
+                                                    type="button"
+                                                    size="md"
+                                                    tint="#AEDEE44D"
+                                                    tintOpacity={0.35}
+                                                    textColor="#000000"
+                                                    lineColor="#ffffff"
+                                                    baseColor="#AEDEE44D"
+                                                    radius={20}
+                                                    className="font-bold text-sm uppercase tracking-tight px-5 py-2 shadow-sm"
+                                                >
+                                                    {plan.buttonText}
+                                                </SpecularButton>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
                     );
                 })}
             </div>
 
-
-            {/* Footer Text and Logo */}
+            {/* Footer Text */}
             <div className="w-full flex flex-col items-center justify-center mt-10 gap-6">
                 <p className="text-sm sm:text-[15px] font-medium text-zinc-900 text-center max-w-[600px] leading-[1.4]">
                     Most CORE members stay for at least 3 months to see improvements in energy, stress, and overall health.

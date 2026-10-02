@@ -116,7 +116,7 @@ const ALL_PROGRAMS: ProgramConfig[] = [
     title: 'Couple Program',
     href: '/eve-genesis',
     image: '/programs/Couple-Program.png',
-    glowColor: '#ec4899',
+    glowColor: '#FFFFFF',
     Component: CoupleProgram,
   },
 ];
@@ -181,7 +181,7 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
 
   return (
     <footer
-      className={`w-full bg-[#FAF8F5] border-t border-[#EAE6DE]/60 pt-20 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 select-none overflow-hidden ${className}`}
+      className={`w-full border-t border-[#EAE6DE]/60 pt-20 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 select-none overflow-hidden ${className}`}
     >
       <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
         {/* Header Section */}
@@ -255,9 +255,9 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
                   {/* Active Outer Luminous Glow & Ring */}
                   <div
                     className="absolute -inset-2.5 rounded-full pointer-events-none blur-md opacity-70 animate-pulse"
-                    style={{
-                      background: `radial-gradient(circle, ${currProg.glowColor}50 0%, ${currProg.glowColor}15 70%, transparent 100%)`,
-                    }}
+                    // style={{
+                    //   background: `radial-gradient(circle, ${currProg.glowColor}50 0%, ${currProg.glowColor}15 70%, transparent 100%)`,
+                    // }}
                   />
                   <div className="absolute -inset-1 rounded-full pointer-events-none border-2 border-white/90 shadow-[0_0_20px_rgba(255,255,255,0.7)]" />
 
@@ -363,9 +363,9 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
                       <>
                         <div
                           className="absolute -inset-2.5 sm:-inset-3.5 rounded-full pointer-events-none blur-md opacity-70 animate-pulse"
-                          style={{
-                            background: `radial-gradient(circle, ${prog.glowColor}50 0%, ${prog.glowColor}15 70%, transparent 100%)`,
-                          }}
+                          // style={{
+                          //   background: `radial-gradient(circle, ${prog.glowColor}50 0%, ${prog.glowColor}15 70%, transparent 100%)`,
+                          // }}
                         />
                         <div
                           className="absolute -inset-1.5 sm:-inset-2 rounded-full pointer-events-none border border-white/90 shadow-[0_0_20px_rgba(255,255,255,0.7)]"

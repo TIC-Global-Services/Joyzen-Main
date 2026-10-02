@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -135,11 +136,10 @@ function GradientOptionWrapper({
     <div className={`relative group w-full ${className}`}>
       {/* Outer Frame with moving gradient border */}
       <div
-        className={`relative p-[2px] rounded-[28px] transition-all duration-300 ${
-          isSelected
-            ? 'shadow-[0_4px_22px_rgba(239,143,96,0.35),0_0_12px_rgba(174,222,228,0.25)]'
-            : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)] group-hover:shadow-[0_4px_20px_rgba(239,143,96,0.22)]'
-        }`}
+        className={`relative p-[2px] rounded-[28px] transition-all duration-300 ${isSelected
+          ? 'shadow-[0_4px_22px_rgba(239,143,96,0.35),0_0_12px_rgba(174,222,228,0.25)]'
+          : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)] group-hover:shadow-[0_4px_20px_rgba(239,143,96,0.22)]'
+          }`}
         style={{
           backgroundImage: gradientString,
           backgroundSize: '200% 100%',
@@ -150,27 +150,24 @@ function GradientOptionWrapper({
       >
         {/* Soft default border overlay when not selected or hovered */}
         <div
-          className={`absolute inset-0 rounded-[28px] bg-white/80 border border-white/90 transition-opacity duration-300 pointer-events-none ${
-            isSelected ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
-          }`}
+          className={`absolute inset-0 rounded-[28px] bg-white/80 border border-white/90 transition-opacity duration-300 pointer-events-none ${isSelected ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
+            }`}
         />
 
         {/* Inner Pill */}
         <div
-          className={`relative z-10 w-full h-full rounded-[26px] overflow-hidden transition-all duration-300 ${
-            isSelected
-              ? 'bg-[#FCFAF7]/95 text-zinc-900 font-bold'
-              : 'bg-white/90 group-hover:bg-[#FCFAF7]/95 text-zinc-700'
-          }`}
+          className={`relative z-10 w-full h-full rounded-[26px] overflow-hidden transition-all duration-300 ${isSelected
+            ? 'bg-[#FCFAF7]/95 text-zinc-900 font-bold'
+            : 'bg-white/90 group-hover:bg-[#FCFAF7]/95 text-zinc-700'
+            }`}
           style={{
             WebkitMaskImage: '-webkit-radial-gradient(white, black)',
           }}
         >
           {/* Subtle moving pastel gradient tint inside pill */}
           <div
-            className={`absolute inset-0 transition-opacity duration-300 pointer-events-none ${
-              isSelected ? 'opacity-25' : 'opacity-0 group-hover:opacity-15'
-            }`}
+            className={`absolute inset-0 transition-opacity duration-300 pointer-events-none ${isSelected ? 'opacity-25' : 'opacity-0 group-hover:opacity-15'
+              }`}
             style={{
               backgroundImage: gradientString,
               backgroundSize: '200% 100%',
@@ -243,11 +240,10 @@ function GlassDropdown({
                     onChange(option);
                     setIsOpen(false);
                   }}
-                  className={`text-sm sm:text-base cursor-pointer py-2 px-3 rounded-xl transition-colors ${
-                    value === option
-                      ? 'font-bold text-zinc-900 bg-white/60'
-                      : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-white/30'
-                  }`}
+                  className={`text-sm sm:text-base cursor-pointer py-2 px-3 rounded-xl transition-colors ${value === option
+                    ? 'font-bold text-zinc-900 bg-white/60'
+                    : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-white/30'
+                    }`}
                 >
                   {option}
                 </div>
@@ -328,6 +324,9 @@ export default function ExploreForm() {
   const onSubmit = (data: ExploreFormData) => {
     console.log('Explore Form Submitted (Step 3 Save):', data);
     setSubmitted(true);
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const resetForm = () => {
@@ -467,65 +466,68 @@ export default function ExploreForm() {
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-2xl flex flex-col items-center mt-10">
+      <div className="relative z-10 w-full max-w-xl flex flex-col items-center mt-10">
         {/* Dynamic Heading & Subtitle */}
-        <div className="text-center max-w-2xl mx-auto mb-8 space-y-3">
-          <AnimatePresence mode="wait">
-            {currentStep === 1 && (
-              <motion.div
-                key="heading-step1"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="space-y-3"
-              >
-                <h1 className="text-[40px] sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.18]">
-                  Explore <br className="sm:hidden" />
-                  <span className="text-[#EF8F60]">Joyzen</span> models
-                </h1>
-                <p className="text-sm sm:text-base lg:text-lg text-zinc-600 font-normal leading-[1.4] max-w-xl mx-auto">
-                  Discover personalized care programs designed around your journey, with structured guidance, continuous support, and plans that adapt as you progress.
-                </p>
-              </motion.div>
-            )}
+        {!submitted && (
+          <div className="text-center max-w-2xl mx-auto mb-8 space-y-3">
+            <AnimatePresence mode="wait">
+              {currentStep === 1 && (
+                <motion.div
+                  key="heading-step1"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="space-y-3"
+                >
+                  <h1 className="text-[40px] sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.18]">
+                    Explore <br className="sm:hidden" />
+                    <span className="text-[#EF8F60]">Joyzen</span> models
+                  </h1>
+                  <p className="text-sm sm:text-base lg:text-lg text-zinc-600 font-normal leading-[1.4] max-w-xl mx-auto">
+                    Discover personalized care programs designed around your journey, with structured guidance, continuous support, and plans that adapt as you progress.
+                  </p>
+                </motion.div>
+              )}
 
-            {currentStep === 2 && (
-              <motion.div
-                key="heading-step2"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="space-y-2"
-              >
-                <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-black leading-[1.18]">
-                  What best describes you right now?
-                </h2>
-                <p className="text-sm sm:text-base text-zinc-600 font-medium">
-                  {selectedGender === 'Prefer not to say'
-                    ? 'Help us understand your health concerns so we can guide you effectively.'
-                    : 'Select the option that matches your current health goals & needs.'}
-                </p>
-              </motion.div>
-            )}
+              {currentStep === 2 && (
+                <motion.div
+                  key="heading-step2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="space-y-2"
+                >
+                  <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-black leading-[1.18]">
+                    What best describes you right now?
+                  </h2>
+                  <p className="text-sm sm:text-base text-zinc-600 font-medium">
+                    {selectedGender === 'Prefer not to say'
+                      ? 'Help us understand your health concerns so we can guide you effectively.'
+                      : 'Select the option that matches your current health goals & needs.'}
+                  </p>
+                </motion.div>
+              )}
 
-            {currentStep === 3 && (
-              <motion.div
-                key="heading-step3"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="space-y-2"
-              >
-                <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-black leading-[1.18]">
-                  To know more about you
-                </h2>
-                <p className="text-sm sm:text-base text-zinc-600 font-medium">
-                  Share your health details so our specialized care team can tailor the best personalized plan for you.
-                </p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+              {currentStep === 3 && (
+                <motion.div
+                  key="heading-step3"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="space-y-2"
+                >
+                  <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-black leading-[1.18]">
+                    Let's take the next step
+                  </h2>
+                  <p className="text-sm sm:text-base text-zinc-600 font-medium">
+                    You've told us a little about what you're looking for.<br className='hidden md:block' />
+                    Now, share your contact details so our team can guide you from here.
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
 
         {/* Stepper Progress Bar Header */}
         {!submitted && (
@@ -534,11 +536,10 @@ export default function ExploreForm() {
               {/* Step 1 */}
               <div className="flex items-center space-x-2">
                 <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                    currentStep === 1
-                      ? 'bg-[#EF8F60] text-white shadow-sm'
-                      : 'bg-[#AEDEE4] text-[#036132]'
-                  }`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 1
+                    ? 'bg-[#EF8F60] text-white shadow-sm'
+                    : 'bg-[#AEDEE4] text-[#036132]'
+                    }`}
                 >
                   1
                 </span>
@@ -552,13 +553,12 @@ export default function ExploreForm() {
               {/* Step 2 */}
               <div className="flex items-center space-x-2">
                 <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                    currentStep === 2
-                      ? 'bg-[#EF8F60] text-white shadow-sm'
-                      : currentStep > 2
-                        ? 'bg-[#AEDEE4] text-[#036132]'
-                        : 'bg-zinc-200 text-zinc-500'
-                  }`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 2
+                    ? 'bg-[#EF8F60] text-white shadow-sm'
+                    : currentStep > 2
+                      ? 'bg-[#AEDEE4] text-[#036132]'
+                      : 'bg-zinc-200 text-zinc-500'
+                    }`}
                 >
                   2
                 </span>
@@ -572,11 +572,10 @@ export default function ExploreForm() {
               {/* Step 3 */}
               <div className="flex items-center space-x-2">
                 <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                    currentStep === 3
-                      ? 'bg-[#EF8F60] text-white shadow-sm'
-                      : 'bg-zinc-200 text-zinc-500'
-                  }`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 3
+                    ? 'bg-[#EF8F60] text-white shadow-sm'
+                    : 'bg-zinc-200 text-zinc-500'
+                    }`}
                 >
                   3
                 </span>
@@ -609,39 +608,62 @@ export default function ExploreForm() {
         {/* Interactive Form Card */}
         <form onSubmit={handleSubmit(onSubmit)} className="relative w-full">
           {/* Background Joyzen Orange Logo Watermark */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 h-48 sm:h-64 pointer-events-none z-0 opacity-35 select-none">
-            <Image
-              src="/joyzen-orange.png"
-              alt="Joyzen Orange Logo Watermark"
-              fill
-              className="object-contain"
-            />
-          </div>
+          {!submitted && (
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 h-48 sm:h-64 pointer-events-none z-0 opacity-35 select-none">
+              <Image
+                src="/joyzen-orange.png"
+                alt="Joyzen Orange Logo Watermark"
+                fill
+                className="object-contain"
+              />
+            </div>
+          )}
 
           {submitted ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="relative z-10 p-8 rounded-3xl bg-white/70 backdrop-blur-2xl border border-white/90 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_12px_32px_rgba(0,0,0,0.04)] text-center space-y-4"
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className="relative z-10 w-full flex flex-col items-center justify-center py-4"
             >
-              <div className="w-14 h-14 rounded-full bg-[#AEDEE4]/50 text-[#036132] mx-auto flex items-center justify-center shadow-xs">
-                <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <div className="space-y-1">
-                <h3 className="text-2xl font-bold text-zinc-900">Form Saved Successfully!</h3>
-                <p className="text-sm text-zinc-600 max-w-md mx-auto">
-                  Thank you, <span className="font-semibold text-zinc-800">{watch('fullName')}</span>. We have saved your information and our specialists will review your profile and reach out shortly.
+              {/* Heading from Image 2 */}
+              <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-bold tracking-tight text-center text-zinc-950 mb-8 sm:mb-10">
+                Confirmation. Your call is booked.
+              </h1>
+
+              {/* Confirmation Card from Image 2 */}
+              <div className="w-full max-w-xl mx-auto p-10 sm:p-14 rounded-[36px] sm:rounded-[44px] bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_12px_36px_rgba(0,0,0,0.04)] relative overflow-hidden text-center">
+                {/* Joyzen Orange Watermark Logo in background */}
+                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-72 sm:w-80 h-72 sm:h-80 pointer-events-none z-0 opacity-25 select-none">
+                  <Image
+                    src="/joyzen-orange.png"
+                    alt="Joyzen Logo"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+
+                <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#EF8F60] tracking-tight mb-5 relative z-10">
+                  You&apos;re all set
+                </h2>
+
+                <p className="text-base sm:text-lg text-zinc-800 font-medium leading-relaxed max-w-sm mx-auto mb-8 relative z-10">
+                  Thank you for reaching out.
+                  <br />
+                  Our Clarity team will review your
+                  <br />
+                  information and get in touch with you.
                 </p>
+
+                <div className="relative z-10">
+                  <Link
+                    href="/"
+                    className="inline-block px-7 py-3 rounded-full text-xs font-bold tracking-wider uppercase text-zinc-900 bg-[#E8F4F5]/80 hover:bg-[#DCEEEF] border border-white shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                  >
+                    BACK TO HOME
+                  </Link>
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={resetForm}
-                className="mt-4 px-7 py-3 rounded-full text-xs font-bold tracking-wide uppercase text-zinc-800 bg-white border border-zinc-200 shadow-sm hover:bg-zinc-50 transition-all cursor-pointer"
-              >
-                Submit Another Response
-              </button>
             </motion.div>
           ) : (
             <AnimatePresence mode="wait" custom={currentStep}>
@@ -735,11 +757,10 @@ export default function ExploreForm() {
                                   setValue('concern', '');
                                   setGenderOpen(false);
                                 }}
-                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
-                                  selectedGender === option
-                                    ? 'font-bold text-zinc-900'
-                                    : 'font-medium text-zinc-500 hover:text-zinc-900'
-                                }`}
+                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${selectedGender === option
+                                  ? 'font-bold text-zinc-900'
+                                  : 'font-medium text-zinc-500 hover:text-zinc-900'
+                                  }`}
                               >
                                 {option}
                               </div>
@@ -796,9 +817,8 @@ export default function ExploreForm() {
                               onClick={() => {
                                 setValue('selectedOption', isItemChosen ? '' : option, { shouldValidate: true });
                               }}
-                              className={`w-full text-center sm:text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] ${
-                                isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-zinc-700 hover:text-zinc-900'
-                              }`}
+                              className={`w-full text-center sm:text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] ${isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-zinc-700 hover:text-zinc-900'
+                                }`}
                             >
                               {option}
                             </button>
@@ -872,7 +892,7 @@ export default function ExploreForm() {
                   className="relative z-10 space-y-4"
                 >
                   {/* Full Name Input (pre-filled from Step 1) */}
-                  <div>
+                  {/* <div>
                     <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('fullName', {
@@ -887,10 +907,10 @@ export default function ExploreForm() {
                       />
                     </div>
                     {errors.fullName && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.fullName.message}</p>}
-                  </div>
+                  </div> */}
 
                   {/* Age Input (pre-filled from Step 1) */}
-                  <div>
+                  {/* <div>
                     <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('age', {
@@ -907,7 +927,7 @@ export default function ExploreForm() {
                       />
                     </div>
                     {errors.age && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.age.message}</p>}
-                  </div>
+                  </div> */}
 
                   {/* Phone Number Input */}
                   <div>
@@ -965,7 +985,7 @@ export default function ExploreForm() {
                   </div>
 
                   {/* Occupation Input */}
-                  <div>
+                  {/* <div>
                     <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
                         {...register('occupation')}
@@ -976,56 +996,57 @@ export default function ExploreForm() {
                       />
                     </div>
                     {errors.occupation && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.occupation.message}</p>}
-                  </div>
+                  </div> */}
 
                   {/* Dropdown 1: Period cycle regular? */}
-                  {selectedGender !== 'Male' && (
+                  {/* {selectedGender !== 'Male' && (
                     <GlassDropdown
                       label="Period cycle regular?"
                       value={periodCycleValue || ''}
                       onChange={(val) => setValue('periodCycleRegular', val, { shouldValidate: true })}
                       error={errors.periodCycleRegular?.message}
                     />
-                  )}
+                  )} */}
 
                   {/* Dropdown 2: PCOS */}
-                  {selectedGender !== 'Male' && (
+                  {/* {selectedGender !== 'Male' && (
                     <GlassDropdown
                       label="PCOS"
                       value={pcosValue || ''}
                       onChange={(val) => setValue('pcos', val, { shouldValidate: true })}
                       error={errors.pcos?.message}
                     />
-                  )}
+                  )} */}
 
                   {/* Dropdown 3: Hormonal */}
-                  <GlassDropdown
+                  {/* <GlassDropdown
                     label="Hormonal"
                     value={hormonalValue || ''}
                     onChange={(val) => setValue('hormonal', val, { shouldValidate: true })}
                     error={errors.hormonal?.message}
-                  />
+                  /> */}
 
                   {/* Dropdown 4: Thyroid */}
-                  <GlassDropdown
+                  {/* <GlassDropdown
                     label="Thyroid"
                     value={thyroidValue || ''}
                     onChange={(val) => setValue('thyroid', val, { shouldValidate: true })}
                     error={errors.thyroid?.message}
-                  />
+                  /> */}
 
-                  {/* Section 2: Trying to Conceive? How long */}
-                  <div className="pt-4 space-y-3">
-                    <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-black">
-                      Trying to Conceive? How long
+                  {/* Section 2: Anything you'd like us to know? */}
+                  <div className="pt-6 space-y-3 w-full">
+                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 text-center">
+                      Anything you&apos;d like us to know?
                     </h2>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <input
+                    <div className="relative rounded-[28px] bg-white/40 backdrop-blur-md border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                      <textarea
                         {...register('tryingToConceive')}
-                        type="text"
-                        placeholder="Your Answer"
+                        id="concern-textarea"
+                        rows={4}
+                        placeholder="Tell us anything you'd like to share before we get in touch..."
                         maxLength={500}
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px] resize-none"
                       />
                     </div>
                     {errors.tryingToConceive && (
@@ -1033,32 +1054,30 @@ export default function ExploreForm() {
                     )}
                   </div>
 
-                  {/* Step 3 Action Buttons */}
-                  <div className="flex items-center justify-between pt-6">
-                    <button
-                      type="button"
-                      onClick={handlePrevStep}
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-[24px] text-sm font-semibold text-zinc-700 bg-white/60 border border-white hover:bg-white transition-all cursor-pointer shadow-xs"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                      </svg>
-                      <span>Back</span>
-                    </button>
-
-                    <SpecularButton
-                      type="submit"
-                      size="md"
-                      tint="#AEDEE44D"
-                      tintOpacity={0.35}
-                      textColor="#000000"
-                      lineColor="#ffffff"
-                      baseColor="#AEDEE44D"
-                      radius={24}
-                      className="font-bold text-sm uppercase tracking-tight px-8 py-3.5 shadow-md"
-                    >
-                      SAVE
-                    </SpecularButton>
+                  {/* Consultant Section (Calendar + Continue & Save + Not Sure What's Happening?) */}
+                  <div className="pt-8 w-full">
+                    <Consultant
+                      onContinueAndSave={() => {
+                        handleSubmit(onSubmit, (formErrors) => {
+                          const firstErrorField = Object.keys(formErrors)[0];
+                          const el = document.getElementsByName(firstErrorField)[0];
+                          if (el) {
+                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            (el as HTMLElement).focus();
+                          }
+                        })();
+                      }}
+                      onBack={handlePrevStep}
+                      showSaveButton={true}
+                      saveButtonText="CONTINUE & SAVE"
+                      onGetInTouch={() => {
+                        const el = document.getElementById('concern-textarea');
+                        if (el) {
+                          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          el.focus();
+                        }
+                      }}
+                    />
                   </div>
                 </motion.div>
               )}
@@ -1066,18 +1085,6 @@ export default function ExploreForm() {
           )}
         </form>
       </div>
-
-      {/* Consultant Calendar Section appears below when Step 3 is reached */}
-      {currentStep === 3 && (
-        <motion.div
-          initial={{ opacity: 0, y: 35 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-          className="relative z-10 w-full  mt-12 sm:mt-16"
-        >
-          <Consultant />
-        </motion.div>
-      )}
     </section>
   );
 }

@@ -7,6 +7,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CalaThreeCircle from './CalaThreeCircle';
 import { LiquidGlass } from '@liquidglass/react';
+import TalkCareButton from '@/components/shared/TalkCareButton';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -397,10 +398,8 @@ export default function CalaScrollSequence() {
     );
 
     // Phase 4 Highlight: at 4.0s (when text touches the button halfway through its movement)
-    tl.to('.talk-button', { borderColor: 'rgba(72,192,204,1)', duration: 0.2 }, "phase3+=1.5")
-      .to('.talk-button-ring', { autoAlpha: 1, duration: 0.2 }, "phase3+=1.5")
-      .to('.talk-button', { borderColor: 'rgba(255,255,255,0.9)', duration: 0.2 }, "phase3+=2.0")
-      .to('.talk-button-ring', { autoAlpha: 0, duration: 0.2 }, "phase3+=2.0");
+    tl.to('.talk-button-ring', { autoAlpha: 1, duration: 0.25 }, "phase3+=1.5")
+      .to('.talk-button-ring', { autoAlpha: 0, duration: 0.35 }, "phase3+=2.0");
 
     // Phase 5: 5.0 to 5.5s - TalkWithCala fades out (leaving the stopped scrolling text behind)
     tl.to('.talk-with-cala', { autoAlpha: 0, scale: 0.9, duration: 0.5, ease: 'power2.in' }, "phase5");
@@ -587,11 +586,11 @@ export default function CalaScrollSequence() {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-full h-[1150vh] md:h-[1800vh] bg-[#FAF8F5]">
+    <div ref={containerRef} className="relative w-full h-[1150vh] md:h-[1800vh]">
       <div className="sticky top-0 h-[100dvh] min-h-[100dvh] h-screen w-full overflow-x-clip flex flex-col items-center justify-center transform-gpu will-change-transform">
 
         {/* SHARED BACKGROUNDS */}
-        <div className="absolute inset-0 pointer-events-none opacity-40">
+        {/* <div className="absolute inset-0 pointer-events-none opacity-40">
           <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="seq-honeycomb-pattern" width="62.35" height="108" patternUnits="userSpaceOnUse">
@@ -600,7 +599,7 @@ export default function CalaScrollSequence() {
             </defs>
             <rect width="100%" height="100%" fill="url(#seq-honeycomb-pattern)" />
           </svg>
-        </div>
+        </div> */}
         <div className="absolute w-[600px] h-[400px] rounded-full bg-gradient-to-b from-teal-100/25 via-cyan-50/20 to-transparent blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" />
 
         {/* --- PHASE 1: HERO SECTION --- */}
@@ -669,11 +668,11 @@ export default function CalaScrollSequence() {
       h-full
       rounded-full
       p-2.5
-      sm:p-3
+      sm:p-3.5
       pointer-events-auto
       border
       border-white/60
-      shadow-[0_20px_70px_rgba(36,168,184,0.35),inset_0_2px_4px_rgba(255,255,255,0.7)]
+      
     "
               >
                 <div
@@ -742,16 +741,11 @@ export default function CalaScrollSequence() {
             <p className="mt-4 sm:mt-5 text-[#27272C] text-sm sm:text-base md:text-[18px] leading-[1.2] max-w-xl font-medium">
               For men who want to improve sperm health, testosterone, stamina, and reproductive health with structured medical and lifestyle guidance.
             </p>
-            <div className="mt-8 sm:mt-10 pointer-events-auto relative">
-              <button className="talk-button group relative inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/90 backdrop-blur-md border-[2px] border-white/90 shadow-[0_12px_32px_rgba(0,0,0,0.06),_0_2px_8px_rgba(0,0,0,0.03)] cursor-pointer select-none transition-shadow">
-                <div className="relative w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(36,168,184,0.35)] border border-white/70">
-                  <img src="/programs/Male-Fertility.png" alt="ATLAS" className="w-full h-full object-cover" />
-                </div>
-                <span className="font-semibold text-base tracking-tight text-[#1E2822] uppercase whitespace-nowrap">
-                  TALK TO CARE TEAM
-                </span>
-              </button>
-              <div className="talk-button-ring absolute inset-[-4px] rounded-full border-2 border-cyan-400 pointer-events-none opacity-0" />
+            <div className="mt-8 sm:mt-10">
+              <TalkCareButton
+                programName="ATLAS"
+                imageSrc="/programs/Male-Fertility.png"
+              />
             </div>
           </div>
         </div>
@@ -1041,7 +1035,7 @@ export default function CalaScrollSequence() {
 
           {/* Top Header */}
           <div className="faq-header text-center absolute top-6 sm:top-8 md:top-10 lg:top-12 pointer-events-auto z-30 flex flex-col items-center">
-            <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-none">
               {"Questions you shouldn't have to figure out alone."}
             </h2>
             <span className="text-[#7EBDB9] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">

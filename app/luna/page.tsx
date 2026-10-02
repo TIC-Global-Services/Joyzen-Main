@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function LunaPage() {
   return (
-    <main className="w-full flex-1 flex flex-col bg-[#FAF8F5]">
+    <main className="w-full flex-1 flex flex-col">
       <CalaScrollSequence />
       <CalaMembership />
       <EveryStage />

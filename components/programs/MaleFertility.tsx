@@ -126,79 +126,15 @@ export default function MaleFertility({
 
     const planetMesh = new THREE.Mesh(sphereGeometry, planetMaterial);
 
-    // 5. Atmospheric Fresnel Rim Glow (Glowing planetary limb / halo)
-    const atmosphereGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.02, 64, 64);
-    const atmosphereMaterial = new THREE.ShaderMaterial({
-      vertexShader: `
-        varying vec3 vNormal;
-        void main() {
-          vNormal = normalize(normalMatrix * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying vec3 vNormal;
-        uniform vec3 uGlowColor;
-        uniform float uIntensity;
-        void main() {
-          float rim = 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0)));
-          float glow = pow(rim, 2.8) * uIntensity;
-          gl_FragColor = vec4(uGlowColor, glow * 0.85);
-        }
-      `,
-      uniforms: {
-        uGlowColor: { value: new THREE.Color(glowColor) },
-        uIntensity: { value: 1.0 },
-      },
-      blending: THREE.AdditiveBlending,
-      transparent: true,
-      side: THREE.FrontSide,
-      depthWrite: false,
-    });
-    const atmosphereMesh = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-
-    // 6. Outer Atmospheric Space Aura (Subtle soft space haze)
-    const outerAuraGeometry = new THREE.SphereGeometry(PLANET_RADIUS * 1.12, 48, 48);
-    const outerAuraMaterial = new THREE.ShaderMaterial({
-      vertexShader: `
-        varying vec3 vNormal;
-        void main() {
-          vNormal = normalize(normalMatrix * normal);
-          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-        }
-      `,
-      fragmentShader: `
-        varying vec3 vNormal;
-        uniform vec3 uAuraColor;
-        uniform float uIntensity;
-        void main() {
-          float rim = max(0.0, 1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))));
-          float glow = pow(rim, 3.2) * 0.55 * uIntensity;
-          gl_FragColor = vec4(uAuraColor, glow);
-        }
-      `,
-      uniforms: {
-        uAuraColor: { value: new THREE.Color(auraColor) },
-        uIntensity: { value: 1.0 },
-      },
-      blending: THREE.AdditiveBlending,
-      side: THREE.BackSide,
-      transparent: true,
-      depthWrite: false,
-    });
-    const outerAuraMesh = new THREE.Mesh(outerAuraGeometry, outerAuraMaterial);
-
     // 7. Axial Tilt Group Hierarchy
     const axialTiltGroup = new THREE.Group();
     axialTiltGroup.rotation.z = 0.38;
     axialTiltGroup.rotation.x = 0.12;
     axialTiltGroup.add(planetMesh);
-    axialTiltGroup.add(atmosphereMesh);
 
     // Master Planet Group
     const orbGroup = new THREE.Group();
     orbGroup.add(axialTiltGroup);
-    orbGroup.add(outerAuraMesh);
     scene.add(orbGroup);
 
     // 8. Resize handler
@@ -342,12 +278,7 @@ export default function MaleFertility({
       curTiltY += (targetTiltY - curTiltY) * 0.07;
 
       const targetShock = isShockedRef.current ? 1.08 : 1.0;
-      const targetGlow = isShockedRef.current ? 1.6 : 1.0;
       curShockScale += (targetShock - curShockScale) * 0.14;
-      curGlowIntensity += (targetGlow - curGlowIntensity) * 0.12;
-
-      atmosphereMaterial.uniforms.uIntensity.value = curGlowIntensity;
-      outerAuraMaterial.uniforms.uIntensity.value = curGlowIntensity;
 
       orbGroup.rotation.x = curTiltX;
       orbGroup.rotation.y = curTiltY;
@@ -375,12 +306,7 @@ export default function MaleFertility({
       }
 
       sphereGeometry.dispose();
-      atmosphereGeometry.dispose();
-      outerAuraGeometry.dispose();
-
       planetMaterial.dispose();
-      atmosphereMaterial.dispose();
-      outerAuraMaterial.dispose();
       texture.dispose();
 
       if (renderer) {
