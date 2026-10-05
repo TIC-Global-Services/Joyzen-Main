@@ -229,6 +229,8 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
               {/* Previous Item (Left) */}
               <Link
                 href={prevProg.href}
+                scroll={true}
+                onClick={() => window.scrollTo(0, 0)}
                 className="flex flex-col items-center opacity-85 active:scale-95 transition-all text-center max-w-[76px]"
               >
                 <div className="w-14 h-14 sm:w-16 sm:h-16 relative rounded-full overflow-hidden shadow-sm border border-white/80 shrink-0">
@@ -249,6 +251,8 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
               {/* Active Item (Center - 3D Model) */}
               <Link
                 href={currProg.href}
+                scroll={true}
+                onClick={() => window.scrollTo(0, 0)}
                 className="flex flex-col items-center transition-all text-center z-10 max-w-[110px]"
               >
                 <div className="relative w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center shrink-0">
@@ -282,6 +286,8 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
               {/* Next Item (Right) */}
               <Link
                 href={nextProg.href}
+                scroll={true}
+                onClick={() => window.scrollTo(0, 0)}
                 className="flex flex-col items-center opacity-85 active:scale-95 transition-all text-center max-w-[76px]"
               >
                 <div className="w-14 h-14 sm:w-16 sm:h-16 relative rounded-full overflow-hidden shadow-sm border border-white/80 shrink-0">
@@ -346,6 +352,8 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
                 <Link
                   key={prog.id}
                   href={prog.href}
+                  scroll={true}
+                  onClick={() => window.scrollTo(0, 0)}
                   onMouseEnter={() => setHoveredId(prog.id)}
                   onMouseLeave={() => setHoveredId(null)}
                   className="group relative flex flex-col items-center focus:outline-none transition-transform duration-300"

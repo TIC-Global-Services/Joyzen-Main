@@ -8,6 +8,8 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import CalaThreeCircle from './CalaThreeCircle';
 import { LiquidGlass } from '@liquidglass/react';
 import TalkCareButton from '@/components/shared/TalkCareButton';
+import { useScrollSequenceControls } from '@/components/shared/useScrollSequenceControls';
+import { EVE_GENESIS_SEQUENCE_CONFIG } from './3dconfig';
 
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
@@ -109,21 +111,6 @@ function AdaptiveGlass({
   style,
   children,
 }: AdaptiveGlassProps) {
-  if (isMobile) {
-    return (
-      <div
-        className={`backdrop-blur-md bg-white/80 border border-white/75 shadow-[0_8px_24px_rgba(0,0,0,0.04)] ${className}`}
-        style={{
-          borderRadius: `${borderRadius}px`,
-          zIndex,
-          ...style,
-        }}
-      >
-        {children}
-      </div>
-    );
-  }
-
   return (
     <LiquidGlass
       borderRadius={borderRadius}
@@ -200,13 +187,13 @@ function CollidingPill({
             isMobile
               ? undefined
               : {
-                  x: pill.driftX.map((v: number) => v * scaleFactor),
-                  y: pill.driftY.map((v: number) => v * scaleFactor),
-                  rotate: pill.rotateRange,
-                }
+                x: pill.driftX.map((v: number) => v * scaleFactor),
+                y: pill.driftY.map((v: number) => v * scaleFactor),
+                rotate: pill.rotateRange,
+              }
           }
           transition={{ duration: pill.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-          drag={!isMobile}
+          drag
           dragConstraints={{ left: -70 * scaleFactor, right: 70 * scaleFactor, top: -70 * scaleFactor, bottom: 70 * scaleFactor }}
           dragElastic={0.4}
           whileDrag={{ scale: 1.12, zIndex: 60, cursor: 'grabbing', boxShadow: '0 20px 40px rgba(0,0,0,0.14)' }}
@@ -215,7 +202,7 @@ function CollidingPill({
             setClickedPill(pill.id);
             setTimeout(() => setClickedPill(null), 600);
           }}
-          className="relative group cursor-grab active:cursor-grabbing"
+          className="relative group cursor-grab active:cursor-grabbing touch-none"
         >
           <AdaptiveGlass
             // isMobile={isMobile}
@@ -278,9 +265,9 @@ function OuterChatPill({ item, scaleFactor, clickedId, setClickedId, className, 
           isMobile
             ? undefined
             : {
-                x: item.driftX.map((v: number) => v * scaleFactor),
-                y: item.driftY.map((v: number) => v * scaleFactor),
-              }
+              x: item.driftX.map((v: number) => v * scaleFactor),
+              y: item.driftY.map((v: number) => v * scaleFactor),
+            }
         }
         transition={{ duration: item.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
         drag={!isMobile}
@@ -353,6 +340,7 @@ function OuterChatPill({ item, scaleFactor, clickedId, setClickedId, className, 
 
 export default function CalaScrollSequence() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const scrollControls = useScrollSequenceControls('EVE & GENESIS', EVE_GENESIS_SEQUENCE_CONFIG);
 
   const [isMobile, setIsMobile] = useState(false);
   const [scaleFactor, setScaleFactor] = useState(1);
@@ -488,8 +476,16 @@ export default function CalaScrollSequence() {
     }
 
     // Phase 8: 8.0 to 9.5s - Mobile UI elements fade out, 3D orb zooms, text fades out
+    const zoomScale = isMobileDev ? scrollControls.mobileZoomScale : scrollControls.zoomPhaseScale;
+    const orbPhase11Scale = isMobileDev ? Math.min(scrollControls.phase11Scale, 7.0) : scrollControls.phase11Scale;
+    const orbPhase12Scale = isMobileDev ? Math.min(scrollControls.phase12Scale, 5.5) : scrollControls.phase12Scale;
+    const orbFinalScale = isMobileDev ? Math.min(scrollControls.finalOrbScale, 1.9) : scrollControls.finalOrbScale;
+    const phase11Top = `${scrollControls.phase11Top}%`;
+    const phase12Top = `${scrollControls.phase12Top}%`;
+    const finalOrbTop = `${scrollControls.finalOrbTop}%`;
+
     tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator', { opacity: 0, duration: 0.2 }, "phase8");
-    tl.to('.mobile-3d-orb', { scale: 15, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
+    tl.to('.mobile-3d-orb', { scale: zoomScale, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
 
     // Phase 9: 9.5 to 10.5s - Final full-screen content fades in
     tl.fromTo('.final-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, "phase9");
@@ -498,21 +494,17 @@ export default function CalaScrollSequence() {
     tl.to('.final-content', { opacity: 0, y: -30, duration: 1, ease: 'power2.in' }, "phase10");
 
     // Phase 11: 11.5 to 12.5s - Orb acts as ceiling. Text 1 fades in.
-    const orbPhase11Scale = isMobileDev ? 7.0 : 9.5;
-    const orbPhase12Scale = isMobileDev ? 5.5 : 6.0;
-    const orbFinalScale = isMobileDev ? 1.9 : 3.2;
-
-    tl.to('.mobile-3d-orb', { scale: orbPhase11Scale, top: '-15%', duration: 1.5, ease: 'power2.inOut' }, "phase11");
+    tl.to('.mobile-3d-orb', { scale: orbPhase11Scale, top: phase11Top, duration: 1.5, ease: 'power2.inOut' }, "phase11");
     tl.fromTo('.benefits-text-1', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.8 }, "phase11+=0.8");
 
     // Phase 12: 13.0 to 14.0s - Text 1 out, Text 2 in, Orb shrinks.
     tl.to('.benefits-text-1', { opacity: 0, scale: 1.05, duration: 0.5 }, "phase12");
-    tl.to('.mobile-3d-orb', { scale: orbPhase12Scale, top: '10%', duration: 1.5, ease: 'power2.inOut' }, "phase12");
+    tl.to('.mobile-3d-orb', { scale: orbPhase12Scale, top: phase12Top, duration: 1.5, ease: 'power2.inOut' }, "phase12");
     tl.fromTo('.benefits-text-2', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.8 }, "phase12+=0.8");
 
     // Phase 13: 14.5 to 15.5s - Text 2 out, Text 3 in, Orb shrinks to center. All pills in.
     tl.to('.benefits-text-2', { opacity: 0, scale: 1.05, duration: 0.5 }, "phase13");
-    tl.to('.mobile-3d-orb', { scale: orbFinalScale, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
+    tl.to('.mobile-3d-orb', { scale: orbFinalScale, top: finalOrbTop, duration: 1.5, ease: 'power2.inOut' }, "phase13");
     tl.fromTo('.benefits-text-3', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.8 }, "phase13+=0.8");
     tl.fromTo('.final-benefit-pill', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
 
@@ -617,7 +609,19 @@ export default function CalaScrollSequence() {
       handoffTl.to({}, { duration: 0.25 });
     });
 
-  }, { scope: containerRef });
+  }, {
+    scope: containerRef,
+    dependencies: [
+      scrollControls.zoomPhaseScale,
+      scrollControls.mobileZoomScale,
+      scrollControls.phase11Scale,
+      scrollControls.phase11Top,
+      scrollControls.phase12Scale,
+      scrollControls.phase12Top,
+      scrollControls.finalOrbScale,
+      scrollControls.finalOrbTop,
+    ],
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -671,7 +675,12 @@ export default function CalaScrollSequence() {
             EVE + GENESIS
           </h1>
 
-          <div className="hero-orb-container relative z-10 flex items-center justify-center">
+          <div
+            className="hero-orb-container relative z-10 flex items-center justify-center"
+            style={{
+              transform: `translate(${scrollControls.heroOrbOffsetX}px, ${scrollControls.heroOrbOffsetY}px) scale(${scrollControls.heroOrbScale})`,
+            }}
+          >
             {shockwaves.map((id) => (
               <motion.div
                 key={`shock-${id}`}
@@ -689,8 +698,8 @@ export default function CalaScrollSequence() {
     items-center
     justify-center
     pointer-events-none
-    w-[clamp(150px,50vw,360px)]
-    h-[clamp(150px,50vw,360px)]
+    w-[clamp(130px,40vw,360px)]
+    h-[clamp(130px,40vw,360px)]
   "
             >
               <AdaptiveGlass
@@ -1089,7 +1098,7 @@ export default function CalaScrollSequence() {
           {/* Pills (All appear together at the end) */}
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[45%] md:top-[40%] right-[calc(60%+10px)] sm:right-[calc(50%+90px)] md:right-[calc(50%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass  borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+              <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Ovulation tracking</span>
               </AdaptiveGlass>
             </div>
@@ -1297,9 +1306,8 @@ export default function CalaScrollSequence() {
                     <div
                       key={`mobile-faq-pill-${faq.id}`}
                       onClick={() => setActiveFaqId(faq.id)}
-                      className={`faq-pill group relative cursor-pointer select-none rounded-[24px] transition-all duration-300 ${
-                        isActive ? 'scale-[1.02] z-20' : 'hover:scale-[1.01] z-10'
-                      }`}
+                      className={`faq-pill group relative cursor-pointer select-none rounded-[24px] transition-all duration-300 ${isActive ? 'scale-[1.02] z-20' : 'hover:scale-[1.01] z-10'
+                        }`}
                     >
                       <LiquidGlass
                         borderRadius={24}
@@ -1311,19 +1319,17 @@ export default function CalaScrollSequence() {
                         displacementScale={0.7}
                         elasticity={0.35}
                         zIndex={20}
-                        className={`w-full rounded-[24px] border transition-all duration-300 ${
-                          isActive
-                            ? 'border-[#E5855E]/40 shadow-[0_8px_25px_rgba(229,133,94,0.15)] bg-white/20'
-                            : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
-                        }`}
+                        className={`w-full rounded-[24px] border transition-all duration-300 ${isActive
+                          ? 'border-[#E5855E]/40 shadow-[0_8px_25px_rgba(229,133,94,0.15)] bg-white/20'
+                          : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
+                          }`}
                       >
                         <div className="px-5 py-3 text-left">
                           <span
-                            className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 ${
-                              isActive
-                                ? 'font-bold text-[#E5855E]'
-                                : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
-                            }`}
+                            className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 ${isActive
+                              ? 'font-bold text-[#E5855E]'
+                              : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
+                              }`}
                           >
                             {faq.question}
                           </span>

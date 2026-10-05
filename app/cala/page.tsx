@@ -15,8 +15,8 @@ export default function CalaPage() {
     <main className="w-full flex-1 flex flex-col">
       <CalaScrollSequence />
       <CalaMembership />
-      <EveryStage/>
-      
+      <EveryStage />
+
     </main>
   );
 }
