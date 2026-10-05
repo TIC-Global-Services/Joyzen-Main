@@ -2,7 +2,7 @@ import type { Globe3DConfig, ScrollSequenceConfig } from '@/components/shared/pr
 
 export const VITA_GLOBE_CONFIG: Globe3DConfig = {
   title: 'VITA 3D Globe',
-  textureUrl: '/programs/Natural-Conception-planet.png',
+  textureUrl: '/programs/Natural-Conception-planet.webp',
 
   // --- 1. Scene Lighting & Exposure ---
   exposure: 1.1,

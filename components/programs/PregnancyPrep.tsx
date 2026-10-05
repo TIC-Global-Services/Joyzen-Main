@@ -20,7 +20,7 @@ export default function PregnancyPrep({
   mouseX,
   mouseY,
   isShocked = false,
-  textureUrl = '/programs/Pregnancy-Prep-planet.png',
+  textureUrl = '/programs/Pregnancy-Prep-planet.webp',
   glowColor = 0xfb923c,
   auraColor = 0xf97316,
   interactive = true,
@@ -43,8 +43,10 @@ export default function PregnancyPrep({
     const resolvedTextureUrl =
       !textureUrl ||
       textureUrl === '/programs/Pregnancy-Prep.svg' ||
-      textureUrl === '/programs/Pregnancy-Prep.png'
-        ? '/programs/Pregnancy-Prep-planet.png'
+      textureUrl === '/programs/Pregnancy-Prep.png' ||
+      textureUrl === '/programs/Pregnancy-Prep.webp' ||
+      textureUrl === '/programs/Pregnancy-Prep-planet.png'
+        ? '/programs/Pregnancy-Prep-planet.webp'
         : textureUrl;
 
     // 1. Scene setup

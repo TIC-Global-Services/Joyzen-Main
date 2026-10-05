@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { LiquidGlass } from '@liquidglass/react';
 
 interface MonthNavigatorProps {
     currentDate: Date;
@@ -174,7 +175,7 @@ export const CalendarCard = ({
             // Timezone-safe past check
             const isPast = date.getTime() < todayNormalized.getTime();
 
-            // Match Image 1: if in April 2026, day 22 has the orange indicator, or real today
+            // Match Image: if in April 2026, day 22 has the orange indicator, or real today
             const isTodayDate =
                 date.getTime() === todayNormalized.getTime() ||
                 (currentDate.getFullYear() === 2026 && currentDate.getMonth() === 3 && i === 22);
@@ -204,18 +205,8 @@ export const CalendarCard = ({
     };
 
     return (
-        <div className="w-full  relative group z-20">
-            <div className="w-full bg-white/5 backdrop-blur-xl shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_28px_rgba(0,0,0,0.03)] rounded-[28px] sm:rounded-[32px] border border-white/80 p-6 sm:p-10 relative overflow-hidden">
-                {/* Joyzen Orange Watermark Logo */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 sm:w-72 h-64 sm:h-72 pointer-events-none z-0 opacity-25 select-none">
-                    <Image
-                        src="/joyzen-orange.png"
-                        alt="Joyzen Orange Watermark"
-                        fill
-                        className="object-contain"
-                    />
-                </div>
-
+        <div className="w-full max-w-lg relative group z-20">
+            <div className="w-full bg-white/75 backdrop-blur-2xl shadow-[0_12px_40px_rgba(0,0,0,0.04),inset_0_1px_2px_rgba(255,255,255,0.9)] rounded-[32px] border border-white/90 p-6 sm:p-8 relative overflow-hidden">
                 <MonthNavigator
                     currentDate={currentDate}
                     onPrev={handlePrevMonth}
@@ -224,11 +215,11 @@ export const CalendarCard = ({
                 />
 
                 {/* Day of week headers */}
-                <div className="grid grid-cols-7 gap-y-3 sm:gap-y-4 gap-x-1 sm:gap-x-2 justify-items-center mb-4 relative z-10 w-full px-1">
+                <div className="grid grid-cols-7 gap-y-3 gap-x-1 justify-items-center mb-4 relative z-10 w-full px-1">
                     {["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"].map(day => (
                         <div
                             key={day}
-                            className="w-9 h-9 sm:w-11 sm:h-11 flex items-center justify-center text-[10px] sm:text-xs font-semibold text-zinc-500 uppercase tracking-wider"
+                            className="w-9 h-9 sm:w-10 sm:h-10 flex items-center justify-center text-[10px] sm:text-xs font-semibold text-zinc-400 uppercase tracking-wider"
                         >
                             {day}
                         </div>
@@ -238,7 +229,7 @@ export const CalendarCard = ({
 
                 {/* Powered by Calendly footer */}
                 <div className="mt-6 flex items-center justify-center gap-1.5 relative z-10">
-                    <span className="text-xs font-medium text-zinc-500">Powered by</span>
+                    <span className="text-xs font-normal text-zinc-400">Powered by</span>
                     <span className="text-[#006BFF] font-sans font-bold text-base sm:text-lg tracking-tight">
                         Calendly
                     </span>
@@ -252,37 +243,126 @@ export interface ConsultantProps {
     onContinueAndSave?: () => void;
     onBack?: () => void;
     showSaveButton?: boolean;
+    showBackButton?: boolean;
     saveButtonText?: string;
     onGetInTouch?: () => void;
     onDateSelect?: (date: Date) => void;
+    showNotSureCard?: boolean;
     className?: string;
+}
+
+export function NotSureCard({
+    onGetInTouch,
+    useLiquidGlass = false,
+    className = "",
+}: {
+    onGetInTouch?: () => void;
+    useLiquidGlass?: boolean;
+    className?: string;
+}) {
+    const cardContent = (
+        <div className="p-8 sm:p-12 relative z-10">
+            <h3 className="text-2xl sm:text-3xl font-bold text-zinc-950 tracking-tight mb-8">
+                Not Sure What&apos;s Happening?
+            </h3>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14 items-start">
+                {/* Left Column */}
+                <div className="space-y-3">
+                    <p className="text-sm sm:text-lg font-semibold leading-relaxed text-zinc-900">
+                        <span className="text-[#EF8F60]">That&apos;s okay.</span> We&apos;re here to help.
+                    </p>
+                    <p className="text-xs sm:text-lg text-black leading-[1.2] font-bold max-w-sm mt-3">
+                        If you&apos;re unsure about what you need or have questions before your call, leave us a message and our Clarity team will get in touch.
+                    </p>
+                </div>
+
+                {/* Right Column */}
+                <div className="space-y-6">
+                    <ul className="space-y-3.5">
+                        {[
+                            "Discuss your current health concerns or symptoms",
+                            "Understand your hormonal and fertility health",
+                            "Ask questions you've been unsure about",
+                            "Get clarity on your next steps, without pressure",
+                        ].map((item, idx) => (
+                            <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-zinc-800 font-medium">
+                                <span className="shrink-0 w-5 h-5 flex items-center justify-center mt-0.5 text-gray-500">
+                                    <Image src="/dot_icon.svg" alt="bullet" width={18} height={18} className="object-contain" />
+                                </span>
+
+                                <span>{item}</span>
+                            </li>
+                        ))}
+                    </ul>
+
+                    <div>
+                        <button
+                            type="button"
+                            onClick={onGetInTouch}
+                            className="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-zinc-900 bg-[#E5F2EE] hover:bg-[#D8EDE7] border border-[#BCE1E5] shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                        >
+                            GET IN TOUCH
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+
+    if (useLiquidGlass) {
+        return (
+            <LiquidGlass
+                borderRadius={36}
+                blur={3}
+                contrast={1.12}
+                brightness={1.05}
+                saturation={1.15}
+                shadowIntensity={0.06}
+                displacementScale={0.8}
+                elasticity={0.4}
+                zIndex={10}
+                className={`w-full max-w-4xl rounded-[32px] sm:rounded-[36px] bg-white/40 backdrop-blur-2xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_32px_rgba(0,0,0,0.03)] overflow-hidden ${className}`}
+            >
+                {cardContent}
+            </LiquidGlass>
+        );
+    }
+
+    return (
+        <div className={`w-full max-w-4xl rounded-[32px] sm:rounded-[36px] bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_32px_rgba(0,0,0,0.03)] ${className}`}>
+            {cardContent}
+        </div>
+    );
 }
 
 const Consultant = ({
     onContinueAndSave,
     onBack,
     showSaveButton = true,
+    showBackButton = false,
     saveButtonText = "CONTINUE & SAVE",
     onGetInTouch,
     onDateSelect,
+    showNotSureCard = true,
     className = "",
 }: ConsultantProps) => {
     return (
         <section className={`relative w-full flex flex-col items-center justify-center ${className}`}>
             {/* 1. Choose a time to connect Heading */}
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 text-center mb-6">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-950 text-center mb-8">
                 Choose a time to connect
             </h2>
 
             {/* 2. Centered Calendar UI */}
-            <div className="w-full flex justify-center mb-4">
+            <div className="w-full flex justify-center mb-20">
                 <CalendarCard onDateSelect={onDateSelect} />
             </div>
 
-            {/* 3. Action Buttons (Back + CONTINUE & SAVE) */}
-            {showSaveButton && (
-                <div className="w-full flex items-center justify-between pt-2 mb-12 sm:mb-16 px-1">
-                    {onBack ? (
+            {/* 3. Action Buttons (CONTINUE & SAVE) */}
+            {/* {showSaveButton && (
+                <div className={`w-full max-w-[440px] flex items-center ${showBackButton && onBack ? 'justify-between' : 'justify-end'} pt-3 ${showNotSureCard ? 'mb-10 sm:mb-14' : 'mb-2'} px-1`}>
+                    {showBackButton && onBack && (
                         <button
                             type="button"
                             onClick={onBack}
@@ -293,75 +373,22 @@ const Consultant = ({
                             </svg>
                             <span>Back</span>
                         </button>
-                    ) : (
-                        <div />
                     )}
 
                     <button
                         type="button"
                         onClick={onContinueAndSave}
-                        className="inline-flex items-center justify-center px-7 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-zinc-900 bg-[#DCEEEF] hover:bg-[#D2EAEB] border border-[#BCE1E5] shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                        className="inline-flex items-center justify-center px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-zinc-900 bg-[#E5F2EE] hover:bg-[#D8EDE7] border border-[#BCE1E5] shadow-xs hover:shadow-sm transition-all cursor-pointer"
                     >
                         {saveButtonText}
                     </button>
                 </div>
-            )}
+            )} */}
 
             {/* 4. Bottom Wide Card: "Not Sure What's Happening?" */}
-            <div className="w-full rounded-[32px] sm:rounded-[36px] bg-white/40 backdrop-blur-xl border border-white/80 p-8 sm:p-12 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_32px_rgba(0,0,0,0.03)]">
-                <h3 className="text-2xl sm:text-3xl font-bold text-zinc-950 tracking-tight mb-6">
-                    Not Sure What&apos;s Happening?
-                </h3>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
-                    {/* Left Column */}
-                    <div className="space-y-3">
-                        <p className="text-sm sm:text-base font-semibold leading-relaxed text-zinc-900">
-                            <span className="text-[#EF8F60]">That&apos;s okay.</span> We&apos;re here to help.
-                        </p>
-                        <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed max-w-sm">
-                            If you&apos;re unsure about what you need or have questions before your call, leave us a message and our Clarity team will get in touch.
-                        </p>
-                    </div>
-
-                    {/* Right Column */}
-                    <div className="space-y-6">
-                        <ul className="space-y-3.5">
-                            {[
-                                "Discuss your current health concerns or symptoms",
-                                "Understand your hormonal and fertility health",
-                                "Ask questions you've been unsure about",
-                                "Get clarity on your next steps, without pressure",
-                            ].map((item, idx) => (
-                                <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-zinc-800 font-medium">
-                                    <svg
-                                        className="w-4 h-4 text-zinc-700 shrink-0 mt-0.5"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z" />
-                                    </svg>
-                                    <span>{item}</span>
-                                </li>
-                            ))}
-                        </ul>
-
-                        <div>
-                            <button
-                                type="button"
-                                onClick={onGetInTouch}
-                                className="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-zinc-900 bg-[#DCEEEF] hover:bg-[#D2EAEB] border border-[#BCE1E5] shadow-xs hover:shadow-sm transition-all cursor-pointer"
-                            >
-                                GET IN TOUCH
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {showNotSureCard && (
+                <NotSureCard onGetInTouch={onGetInTouch} />
+            )}
         </section>
     );
 };

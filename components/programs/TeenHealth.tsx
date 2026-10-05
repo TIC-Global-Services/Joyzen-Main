@@ -20,7 +20,7 @@ export default function TeenHealth({
   mouseX,
   mouseY,
   isShocked = false,
-  textureUrl = '/programs/Teen-Health-planet.png',
+  textureUrl = '/programs/Teen-Health-planet.webp',
   glowColor = 0xe879f9,
   auraColor = 0xc084fc,
   interactive = true,
@@ -43,8 +43,10 @@ export default function TeenHealth({
     const resolvedTextureUrl =
       !textureUrl ||
       textureUrl === '/programs/Teen-Health.svg' ||
-      textureUrl === '/programs/Teen-Health.png'
-        ? '/programs/Teen-Health-planet.png'
+      textureUrl === '/programs/Teen-Health.png' ||
+      textureUrl === '/programs/Teen-Health.webp' ||
+      textureUrl === '/programs/Teen-Health-planet.png'
+        ? '/programs/Teen-Health-planet.webp'
         : textureUrl;
 
     // 1. Scene setup

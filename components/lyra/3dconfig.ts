@@ -2,7 +2,7 @@ import type { Globe3DConfig, ScrollSequenceConfig } from '@/components/shared/pr
 
 export const LYRA_GLOBE_CONFIG: Globe3DConfig = {
   title: 'LYRA 3D Globe',
-  textureUrl: '/programs/Women-Health-planet.png',
+  textureUrl: '/programs/Women-Health-planet.webp',
 
   // --- 1. Scene Lighting & Exposure ---
   exposure: 1.1,

@@ -8,7 +8,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import SpecularButton from '@/reuseable/specularButton';
-import Consultant from '@/components/q-form-2/conseltent';
+import Consultant, { NotSureCard } from '@/components/q-form-2/conseltent';
+import { LiquidGlass } from '@liquidglass/react';
 
 export const exploreFormSchema = z
   .object({
@@ -43,43 +44,22 @@ export const exploreFormSchema = z
       .email('Please enter a valid email address'),
     city: z
       .string()
-      .min(3, 'City must be at least 3 characters')
+      .min(2, 'City must be at least 2 characters')
       .max(50, 'City must not exceed 50 characters'),
     country: z
       .string()
-      .min(3, 'Country must be at least 3 characters')
+      .min(2, 'Country must be at least 2 characters')
       .max(50, 'Country must not exceed 50 characters'),
-    occupation: z
-      .string()
-      .min(3, 'Occupation must be at least 3 characters')
-      .max(50, 'Occupation must not exceed 50 characters'),
+    occupation: z.string().optional().or(z.literal('')),
     periodCycleRegular: z.string().optional().or(z.literal('')),
     pcos: z.string().optional().or(z.literal('')),
-    hormonal: z.string().min(1, 'Please select Yes or No'),
-    thyroid: z.string().min(1, 'Please select Yes or No'),
+    hormonal: z.string().optional().or(z.literal('')),
+    thyroid: z.string().optional().or(z.literal('')),
     tryingToConceive: z
       .string()
       .max(500, 'Answer must not exceed 500 characters')
       .optional()
       .or(z.literal('')),
-  })
-  .superRefine((data, ctx) => {
-    if (data.gender === 'Female') {
-      if (!data.periodCycleRegular || data.periodCycleRegular.trim() === '') {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['periodCycleRegular'],
-          message: 'Please select Yes or No',
-        });
-      }
-      if (!data.pcos || data.pcos.trim() === '') {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['pcos'],
-          message: 'Please select Yes or No',
-        });
-      }
-    }
   });
 
 export type ExploreFormData = z.infer<typeof exploreFormSchema>;
@@ -351,7 +331,7 @@ export default function ExploreForm() {
   };
 
   return (
-    <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden">
+    <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden bg-[#FAF8F5]">
       {/* iOS-Safe Gradient Flow Keyframes */}
       <style>{`
         @keyframes exploreGradientFlow {
@@ -366,107 +346,29 @@ export default function ExploreForm() {
         }
       `}</style>
 
-      {/* Dynamic Animated Background: Vibrant Pastel, Full Edge-to-Edge Color Sweep (iOS GPU Optimized) */}
-      <div
-        className="fixed inset-0 pointer-events-none overflow-hidden z-0 bg-[#FCFAF7]/20"
-        style={{ transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)', isolation: 'isolate' }}
-      >
-        <motion.div
-          className="absolute top-0 -left-[60vw] w-[220vw] h-full opacity-60 blur-[30px]"
-          style={{
-            backgroundImage:
-              'linear-gradient(90deg, rgba(250,237,150,0.65) 0%, rgba(255,218,195,0.6) 25%, rgba(235,208,245,0.55) 50%, rgba(185,228,252,0.65) 75%, rgba(250,237,150,0.65) 100%)',
-            backgroundSize: '100% 100%',
-            willChange: 'transform',
-          }}
-          animate={{
-            x: ['0vw', '60vw', '0vw'],
-          }}
-          transition={{
-            duration: 13,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        <motion.div
-          className="absolute top-1/6 -left-20 sm:-left-36 w-[340px] h-[340px] sm:w-[680px] sm:h-[680px] lg:w-[880px] lg:h-[880px] rounded-full blur-[45px] sm:blur-[80px] lg:blur-[120px]"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(250,237,150,0.7) 0%, rgba(255,218,195,0.55) 45%, rgba(255,218,195,0) 75%)',
-            willChange: 'transform',
-          }}
-          animate={{
-            x: ['0vw', '70vw', '0vw'],
-            y: ['0vh', '12vh', '0vh'],
-            scale: [1, 1.08, 0.95, 1],
-          }}
-          transition={{
-            duration: 13,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        <motion.div
-          className="absolute top-1/4 -right-20 sm:-right-36 w-[360px] h-[360px] sm:w-[700px] sm:h-[700px] lg:w-[920px] lg:h-[920px] rounded-full blur-[45px] sm:blur-[80px] lg:blur-[120px]"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(185,228,252,0.7) 0%, rgba(235,208,245,0.55) 45%, rgba(235,208,245,0) 75%)',
-            willChange: 'transform',
-          }}
-          animate={{
-            x: ['0vw', '-70vw', '0vw'],
-            y: ['0vh', '-10vh', '0vh'],
-            scale: [1, 0.95, 1.08, 1],
-          }}
-          transition={{
-            duration: 13,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-        />
-
-        <motion.div
-          className="absolute top-2/3 -left-16 sm:-left-32 w-[320px] h-[320px] sm:w-[620px] sm:h-[620px] lg:w-[780px] lg:h-[780px] rounded-full blur-[45px] sm:blur-[80px] lg:blur-[120px]"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(255,208,185,0.6) 0%, rgba(250,237,150,0.45) 45%, rgba(250,237,150,0) 75%)',
-            willChange: 'transform',
-          }}
-          animate={{
-            x: ['0vw', '65vw', '0vw'],
-            y: ['0vh', '-7vh', '0vh'],
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 0.8,
-          }}
-        />
-
-        <motion.div
-          className="absolute -top-20 sm:-top-32 -right-16 sm:-right-32 w-[340px] h-[340px] sm:w-[640px] sm:h-[640px] lg:w-[820px] lg:h-[820px] rounded-full blur-[45px] sm:blur-[80px] lg:blur-[120px]"
-          style={{
-            background:
-              'radial-gradient(circle, rgba(195,242,246,0.65) 0%, rgba(235,208,245,0.45) 45%, rgba(235,208,245,0) 75%)',
-            willChange: 'transform',
-          }}
-          animate={{
-            x: ['0vw', '-65vw', '0vw'],
-            y: ['0vh', '9vh', '0vh'],
-          }}
-          transition={{
-            duration: 14,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: 1.2,
-          }}
-        />
+      {/* Honeycomb Vector Pattern Grid */}
+      <div className="fixed inset-0 pointer-events-none opacity-35 z-0">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern
+              id="explore-honeycomb-pattern"
+              width="62.35"
+              height="108"
+              patternUnits="userSpaceOnUse"
+            >
+              <path
+                d="M 31.18 0 L 62.35 18 L 62.35 54 L 31.18 72 L 0 54 L 0 18 Z M 0 54 L 0 90 L 31.18 108 L 62.35 90 L 62.35 54 M 31.18 72 L 31.18 108"
+                fill="none"
+                stroke="#EAE6DE"
+                strokeWidth="1.1"
+              />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#explore-honeycomb-pattern)" />
+        </svg>
       </div>
 
-      <div className="relative z-10 w-full max-w-xl flex flex-col items-center mt-10">
+      <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center mt-10 transition-all duration-300">
         {/* Dynamic Heading & Subtitle */}
         {!submitted && (
           <div className="text-center max-w-2xl mx-auto mb-8 space-y-3">
@@ -607,17 +509,6 @@ export default function ExploreForm() {
 
         {/* Interactive Form Card */}
         <form onSubmit={handleSubmit(onSubmit)} className="relative w-full">
-          {/* Background Joyzen Orange Logo Watermark */}
-          {!submitted && (
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 sm:w-64 h-48 sm:h-64 pointer-events-none z-0 opacity-35 select-none">
-              <Image
-                src="/joyzen-orange.png"
-                alt="Joyzen Orange Logo Watermark"
-                fill
-                className="object-contain"
-              />
-            </div>
-          )}
 
           {submitted ? (
             <motion.div
@@ -631,38 +522,43 @@ export default function ExploreForm() {
                 Confirmation. Your call is booked.
               </h1>
 
-              {/* Confirmation Card from Image 2 */}
-              <div className="w-full max-w-xl mx-auto p-10 sm:p-14 rounded-[36px] sm:rounded-[44px] bg-white/60 backdrop-blur-2xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_12px_36px_rgba(0,0,0,0.04)] relative overflow-hidden text-center">
-                {/* Joyzen Orange Watermark Logo in background */}
-                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 w-72 sm:w-80 h-72 sm:h-80 pointer-events-none z-0 opacity-25 select-none">
-                  <Image
-                    src="/joyzen-orange.png"
-                    alt="Joyzen Logo"
-                    fill
-                    className="object-contain"
-                  />
-                </div>
+              {/* Confirmation Card with Liquid Glass Effect */}
+              <div className="w-full max-w-xl mx-auto">
+                <LiquidGlass
+                  borderRadius={38}
+                  blur={3}
+                  contrast={1.14}
+                  brightness={1.05}
+                  saturation={1.18}
+                  shadowIntensity={0.06}
+                  displacementScale={0.8}
+                  elasticity={0.4}
+                  zIndex={10}
+                  className="w-full rounded-[36px] sm:rounded-[44px] bg-white/40 backdrop-blur-2xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_12px_36px_rgba(0,0,0,0.04)] overflow-hidden"
+                >
+                  <div className="p-10 sm:p-14 text-center relative z-10">
+                    <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#EF8F60] tracking-tight mb-5 relative z-10">
+                      You&apos;re all set
+                    </h2>
 
-                <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#EF8F60] tracking-tight mb-5 relative z-10">
-                  You&apos;re all set
-                </h2>
+                    <p className="text-base sm:text-lg text-zinc-800 font-medium leading-relaxed max-w-sm mx-auto mb-8 relative z-10">
+                      Thank you for reaching out.
+                      <br />
+                      Our Clarity team will review your
+                      <br />
+                      information and get in touch with you.
+                    </p>
 
-                <p className="text-base sm:text-lg text-zinc-800 font-medium leading-relaxed max-w-sm mx-auto mb-8 relative z-10">
-                  Thank you for reaching out.
-                  <br />
-                  Our Clarity team will review your
-                  <br />
-                  information and get in touch with you.
-                </p>
-
-                <div className="relative z-10">
-                  <Link
-                    href="/"
-                    className="inline-block px-7 py-3 rounded-full text-xs font-bold tracking-wider uppercase text-zinc-900 bg-[#E8F4F5]/80 hover:bg-[#DCEEEF] border border-white shadow-xs hover:shadow-sm transition-all cursor-pointer"
-                  >
-                    BACK TO HOME
-                  </Link>
-                </div>
+                    <div className="relative z-10">
+                      <Link
+                        href="/"
+                        className="inline-block px-7 py-3 rounded-full text-xs font-bold tracking-wider uppercase text-zinc-900 bg-[#E8F4F5]/80 hover:bg-[#DCEEEF] border border-white shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                      >
+                        BACK TO HOME
+                      </Link>
+                    </div>
+                  </div>
+                </LiquidGlass>
               </div>
             </motion.div>
           ) : (
@@ -889,195 +785,111 @@ export default function ExploreForm() {
                   animate="visible"
                   exit="exit"
                   transition={{ duration: 0.35 }}
-                  className="relative z-10 space-y-4"
+                  className="relative z-10 space-y-8 w-full flex flex-col items-center"
                 >
-                  {/* Full Name Input (pre-filled from Step 1) */}
-                  {/* <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <input
-                        {...register('fullName', {
-                          onChange: (e) => {
-                            e.target.value = e.target.value.replace(/[0-9]/g, '');
-                          },
-                        })}
-                        type="text"
-                        placeholder="Full Name"
-                        maxLength={50}
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                      />
+                  <div className="w-full max-w-xl mx-auto space-y-4">
+                    {/* Phone Number Input */}
+                    <div>
+                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                        <input
+                          {...register('phoneNumber')}
+                          type="tel"
+                          placeholder="Phone number"
+                          maxLength={10}
+                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                        />
+                      </div>
+                      {errors.phoneNumber && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.phoneNumber.message}</p>}
                     </div>
-                    {errors.fullName && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.fullName.message}</p>}
-                  </div> */}
 
-                  {/* Age Input (pre-filled from Step 1) */}
-                  {/* <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <input
-                        {...register('age', {
-                          onChange: (e) => {
-                            e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
-                          },
-                        })}
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        maxLength={3}
-                        placeholder="Age"
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                      />
+                    {/* Email Input */}
+                    <div>
+                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                        <input
+                          {...register('email')}
+                          type="email"
+                          placeholder="Email"
+                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                        />
+                      </div>
+                      {errors.email && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.email.message}</p>}
                     </div>
-                    {errors.age && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.age.message}</p>}
-                  </div> */}
 
-                  {/* Phone Number Input */}
-                  <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <input
-                        {...register('phoneNumber')}
-                        type="tel"
-                        placeholder="Phone number"
-                        maxLength={10}
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                      />
+                    {/* City Input */}
+                    <div>
+                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                        <input
+                          {...register('city')}
+                          type="text"
+                          placeholder="city"
+                          maxLength={50}
+                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                        />
+                      </div>
+                      {errors.city && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.city.message}</p>}
                     </div>
-                    {errors.phoneNumber && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.phoneNumber.message}</p>}
+
+                    {/* Country Input */}
+                    <div>
+                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                        <input
+                          {...register('country')}
+                          type="text"
+                          placeholder="Country"
+                          maxLength={50}
+                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                        />
+                      </div>
+                      {errors.country && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.country.message}</p>}
+                    </div>
+
+                    {/* Section 2: Anything you'd like us to know? */}
+                    <div className="pt-4 space-y-3 w-full">
+                      <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 text-center">
+                        Anything you&apos;d like us to know?
+                      </h2>
+                      <div className="relative rounded-[28px] bg-white/40 backdrop-blur-md border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                        <textarea
+                          {...register('tryingToConceive')}
+                          id="concern-textarea"
+                          rows={4}
+                          placeholder="Tell us anything you'd like to share before we get in touch..."
+                          maxLength={500}
+                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px] resize-none"
+                        />
+                      </div>
+                      {errors.tryingToConceive && (
+                        <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.tryingToConceive.message}</p>
+                      )}
+                    </div>
                   </div>
 
-                  {/* Email Input */}
-                  <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <input
-                        {...register('email')}
-                        type="email"
-                        placeholder="Email"
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                      />
-                    </div>
-                    {errors.email && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.email.message}</p>}
-                  </div>
+                  {/* Step 3 Form Action Buttons */}
+                  <div className="flex items-center justify-between pt-6 w-full max-w-xl mx-auto">
+                    <button
+                      type="button"
+                      onClick={handlePrevStep}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-[24px] text-sm font-semibold text-zinc-700 bg-white/60 border border-white hover:bg-white transition-all cursor-pointer shadow-xs"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                      </svg>
+                      <span>Back</span>
+                    </button>
 
-                  {/* City Input */}
-                  <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <input
-                        {...register('city')}
-                        type="text"
-                        placeholder="city"
-                        maxLength={50}
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                      />
-                    </div>
-                    {errors.city && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.city.message}</p>}
-                  </div>
-
-                  {/* Country Input */}
-                  <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <input
-                        {...register('country')}
-                        type="text"
-                        placeholder="Country"
-                        maxLength={50}
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                      />
-                    </div>
-                    {errors.country && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.country.message}</p>}
-                  </div>
-
-                  {/* Occupation Input */}
-                  {/* <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <input
-                        {...register('occupation')}
-                        type="text"
-                        placeholder="Occupation"
-                        maxLength={50}
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                      />
-                    </div>
-                    {errors.occupation && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.occupation.message}</p>}
-                  </div> */}
-
-                  {/* Dropdown 1: Period cycle regular? */}
-                  {/* {selectedGender !== 'Male' && (
-                    <GlassDropdown
-                      label="Period cycle regular?"
-                      value={periodCycleValue || ''}
-                      onChange={(val) => setValue('periodCycleRegular', val, { shouldValidate: true })}
-                      error={errors.periodCycleRegular?.message}
-                    />
-                  )} */}
-
-                  {/* Dropdown 2: PCOS */}
-                  {/* {selectedGender !== 'Male' && (
-                    <GlassDropdown
-                      label="PCOS"
-                      value={pcosValue || ''}
-                      onChange={(val) => setValue('pcos', val, { shouldValidate: true })}
-                      error={errors.pcos?.message}
-                    />
-                  )} */}
-
-                  {/* Dropdown 3: Hormonal */}
-                  {/* <GlassDropdown
-                    label="Hormonal"
-                    value={hormonalValue || ''}
-                    onChange={(val) => setValue('hormonal', val, { shouldValidate: true })}
-                    error={errors.hormonal?.message}
-                  /> */}
-
-                  {/* Dropdown 4: Thyroid */}
-                  {/* <GlassDropdown
-                    label="Thyroid"
-                    value={thyroidValue || ''}
-                    onChange={(val) => setValue('thyroid', val, { shouldValidate: true })}
-                    error={errors.thyroid?.message}
-                  /> */}
-
-                  {/* Section 2: Anything you'd like us to know? */}
-                  <div className="pt-6 space-y-3 w-full">
-                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 text-center">
-                      Anything you&apos;d like us to know?
-                    </h2>
-                    <div className="relative rounded-[28px] bg-white/40 backdrop-blur-md border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <textarea
-                        {...register('tryingToConceive')}
-                        id="concern-textarea"
-                        rows={4}
-                        placeholder="Tell us anything you'd like to share before we get in touch..."
-                        maxLength={500}
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px] resize-none"
-                      />
-                    </div>
-                    {errors.tryingToConceive && (
-                      <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.tryingToConceive.message}</p>
-                    )}
-                  </div>
-
-                  {/* Consultant Section (Calendar + Continue & Save + Not Sure What's Happening?) */}
-                  <div className="pt-8 w-full">
-                    <Consultant
-                      onContinueAndSave={() => {
-                        handleSubmit(onSubmit, (formErrors) => {
-                          const firstErrorField = Object.keys(formErrors)[0];
-                          const el = document.getElementsByName(firstErrorField)[0];
-                          if (el) {
-                            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                            (el as HTMLElement).focus();
-                          }
-                        })();
-                      }}
-                      onBack={handlePrevStep}
-                      showSaveButton={true}
-                      saveButtonText="CONTINUE & SAVE"
-                      onGetInTouch={() => {
-                        const el = document.getElementById('concern-textarea');
-                        if (el) {
-                          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          el.focus();
-                        }
-                      }}
-                    />
+                    <SpecularButton
+                      type="submit"
+                      size="md"
+                      tint="#AEDEE44D"
+                      tintOpacity={0.35}
+                      textColor="#000000"
+                      lineColor="#ffffff"
+                      baseColor="#AEDEE44D"
+                      radius={24}
+                      className="font-bold text-sm uppercase tracking-tight px-8 py-3.5 shadow-md cursor-pointer"
+                    >
+                      SUBMIT FORM
+                    </SpecularButton>
                   </div>
                 </motion.div>
               )}
@@ -1085,6 +897,66 @@ export default function ExploreForm() {
           )}
         </form>
       </div>
+
+      {/* Single Background Joyzen Logo Watermark bridging top and bottom sections */}
+      {(currentStep === 3 || submitted) && (
+        <div className="relative w-full flex items-center justify-center -my-20 sm:-my-28 pointer-events-none z-0 select-none">
+          <div className="relative w-72 sm:w-96 h-72 sm:h-96 opacity-40">
+            <Image
+              src="/joyzen-orange.png"
+              alt="Joyzen Logo Watermark"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
+        </div>
+      )}
+
+      {/* When submitted: NotSureCard remains below the confirmation card with liquid glass effect */}
+      {submitted && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+          className="relative z-10 w-full max-w-4xl mx-auto mt-4 sm:mt-6 mb-12"
+        >
+          <NotSureCard
+            useLiquidGlass={true}
+            onGetInTouch={() => {
+              if (typeof window !== 'undefined') {
+                window.location.href = 'mailto:care@joyzen.in';
+              }
+            }}
+          />
+        </motion.div>
+      )}
+
+      {/* When in Step 3 and not submitted: Calendar & NotSureCard (independent from form submission) */}
+      {!submitted && currentStep === 3 && (
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 w-full max-w-4xl mx-auto mt-4 sm:mt-6"
+        >
+          <Consultant
+            showSaveButton={true}
+            showBackButton={false}
+            saveButtonText="CONTINUE & SAVE"
+            onContinueAndSave={() => {
+              console.log('Calendar slot confirmed');
+            }}
+            onGetInTouch={() => {
+              const el = document.getElementById('concern-textarea');
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.focus();
+              }
+            }}
+          />
+        </motion.div>
+      )}
     </section>
   );
 }

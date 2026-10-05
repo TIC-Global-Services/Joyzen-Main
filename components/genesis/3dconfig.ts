@@ -2,7 +2,7 @@ import type { Globe3DConfig, ScrollSequenceConfig } from '@/components/shared/pr
 
 export const GENESIS_GLOBE_CONFIG: Globe3DConfig = {
   title: 'GENESIS 3D Globe',
-  textureUrl: '/programs/Fatherhood-Prep-planet.png',
+  textureUrl: '/programs/Ethereal_Lavender_Horizon.webp',
 
   // --- 1. Scene Lighting & Exposure ---
   exposure: 1.1,

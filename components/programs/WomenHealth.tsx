@@ -20,7 +20,7 @@
     mouseX,
     mouseY,
     isShocked = false,
-    textureUrl = '/programs/Women-Health-planet.png',
+    textureUrl = '/programs/Women-Health-planet.webp',
     glowColor = 0xf43f5e,
     auraColor = 0xfb7185,
     interactive = true,
@@ -43,8 +43,10 @@
       const resolvedTextureUrl =
         !textureUrl ||
         textureUrl === '/programs/Women-Health.svg' ||
-        textureUrl === '/programs/Women-Health.png'
-          ? '/programs/Women-Health-planet.png'
+        textureUrl === '/programs/Women-Health.png' ||
+        textureUrl === '/programs/Women-Health.webp' ||
+        textureUrl === '/programs/Women-Health-planet.png'
+          ? '/programs/Women-Health-planet.webp'
           : textureUrl;
 
       // 1. Scene setup

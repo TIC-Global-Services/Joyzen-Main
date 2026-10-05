@@ -2,7 +2,7 @@ import type { Globe3DConfig, ScrollSequenceConfig } from '@/components/shared/pr
 
 export const ATLAS_GLOBE_CONFIG: Globe3DConfig = {
   title: 'ATLAS 3D Globe',
-  textureUrl: '/programs/Male-Fertility-planet.png',
+  textureUrl: '/programs/Male-Fertility-planet.webp',
 
   // --- 1. Scene Lighting & Exposure ---
   exposure: 1.1,

@@ -20,7 +20,7 @@ export default function NaturalConception({
   mouseX,
   mouseY,
   isShocked = false,
-  textureUrl = '/programs/Natural-Conception-planet.png',
+  textureUrl = '/programs/Natural-Conception-planet.webp',
   glowColor = 0xfbbf24,
   auraColor = 0xf59e0b,
   interactive = true,
@@ -43,8 +43,10 @@ export default function NaturalConception({
     const resolvedTextureUrl =
       !textureUrl ||
       textureUrl === '/programs/Natural-Conception.svg' ||
-      textureUrl === '/programs/Natural-Conception.png'
-        ? '/programs/Natural-Conception-planet.png'
+      textureUrl === '/programs/Natural-Conception.png' ||
+      textureUrl === '/programs/Natural-Conception.webp' ||
+      textureUrl === '/programs/Natural-Conception-planet.png'
+        ? '/programs/Natural-Conception-planet.webp'
         : textureUrl;
 
     // 1. Scene setup

@@ -280,7 +280,7 @@ export default function DashboardShowcaseSection() {
                 {/* Dashboard Screenshot with crisp natural fit and smooth hover scale */}
                 <div className="relative w-full flex-1 min-h-[300px] sm:min-h-[380px] lg:min-h-[450px] rounded-2xl overflow-hidden flex items-center ">
                   <Image
-                    src="/in-one-place.png"
+                    src="https://ik.imagekit.io/gyg6yfnd5/dashboard.png"
                     alt="Everything your health has been asking for Finally in one place"
                     fill
                     priority

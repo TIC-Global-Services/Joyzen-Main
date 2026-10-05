@@ -2,7 +2,7 @@ import type { Globe3DConfig, ScrollSequenceConfig } from '@/components/shared/pr
 
 export const CORE_GLOBE_CONFIG: Globe3DConfig = {
   title: 'CORE 3D Globe',
-  textureUrl: '/programs/Men-Health-planet.png',
+  textureUrl: '/programs/Men-Health-planet.webp',
 
   // --- 1. Scene Lighting & Exposure ---
   exposure: 1.1,

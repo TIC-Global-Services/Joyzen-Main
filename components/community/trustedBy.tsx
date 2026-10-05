@@ -30,7 +30,7 @@ export default function TrustedBy() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: '-40px' }}
                             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                            className="bg-white rounded-[20px] p-6 sm:p-7 md:p-8 flex flex-col justify-between shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 flex-1"
+                            className="bg-white rounded-[20px] p-6 sm:p-7 md:p-8 flex flex-col justify-between shadow-xl border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 flex-1"
                         >
                             <div>
                                 <h3 className="text-[40px] sm:text-6xl font-bold tracking-tight text-[#FAD405] leading-none">
@@ -42,7 +42,7 @@ export default function TrustedBy() {
                             </div>
 
                             {/* PIB Badge */}
-                            <div className="flex justify-start md:justify-end mt-4 pt-2">
+                            <div className="flex justify-start md:justify-end mt-4 pt-2 ">
                                 <div className="inline-flex items-center gap-3 px-6 py-2 rounded-full bg-[#DDC5DF80] text-black text-sm md:text-base font-medium tracking-tight shadow-2xs">
                                     <div className="relative w-6 h-6 rounded-full overflow-hidden flex-shrink-0 bg-white/60">
                                         <Image
@@ -63,7 +63,7 @@ export default function TrustedBy() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: '-40px' }}
                             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-                            className="bg-white rounded-[20px] p-6 sm:p-7 md:p-8 flex flex-col justify-center shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 flex-1"
+                            className="bg-white rounded-[20px] p-6 sm:p-7 md:p-8 flex flex-col justify-center shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] shadow-xl hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 flex-1"
                         >
                             <h3 className="text-4xl sm:text-[6.250rem] font-bold tracking-tight text-[#E87547] leading-none">
                                 25%
@@ -80,7 +80,7 @@ export default function TrustedBy() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-40px' }}
                         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.15 }}
-                        className="lg:col-span-8 bg-white rounded-[20px]  p-6 sm:p-8 md:p-10 flex flex-col justify-between shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300"
+                        className="lg:col-span-8 bg-white rounded-[20px]  p-6 sm:p-8 md:p-10 flex flex-col justify-between shadow-xl border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300"
                     >
                         <div>
                             <h2 className="text-[40px] sm:text-4xl md:text-6xl font-bold tracking-tighter text-[#E87547] leading-none">
@@ -137,7 +137,7 @@ export default function TrustedBy() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-40px' }}
                         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                        className="lg:col-span-8 bg-white rounded-[20px] p-6 sm:p-8 md:p-10 flex flex-col justify-between shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 overflow-hidden"
+                        className="lg:col-span-8 bg-white rounded-[20px] p-6 sm:p-8 md:p-10 flex flex-col justify-between shadow-xl border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300 overflow-hidden"
                     >
                         <div>
                             <h2 className="text-[40px] sm:text-4xl md:text-6xl font-bold tracking-tight text-[#036132] leading-none">
@@ -172,7 +172,7 @@ export default function TrustedBy() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: '-40px' }}
                         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.25 }}
-                        className="lg:col-span-4 bg-white rounded-[20px] p-6 sm:p-7 md:p-8 flex flex-col justify-center shadow-[0_4px_25px_rgba(0,0,0,0.03)] border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300"
+                        className="lg:col-span-4 bg-white rounded-[20px] p-6 sm:p-7 md:p-8 flex flex-col justify-center shadow-xl border border-black/[0.04] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all duration-300"
                     >
                         <h3 className="text-[40px] sm:text-6xl font-bold tracking-tight text-[#AEDEE4] drop-shadow-xs leading-none">
                             500+

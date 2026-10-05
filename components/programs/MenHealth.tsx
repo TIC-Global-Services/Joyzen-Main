@@ -20,7 +20,7 @@ export default function MenHealth({
   mouseX,
   mouseY,
   isShocked = false,
-  textureUrl = '/programs/Men-Health-planet.png',
+  textureUrl = '/programs/Men-Health-planet.webp',
   glowColor = 0x2dd4bf,
   auraColor = 0x14b8a6,
   interactive = true,
@@ -43,8 +43,10 @@ export default function MenHealth({
     const resolvedTextureUrl =
       !textureUrl ||
       textureUrl === '/programs/Men-Health.svg' ||
-      textureUrl === '/programs/Men-Health.png'
-        ? '/programs/Men-Health-planet.png'
+      textureUrl === '/programs/Men-Health.png' ||
+      textureUrl === '/programs/Men-Health.webp' ||
+      textureUrl === '/programs/Men-Health-planet.png'
+        ? '/programs/Men-Health-planet.webp'
         : textureUrl;
 
     // 1. Scene setup

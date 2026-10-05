@@ -2,7 +2,7 @@ import type { Globe3DConfig, ScrollSequenceConfig } from '@/components/shared/pr
 
 export const EVE_GLOBE_CONFIG: Globe3DConfig = {
   title: 'EVE 3D Globe',
-  textureUrl: '/programs/Pregnancy-Prep-planet.png',
+  textureUrl: '/programs/Pregnancy-Prep-planet.webp',
 
   // --- 1. Scene Lighting & Exposure ---
   exposure: 1.1,

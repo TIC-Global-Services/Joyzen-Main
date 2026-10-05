@@ -20,7 +20,7 @@ export default function MaleFertility({
   mouseX,
   mouseY,
   isShocked = false,
-  textureUrl = '/programs/Male-Fertility-planet.png',
+  textureUrl = '/programs/Male-Fertility-planet.webp',
   glowColor = 0x38bdf8,
   auraColor = 0x06b6d4,
   interactive = true,
@@ -43,8 +43,10 @@ export default function MaleFertility({
     const resolvedTextureUrl =
       !textureUrl ||
       textureUrl === '/programs/Male-Fertility.svg' ||
-      textureUrl === '/programs/Male-Fertility.png'
-        ? '/programs/Male-Fertility-planet.png'
+      textureUrl === '/programs/Male-Fertility.png' ||
+      textureUrl === '/programs/Male-Fertility.webp' ||
+      textureUrl === '/programs/Male-Fertility-planet.png'
+        ? '/programs/Male-Fertility-planet.webp'
         : textureUrl;
 
     // 1. Scene setup

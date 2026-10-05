@@ -2,7 +2,7 @@ import type { Globe3DConfig, ScrollSequenceConfig } from '@/components/shared/pr
 
 export const LUNA_GLOBE_CONFIG: Globe3DConfig = {
   title: 'LUNA 3D Globe',
-  textureUrl: '/programs/Teen-Health-planet.png',
+  textureUrl: '/programs/Teen-Health-planet.webp',
 
   // --- 1. Scene Lighting & Exposure ---
   exposure: 1.1,
