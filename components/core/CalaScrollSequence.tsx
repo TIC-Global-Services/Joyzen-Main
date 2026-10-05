@@ -441,7 +441,7 @@ export default function CalaScrollSequence() {
 
     // Phase 8: 8.0 to 9.5s - Mobile UI elements fade out, 3D orb zooms, text fades out
     tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator', { autoAlpha: 0, duration: 0.2 }, "phase8");
-    tl.to('.mobile-3d-orb', { scale: isMobileDev ? 5.5 : 15, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
+    tl.to('.mobile-3d-orb', { scale: isMobileDev ? 6.5 : 15, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
 
     // Phase 9: 9.5 to 10.5s - Final full-screen content fades in
     tl.fromTo('.final-content', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 1, ease: 'power2.out' }, "phase9");

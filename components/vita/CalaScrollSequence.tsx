@@ -472,7 +472,7 @@ export default function CalaScrollSequence() {
     // Phase 11: 11.5 to 12.5s - Orb acts as massive ceiling. Text 1 fades in.
     const orbPhase11Scale = isMobileDev ? 8.0 : 9.5;
     const orbPhase12Scale = isMobileDev ? 5.5 : 6.0;
-    const orbFinalScale = isMobileDev ? 1.9 : 3.2;
+    const orbFinalScale = isMobileDev ? 1.4 : 3.2;
 
     tl.to('.mobile-3d-orb', { scale: orbPhase11Scale, top: '-15%', duration: 1.5, ease: 'power2.inOut' }, "phase11");
     tl.fromTo('.benefits-text-1', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase11+=0.8");
@@ -641,7 +641,7 @@ export default function CalaScrollSequence() {
     tracking-[-0.035em]
     text-[#72B2AA]
     whitespace-nowrap
-    text-[clamp(130px,28vw,420px)]
+    text-[clamp(160px,32vw,420px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
   "
           >

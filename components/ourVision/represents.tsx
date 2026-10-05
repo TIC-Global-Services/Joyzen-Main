@@ -834,7 +834,7 @@ export default function Represents() {
                       fill={isHovered ? item.color.accent : item.color.text}
                       letterSpacing="0.04em"
                       className="select-none"
-                      style={{ transition: 'fill 0.3s ease',margin:"0px 0px 6px 0px" }}
+                      style={{ transition: 'fill 0.3s ease',margin:"10px 10px 6px 10px" }}
                     >
                       {item.num}
                     </text>
@@ -870,10 +870,10 @@ export default function Represents() {
                       className="select-none"
                       style={{ transition: 'fill 0.3s ease' }}
                     >
-                      <tspan x={item.textPos.x} dy="0">
+                      <tspan x={item.textPos.x} dy="2">
                         {item.descLine1}
                       </tspan>
-                      <tspan x={item.textPos.x} dy="16">
+                      <tspan x={item.textPos.x} dy="20">
                         {item.descLine2}
                       </tspan>
                     </text>

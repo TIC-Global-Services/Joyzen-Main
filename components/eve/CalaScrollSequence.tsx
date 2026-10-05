@@ -203,10 +203,10 @@ function CollidingPill({
             isMobile
               ? undefined
               : {
-                  x: pill.driftX.map((v: number) => v * scaleFactor),
-                  y: pill.driftY.map((v: number) => v * scaleFactor),
-                  rotate: pill.rotateRange,
-                }
+                x: pill.driftX.map((v: number) => v * scaleFactor),
+                y: pill.driftY.map((v: number) => v * scaleFactor),
+                rotate: pill.rotateRange,
+              }
           }
           transition={{ duration: pill.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
           drag={!isMobile}
@@ -439,7 +439,7 @@ export default function CalaScrollSequence() {
 
     // Phase 8: 8.0 to 9.5s - Mobile UI elements fade out, 3D orb zooms, text fades out
     tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator', { autoAlpha: 0, duration: 0.2 }, "phase8");
-    tl.to('.mobile-3d-orb', { scale: isMobileDev ? 5.5 : 15, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
+    tl.to('.mobile-3d-orb', { scale: isMobileDev ? 6.5 : 15, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
 
     // Phase 9: 9.5 to 10.5s - Final full-screen content fades in
     tl.fromTo('.final-content', { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 1, ease: 'power2.out' }, "phase9");
@@ -615,7 +615,7 @@ export default function CalaScrollSequence() {
     tracking-[-0.035em]
     text-[#72B2AA]
     whitespace-nowrap
-    text-[clamp(130px,28vw,420px)]
+    text-[clamp(220px,38vw,420px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
   "
           >
@@ -752,7 +752,7 @@ export default function CalaScrollSequence() {
                 <img src="/mobile-cala.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
 
                 <div className="mobile-watermark mobile-ui absolute z-10 pointer-events-none select-none flex items-center justify-center" style={{ top: '40%', left: '50%' }}>
-                  <span className="text-[42px] sm:text-[72px] font-black tracking-widest text-[#72B2AA] uppercase">EVE</span>
+                  <span className="text-[72px] sm:text-[72px] font-black tracking-widest text-[#72B2AA] uppercase">EVE</span>
                 </div>
 
                 {/* ZOOMABLE 3D ORB */}
@@ -861,7 +861,7 @@ export default function CalaScrollSequence() {
               <h3 className="text-[#E5855E] text-[10px] sm:text-sm md:text-lg font-bold tracking-tight uppercase md:mb-3">
                 What's Inside The Membership
               </h3>
-              <h2 className="text-3xl sm:text-4xl md:text-3xl lg:text-[32px] font-bold text-white tracking-tight drop-shadow-md leading-[1.1]">
+              <h2 className="text-3xl sm:text-4xl md:text-3xl lg:text-[32px] font-bold text-white tracking-tight drop-shadow-md leading-none">
                 Structured medical, fertility, and lifestyle guidance.
               </h2>
             </div>
@@ -970,7 +970,7 @@ export default function CalaScrollSequence() {
             </div>
 
             {/* Footer Text */}
-            <p className="mt-10 sm:mt-12 text-white font-medium text-sm sm:text-base md:text-[17px] drop-shadow max-w-4xl leading-[1.2]">
+            <p className="mt-6 sm:mt-12 text-white font-medium text-sm sm:text-base md:text-[17px] drop-shadow max-w-4xl leading-[1.2]">
               The source positions EVE around structured medical, fertility, and lifestyle guidance.
             </p>
           </div>
@@ -1000,7 +1000,7 @@ export default function CalaScrollSequence() {
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] md:top-[65%] right-[calc(70%+20px)] sm:right-[calc(50%+60px)] md:right-[calc(50%+110px)]">
+          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] md:top-[65%] right-[calc(60%+10px)] sm:right-[calc(50%+60px)] md:right-[calc(50%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Hormone optimization</span>
@@ -1145,7 +1145,7 @@ export default function CalaScrollSequence() {
           {/* Mobile Layout (< md) - ONLY MOUNT ON MOBILE */}
           {isMobile && (
             <div className="flex md:hidden absolute inset-x-0 bottom-4 top-[100px] flex-col justify-start items-center px-4 pointer-events-auto z-40 overflow-y-auto pt-2 pb-6">
-              
+
               {/* Answer Box (TOP) */}
               <div className="faq-right-box w-full max-w-[340px] mb-auto relative z-10 shrink-0">
                 <div className="p-5 rounded-3xl border border-white/80 bg-white/95 shadow-xl backdrop-blur-xl text-left relative overflow-hidden">
