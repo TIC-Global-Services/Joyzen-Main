@@ -181,7 +181,9 @@ function CollidingPill({
       }}
       transition={{ type: 'spring', stiffness: 280, damping: 18 }}
     >
+      {/* Layer 1: Cursor Repulsion */}
       <motion.div style={{ x: repelX, y: repelY }}>
+        {/* Layer 2: Floating Organic Drift */}
         <motion.div
           animate={
             isMobile
@@ -193,55 +195,58 @@ function CollidingPill({
               }
           }
           transition={{ duration: pill.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-          drag
-          dragConstraints={{ left: -70 * scaleFactor, right: 70 * scaleFactor, top: -70 * scaleFactor, bottom: 70 * scaleFactor }}
-          dragElastic={0.4}
-          whileDrag={{ scale: 1.12, zIndex: 60, cursor: 'grabbing', boxShadow: '0 20px 40px rgba(0,0,0,0.14)' }}
-          whileHover={{ scale: 1.08, cursor: 'grab', transition: { type: 'spring', stiffness: 400, damping: 15 } }}
-          onClick={() => {
-            setClickedPill(pill.id);
-            setTimeout(() => setClickedPill(null), 600);
-          }}
-          className="relative group cursor-grab active:cursor-grabbing touch-none"
         >
-          <AdaptiveGlass
-            // isMobile={isMobile}
-            borderRadius={9999}
-            blur={1.5}
-            contrast={1.12}
-            brightness={1.04}
-            saturation={1.15}
-            shadowIntensity={0.05}
-            displacementScale={0.8}
-            elasticity={0.4}
-            zIndex={20}
-            className="transition-all duration-300 select-none border border-white/60 hover:border-white/90"
+          {/* Layer 3: Interactive Drag Layer */}
+          <motion.div
+            drag
+            dragConstraints={{ left: -70 * scaleFactor, right: 70 * scaleFactor, top: -70 * scaleFactor, bottom: 70 * scaleFactor }}
+            dragElastic={0.4}
+            whileDrag={{ scale: 1.12, zIndex: 60, cursor: 'grabbing', boxShadow: '0 20px 40px rgba(0,0,0,0.14)' }}
+            whileHover={{ scale: 1.08, cursor: 'grab', transition: { type: 'spring', stiffness: 400, damping: 15 } }}
+            onClick={() => {
+              setClickedPill(pill.id);
+              setTimeout(() => setClickedPill(null), 600);
+            }}
+            className="relative group cursor-grab active:cursor-grabbing touch-none select-none"
           >
-            <div
-              className="relative flex items-center justify-center rounded-full"
-              style={{
-                padding: `${Math.max(8, 15 * scaleFactor)}px ${Math.max(16, 28 * scaleFactor)}px`,
-              }}
+            <AdaptiveGlass
+              borderRadius={9999}
+              blur={1.5}
+              contrast={1.12}
+              brightness={1.04}
+              saturation={1.15}
+              shadowIntensity={0.05}
+              displacementScale={0.8}
+              elasticity={0.4}
+              zIndex={20}
+              className="transition-all duration-300 select-none border border-white/60 hover:border-white/90"
             >
-              {clickedPill === pill.id && (
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0.9 }}
-                  animate={{ scale: 1.6, opacity: 0 }}
-                  transition={{ duration: 0.5, ease: 'easeOut' }}
-                  className="absolute inset-0 rounded-full border-2 border-cyan-400 pointer-events-none"
-                />
-              )}
-              <span
-                className="font-semibold text-zinc-900 tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
+              <div
+                className="relative flex items-center justify-center rounded-full pointer-events-none"
                 style={{
-                  fontSize: `clamp(11px, ${25 * scaleFactor}px, 16px)`,
-                  color: '#1E2822',
+                  padding: `${Math.max(8, 15 * scaleFactor)}px ${Math.max(16, 28 * scaleFactor)}px`,
                 }}
               >
-                {pill.label}
-              </span>
-            </div>
-          </AdaptiveGlass>
+                {clickedPill === pill.id && (
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0.9 }}
+                    animate={{ scale: 1.6, opacity: 0 }}
+                    transition={{ duration: 0.5, ease: 'easeOut' }}
+                    className="absolute inset-0 rounded-full border-2 border-cyan-400 pointer-events-none"
+                  />
+                )}
+                <span
+                  className="font-semibold text-zinc-900 tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
+                  style={{
+                    fontSize: `clamp(11px, ${25 * scaleFactor}px, 16px)`,
+                    color: '#1E2822',
+                  }}
+                >
+                  {pill.label}
+                </span>
+              </div>
+            </AdaptiveGlass>
+          </motion.div>
         </motion.div>
       </motion.div>
     </motion.div>
@@ -254,7 +259,7 @@ function OuterChatPill({ item, scaleFactor, clickedId, setClickedId, className, 
 
   return (
     <div
-      className={`absolute pointer-events-auto select-none ${className}`}
+      className={`absolute select-none ${className}`}
       data-x={targetX}
       data-y={targetY}
       data-side={item.side}
@@ -270,73 +275,77 @@ function OuterChatPill({ item, scaleFactor, clickedId, setClickedId, className, 
             }
         }
         transition={{ duration: item.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
-        drag={!isMobile}
-        dragConstraints={{ left: -35 * scaleFactor, right: 35 * scaleFactor, top: -25 * scaleFactor, bottom: 25 * scaleFactor }}
-        dragElastic={0.35}
-        whileDrag={{ scale: 1.05, zIndex: 60, cursor: 'grabbing', boxShadow: '0 20px 40px rgba(0,0,0,0.12)' }}
-        whileHover={{ scale: 1.03, cursor: 'grab', transition: { type: 'spring', stiffness: 400, damping: 15 } }}
-        onClick={() => {
-          setClickedId(item.id);
-          setTimeout(() => setClickedId(null), 700);
-        }}
-        className="relative group cursor-grab active:cursor-grabbing"
       >
-        <AdaptiveGlass
-          isMobile={isMobile}
-          borderRadius={26}
-          blur={1.8}
-          contrast={1.12}
-          brightness={1.04}
-          saturation={1.15}
-          shadowIntensity={0.06}
-          displacementScale={0.8}
-          elasticity={0.4}
-          zIndex={20}
-          className="transition-all duration-300 border border-white/70 hover:border-white/95 bg-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.06),_0_2px_8px_rgba(0,0,0,0.03)]"
+        <motion.div
+          drag={!isMobile}
+          dragConstraints={{ left: -35 * scaleFactor, right: 35 * scaleFactor, top: -25 * scaleFactor, bottom: 25 * scaleFactor }}
+          dragElastic={0.35}
+          whileDrag={{ scale: 1.05, zIndex: 60, cursor: 'grabbing', boxShadow: '0 20px 40px rgba(0,0,0,0.12)' }}
+          whileHover={{ scale: 1.03, cursor: 'grab', transition: { type: 'spring', stiffness: 400, damping: 15 } }}
+          onClick={() => {
+            setClickedId(item.id);
+            setTimeout(() => setClickedId(null), 700);
+          }}
+          className="relative group cursor-grab active:cursor-grabbing touch-none select-none"
         >
-          <div
-            className="relative flex items-start gap-3 rounded-3xl"
-            style={{
-              padding: `${Math.max(10, 14 * scaleFactor)}px ${Math.max(14, 20 * scaleFactor)}px`,
-              maxWidth: `clamp(210px, ${310 * scaleFactor}px, 345px)`,
-            }}
+          <AdaptiveGlass
+            isMobile={isMobile}
+            borderRadius={26}
+            blur={1.8}
+            contrast={1.12}
+            brightness={1.04}
+            saturation={1.15}
+            shadowIntensity={0.06}
+            displacementScale={0.8}
+            elasticity={0.4}
+            zIndex={20}
+            className="transition-all duration-300 border border-white/70 hover:border-white/95 bg-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.06),_0_2px_8px_rgba(0,0,0,0.03)]"
           >
-            {clickedId === item.id && (
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0.9 }}
-                animate={{ scale: 1.4, opacity: 0 }}
-                transition={{ duration: 0.45, ease: 'easeOut' }}
-                className="absolute inset-0 rounded-3xl border-2 border-cyan-400 pointer-events-none"
-              />
-            )}
-            {item.avatarType === 'cala-orb' ? (
-              <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden shrink-0 mt-0.5 border border-teal-300/80 shadow-[0_2px_8px_rgba(36,168,184,0.35)]">
-                <img
-                  src="/programs/Couple-Program.png"
-                  alt="EVE + GENESIS"
-                  className="w-full h-full object-cover scale-[1.2]"
+            <div
+              className="relative flex items-start gap-3 rounded-3xl pointer-events-none"
+              style={{
+                padding: `${Math.max(10, 14 * scaleFactor)}px ${Math.max(14, 20 * scaleFactor)}px`,
+                maxWidth: `clamp(210px, ${310 * scaleFactor}px, 345px)`,
+              }}
+            >
+              {clickedId === item.id && (
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0.9 }}
+                  animate={{ scale: 1.4, opacity: 0 }}
+                  transition={{ duration: 0.45, ease: 'easeOut' }}
+                  className="absolute inset-0 rounded-3xl border-2 border-cyan-400 pointer-events-none"
                 />
+              )}
+              {item.avatarType === 'cala-orb' ? (
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden shrink-0 mt-0.5 border border-teal-300/80 shadow-[0_2px_8px_rgba(36,168,184,0.35)]">
+                  <img
+                    src="/programs/Couple-Program.png"
+                    alt="EVE + GENESIS"
+                    className="w-full h-full object-cover scale-[1.2]"
+                  />
+                </div>
+              ) : (
+                <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-[#E5855E] shrink-0 mt-1 shadow-sm border border-white/60" />
+              )}
+              <div className="flex flex-col text-left">
+                <span className={`font-semibold text-[10px] tracking-tight ${item.isCala ? 'text-[#3E9B92]' : 'text-[#1E2822]'}`}>
+                  {item.sender}
+                </span>
+                <p
+                  className="text-[10px] sm:text-lg text-black leading-snug mt-1 font-normal"
+                  style={{ fontSize: `clamp(11px, ${14 * scaleFactor}px, 16.5px)` }}
+                >
+                  {item.message}
+                </p>
               </div>
-            ) : (
-              <div className="w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full bg-[#E5855E] shrink-0 mt-1 shadow-sm border border-white/60" />
-            )}
-            <div className="flex flex-col text-left">
-              <span className={`font-semibold text-[10px] tracking-tight ${item.isCala ? 'text-[#3E9B92]' : 'text-[#1E2822]'}`}>
-                {item.sender}
-              </span>
-              <p
-                className="text-[10px] sm:text-lg text-black leading-snug mt-1 font-normal"
-                style={{ fontSize: `clamp(11px, ${14 * scaleFactor}px, 16.5px)` }}
-              >
-                {item.message}
-              </p>
             </div>
-          </div>
-        </AdaptiveGlass>
+          </AdaptiveGlass>
+        </motion.div>
       </motion.div>
     </div>
   );
 }
+
 
 export default function CalaScrollSequence() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -381,11 +390,28 @@ export default function CalaScrollSequence() {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      mouseX.set(e.clientX - centerX);
+      mouseY.set(e.clientY - centerY);
+    };
+    const handleLeave = () => {
+      mouseX.set(0);
+      mouseY.set(0);
+    };
+    window.addEventListener('mousemove', handleMove, { passive: true });
+    window.addEventListener('mouseleave', handleLeave);
+    return () => {
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseleave', handleLeave);
+    };
+  }, [mouseX, mouseY]);
+
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
     mouseX.set(e.clientX - centerX);
     mouseY.set(e.clientY - centerY);
   }, [mouseX, mouseY]);
@@ -403,6 +429,23 @@ export default function CalaScrollSequence() {
 
     const isMobileDev = window.innerWidth < 768;
 
+    // Ensure hidden phases cannot intercept pointer events before they are scrolled to
+    gsap.set(
+      [
+        '.talk-with-cala',
+        '.care-team-text',
+        '.mobile-phone-container',
+        '.outer-pills-container',
+        '.final-content',
+        '.benefits-sequence',
+        '.faq-container',
+      ],
+      { autoAlpha: 0, pointerEvents: 'none' }
+    );
+    gsap.set('.hero-pills', { autoAlpha: 1, pointerEvents: 'none' });
+    gsap.set('.hero-orb-container', { autoAlpha: 1, pointerEvents: 'auto' });
+    gsap.set('.hero-cala-text', { autoAlpha: 1 });
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
@@ -417,18 +460,22 @@ export default function CalaScrollSequence() {
     tl.to({}, { duration: 1.0 });
 
     // Phase 2: 1.0 to 2.5s - Hero fades out sequentially
-    tl.to('.hero-pills', { opacity: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit")
+    tl.to('.hero-pills', { autoAlpha: 0, pointerEvents: 'none', duration: 0.5, ease: 'power1.inOut' }, "hero-exit")
       .to(['.hero-cala-text', '.hero-orb-container'], { y: -60, duration: 1.5, ease: 'power1.inOut' }, "hero-exit")
-      .to('.hero-cala-text', { opacity: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=0.5")
-      .to('.hero-orb-container', { opacity: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=1.0");
+      .to('.hero-cala-text', { autoAlpha: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=0.5")
+      .to('.hero-orb-container', { autoAlpha: 0, pointerEvents: 'none', duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=1.0");
 
     // Phase 3: 2.5 to 3.5s - TalkWithCala fades in from bottom
-    tl.fromTo('.talk-with-cala', { opacity: 0, y: 80, scale: 1 }, { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' }, "phase3");
+    tl.fromTo('.talk-with-cala',
+      { autoAlpha: 0, y: 80, scale: 1, pointerEvents: 'none' },
+      { autoAlpha: 1, y: 0, scale: 1, pointerEvents: 'auto', duration: 1, ease: 'power2.out' },
+      "phase3"
+    );
 
     // Phase 4: 3.0 to 5.0s - EVE + GENESIS CARE TEAM text moving from right
     tl.fromTo('.care-team-text',
-      { x: '100vw', opacity: 0 },
-      { x: '0', opacity: 1, duration: 2.0, ease: 'power1.out' },
+      { x: '100vw', autoAlpha: 0 },
+      { x: '0', autoAlpha: 1, duration: 2.0, ease: 'power1.out' },
       "phase3+=0.5"
     );
 
@@ -437,34 +484,40 @@ export default function CalaScrollSequence() {
       .to('.talk-button-ring', { autoAlpha: 0, duration: 0.35 }, "phase3+=2.0");
 
     // Phase 5: 5.0 to 5.5s - TalkWithCala fades out
-    tl.to('.talk-with-cala', { opacity: 0, scale: 0.9, duration: 0.5, ease: 'power2.in' }, "phase5");
+    tl.to('.talk-with-cala', { autoAlpha: 0, pointerEvents: 'none', scale: 0.9, duration: 0.5, ease: 'power2.in' }, "phase5");
 
     // Phase 6: 5.5 to 6.0s - Mobile Phone container fades in
-    tl.fromTo('.mobile-phone-container', { opacity: 0 }, { opacity: 1, duration: 0.5, ease: 'power1.out' }, "phase6");
+    tl.fromTo('.mobile-phone-container',
+      { autoAlpha: 0, pointerEvents: 'none' },
+      { autoAlpha: 1, pointerEvents: 'auto', duration: 0.5, ease: 'power1.out' },
+      "phase6"
+    );
 
     // Phase 6.5: 6.0 to 6.5s - Typing indicator sequence
-    tl.fromTo('.typing-indicator', { opacity: 0, y: 10, scale: 0.8 }, { opacity: 1, y: 0, scale: 1, duration: 0.2 }, "phase6+=0.5")
-      .to('.typing-indicator', { opacity: 0, y: 10, scale: 0.8, duration: 0.2 }, "phase6+=0.8");
+    tl.fromTo('.typing-indicator', { autoAlpha: 0, y: 10, scale: 0.8 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.2 }, "phase6+=0.5")
+      .to('.typing-indicator', { autoAlpha: 0, y: 10, scale: 0.8, duration: 0.2 }, "phase6+=0.8");
 
     // Phase 7: 6.5 to 8.0s - Chats appear sequentially
     tl.fromTo('.chat-message',
-      { opacity: 0, y: 32, scale: 0.92 },
-      { opacity: 1, y: 0, scale: 1, stagger: 0.25, duration: 0.5, ease: 'back.out(1.4)' },
+      { autoAlpha: 0, y: 32, scale: 0.92 },
+      { autoAlpha: 1, y: 0, scale: 1, stagger: 0.25, duration: 0.5, ease: 'back.out(1.4)' },
       "phase7"
     );
 
     // Phase 7: 6.5 to 8.0s - Outer Chats appear sequentially (Desktop)
     if (!isMobileDev) {
+      tl.set('.outer-pills-container', { autoAlpha: 1, pointerEvents: 'auto' }, "phase7");
       tl.fromTo('.outer-pill',
         {
-          opacity: 0,
+          autoAlpha: 0,
           scale: 0.86,
           x: (i, el) => parseFloat(el.dataset.x || '0') + (el.dataset.side === 'left' ? -40 : 40),
           y: (i, el) => parseFloat(el.dataset.y || '0')
         },
         {
-          opacity: 1,
+          autoAlpha: 1,
           scale: 1,
+          pointerEvents: 'auto',
           x: (i, el) => parseFloat(el.dataset.x || '0'),
           y: (i, el) => parseFloat(el.dataset.y || '0'),
           stagger: 0.25,
@@ -484,41 +537,50 @@ export default function CalaScrollSequence() {
     const phase12Top = `${scrollControls.phase12Top}%`;
     const finalOrbTop = `${scrollControls.finalOrbTop}%`;
 
-    tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator', { opacity: 0, duration: 0.2 }, "phase8");
+    tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator, .mobile-phone-container', { autoAlpha: 0, pointerEvents: 'none', duration: 0.2 }, "phase8");
     tl.to('.mobile-3d-orb', { scale: zoomScale, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
 
     // Phase 9: 9.5 to 10.5s - Final full-screen content fades in
-    tl.fromTo('.final-content', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1, ease: 'power2.out' }, "phase9");
+    tl.fromTo('.final-content',
+      { autoAlpha: 0, y: 30, pointerEvents: 'none' },
+      { autoAlpha: 1, y: 0, pointerEvents: 'auto', duration: 1, ease: 'power2.out' },
+      "phase9"
+    );
 
     // Phase 10: 10.5 to 11.5s - Full-screen content fades out
-    tl.to('.final-content', { opacity: 0, y: -30, duration: 1, ease: 'power2.in' }, "phase10");
+    tl.to('.final-content', { autoAlpha: 0, pointerEvents: 'none', y: -30, duration: 1, ease: 'power2.in' }, "phase10");
 
     // Phase 11: 11.5 to 12.5s - Orb acts as ceiling. Text 1 fades in.
     tl.to('.mobile-3d-orb', { scale: orbPhase11Scale, top: phase11Top, duration: 1.5, ease: 'power2.inOut' }, "phase11");
-    tl.fromTo('.benefits-text-1', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.8 }, "phase11+=0.8");
+    tl.set('.benefits-sequence', { autoAlpha: 1, pointerEvents: 'auto' }, "phase11");
+    tl.fromTo('.benefits-text-1', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase11+=0.8");
 
     // Phase 12: 13.0 to 14.0s - Text 1 out, Text 2 in, Orb shrinks.
-    tl.to('.benefits-text-1', { opacity: 0, scale: 1.05, duration: 0.5 }, "phase12");
+    tl.to('.benefits-text-1', { autoAlpha: 0, scale: 1.05, duration: 0.5 }, "phase12");
     tl.to('.mobile-3d-orb', { scale: orbPhase12Scale, top: phase12Top, duration: 1.5, ease: 'power2.inOut' }, "phase12");
-    tl.fromTo('.benefits-text-2', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.8 }, "phase12+=0.8");
+    tl.fromTo('.benefits-text-2', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase12+=0.8");
 
     // Phase 13: 14.5 to 15.5s - Text 2 out, Text 3 in, Orb shrinks to center. All pills in.
-    tl.to('.benefits-text-2', { opacity: 0, scale: 1.05, duration: 0.5 }, "phase13");
+    tl.to('.benefits-text-2', { autoAlpha: 0, scale: 1.05, duration: 0.5 }, "phase13");
     tl.to('.mobile-3d-orb', { scale: orbFinalScale, top: finalOrbTop, duration: 1.5, ease: 'power2.inOut' }, "phase13");
-    tl.fromTo('.benefits-text-3', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.8 }, "phase13+=0.8");
-    tl.fromTo('.final-benefit-pill', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
+    tl.fromTo('.benefits-text-3', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase13+=0.8");
+    tl.fromTo('.final-benefit-pill', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
 
     // Phase 14: 16.0 to 17.0s - Settle orb and finalize
     tl.to('.mobile-3d-orb', { scale: orbFinalScale, duration: 1 }, "phase14");
 
     // Phase 15: Fade out benefits-text-3 and final pills completely
-    tl.to('.benefits-text-3', { opacity: 0, scale: 1.05, duration: 0.8, ease: 'power2.in' }, "phase15");
-    tl.to('.final-benefit-pill', { opacity: 0, scale: 0.85, duration: 0.8, stagger: 0.08, ease: 'power2.in' }, "phase15");
-    tl.set('.benefits-sequence', { pointerEvents: 'none' }, "phase15+=0.8");
+    tl.to('.benefits-text-3', { autoAlpha: 0, scale: 1.05, duration: 0.8, ease: 'power2.in' }, "phase15");
+    tl.to('.final-benefit-pill', { autoAlpha: 0, scale: 0.85, duration: 0.8, stagger: 0.08, ease: 'power2.in' }, "phase15");
+    tl.set('.benefits-sequence', { autoAlpha: 0, pointerEvents: 'none' }, "phase15+=0.8");
 
     // Phase 16: Build in FAQ section sequentially
     const faqStart = "phase15+=1.4";
-    tl.to('.faq-container', { opacity: 1, duration: 0.2 }, faqStart);
+    tl.fromTo('.faq-container',
+      { autoAlpha: 0, pointerEvents: 'none' },
+      { autoAlpha: 1, pointerEvents: 'auto', duration: 0.2 },
+      faqStart
+    );
 
     // Header slides down from top & fades in
     tl.fromTo('.faq-header',
@@ -649,9 +711,7 @@ export default function CalaScrollSequence() {
 
         {/* --- PHASE 1: HERO SECTION --- */}
         <div
-          className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
+          className="hero-section absolute inset-0 flex items-center justify-center pointer-events-none z-10"
         >
           <h1
             className="
@@ -676,7 +736,7 @@ export default function CalaScrollSequence() {
           </h1>
 
           <div
-            className="hero-orb-container relative z-10 flex items-center justify-center"
+            className="hero-orb-container relative z-10 flex items-center justify-center pointer-events-auto"
             style={{
               transform: `translate(${scrollControls.heroOrbOffsetX}px, ${scrollControls.heroOrbOffsetY}px) scale(${scrollControls.heroOrbScale})`,
             }}
@@ -697,7 +757,7 @@ export default function CalaScrollSequence() {
     flex
     items-center
     justify-center
-    pointer-events-none
+    pointer-events-auto
     w-[clamp(130px,40vw,360px)]
     h-[clamp(130px,40vw,360px)]
   "
@@ -735,20 +795,22 @@ export default function CalaScrollSequence() {
         flex
         items-center
         justify-center
+        pointer-events-auto
       "
                 >
                   <CalaThreeCircle
                     mouseX={mouseX}
                     mouseY={mouseY}
                     isShocked={activeShockId !== null}
-                    className="w-full h-full"
+                    interactive={true}
+                    className="w-full h-full pointer-events-auto"
                   />
                 </div>
               </AdaptiveGlass>
             </div>
           </div>
 
-          <div className="hero-pills absolute inset-0 flex items-center justify-center z-20">
+          <div className="hero-pills absolute inset-0 flex items-center justify-center pointer-events-none z-20">
             {PILLS.map((pill) => {
               const targetX = isMobile && pill.mobileX !== undefined ? pill.mobileX : pill.baseX;
               const targetY = isMobile && pill.mobileY !== undefined ? pill.mobileY : pill.baseY;
@@ -776,14 +838,14 @@ export default function CalaScrollSequence() {
         </div>
 
         {/* --- PHASE 3/4: EVE + GENESIS CARE TEAM TEXT --- */}
-        <div className="care-team-text absolute inset-x-0 bottom-4 sm:bottom-8 lg:bottom-12 flex items-center justify-center pointer-events-none select-none z-10 opacity-0">
+        <div className="care-team-text absolute inset-x-0 bottom-4 sm:bottom-8 lg:bottom-12 flex items-center justify-center pointer-events-none select-none z-10 opacity-0 invisible">
           <h1 className="text-[#008080] font-black uppercase text-center flex items-center justify-center leading-none tracking-[-0.015em] whitespace-nowrap" style={{ fontSize: 'clamp(70px, 12.5vw, 195px)' }}>
             EVE + GENESIS CARE TEAM
           </h1>
         </div>
 
         {/* --- PHASE 2: TALK TO CARE TEAM SECTION --- */}
-        <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
+        <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0 invisible">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]">
               <span className="text-[#7EBDB9]">EVE + GENESIS</span> is Couple Conception Program.
@@ -801,10 +863,10 @@ export default function CalaScrollSequence() {
         </div>
 
         {/* --- PHASE 5: CALACHAT MOBILE & ZOOMS --- */}
-        <div className="mobile-phone-container absolute inset-0 z-30 flex items-center justify-center pointer-events-none opacity-0">
+        <div className="mobile-phone-container absolute inset-0 z-30 flex items-center justify-center pointer-events-none opacity-0 invisible">
           <div className="relative w-full max-w-[1240px] h-[580px] sm:h-[660px] md:h-[720px] flex items-center justify-center mx-auto px-4">
 
-            <div className="relative z-10 flex flex-col items-center justify-center pointer-events-auto">
+            <div className="relative z-10 flex flex-col items-center justify-center">
               <div className="relative aspect-[872/1804] flex items-center justify-center select-none" style={{ width: `clamp(270px, ${325 * scaleFactor}px, 355px)` }}>
 
                 <img src="/mobile-cala.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
@@ -857,7 +919,7 @@ export default function CalaScrollSequence() {
         justify-center
       "
                     >
-                      <CalaThreeCircle interactive={false} className="w-full h-full" />
+                      <CalaThreeCircle interactive={false} showControls={false} className="w-full h-full" />
                     </div>
                   </AdaptiveGlass>
                 </div>
@@ -912,7 +974,7 @@ export default function CalaScrollSequence() {
 
             {/* OUTER CHAT PILLS (Desktop Only) */}
             {!isMobile && (
-              <div className="outer-pills-container absolute inset-0 hidden md:flex items-center justify-center pointer-events-none z-20">
+              <div className="outer-pills-container absolute inset-0 hidden md:flex items-center justify-center pointer-events-none z-20 opacity-0 invisible">
                 {CHAT_SEQUENCE.map((item) => (
                   <OuterChatPill
                     key={item.id}
@@ -931,8 +993,8 @@ export default function CalaScrollSequence() {
         </div>
 
         {/* --- PHASE 8: FINAL CONTENT OVER FULLSCREEN ORB --- */}
-        <div className="final-content absolute inset-0 z-40 flex flex-col items-center justify-center pointer-events-none text-center opacity-0 px-4 sm:px-6">
-          <div className="md:max-w-[1100px] mx-auto flex flex-col items-start md:items-center pointer-events-auto w-full">
+        <div className="final-content absolute inset-0 z-40 flex flex-col items-center justify-center pointer-events-none text-center opacity-0 invisible px-4 sm:px-6">
+          <div className="md:max-w-[1100px] mx-auto flex flex-col items-start md:items-center w-full">
 
             {/* Header Section */}
             <div className="mb-5 sm:mb-14">
@@ -1080,7 +1142,7 @@ export default function CalaScrollSequence() {
         </div>
 
         {/* --- PHASE 11-14: BENEFITS SEQUENCE --- */}
-        <div className="benefits-sequence absolute inset-0 z-40 pointer-events-none">
+        <div className="benefits-sequence absolute inset-0 z-40 pointer-events-none opacity-0 invisible">
           {/* Texts */}
           <div className="benefits-text-1 absolute inset-0 flex flex-col items-center justify-center opacity-0">
             <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-4">BENEFITS</span>
@@ -1134,7 +1196,7 @@ export default function CalaScrollSequence() {
         </div>
 
         {/* --- PHASE 16: FAQ --- */}
-        <div className="faq-container absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none opacity-0 select-none">
+        <div className="faq-container absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none opacity-0 invisible select-none">
 
           {/* Top Header */}
           <div className="faq-header text-center absolute top-6 sm:top-8 md:top-10 lg:top-12 pointer-events-auto z-30 flex flex-col items-center">

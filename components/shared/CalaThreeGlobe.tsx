@@ -702,12 +702,27 @@ export default function CalaThreeGlobe({
       }
     };
 
+    const onWindowPointerMove = (e: PointerEvent) => {
+      if (isDragging) {
+        onPointerMove(e);
+      }
+    };
+
+    const onWindowPointerUp = (e: PointerEvent) => {
+      if (isDragging) {
+        onPointerUp(e);
+      }
+    };
+
     if (interactive) {
       container.addEventListener('pointerdown', onPointerDown);
       container.addEventListener('pointermove', onPointerMove);
       container.addEventListener('pointerup', onPointerUp);
       container.addEventListener('pointercancel', onPointerUp);
       container.addEventListener('pointerleave', onPointerLeave);
+      window.addEventListener('pointermove', onWindowPointerMove);
+      window.addEventListener('pointerup', onWindowPointerUp);
+      window.addEventListener('pointercancel', onWindowPointerUp);
     }
 
     const animate = () => {
@@ -845,6 +860,9 @@ export default function CalaThreeGlobe({
         container.removeEventListener('pointerup', onPointerUp);
         container.removeEventListener('pointercancel', onPointerUp);
         container.removeEventListener('pointerleave', onPointerLeave);
+        window.removeEventListener('pointermove', onWindowPointerMove);
+        window.removeEventListener('pointerup', onWindowPointerUp);
+        window.removeEventListener('pointercancel', onWindowPointerUp);
       }
 
       sphereGeometry.dispose();

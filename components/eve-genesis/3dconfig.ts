@@ -2,7 +2,7 @@ import type { Globe3DConfig, ScrollSequenceConfig } from '@/components/shared/pr
 
 export const EVE_GENESIS_GLOBE_CONFIG: Globe3DConfig = {
   title: 'EVE & GENESIS 3D Globe',
-  textureUrl: '/Couple-Program-planet.webp',
+  textureUrl: '/programs/Couple-Program-planet.webp',
 
   // --- 1. Scene Lighting & Exposure ---
   exposure: 1.1,
