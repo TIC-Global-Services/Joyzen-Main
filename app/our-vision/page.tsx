@@ -50,10 +50,10 @@ const page = () => {
     <main className="relative flex-1 flex flex-col w-full">
       <Hero />
       <HereItFrom />
-      <Represents/>
+      <Represents />
       <Epharmacy />
-           <div className='h-20 w-full bg-white absolute -bottom-[0.8%] left-0 z-100 blur-lg'></div>
-     <div className='h-5 w-full bg-[#fffcf7] absolute -bottom-[0.7%] left-0 z-100 blur-lg'></div>
+      <div className='h-20 w-full bg-[#fffcf7] absolute -bottom-[1%] md:bottom-[-0.8%] -left-[2%] z-10 blur-sm'></div>
+      <div className='h-20 w-full bg-white absolute -bottom-[0.2%] hidden md:block  left-0 z-100 blur-lg'></div>
     </main>
   );
 };

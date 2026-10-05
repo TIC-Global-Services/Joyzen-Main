@@ -221,7 +221,7 @@ function CollidingPill({
           className="relative group cursor-grab active:cursor-grabbing"
         >
           <AdaptiveGlass
-            isMobile={isMobile}
+            // isMobile={isMobile}
             borderRadius={9999}
             blur={1.5}
             contrast={1.12}
@@ -248,9 +248,9 @@ function CollidingPill({
                 />
               )}
               <span
-                className="font-semibold text-zinc-900 tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
+                className="font-medium text-zinc-900 tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
                 style={{
-                  fontSize: `clamp(11px, ${25 * scaleFactor}px, 16px)`,
+                  fontSize: `clamp(11px, ${25 * scaleFactor}px, 12px)`,
                   color: '#1E2822',
                 }}
               >
@@ -298,7 +298,7 @@ function OuterChatPill({ item, scaleFactor, clickedId, setClickedId, className, 
         className="relative group cursor-grab active:cursor-grabbing"
       >
         <AdaptiveGlass
-          isMobile={isMobile}
+          // isMobile={isMobile}
           borderRadius={26}
           blur={1.8}
           contrast={1.12}
@@ -308,7 +308,7 @@ function OuterChatPill({ item, scaleFactor, clickedId, setClickedId, className, 
           displacementScale={0.8}
           elasticity={0.4}
           zIndex={20}
-          className="transition-all duration-300 border border-white/70 hover:border-white/95 bg-white/10 shadow-[0_12px_32px_rgba(0,0,0,0.06),_0_2px_8px_rgba(0,0,0,0.03)]"
+          className="transition-all duration-300 border border-white/70 hover:border-white/95"
         >
           <div
             className="relative flex items-start gap-3 rounded-3xl"
@@ -667,7 +667,7 @@ export default function CalaScrollSequence() {
     tracking-[-0.035em]
     text-[#72B2AA]
     whitespace-nowrap
-    text-[clamp(44px,11vw,180px)]
+    text-[clamp(44px,25vw,180px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
   "
           >

@@ -3,6 +3,24 @@
 import React, { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 
+const PROGRAM_ROUTES = [
+  '/eve',
+  '/lyra',
+  '/luna',
+  '/cala',
+  '/core',
+  '/atlas',
+  '/genesis',
+  '/vita',
+  '/eve-genesis',
+];
+
+const HIDDEN_FOOTER_ROUTES = new Set([
+  '/q-form',
+  '/q-form-2',
+  ...PROGRAM_ROUTES,
+]);
+
 export default function Footer() {
   const pathname = usePathname();
 
@@ -17,8 +35,13 @@ export default function Footer() {
     }
   }, []);
 
-  // Hide footer on specific question form pages
-  if (pathname === '/q-form' || pathname === '/q-form-2') {
+  // Hide footer on specific question form pages and all program pages
+  const normalizedPath = pathname?.replace(/\/$/, '') || '';
+  const isHidden =
+    HIDDEN_FOOTER_ROUTES.has(normalizedPath) ||
+    PROGRAM_ROUTES.some((route) => normalizedPath.startsWith(`${route}/`));
+
+  if (isHidden) {
     return null;
   }
 

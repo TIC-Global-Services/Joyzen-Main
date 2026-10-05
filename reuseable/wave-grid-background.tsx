@@ -257,7 +257,7 @@ export function WaveGridBackground({
         scene.add(camera);
 
         // ── Lighting ───────────────────────────────────────────────────────────
-        const ambientLight = new THREE.AmbientLight("#ffffff", isMobile ? 1.3 : 2.3);
+        const ambientLight = new THREE.AmbientLight("#ffffff", 2.3);
         scene.add(ambientLight);
 
         const keyLight = new THREE.DirectionalLight("#ffffff", 1.8);
