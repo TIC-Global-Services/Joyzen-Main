@@ -290,12 +290,15 @@ export default function Hero() {
             onError={triggerShrink}
             style={{
               backgroundColor: '#ffffff',
-              clipPath: isShrunk ? 'inset(0px 0px 1px 0px)' : 'none',
             }}
             className={`block w-full h-full bg-white pointer-events-none border-0 outline-none select-none ${
               isShrunk ? 'object-contain' : 'object-cover'
             }`}
           />
+          {/* Seamless white bottom strip to completely eliminate any subpixel/GPU black line during scroll */}
+          {isShrunk && (
+            <div className="absolute -bottom-1 left-0 right-0 h-2 bg-white pointer-events-none z-20" />
+          )}
         </motion.div>
       </motion.div>
     </section>

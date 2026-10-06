@@ -436,10 +436,10 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
         </div>
 
         {/* Bottom Tagline & Powered by Joyzen */}
-        <div className="mt-16 sm:mt-24 pt-8 w-full flex items-center justify-center text-center">
-          <p className="text-base sm:text-lg md:text-xl font-medium text-[#1E2822] flex items-center gap-1.5 sm:gap-2">
+        <div className="mt-16 sm:mt-24 pt-8 w-full flex items-end justify-center text-center">
+          <p className="text-base sm:text-lg md:text-2xl font-medium text-black tracking-tight flex items-center gap-1.5 sm:gap-2">
             <span>Powered by</span>
-            <span className="font-bold text-[#E5855E] tracking-tight">Joyzen</span>
+            <span className="font-bold text-[#E5855E] tracking-tight text-[34px] md:text-[44px]">Joyzen</span>
           </p>
         </div>
       </div>

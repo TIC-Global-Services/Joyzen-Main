@@ -988,28 +988,28 @@ export default function CalaScrollSequence() {
           </div>
 
           {/* Pills (All appear together at the end) */}
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[45%] md:top-[40%] right-[calc(60%+10px)] sm:right-[calc(50%+90px)] md:right-[calc(50%+150px)]">
+          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[45%] md:top-[40%] right-[calc(60%+10px)] sm:right-[calc(50%+90px)] md:right-[calc(60%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Symptom review</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] md:top-[65%] right-[calc(65%+10px)] sm:right-[calc(50%+60px)] md:right-[calc(50%+110px)]">
+          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] md:top-[65%] right-[calc(65%+10px)] sm:right-[calc(50%+60px)] md:right-[calc(60%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Personalized guidance</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[40%] md:top-[42%] left-[calc(50%+30px)] sm:left-[calc(50%+90px)] md:left-[calc(50%+150px)]">
+          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[40%] md:top-[42%] left-[calc(50%+30px)] sm:left-[calc(50%+90px)] md:left-[calc(60%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Sleep & recovery</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] left-[calc(60%+20px)] sm:left-[calc(50%+60px)] md:left-[calc(50%+110px)]">
+          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] left-[calc(60%+20px)] sm:left-[calc(50%+60px)] md:left-[calc(60%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Hormone guidance</span>
