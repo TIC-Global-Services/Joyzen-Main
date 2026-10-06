@@ -704,8 +704,8 @@ export default function CalaScrollSequence() {
     items-center
     justify-center
     pointer-events-none
-    w-[clamp(150px,50vw,360px)]
-    h-[clamp(150px,50vw,360px)]
+    w-[clamp(130px,35vw,360px)]
+    h-[clamp(130px,35vw,360px)]
   "
             >
               <AdaptiveGlass

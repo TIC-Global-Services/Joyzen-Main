@@ -678,8 +678,8 @@ export default function CalaScrollSequence() {
     items-center
     justify-center
     pointer-events-none
-    w-[clamp(150px,50vw,360px)]
-    h-[clamp(150px,50vw,360px)]
+    w-[clamp(130px,35vw,360px)]
+    h-[clamp(130px,35vw,360px)]
   "
             >
               <AdaptiveGlass
@@ -1249,15 +1249,15 @@ export default function CalaScrollSequence() {
                       elasticity={0.35}
                       zIndex={20}
                       className={`w-full rounded-[24px] border transition-all duration-300 ${isActive
-                          ? 'border-[#E5855E]/40 shadow-[0_8px_25px_rgba(229,133,94,0.15)] bg-white/20'
-                          : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
+                        ? 'border-[#E5855E]/40 shadow-[0_8px_25px_rgba(229,133,94,0.15)] bg-white/20'
+                        : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
                         }`}
                     >
                       <div className="px-5 py-3 text-left">
                         <span
                           className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 ${isActive
-                              ? 'font-bold text-[#E5855E]'
-                              : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
+                            ? 'font-bold text-[#E5855E]'
+                            : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
                             }`}
                         >
                           {faq.question}
