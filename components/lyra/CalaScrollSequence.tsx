@@ -22,14 +22,14 @@ interface PillData {
   id: string; label: string; baseX: number; baseY: number; mobileX?: number; mobileY?: number; angle: number; driftX: number[]; driftY: number[]; rotateRange: number[]; duration: number;
 }
 const PILLS: PillData[] = [
-  { id: 'cycle-health', label: 'Cycle health', baseX: 0, baseY: -250, mobileX: 200, mobileY: -160, angle: -90, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
-  { id: 'hormone-balance', label: 'Hormone balance', baseX: -265, baseY: -185, mobileX: -200, mobileY: -160, angle: -140, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
-  { id: 'pms', label: 'PMS', baseX: -490, baseY: 15, mobileX: -260, mobileY: 0, angle: 180, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
-  { id: 'low-energy', label: 'Low energy', baseX: -250, baseY: 190, mobileX: -200, mobileY: 160, angle: 140, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
-  { id: 'intimate-health', label: 'Intimate health', baseX: 0, baseY: 255, mobileX: 0, mobileY: -280, angle: 90, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
-  { id: 'lifestyle-guidance', label: 'Lifestyle guidance', baseX: 225, baseY: 190, mobileX: 200, mobileY: 160, angle: 40, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
-  { id: 'fertility-readiness', label: 'Fertility readiness', baseX: 490, baseY: 65, mobileX: 260, mobileY: 0, angle: 0, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
-  { id: 'real-support', label: 'Real doctor care', baseX: 265, baseY: -185, mobileX: 0, mobileY: 280, angle: -40, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'cycle-health', label: 'Cycle health', baseX: 0, baseY: -250, mobileX: 105, mobileY: -76, angle: -90, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'hormone-balance', label: 'Hormone balance', baseX: -265, baseY: -185, mobileX: -105, mobileY: -76, angle: -140, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'pms', label: 'PMS', baseX: -490, baseY: 15, mobileX: -165, mobileY: 0, angle: 180, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'low-energy', label: 'Low energy', baseX: -250, baseY: 190, mobileX: -105, mobileY: 78, angle: 140, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'intimate-health', label: 'Intimate health', baseX: 0, baseY: 255, mobileX: 0, mobileY: -128, angle: 90, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'lifestyle-guidance', label: 'Lifestyle guidance', baseX: 225, baseY: 190, mobileX: 105, mobileY: 78, angle: 40, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'fertility-readiness', label: 'Fertility readiness', baseX: 490, baseY: 15, mobileX: 165, mobileY: 0, angle: 0, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
+  { id: 'real-support', label: 'Real doctor care', baseX: 265, baseY: -185, mobileX: 0, mobileY: 130, angle: -40, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 5.0 },
 ];
 
 interface ChatItem {
@@ -147,8 +147,9 @@ function CollidingPill({
   mouseY,
   isMobile,
 }: any) {
-  const scaledX = targetX * scaleFactor;
-  const scaledY = targetY * scaleFactor;
+  const mobileScale = isMobile ? Math.min(1.15, Math.max(0.85, (typeof window !== 'undefined' ? window.innerWidth : 390) / 390)) : 1;
+  const scaledX = isMobile ? targetX * mobileScale : targetX * scaleFactor;
+  const scaledY = isMobile ? targetY * mobileScale : targetY * scaleFactor;
 
   const repelX = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
   const repelY = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
@@ -223,7 +224,9 @@ function CollidingPill({
             <div
               className="relative flex items-center justify-center rounded-full"
               style={{
-                padding: `${Math.max(8, 15 * scaleFactor)}px ${Math.max(16, 28 * scaleFactor)}px`,
+                padding: isMobile
+                  ? '6px 13px'
+                  : `${Math.max(8, 15 * scaleFactor)}px ${Math.max(16, 28 * scaleFactor)}px`,
               }}
             >
               {clickedPill === pill.id && (
@@ -237,7 +240,7 @@ function CollidingPill({
               <span
                 className="font-semibold text-zinc-900 tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
                 style={{
-                  fontSize: `clamp(11px, ${25 * scaleFactor}px, 16px)`,
+                  fontSize: isMobile ? '11px' : `clamp(11px, ${25 * scaleFactor}px, 16px)`,
                   color: '#1E2822',
                 }}
               >
@@ -674,7 +677,8 @@ export default function CalaScrollSequence() {
     tracking-[-0.035em]
     text-[#CB6D7A]
     whitespace-nowrap
-    text-[clamp(130px,28vw,420px)]
+    text-[35vw]
+    md:text-[clamp(130px,28vw,420px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
   "
           >
@@ -704,8 +708,10 @@ export default function CalaScrollSequence() {
     items-center
     justify-center
     pointer-events-none
-  w-[clamp(130px,35vw,360px)]
-    h-[clamp(130px,35vw,360px)]
+    w-[clamp(120px,32vw,145px)]
+    h-[clamp(120px,32vw,145px)]
+    md:w-[clamp(130px,35vw,360px)]
+    md:h-[clamp(130px,35vw,360px)]
   "
             >
               <AdaptiveGlass

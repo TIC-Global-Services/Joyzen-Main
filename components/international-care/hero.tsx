@@ -14,6 +14,8 @@ export default function Hero() {
   const [isShrunk, setIsShrunk] = useState(false);
   const [isRevealed, setIsRevealed] = useState(false);
 
+  const mobileVideoRef = useRef<HTMLVideoElement>(null);
+
   const triggerShrink = () => {
     setIsShrunk((prev) => {
       if (!prev) {
@@ -27,7 +29,21 @@ export default function Hero() {
     });
   };
 
+  // Play mobile video on mount
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      const video = mobileVideoRef.current;
+      if (video) {
+        video.defaultMuted = true;
+        video.muted = true;
+        video.play().catch(() => {});
+      }
+    }
+  }, []);
+
+  // Desktop video play
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.innerWidth < 768) return;
     const video = videoRef.current;
     if (!video || isShrunk) return;
 
@@ -38,8 +54,13 @@ export default function Hero() {
     video.play().catch(() => {});
   }, [isShrunk]);
 
-  // Disable all scrolling until the video completes, shrinks, and the reveal animation finishes
+  // Disable all scrolling on desktop until the video completes, shrinks, and the reveal animation finishes
   useEffect(() => {
+    // Never lock scroll on mobile devices
+    if (typeof window !== 'undefined' && window.innerWidth < 768) {
+      return;
+    }
+
     if (isRevealed) {
       const lenis = (window as any).__lenis;
       if (lenis) {
@@ -152,6 +173,26 @@ export default function Hero() {
     };
   }, [isRevealed]);
 
+  // Clean up any locks if resized to mobile
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        document.body.style.overscrollBehavior = '';
+        document.documentElement.style.overscrollBehavior = '';
+        document.body.style.touchAction = '';
+        const lenis = (window as any).__lenis;
+        if (lenis) {
+          lenis.start();
+          lenis.resize();
+        }
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const handleTimeUpdate = () => {
     const video = videoRef.current;
     if (!video || !video.duration || isShrunk) return;
@@ -183,122 +224,180 @@ export default function Hero() {
   };
 
   return (
-    <section
-      className={`relative w-full flex flex-col items-center select-none bg-white overflow-hidden transition-[padding,min-height] duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-        isShrunk
-          ? 'min-h-screen pt-28 sm:pt-36 md:pt-40 pb-16 sm:pb-24 justify-start'
-          : 'h-screen min-h-screen pt-0 pb-0 justify-center'
-      }`}
-    >
-      {/* Headline & Subtitle Content with Masked Word-by-Word Blur & Slide-up Effect */}
-      <motion.div
-        initial={false}
-        animate={
+    <>
+      {/* Mobile Version: Like before, normal video playing below text content */}
+      <section className="relative w-full min-h-screen flex md:hidden flex-col items-center justify-start pt-28 sm:pt-36 pb-16 sm:pb-24 overflow-hidden select-none bg-white">
+        <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 flex flex-col items-center text-center">
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="text-3xl sm:text-4xl font-bold text-[#111111] tracking-tight"
+          >
+            Supporting Patients
+            <br className="hidden sm:inline" />
+            {' '}Across The Globe
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+            className="mt-4 sm:mt-6 text-base sm:text-lg text-black font-bold leading-relaxed max-w-3xl"
+          >
+            Joyzen provides virtual consultations and ongoing care
+            <br className="hidden sm:inline" />
+            {' '}for patients living around the world.
+          </motion.p>
+        </div>
+
+        {/* Full Width Video Container below text */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95, y: 30 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+          className="relative z-10 w-full flex justify-center items-start mt-6 sm:mt-10"
+        >
+          <div className="relative w-full bg-white overflow-hidden">
+            <video
+              ref={mobileVideoRef}
+              src="/JOYZEN-MAP-FINAL-V4.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              preload="auto"
+              style={{
+                backgroundColor: '#ffffff',
+              }}
+              className="block w-full h-auto object-cover pointer-events-none border-0 outline-none select-none scale-[1.02]"
+            />
+            {/* Seamless white border overlay */}
+            <div className="absolute inset-0 border-[3px] border-white pointer-events-none z-20" />
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Desktop Version: Fullscreen video shrinking into resting position with word-by-word reveal */}
+      <section
+        className={`relative w-full hidden md:flex flex-col items-center select-none bg-white overflow-hidden transition-[padding,min-height] duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isShrunk
-            ? { opacity: 1, y: 0, height: 'auto', marginBottom: 0 }
-            : { opacity: 0, y: -30, height: 0, marginBottom: 0 }
-        }
-        transition={{
-          duration: 1.1,
-          ease: [0.16, 1, 0.3, 1],
-          delay: isShrunk ? 0.2 : 0,
-        }}
-        className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center overflow-hidden"
-      >
-        {/* Animated Headline with Staggered Word Reveal */}
-        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[50px] font-bold text-[#111111] tracking-tight flex flex-wrap justify-center items-center">
-          {HEADLINE_WORDS.map((word, i) => (
-            <span key={i} className="inline-block overflow-hidden mr-[0.26em] last:mr-0 py-1">
-              <motion.span
-                initial={{ y: '125%', opacity: 0, filter: 'blur(8px)' }}
-                animate={
-                  isShrunk
-                    ? { y: '0%', opacity: 1, filter: 'blur(0px)' }
-                    : { y: '125%', opacity: 0, filter: 'blur(8px)' }
-                }
-                transition={{
-                  duration: 0.9,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: isShrunk ? 0.3 + i * 0.06 : 0,
-                }}
-                className="inline-block"
-              >
-                {word}
-              </motion.span>
-            </span>
-          ))}
-        </h1>
-
-        {/* Animated Subtitle with Staggered Word Reveal */}
-        <p className="mt-3 text-base sm:text-lg md:text-2xl text-black font-bold leading-tight max-w-2xl flex flex-wrap justify-center items-center">
-          {SUBTITLE_WORDS.map((word, i) => (
-            <span key={i} className="inline-block overflow-hidden mr-[0.24em] last:mr-0 py-0.5">
-              <motion.span
-                initial={{ y: '110%', opacity: 0, filter: 'blur(6px)' }}
-                animate={
-                  isShrunk
-                    ? { y: '0%', opacity: 1, filter: 'blur(0px)' }
-                    : { y: '110%', opacity: 0, filter: 'blur(6px)' }
-                }
-                transition={{
-                  duration: 0.8,
-                  ease: [0.16, 1, 0.3, 1],
-                  delay: isShrunk ? 0.6 + i * 0.03 : 0,
-                }}
-                className="inline-block"
-              >
-                {word}
-              </motion.span>
-            </span>
-          ))}
-        </p>
-      </motion.div>
-
-      {/* Video Container (Smooth organic contraction with gentle easing into resting position) */}
-      <motion.div
-        layout
-        transition={{
-          duration: 1.4,
-          ease: [0.16, 1, 0.3, 1],
-        }}
-        onClick={handleVideoClick}
-        className={`relative z-10 w-full flex justify-center items-start transition-[margin] duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isShrunk ? 'mt-6 sm:mt-10 cursor-default' : 'mt-0 cursor-pointer h-full'
+            ? 'min-h-screen pt-28 sm:pt-36 md:pt-40 pb-16 sm:pb-24 justify-start'
+            : 'h-screen min-h-screen pt-0 pb-0 justify-center'
         }`}
       >
+        {/* Headline & Subtitle Content with Masked Word-by-Word Blur & Slide-up Effect */}
+        <motion.div
+          initial={false}
+          animate={
+            isShrunk
+              ? { opacity: 1, y: 0, height: 'auto', marginBottom: 0 }
+              : { opacity: 0, y: -30, height: 0, marginBottom: 0 }
+          }
+          transition={{
+            duration: 1.1,
+            ease: [0.16, 1, 0.3, 1],
+            delay: isShrunk ? 0.2 : 0,
+          }}
+          className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center overflow-hidden"
+        >
+          {/* Animated Headline with Staggered Word Reveal */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[50px] font-bold text-[#111111] tracking-tight flex flex-wrap justify-center items-center">
+            {HEADLINE_WORDS.map((word, i) => (
+              <span key={i} className="inline-block overflow-hidden mr-[0.26em] last:mr-0 py-1">
+                <motion.span
+                  initial={{ y: '125%', opacity: 0, filter: 'blur(8px)' }}
+                  animate={
+                    isShrunk
+                      ? { y: '0%', opacity: 1, filter: 'blur(0px)' }
+                      : { y: '125%', opacity: 0, filter: 'blur(8px)' }
+                  }
+                  transition={{
+                    duration: 0.9,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: isShrunk ? 0.3 + i * 0.06 : 0,
+                  }}
+                  className="inline-block"
+                >
+                  {word}
+                </motion.span>
+              </span>
+            ))}
+          </h1>
+
+          {/* Animated Subtitle with Staggered Word Reveal */}
+          <p className="mt-3 text-base sm:text-lg md:text-2xl text-black font-bold leading-tight max-w-2xl flex flex-wrap justify-center items-center">
+            {SUBTITLE_WORDS.map((word, i) => (
+              <span key={i} className="inline-block overflow-hidden mr-[0.24em] last:mr-0 py-0.5">
+                <motion.span
+                  initial={{ y: '110%', opacity: 0, filter: 'blur(6px)' }}
+                  animate={
+                    isShrunk
+                      ? { y: '0%', opacity: 1, filter: 'blur(0px)' }
+                      : { y: '110%', opacity: 0, filter: 'blur(6px)' }
+                  }
+                  transition={{
+                    duration: 0.8,
+                    ease: [0.16, 1, 0.3, 1],
+                    delay: isShrunk ? 0.6 + i * 0.03 : 0,
+                  }}
+                  className="inline-block"
+                >
+                  {word}
+                </motion.span>
+              </span>
+            ))}
+          </p>
+        </motion.div>
+
+        {/* Video Container (Smooth organic contraction with gentle easing into resting position) */}
         <motion.div
           layout
           transition={{
             duration: 1.4,
             ease: [0.16, 1, 0.3, 1],
           }}
-          className={`relative w-full bg-white overflow-hidden transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
-            isShrunk
-              ? 'aspect-video max-h-[82vh]'
-              : 'h-full'
+          onClick={handleVideoClick}
+          className={`relative z-10 w-full flex justify-center items-start transition-[margin] duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+            isShrunk ? 'mt-6 sm:mt-10 cursor-default' : 'mt-0 cursor-pointer h-full'
           }`}
         >
-          <video
-            ref={videoRef}
-            src="/JOYZEN-MAP-FINAL-V4.mp4"
-            autoPlay
-            muted
-            playsInline
-            preload="auto"
-            onTimeUpdate={handleTimeUpdate}
-            onEnded={handleEnded}
-            onError={triggerShrink}
-            style={{
-              backgroundColor: '#ffffff',
+          <motion.div
+            layout
+            transition={{
+              duration: 1.4,
+              ease: [0.16, 1, 0.3, 1],
             }}
-            className={`block w-full h-full bg-white pointer-events-none border-0 outline-none select-none scale-[1.02] ${
-              isShrunk ? 'object-contain' : 'object-cover'
+            className={`relative w-full bg-white overflow-hidden transition-all duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)] ${
+              isShrunk
+                ? 'aspect-video max-h-[82vh]'
+                : 'h-full'
             }`}
-          />
-          {/* Seamless white border overlay to eliminate subpixel/GPU black lines on all sides */}
-          <div className="absolute inset-0 border-[3px] border-white pointer-events-none z-20" />
+          >
+            <video
+              ref={videoRef}
+              src="/JOYZEN-MAP-FINAL-V4.mp4"
+              autoPlay
+              muted
+              playsInline
+              preload="auto"
+              onTimeUpdate={handleTimeUpdate}
+              onEnded={handleEnded}
+              onError={triggerShrink}
+              style={{
+                backgroundColor: '#ffffff',
+              }}
+              className={`block w-full h-full bg-white pointer-events-none border-0 outline-none select-none scale-[1.02] ${
+                isShrunk ? 'object-contain' : 'object-cover'
+              }`}
+            />
+            {/* Seamless white border overlay to eliminate subpixel/GPU black lines on all sides */}
+            <div className="absolute inset-0 border-[3px] border-white pointer-events-none z-20" />
+          </motion.div>
         </motion.div>
-      </motion.div>
-    </section>
+      </section>
+    </>
   );
 }

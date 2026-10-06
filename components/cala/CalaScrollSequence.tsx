@@ -22,14 +22,14 @@ interface PillData {
   id: string; label: string; baseX: number; baseY: number; mobileX?: number; mobileY?: number; angle: number; driftX: number[]; driftY: number[]; rotateRange: number[]; duration: number;
 }
 const PILLS: PillData[] = [
-  { id: 'pcos', label: 'PCOS Care', baseX: 0, baseY: -250, mobileX: 200, mobileY: -160, angle: -90, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 4.8 },
-  { id: 'fertility', label: 'Fertility Readiness', baseX: -265, baseY: -185, mobileX: -200, mobileY: -160, angle: -140, driftX: [0, 8, -6, 3, 0], driftY: [0, 6, -8, 2, 0], rotateRange: [0, -2, 1.5, -1, 0], duration: 5.2 },
-  { id: 'ongoing', label: 'Ongoing Care', baseX: -490, baseY: 15, mobileX: -260, mobileY: 0, angle: 180, driftX: [0, 9, -7, 3, 0], driftY: [0, -6, 7, -3, 0], rotateRange: [0, 2, -1.5, 1, 0], duration: 5.6 },
-  { id: 'pms', label: 'PMS Support', baseX: -250, baseY: 190, mobileX: -200, mobileY: 160, angle: 140, driftX: [0, 6, -8, 2, 0], driftY: [0, -8, 6, -2, 0], rotateRange: [0, -1.8, 2, -1, 0], duration: 4.9 },
-  { id: 'ovulation', label: 'Ovulation Tracking', baseX: 0, baseY: 255, mobileX: 0, mobileY: -280, angle: 90, driftX: [0, -5, 6, -2, 0], driftY: [0, -9, 7, -3, 0], rotateRange: [0, 1.2, -1.5, 0.8, 0], duration: 5.4 },
-  { id: 'care-team', label: 'Real Care Team', baseX: 225, baseY: 190, mobileX: 200, mobileY: 160, angle: 40, driftX: [0, -7, 8, -3, 0], driftY: [0, -7, 8, -2, 0], rotateRange: [0, 2, -2, 1, 0], duration: 5.0 },
-  { id: 'cycle', label: 'Cycle Health', baseX: 490, baseY: 65, mobileX: 260, mobileY: 0, angle: 0, driftX: [0, -9, 7, -3, 0], driftY: [0, 6, -7, 2, 0], rotateRange: [0, -2, 1.5, -0.8, 0], duration: 5.5 },
-  { id: 'hormone', label: 'Hormone Health', baseX: 265, baseY: -185, mobileX: 0, mobileY: 280, angle: -40, driftX: [0, -7, 5, -2, 0], driftY: [0, 7, -6, 2, 0], rotateRange: [0, 1.8, -1.2, 0.6, 0], duration: 5.1 },
+  { id: 'pcos', label: 'PCOS Care', baseX: 0, baseY: -250, mobileX: 105, mobileY: -76, angle: -90, driftX: [0, 4, -4, 2, 0], driftY: [0, 8, -6, 2, 0], rotateRange: [0, 1.5, -1, 0.5, 0], duration: 4.8 },
+  { id: 'fertility', label: 'Fertility Readiness', baseX: -265, baseY: -185, mobileX: -105, mobileY: -76, angle: -140, driftX: [0, 8, -6, 3, 0], driftY: [0, 6, -8, 2, 0], rotateRange: [0, -2, 1.5, -1, 0], duration: 5.2 },
+  { id: 'ongoing', label: 'Ongoing Care', baseX: -490, baseY: 15, mobileX: -165, mobileY: 0, angle: 180, driftX: [0, 9, -7, 3, 0], driftY: [0, -6, 7, -3, 0], rotateRange: [0, 2, -1.5, 1, 0], duration: 5.6 },
+  { id: 'pms', label: 'PMS Support', baseX: -250, baseY: 190, mobileX: -105, mobileY: 78, angle: 140, driftX: [0, 6, -8, 2, 0], driftY: [0, -8, 6, -2, 0], rotateRange: [0, -1.8, 2, -1, 0], duration: 4.9 },
+  { id: 'ovulation', label: 'Ovulation Tracking', baseX: 0, baseY: 255, mobileX: 0, mobileY: -128, angle: 90, driftX: [0, -5, 6, -2, 0], driftY: [0, -9, 7, -3, 0], rotateRange: [0, 1.2, -1.5, 0.8, 0], duration: 5.4 },
+  { id: 'care-team', label: 'Real Care Team', baseX: 225, baseY: 190, mobileX: 105, mobileY: 78, angle: 40, driftX: [0, -7, 8, -3, 0], driftY: [0, -7, 8, -2, 0], rotateRange: [0, 2, -2, 1, 0], duration: 5.0 },
+  { id: 'cycle', label: 'Cycle Health', baseX: 490, baseY: 15, mobileX: 165, mobileY: 0, angle: 0, driftX: [0, -9, 7, -3, 0], driftY: [0, 6, -7, 2, 0], rotateRange: [0, -2, 1.5, -0.8, 0], duration: 5.5 },
+  { id: 'hormone', label: 'Hormone Health', baseX: 265, baseY: -185, mobileX: 0, mobileY: 130, angle: -40, driftX: [0, -7, 5, -2, 0], driftY: [0, 7, -6, 2, 0], rotateRange: [0, 1.8, -1.2, 0.6, 0], duration: 5.1 },
 ];
 
 interface ChatItem {
@@ -147,8 +147,9 @@ function CollidingPill({
   mouseY,
   isMobile,
 }: any) {
-  const scaledX = targetX * scaleFactor;
-  const scaledY = targetY * scaleFactor;
+  const mobileScale = isMobile ? Math.min(1.15, Math.max(0.85, (typeof window !== 'undefined' ? window.innerWidth : 390) / 390)) : 1;
+  const scaledX = isMobile ? targetX * mobileScale : targetX * scaleFactor;
+  const scaledY = isMobile ? targetY * mobileScale : targetY * scaleFactor;
 
   const repelX = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
   const repelY = useSpring(useMotionValue(0), { stiffness: 220, damping: 18 });
@@ -217,9 +218,22 @@ function CollidingPill({
             zIndex={20}
             className="transition-all duration-300 select-none border shadow-[inset_0_1px_2px_rgba(255,255,255,0.9)] border-white/70 hover:border-white/95 bg-[#FFFFFF0A]"
           >
-            <div className="relative flex items-center justify-center rounded-full" style={{ padding: `${Math.max(8, 15 * scaleFactor)}px ${Math.max(16, 28 * scaleFactor)}px` }}>
+            <div
+              className="relative flex items-center justify-center rounded-full"
+              style={{
+                padding: isMobile
+                  ? '6px 13px'
+                  : `${Math.max(8, 15 * scaleFactor)}px ${Math.max(16, 28 * scaleFactor)}px`,
+              }}
+            >
               {clickedPill === pill.id && <motion.div initial={{ scale: 0.8, opacity: 0.9 }} animate={{ scale: 1.6, opacity: 0 }} transition={{ duration: 0.5, ease: 'easeOut' }} className="absolute inset-0 rounded-full border-2 border-cyan-400 pointer-events-none" />}
-              <span className="font-semibold text-zinc-900 tracking-tight whitespace-nowrap leading-none transition-colors duration-200" style={{ fontSize: `clamp(11px, ${25 * scaleFactor}px, 16px)`, color: '#1E2822' }}>
+              <span
+                className="font-semibold text-zinc-900 tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
+                style={{
+                  fontSize: isMobile ? '11px' : `clamp(11px, ${25 * scaleFactor}px, 16px)`,
+                  color: '#1E2822',
+                }}
+              >
                 {pill.label}
               </span>
             </div>
@@ -622,7 +636,8 @@ export default function CalaScrollSequence() {
     tracking-[-0.035em]
     text-[#008080]
     whitespace-nowrap
-    text-[clamp(130px,28vw,420px)]
+    text-[35vw]
+    md:text-[clamp(130px,28vw,420px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
   "
           >
@@ -652,8 +667,10 @@ export default function CalaScrollSequence() {
     items-center
     justify-center
     pointer-events-none
-    w-[clamp(130px,35vw,360px)]
-    h-[clamp(130px,35vw,360px)]
+    w-[clamp(120px,32vw,145px)]
+    h-[clamp(120px,32vw,145px)]
+    md:w-[clamp(130px,35vw,360px)]
+    md:h-[clamp(130px,35vw,360px)]
   "
             >
               <AdaptiveGlass
