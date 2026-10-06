@@ -284,7 +284,7 @@ export default function DashboardShowcaseSection() {
                     alt="Everything your health has been asking for Finally in one place"
                     fill
                     priority
-                    className="w-full h-full object-cover object-top lg:object-contain rounded-xl transition-transform duration-700 ease-out scale-[1.015]"
+                    className="w-full h-full  object-top object-contain rounded-xl transition-transform duration-700 ease-out scale-[1.015]"
                   />
                   {/* Bottom Gradient Overlay */}
                   <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-white via-white/50 to-transparent pointer-events-none z-10" />
