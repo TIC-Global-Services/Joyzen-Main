@@ -6,7 +6,7 @@ export const CALA_GLOBE_CONFIG: Globe3DConfig = {
 
   // --- 1. Scene Lighting & Exposure ---
   exposure: 1.1,
-  keyLightIntensity: 1.5,
+  keyLightIntensity: 4.7,
   keyLightColor: '#ffffff',
   keyLightPos: [4.5, 3.5, 5.0],
   ambientLightIntensity: 0.9,
@@ -55,7 +55,7 @@ export const CALA_SEQUENCE_CONFIG: ScrollSequenceConfig = {
   phase11Top: -15,
   phase12Scale: 6.0,
   phase12Top: 10,
-  finalOrbScale: 3.2,
+  finalOrbScale: 4.2,
   finalOrbTop: 50,
 
   // Glass Optics & Refraction (AdaptiveGlass)

@@ -41,7 +41,7 @@ export function useScrollSequenceControls(
     mobileZoomScale: 6.5,
     phase11Scale: 9.5,
     phase11Top: -15,
-    phase12Scale: 6.0,
+    phase12Scale: 6.5,
     phase12Top: 10,
     finalOrbScale: 3.2,
     finalOrbTop: 50,

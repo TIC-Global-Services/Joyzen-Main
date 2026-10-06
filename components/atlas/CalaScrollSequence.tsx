@@ -36,12 +36,12 @@ interface ChatItem {
   id: string; sender: string; isCala: boolean; avatarType: 'orange-dot' | 'cala-orb'; message: string; time: string; side: 'left' | 'right'; offsetX: number; offsetY: number; driftX: number[]; driftY: number[]; duration: number;
 }
 const CHAT_SEQUENCE: ChatItem[] = [
-  { id: 'msg-1', sender: 'Rahul', isCala: false, avatarType: 'orange-dot', message: "I’m worried about my fertility report.", time: '10:24 AM', side: 'left', offsetX: -220, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-2', sender: 'ATLAS Care Team', isCala: true, avatarType: 'cala-orb', message: "We can help explain your semen analysis and review your fertility progress.", time: '10:25 AM', side: 'left', offsetX: -150, offsetY: 15, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-3', sender: 'Rahul', isCala: false, avatarType: 'orange-dot', message: "Thank You, ATLAS", time: '10:26 AM', side: 'left', offsetX: -270, offsetY: 180, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-4', sender: 'Aman', isCala: false, avatarType: 'orange-dot', message: "Can I track my hormones too?", time: '10:28 AM', side: 'right', offsetX: 520, offsetY: -145, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-5', sender: 'ATLAS Care Team', isCala: true, avatarType: 'cala-orb', message: "Yes. Your plan includes hormone tracking and fertility readiness support.", time: '10:29 AM', side: 'right', offsetX: 420, offsetY: 20, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-6', sender: 'Aman', isCala: false, avatarType: 'orange-dot', message: "Thank You, ATLAS", time: '10:30 AM', side: 'right', offsetX: 370, offsetY: 185, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
+  { id: 'msg-1', sender: 'Rahul', isCala: false, avatarType: 'orange-dot', message: "I'm worried about my fertility report.", time: '10:24 AM', side: 'left', offsetX: -360, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.2 },
+  { id: 'msg-2', sender: 'ATLAS Care Team', isCala: true, avatarType: 'cala-orb', message: "We can help explain your semen analysis and review your fertility progress.", time: '10:25 AM', side: 'left', offsetX: -250, offsetY: 15, driftX: [0, -6, 5, -2, 0], driftY: [0, -7, 6, -2, 0], duration: 5.6 },
+  { id: 'msg-3', sender: 'Rahul', isCala: false, avatarType: 'orange-dot', message: "Thank You, ATLAS", time: '10:26 AM', side: 'left', offsetX: -370, offsetY: 180, driftX: [0, 4, -5, 3, 0], driftY: [0, 5, -6, 2, 0], duration: 4.8 },
+  { id: 'msg-4', sender: 'Aman', isCala: false, avatarType: 'orange-dot', message: "Can I track my hormones too?", time: '10:28 AM', side: 'right', offsetX: 720, offsetY: -145, driftX: [0, -8, 4, -2, 0], driftY: [0, 6, -6, 2, 0], duration: 5.0 },
+  { id: 'msg-5', sender: 'ATLAS Care Team', isCala: true, avatarType: 'cala-orb', message: "Yes. Your plan includes hormone tracking and fertility readiness support.", time: '10:29 AM', side: 'right', offsetX: 580, offsetY: 20, driftX: [0, 7, -6, 2, 0], driftY: [0, -5, 7, -3, 0], duration: 5.4 },
+  { id: 'msg-6', sender: 'Aman', isCala: false, avatarType: 'orange-dot', message: "Thank You, ATLAS", time: '10:30 AM', side: 'right', offsetX: 580, offsetY: 185, driftX: [0, -4, 5, -2, 0], driftY: [0, -6, 5, -2, 0], duration: 5.1 },
 ];
 
 interface FaqItem {
@@ -52,27 +52,27 @@ interface FaqItem {
 const FAQ_SEQUENCE: FaqItem[] = [
   {
     id: 1,
-    question: '26. What do my sperm results mean?',
+    question: '1. What do my sperm results mean?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 2,
-    question: '27. How can I track fertility progress?',
+    question: '2. How can I track fertility progress?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 3,
-    question: '28. Can I understand my hormone results?',
+    question: '3. Can I understand my hormone results?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 4,
-    question: '29. Can lifestyle affect sperm health?',
+    question: '4. Can lifestyle affect sperm health?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 5,
-    question: '30. When should I seek further care?',
+    question: '5. When should I seek further care?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
 ];
@@ -190,10 +190,10 @@ function CollidingPill({
             isMobile
               ? undefined
               : {
-                  x: pill.driftX.map((v: number) => v * scaleFactor),
-                  y: pill.driftY.map((v: number) => v * scaleFactor),
-                  rotate: pill.rotateRange,
-                }
+                x: pill.driftX.map((v: number) => v * scaleFactor),
+                y: pill.driftY.map((v: number) => v * scaleFactor),
+                rotate: pill.rotateRange,
+              }
           }
           transition={{ duration: pill.duration, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
           drag
@@ -625,7 +625,7 @@ export default function CalaScrollSequence() {
     uppercase
     leading-none
     tracking-[-0.035em]
-    text-[#72B2AA]
+    text-[#8F9B6F]
     whitespace-nowrap
     text-[clamp(130px,28vw,420px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
@@ -745,7 +745,7 @@ export default function CalaScrollSequence() {
         <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]">
-              <span className="text-[#7EBDB9]">ATLAS</span> is Male Fertility & Hormone Restoration Program.
+              <span className="text-[#8F9B6F]">ATLAS</span> is Male Fertility & Hormone Restoration Program.
             </h2>
             <p className="mt-4 sm:mt-5 text-[#27272C] text-sm sm:text-base md:text-[18px] leading-[1.2] max-w-xl font-medium">
               For men who want to improve sperm health, testosterone, stamina, and reproductive health with structured medical and lifestyle guidance.
@@ -766,10 +766,10 @@ export default function CalaScrollSequence() {
             <div className="relative z-10 flex flex-col items-center justify-center pointer-events-auto">
               <div className="relative aspect-[872/1804] flex items-center justify-center select-none" style={{ width: `clamp(270px, ${325 * scaleFactor}px, 355px)` }}>
 
-                <img src="/mobile-cala.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
+                <img src="/mobile-mockup-v2.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
 
                 <div className="mobile-watermark mobile-ui absolute z-10 pointer-events-none select-none flex items-center justify-center" style={{ top: '40%', left: '50%' }}>
-                  <span className="text-[42px] sm:text-[72px] font-black tracking-widest text-[#72B2AA] uppercase">ATLAS</span>
+                  <span className="text-[42px] sm:text-[72px] font-black tracking-widest text-[#8F9B6F] uppercase">ATLAS</span>
                 </div>
 
                 {/* ZOOMABLE 3D ORB */}
@@ -883,34 +883,34 @@ export default function CalaScrollSequence() {
               </h2>
             </div>
 
-                        {/* Grid of Cards */}
+            {/* Grid of Cards */}
             <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
               <div className="col-span-1">
-                <AdaptiveGlass  borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group"> 
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Medical & Fertility Care</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Medical & Fertility Care</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Dedicated Andrologist / Men’s Health Doctor</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>3 consultations/month</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Semen analysis & lab interpretation</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Monthly fertility & hormone review</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Male fertility tracking</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Hormone tracking dashboard</span>
                       </li>
@@ -919,23 +919,23 @@ export default function CalaScrollSequence() {
                 </AdaptiveGlass>
               </div>
               <div className="col-span-1">
-                <AdaptiveGlass  borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Reproductive & Sexual Health</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Reproductive & Sexual Health</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Libido & erection monitoring</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Ejaculation comfort guidance</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Testicular health monitoring</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Fertility readiness index</span>
                       </li>
@@ -946,29 +946,29 @@ export default function CalaScrollSequence() {
               <div className="col-span-1">
                 <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-3 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Lifestyle & Recovery</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Lifestyle & Recovery</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Supplement protocol</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Sleep, stress & lifestyle correction</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Daily fertility support chat</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Priority Q&A</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Red-flag guidance</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Joyzen formulations included</span>
                       </li>
@@ -1047,7 +1047,7 @@ export default function CalaScrollSequence() {
             <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-none">
               {"Questions you shouldn't have to figure out alone."}
             </h2>
-            <span className="text-[#7EBDB9] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
+            <span className="text-[#8F9B6F] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
               ATLAS
             </span>
           </div>
@@ -1154,7 +1154,7 @@ export default function CalaScrollSequence() {
           {/* Mobile Layout (< md) - ONLY MOUNT ON MOBILE */}
           {isMobile && (
             <div className="flex md:hidden absolute inset-x-0 bottom-4 top-[100px] flex-col justify-start items-center px-4 pointer-events-auto z-40 overflow-y-auto pt-2 pb-6">
-              
+
               {/* Answer Box (TOP) */}
               <div className="faq-right-box w-full max-w-[340px] mb-auto relative z-10 shrink-0">
                 <div className="p-5 rounded-3xl border border-white/80 bg-white/95 shadow-xl backdrop-blur-xl text-left relative overflow-hidden">

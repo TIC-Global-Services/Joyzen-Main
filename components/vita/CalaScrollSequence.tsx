@@ -57,12 +57,12 @@ interface ChatItem {
   duration: number;
 }
 const CHAT_SEQUENCE: ChatItem[] = [
-  { id: 'msg-1', sender: 'Tarun & Priya', isCala: false, avatarType: 'orange-dot', message: "We’ve been trying to conceive. Where do we start?", time: '10:24 AM', side: 'left', offsetX: -220, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-2', sender: 'VITA Care Team', isCala: true, avatarType: 'cala-orb', message: "We can begin with a complete fertility evaluation for both partners.", time: '10:25 AM', side: 'left', offsetX: -150, offsetY: 15, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-3', sender: 'Tarun & Priya', isCala: false, avatarType: 'orange-dot', message: "Thank You, VITA", time: '10:26 AM', side: 'left', offsetX: -270, offsetY: 180, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-4', sender: 'Aditya & Ritu', isCala: false, avatarType: 'orange-dot', message: "Can you help us understand our reports?", time: '10:28 AM', side: 'right', offsetX: 520, offsetY: -145, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-5', sender: 'VITA Care Team', isCala: true, avatarType: 'cala-orb', message: "Yes. Your care team can explain reports and guide the next steps.", time: '10:29 AM', side: 'right', offsetX: 420, offsetY: 20, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-6', sender: 'Aditya & Ritu', isCala: false, avatarType: 'orange-dot', message: "Thank You, VITA", time: '10:30 AM', side: 'right', offsetX: 370, offsetY: 185, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
+  { id: 'msg-1', sender: 'Tarun & Priya', isCala: false, avatarType: 'orange-dot', message: "We’ve been trying to conceive. Where do we start?", time: '10:24 AM', side: 'left', offsetX: -360, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.2 },
+  { id: 'msg-2', sender: 'VITA Care Team', isCala: true, avatarType: 'cala-orb', message: "We can begin with a complete fertility evaluation for both partners.", time: '10:25 AM', side: 'left', offsetX: -250, offsetY: 15, driftX: [0, -6, 5, -2, 0], driftY: [0, -7, 6, -2, 0], duration: 5.6 },
+  { id: 'msg-3', sender: 'Tarun & Priya', isCala: false, avatarType: 'orange-dot', message: "Thank You, VITA", time: '10:26 AM', side: 'left', offsetX: -370, offsetY: 180, driftX: [0, 4, -5, 3, 0], driftY: [0, 5, -6, 2, 0], duration: 4.8 },
+  { id: 'msg-4', sender: 'Aditya & Ritu', isCala: false, avatarType: 'orange-dot', message: "Can you help us understand our reports?", time: '10:28 AM', side: 'right', offsetX: 720, offsetY: -145, driftX: [0, -8, 4, -2, 0], driftY: [0, 6, -6, 2, 0], duration: 5.0 },
+  { id: 'msg-5', sender: 'VITA Care Team', isCala: true, avatarType: 'cala-orb', message: "Yes. Your care team can explain reports and guide the next steps.", time: '10:29 AM', side: 'right', offsetX: 580, offsetY: 20, driftX: [0, 7, -6, 2, 0], driftY: [0, -5, 7, -3, 0], duration: 5.4 },
+  { id: 'msg-6', sender: 'Aditya & Ritu', isCala: false, avatarType: 'orange-dot', message: "Thank You, VITA", time: '10:30 AM', side: 'right', offsetX: 580, offsetY: 185, driftX: [0, -4, 5, -2, 0], driftY: [0, -6, 5, -2, 0], duration: 5.1 },
 ];
 
 interface FaqItem {
@@ -73,27 +73,27 @@ interface FaqItem {
 const FAQ_SEQUENCE: FaqItem[] = [
   {
     id: 1,
-    question: '36. How do we evaluate fertility together?',
+    question: '1. How do we evaluate fertility together?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 2,
-    question: '37. How can we plan conception timing?',
+    question: '2. How can we plan conception timing?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 3,
-    question: '38. Can both partners receive medical guidance?',
+    question: '3. Can both partners receive medical guidance?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 4,
-    question: '39. Can our reports be explained simply?',
+    question: '4. Can our reports be explained simply?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 5,
-    question: '40. How can we stay supported while trying?',
+    question: '5. How can we stay supported while trying?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
 ];
@@ -643,7 +643,7 @@ export default function CalaScrollSequence() {
     uppercase
     leading-none
     tracking-[-0.035em]
-    text-[#72B2AA]
+    text-[#CB7869]
     whitespace-nowrap
     text-[clamp(160px,32vw,420px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
@@ -763,7 +763,7 @@ export default function CalaScrollSequence() {
         <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]">
-              <span className="text-[#7EBDB9]">VITA</span> is Natural Conception Program.
+              <span className="text-[#CB7869]">VITA</span> is Natural Conception Program.
             </h2>
             <p className="mt-4 sm:mt-5 text-[#27272C] text-sm sm:text-base md:text-[18px] leading-[1.2] max-w-xl font-medium">
               A Joyzen Clinic fertility program with guided evaluation, conception planning, medical support, lifestyle guidance, and emotional support for couples trying to conceive.
@@ -784,10 +784,10 @@ export default function CalaScrollSequence() {
             <div className="relative z-10 flex flex-col items-center justify-center pointer-events-auto">
               <div className="relative aspect-[872/1804] flex items-center justify-center select-none" style={{ width: `clamp(270px, ${325 * scaleFactor}px, 355px)` }}>
 
-                <img src="/mobile-cala.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
+                <img src="/mobile-mockup-v2.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
 
                 <div className="mobile-watermark mobile-ui absolute z-10 pointer-events-none select-none flex items-center justify-center" style={{ top: '40%', left: '50%' }}>
-                  <span className="text-[42px] sm:text-[72px] font-black tracking-widest text-[#72B2AA] uppercase">VITA</span>
+                  <span className="text-[42px] sm:text-[72px] font-black tracking-widest text-[#CB7869] uppercase">VITA</span>
                 </div>
 
                 {/* ZOOMABLE 3D ORB */}
@@ -906,25 +906,25 @@ export default function CalaScrollSequence() {
               <div className="col-span-1">
                 <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Complete Fertility Evaluation</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Complete Fertility Evaluation</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Male + female fertility assessment</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Hormone & cycle assessment</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Semen analysis review</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Uterine readiness monitoring</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Lab report interpretation</span>
                       </li>
@@ -935,29 +935,29 @@ export default function CalaScrollSequence() {
               <div className="col-span-1">
                 <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Personalized Conception Plan</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Personalized Conception Plan</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Ovulation & fertile-window tracking</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Conception timing</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Cycle quality analysis</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Sperm health improvement</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Conception roadmap</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Medication support if required</span>
                       </li>
@@ -968,33 +968,33 @@ export default function CalaScrollSequence() {
               <div className="col-span-1">
                 <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Continuous Care</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Continuous Care</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Gynecologist + andrologist</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Weekly medical follow-ups</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Daily care team chat</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Red-flag guidance</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Fertility diet & exercise/yoga</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Lifestyle plans & emotional reassurance</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Two-week-wait guidance</span>
                       </li>
@@ -1030,14 +1030,14 @@ export default function CalaScrollSequence() {
           {/* Pills (All appear together at the end) */}
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[45%] md:top-[40%] right-[calc(60%+10px)] sm:right-[calc(50%+90px)] md:right-[calc(50%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass  borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+              <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Fertility assessment</span>
               </AdaptiveGlass>
             </div>
           </div>
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] md:top-[65%] right-[calc(60%+10px)] sm:right-[calc(50%+60px)] md:right-[calc(50%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass  borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+              <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Hormone & cycle review</span>
               </AdaptiveGlass>
             </div>
@@ -1051,14 +1051,14 @@ export default function CalaScrollSequence() {
           </div>
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] left-[calc(60%+20px)] sm:left-[calc(50%+60px)] md:left-[calc(50%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass  borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+              <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Ovulation tracking</span>
               </AdaptiveGlass>
             </div>
           </div>
           <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[calc(50%+130px)] md:top-[calc(50%+230px)] left-1/2">
             <div className="-translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass  borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+              <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Gynecologist + andrologist</span>
               </AdaptiveGlass>
             </div>
@@ -1073,7 +1073,7 @@ export default function CalaScrollSequence() {
             <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-none">
               {"Questions you shouldn't have to figure out alone."}
             </h2>
-            <span className="text-[#7EBDB9] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
+            <span className="text-[#CB7869] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
               VITA
             </span>
           </div>
@@ -1232,9 +1232,8 @@ export default function CalaScrollSequence() {
                   <div
                     key={`mobile-faq-pill-${faq.id}`}
                     onClick={() => setActiveFaqId(faq.id)}
-                    className={`faq-pill group relative cursor-pointer select-none rounded-[24px] transition-all duration-300 ${
-                      isActive ? 'scale-[1.02] z-20' : 'hover:scale-[1.01] z-10'
-                    }`}
+                    className={`faq-pill group relative cursor-pointer select-none rounded-[24px] transition-all duration-300 ${isActive ? 'scale-[1.02] z-20' : 'hover:scale-[1.01] z-10'
+                      }`}
                   >
                     <AdaptiveGlass
                       borderRadius={24}
@@ -1246,19 +1245,17 @@ export default function CalaScrollSequence() {
                       displacementScale={0.7}
                       elasticity={0.35}
                       zIndex={20}
-                      className={`w-full rounded-[24px] border transition-all duration-300 ${
-                        isActive
+                      className={`w-full rounded-[24px] border transition-all duration-300 ${isActive
                           ? 'border-[#E5855E]/40 shadow-[0_8px_25px_rgba(229,133,94,0.15)] bg-white/20'
                           : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
-                      }`}
+                        }`}
                     >
                       <div className="px-5 py-3 text-left">
                         <span
-                          className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 ${
-                            isActive
+                          className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 ${isActive
                               ? 'font-bold text-[#E5855E]'
                               : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
-                          }`}
+                            }`}
                         >
                           {faq.question}
                         </span>

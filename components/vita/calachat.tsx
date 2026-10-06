@@ -235,9 +235,8 @@ function OuterChatPill({
 
             <div className="flex flex-col text-left">
               <span
-                className={`font-semibold text-xs tracking-tight ${
-                  item.isCala ? 'text-[#3E9B92]' : 'text-[#1E2822]'
-                }`}
+                className={`font-semibold text-xs tracking-tight ${item.isCala ? 'text-[#3E9B92]' : 'text-[#1E2822]'
+                  }`}
               >
                 {item.sender}
               </span>
@@ -322,8 +321,8 @@ export default function CalaChat() {
     >
       {/* Sticky Fullscreen Stage */}
       <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col items-center justify-center">
-        
-      
+
+
         {/* 2. Soft Ambient Center Radial Glow */}
         <div className="absolute w-[650px] h-[480px] rounded-full bg-gradient-to-b from-teal-100/25 via-cyan-50/20 to-transparent blur-3xl pointer-events-none -translate-x-1/2 -translate-y-1/2 left-1/2 top-1/2" />
 
@@ -348,7 +347,7 @@ export default function CalaChat() {
 
         {/* 5. Main Stage Area with Mobile Phone and Outer Floating Chat Pills */}
         <div className="relative z-10 w-full max-w-[1240px] h-[580px] sm:h-[660px] md:h-[720px] flex items-center justify-center mx-auto px-4">
-          
+
           {/* THE SMARTPHONE MOCKUP: Exclusively uses /mobile-cala.svg */}
           <div className="relative z-10 flex flex-col items-center justify-center">
             <div
@@ -359,7 +358,7 @@ export default function CalaChat() {
             >
               {/* Only the SVG /mobile-cala.svg is rendered */}
               <img
-                src="/mobile-cala.png"
+                src="/mobile-mockup-v2.png"
                 alt="VITA Mobile"
                 className="w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)]"
               />
@@ -410,7 +409,7 @@ export default function CalaChat() {
                 {/* Flex column container with mt-auto anchor:
                     Guarantees latest message stays at bottom and older messages smoothly move TOP */}
                 <div className="w-full flex flex-col justify-end gap-2.5 pb-1">
-                  
+
                   {/* Empty spacer pushes few messages to bottom */}
                   <div className="mt-auto flex-shrink-0" />
 
@@ -428,16 +427,14 @@ export default function CalaChat() {
                           damping: 26,
                           mass: 0.75,
                         }}
-                        className={`w-full flex ${
-                          item.isCala ? 'justify-start' : 'justify-end'
-                        }`}
+                        className={`w-full flex ${item.isCala ? 'justify-start' : 'justify-end'
+                          }`}
                       >
                         {item.isCala ? (
                           // CALA Care Team message bubble (WhatsApp incoming style)
                           <div
-                            className={`max-w-[88%] p-2 sm:p-2.5 rounded-2xl rounded-tl-sm bg-white/95 backdrop-blur-md border border-teal-100 shadow-[0_3px_12px_rgba(0,0,0,0.06)] flex items-start gap-1.5 transition-all duration-300 ${
-                              clickedId === item.id ? 'ring-2 ring-teal-400' : ''
-                            }`}
+                            className={`max-w-[88%] p-2 sm:p-2.5 rounded-2xl rounded-tl-sm bg-white/95 backdrop-blur-md border border-teal-100 shadow-[0_3px_12px_rgba(0,0,0,0.06)] flex items-start gap-1.5 transition-all duration-300 ${clickedId === item.id ? 'ring-2 ring-teal-400' : ''
+                              }`}
                           >
                             <div className="w-4 h-4 rounded-full overflow-hidden shrink-0 mt-0.5 border border-teal-300 shadow-sm">
                               <CalaThreeCircle interactive={false} className="w-full h-full" />
@@ -457,9 +454,8 @@ export default function CalaChat() {
                         ) : (
                           // User message bubble (WhatsApp outgoing style)
                           <div
-                            className={`max-w-[85%] px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-2xl rounded-tr-sm bg-[#E6F4F1] border border-teal-200/70 shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-right transition-all duration-300 ${
-                              clickedId === item.id ? 'ring-2 ring-[#E5855E]' : ''
-                            }`}
+                            className={`max-w-[85%] px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-2xl rounded-tr-sm bg-[#E6F4F1] border border-teal-200/70 shadow-[0_2px_8px_rgba(0,0,0,0.04)] text-right transition-all duration-300 ${clickedId === item.id ? 'ring-2 ring-[#E5855E]' : ''
+                              }`}
                           >
                             <div className="text-[8.5px] font-semibold text-[#E5855E] text-right mb-0.5">
                               {item.sender}

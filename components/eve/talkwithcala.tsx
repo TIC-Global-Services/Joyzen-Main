@@ -42,7 +42,7 @@ export default function TalkWithCala() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]"
         >
-          <span className="text-[#7EBDB9]">EVE</span> is Pregnancy, Prepared With a Plan.
+          <span className="text-[#DD9057]">EVE</span> is Pregnancy, Prepared With a Plan.
         </motion.h2>
 
         {/* Subtitle Paragraph */}

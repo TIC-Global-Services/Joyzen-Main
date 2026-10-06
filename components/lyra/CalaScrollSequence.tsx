@@ -36,12 +36,12 @@ interface ChatItem {
   id: string; sender: string; isCala: boolean; avatarType: 'orange-dot' | 'cala-orb'; message: string; time: string; side: 'left' | 'right'; offsetX: number; offsetY: number; driftX: number[]; driftY: number[]; duration: number;
 }
 const CHAT_SEQUENCE: ChatItem[] = [
-  { id: 'msg-1', sender: 'Megha', isCala: false, avatarType: 'orange-dot', message: "My cycle has been irregular. What should I track?", time: '10:24 AM', side: 'left', offsetX: -220, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-2', sender: 'LYRA Care Team', isCala: true, avatarType: 'cala-orb', message: "We can look at your cycle patterns, symptoms, and progress together.", time: '10:25 AM', side: 'left', offsetX: -150, offsetY: 15, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-3', sender: 'Megha', isCala: false, avatarType: 'orange-dot', message: "Thank You, LYRA", time: '10:26 AM', side: 'left', offsetX: -270, offsetY: 180, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-4', sender: 'Pooja', isCala: false, avatarType: 'orange-dot', message: "Can I ask questions between consultations?", time: '10:28 AM', side: 'right', offsetX: 520, offsetY: -145, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-5', sender: 'LYRA Care Team', isCala: true, avatarType: 'cala-orb', message: "Yes. Your care team is available through private health chat.", time: '10:29 AM', side: 'right', offsetX: 420, offsetY: 20, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-6', sender: 'Pooja', isCala: false, avatarType: 'orange-dot', message: "Thank You, LYRA", time: '10:30 AM', side: 'right', offsetX: 370, offsetY: 185, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
+  { id: 'msg-1', sender: 'Megha', isCala: false, avatarType: 'orange-dot', message: "My cycle has been irregular. What should I track?", time: '10:24 AM', side: 'left', offsetX: -360, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.2 },
+  { id: 'msg-2', sender: 'LYRA Care Team', isCala: true, avatarType: 'cala-orb', message: "We can look at your cycle patterns, symptoms, and progress together.", time: '10:25 AM', side: 'left', offsetX: -250, offsetY: 15, driftX: [0, -6, 5, -2, 0], driftY: [0, -7, 6, -2, 0], duration: 5.6 },
+  { id: 'msg-3', sender: 'Megha', isCala: false, avatarType: 'orange-dot', message: "Thank You, LYRA", time: '10:26 AM', side: 'left', offsetX: -370, offsetY: 180, driftX: [0, 4, -5, 3, 0], driftY: [0, 5, -6, 2, 0], duration: 4.8 },
+  { id: 'msg-4', sender: 'Pooja', isCala: false, avatarType: 'orange-dot', message: "Can I ask questions between consultations?", time: '10:28 AM', side: 'right', offsetX: 720, offsetY: -145, driftX: [0, -8, 4, -2, 0], driftY: [0, 6, -6, 2, 0], duration: 5.0 },
+  { id: 'msg-5', sender: 'LYRA Care Team', isCala: true, avatarType: 'cala-orb', message: "Yes. Your care team is available through private health chat.", time: '10:29 AM', side: 'right', offsetX: 580, offsetY: 20, driftX: [0, 7, -6, 2, 0], driftY: [0, -5, 7, -3, 0], duration: 5.4 },
+  { id: 'msg-6', sender: 'Pooja', isCala: false, avatarType: 'orange-dot', message: "Thank You, LYRA", time: '10:30 AM', side: 'right', offsetX: 580, offsetY: 185, driftX: [0, -4, 5, -2, 0], driftY: [0, -6, 5, -2, 0], duration: 5.1 },
 ];
 
 interface FaqItem {
@@ -52,27 +52,27 @@ interface FaqItem {
 const FAQ_SEQUENCE: FaqItem[] = [
   {
     id: 1,
-    question: '6. Why are my cycles irregular?',
+    question: '1. Why are my cycles irregular?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 2,
-    question: '7. Could my symptoms be hormone-related?',
+    question: '2. Could my symptoms be hormone-related?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 3,
-    question: '8. Can I get support between consultations?',
+    question: '3. Can I get support between consultations?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 4,
-    question: '9. How can I understand my ovulation?',
+    question: '4. How can I understand my ovulation?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 5,
-    question: '10. How can lifestyle affect my cycle?',
+    question: '5. How can lifestyle affect my cycle?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
 ];
@@ -669,7 +669,7 @@ export default function CalaScrollSequence() {
     uppercase
     leading-none
     tracking-[-0.035em]
-    text-[#72B2AA]
+    text-[#CB6D7A]
     whitespace-nowrap
     text-[clamp(130px,28vw,420px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
@@ -789,7 +789,7 @@ export default function CalaScrollSequence() {
         <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]">
-              <span className="text-[#7EBDB9]">LYRA</span> is Women’s Health, Balanced With Guidance.
+              <span className="text-[#CB6D7A]">LYRA</span> is Women’s Health, Balanced With Guidance.
             </h2>
             <p className="mt-4 sm:mt-5 text-[#27272C] text-sm sm:text-base md:text-[18px] leading-[1.2] max-w-xl font-medium">
               For women who want to improve their health, hormones, cycle, and overall wellbeing with continuous medical and lifestyle guidance.
@@ -810,10 +810,10 @@ export default function CalaScrollSequence() {
             <div className="relative z-10 flex flex-col items-center justify-center pointer-events-auto">
               <div className="relative aspect-[872/1804] flex items-center justify-center select-none" style={{ width: `clamp(270px, ${325 * scaleFactor}px, 355px)` }}>
 
-                <img src="/mobile-cala.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
+                <img src="/mobile-mockup-v2.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
 
                 <div className="mobile-watermark mobile-ui absolute z-10 pointer-events-none select-none flex items-center justify-center" style={{ top: '40%', left: '50%' }}>
-                  <span className="text-[42px] sm:text-[72px] font-black tracking-widest text-[#72B2AA] uppercase">LYRA</span>
+                  <span className="text-[42px] sm:text-[72px] font-black tracking-widest text-[#CB6D7A] uppercase">LYRA</span>
                 </div>
 
                 {/* ZOOMABLE 3D ORB */}
@@ -963,25 +963,25 @@ export default function CalaScrollSequence() {
                   className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group"
                 >
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Medical & Health Support</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Medical & Health Support</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>3 monthly 1-to-1 consultations</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Cycle + hormone optimization plan</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Intimate health check-ins</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Vaginal & uterine wellness guidance</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Symptom + red-flag monitoring</span>
                       </li>
@@ -1003,25 +1003,25 @@ export default function CalaScrollSequence() {
                   className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group"
                 >
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Tracking & Care</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Tracking & Care</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Cycle & ovulation insight report</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Fertility readiness score</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Private health chat</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Dedicated care buddy</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Progress & emotional wellbeing tracking</span>
                       </li>
@@ -1043,25 +1043,25 @@ export default function CalaScrollSequence() {
                   className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group"
                 >
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">Lifestyle Support</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Lifestyle Support</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Personalized diet plan</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Home or gym workout plan</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Monthly plan adjustments</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Lifestyle habit coaching</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Joyzen formulations included</span>
                       </li>
@@ -1140,7 +1140,7 @@ export default function CalaScrollSequence() {
             <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-tight">
               {"Questions you shouldn't have to figure out alone."}
             </h2>
-            <span className="text-[#7EBDB9] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
+            <span className="text-[#CB6D7A] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
               LYRA
             </span>
           </div>
@@ -1319,15 +1319,15 @@ export default function CalaScrollSequence() {
                         elasticity={0.35}
                         zIndex={20}
                         className={`w-full rounded-[24px] border transition-all duration-300 ${isActive
-                            ? 'border-[#E5855E]/40 shadow-[0_8px_25px_rgba(229,133,94,0.15)] bg-white/20'
-                            : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
+                          ? 'border-[#E5855E]/40 shadow-[0_8px_25px_rgba(229,133,94,0.15)] bg-white/20'
+                          : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
                           }`}
                       >
                         <div className="px-5 py-3 text-left">
                           <span
                             className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 ${isActive
-                                ? 'font-bold text-[#E5855E]'
-                                : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
+                              ? 'font-bold text-[#E5855E]'
+                              : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
                               }`}
                           >
                             {faq.question}

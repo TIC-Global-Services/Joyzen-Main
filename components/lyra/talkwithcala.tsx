@@ -42,7 +42,7 @@ export default function TalkWithCala() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]"
         >
-          <span className="text-[#7EBDB9]">LYRA</span> is Women’s Health, Balanced With Guidance.
+          <span className="text-[#CB6D7A]">LYRA</span> is Women’s Health, Balanced With Guidance.
         </motion.h2>
 
         {/* Subtitle Paragraph */}

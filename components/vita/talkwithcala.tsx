@@ -42,7 +42,7 @@ export default function TalkWithCala() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]"
         >
-          <span className="text-[#7EBDB9]">VITA</span> is Natural Conception Program.
+          <span className="text-[#CB7869]">VITA</span> is Natural Conception Program.
         </motion.h2>
 
         {/* Subtitle Paragraph */}

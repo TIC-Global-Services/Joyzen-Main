@@ -36,12 +36,12 @@ interface ChatItem {
   id: string; sender: string; isCala: boolean; avatarType: 'orange-dot' | 'cala-orb'; message: string; time: string; side: 'left' | 'right'; offsetX: number; offsetY: number; driftX: number[]; driftY: number[]; duration: number;
 }
 const CHAT_SEQUENCE: ChatItem[] = [
-  { id: 'msg-1', sender: 'Arjun & Neha', isCala: false, avatarType: 'orange-dot', message: "How can we prepare together?", time: '10:24 AM', side: 'left', offsetX: -220, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-2', sender: 'Care Team', isCala: true, avatarType: 'cala-orb', message: "We guide both partners with fertility, lifestyle, and conception planning.", time: '10:25 AM', side: 'left', offsetX: -150, offsetY: 15, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-3', sender: 'Arjun & Neha', isCala: false, avatarType: 'orange-dot', message: "Thank You, Care Team", time: '10:26 AM', side: 'left', offsetX: -270, offsetY: 180, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-4', sender: 'Rohan & Maya', isCala: false, avatarType: 'orange-dot', message: "Can we coordinate our next steps?", time: '10:28 AM', side: 'right', offsetX: 520, offsetY: -145, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-5', sender: 'Care Team', isCala: true, avatarType: 'cala-orb', message: "Yes. Your program includes couple consultations and weekly follow-ups.", time: '10:29 AM', side: 'right', offsetX: 420, offsetY: 20, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
-  { id: 'msg-6', sender: 'Rohan & Maya', isCala: false, avatarType: 'orange-dot', message: "Thank You, Care Team", time: '10:30 AM', side: 'right', offsetX: 370, offsetY: 185, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.0 },
+  { id: 'msg-1', sender: 'Arjun & Neha', isCala: false, avatarType: 'orange-dot', message: "How can we prepare together?", time: '10:24 AM', side: 'left', offsetX: -360, offsetY: -155, driftX: [0, 5, -4, 2, 0], driftY: [0, 6, -5, 2, 0], duration: 5.2 },
+  { id: 'msg-2', sender: 'Care Team', isCala: true, avatarType: 'cala-orb', message: "We guide both partners with fertility, lifestyle, and conception planning.", time: '10:25 AM', side: 'left', offsetX: -250, offsetY: 15, driftX: [0, -6, 5, -2, 0], driftY: [0, -7, 6, -2, 0], duration: 5.6 },
+  { id: 'msg-3', sender: 'Arjun & Neha', isCala: false, avatarType: 'orange-dot', message: "Thank You, Care Team", time: '10:26 AM', side: 'left', offsetX: -370, offsetY: 180, driftX: [0, 4, -5, 3, 0], driftY: [0, 5, -6, 2, 0], duration: 4.8 },
+  { id: 'msg-4', sender: 'Rohan & Maya', isCala: false, avatarType: 'orange-dot', message: "Can we coordinate our next steps?", time: '10:28 AM', side: 'right', offsetX: 720, offsetY: -145, driftX: [0, -8, 4, -2, 0], driftY: [0, 6, -6, 2, 0], duration: 5.0 },
+  { id: 'msg-5', sender: 'Care Team', isCala: true, avatarType: 'cala-orb', message: "Yes. Your program includes couple consultations and weekly follow-ups.", time: '10:29 AM', side: 'right', offsetX: 580, offsetY: 20, driftX: [0, 7, -6, 2, 0], driftY: [0, -5, 7, -3, 0], duration: 5.4 },
+  { id: 'msg-6', sender: 'Rohan & Maya', isCala: false, avatarType: 'orange-dot', message: "Thank You, Care Team", time: '10:30 AM', side: 'right', offsetX: 580, offsetY: 185, driftX: [0, -4, 5, -2, 0], driftY: [0, -6, 5, -2, 0], duration: 5.1 },
 ];
 
 interface FaqItem {
@@ -52,27 +52,27 @@ interface FaqItem {
 const FAQ_SEQUENCE: FaqItem[] = [
   {
     id: 1,
-    question: '16. How can we prepare together?',
+    question: '1. How can we prepare together?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 2,
-    question: '17. How do we coordinate conception timing?',
+    question: '2. How do we coordinate conception timing?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 3,
-    question: '18. Can both partners receive guidance?',
+    question: '3. Can both partners receive guidance?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
     id: 4,
-    question: '19. How can lifestyle support fertility?',
+    question: '4. How can lifestyle support fertility?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
   {
-    id: 20,
-    question: '20. Can we get help during the trying period?',
+    id: 5,
+    question: '5. Can we get help during the trying period?',
     answer: 'Your symptoms, questions, and progress can be reviewed with guided support from your care team.',
   },
 ];
@@ -435,6 +435,7 @@ export default function CalaScrollSequence() {
         '.talk-with-cala',
         '.care-team-text',
         '.mobile-phone-container',
+        '.mobile-3d-orb',
         '.outer-pills-container',
         '.final-content',
         '.benefits-sequence',
@@ -486,10 +487,15 @@ export default function CalaScrollSequence() {
     // Phase 5: 5.0 to 5.5s - TalkWithCala fades out
     tl.to('.talk-with-cala', { autoAlpha: 0, pointerEvents: 'none', scale: 0.9, duration: 0.5, ease: 'power2.in' }, "phase5");
 
-    // Phase 6: 5.5 to 6.0s - Mobile Phone container fades in
+    // Phase 6: 5.5 to 6.0s - Mobile Phone container + 3D orb fade in
     tl.fromTo('.mobile-phone-container',
       { autoAlpha: 0, pointerEvents: 'none' },
       { autoAlpha: 1, pointerEvents: 'auto', duration: 0.5, ease: 'power1.out' },
+      "phase6"
+    );
+    tl.fromTo('.mobile-3d-orb',
+      { autoAlpha: 0 },
+      { autoAlpha: 1, duration: 0.5, ease: 'power1.out' },
       "phase6"
     );
 
@@ -726,7 +732,7 @@ export default function CalaScrollSequence() {
     uppercase
     leading-none
     tracking-[-0.035em]
-    text-[#72B2AA]
+    text-[#5A856C]
     whitespace-nowrap
     text-[clamp(44px,11vw,180px)]
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
@@ -778,7 +784,7 @@ export default function CalaScrollSequence() {
       h-full
       rounded-full
       p-2.5
-      sm:p-5
+      sm:p-3
       pointer-events-auto
       border
       border-white/60
@@ -848,7 +854,7 @@ export default function CalaScrollSequence() {
         <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0 invisible">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]">
-              <span className="text-[#7EBDB9]">EVE + GENESIS</span> is Couple Conception Program.
+              <span className="text-[#5A856C]">EVE + GENESIS</span> is Couple Conception Program.
             </h2>
             <p className="mt-4 sm:mt-5 text-[#27272C] text-sm sm:text-base md:text-[18px] leading-[1.2] max-w-xl font-medium">
               For couples who want to prepare and conceive naturally with guided support for both partners.
@@ -869,60 +875,13 @@ export default function CalaScrollSequence() {
             <div className="relative z-10 flex flex-col items-center justify-center">
               <div className="relative aspect-[872/1804] flex items-center justify-center select-none" style={{ width: `clamp(270px, ${325 * scaleFactor}px, 355px)` }}>
 
-                <img src="/mobile-cala.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
+                <img src="/mobile-mockup-v2.png" alt="CALA Mobile" className="mobile-ui w-full h-full object-contain pointer-events-none select-none drop-shadow-[0_25px_60px_rgba(0,0,0,0.14)] relative z-10" />
 
                 <div className="mobile-watermark mobile-ui absolute z-10 pointer-events-none select-none flex items-center justify-center" style={{ top: '38%', left: '50%' }}>
-                  <span className="text-2xl sm:text-[72px] font-black tracking-tight  text-[#72B2AA] uppercase">EVEGenesis</span>
+                  <span className="text-2xl sm:text-[42px] font-black tracking-tight  text-[#5A856C] uppercase">EVEGenesis</span>
                 </div>
 
-                {/* ZOOMABLE 3D ORB */}
-                <div
-                  className="mobile-3d-orb absolute z-20 pointer-events-none rounded-full flex items-center justify-center"
-                  style={{
-                    top: '50%', left: '50%',
-                    width: `clamp(150px, ${168 * scaleFactor}px, 190px)`,
-                    height: `clamp(150px, ${168 * scaleFactor}px, 190px)`
-                  }}
-                >
-                  <AdaptiveGlass
-                    // isMobile={isMobile}
-                    borderRadius={9999}
-                    blur={2}
-                    contrast={1.15}
-                    brightness={1.05}
-                    saturation={1.2}
-                    shadowIntensity={0.12}
-                    displacementScale={1.2}
-                    elasticity={0.5}
-                    zIndex={10}
-                    className="
-      w-full
-      h-full
-      rounded-full
-      p-2.5
-      sm:p-5
-      pointer-events-auto
-      border
-      border-white/60
-      shadow-[0_20px_70px_rgba(36,168,184,0.35),inset_0_2px_4px_rgba(255,255,255,0.7)]
-    "
-                  >
-                    <div
-                      className="
-        relative
-        w-full
-        h-full
-        rounded-full
-        overflow-hidden
-        flex
-        items-center
-        justify-center
-      "
-                    >
-                      <CalaThreeCircle interactive={false} showControls={false} className="w-full h-full" />
-                    </div>
-                  </AdaptiveGlass>
-                </div>
+                {/* 3D ORB PLACEHOLDER — actual orb is rendered as a sibling outside .mobile-phone-container */}
 
                 {/* MOBILE UI OVERLAY (Chats) - MOBILE ONLY */}
                 <div className="mobile-ui absolute z-30 overflow-hidden flex flex-col justify-end pointer-events-auto md:hidden" style={{ top: '14%', bottom: '10%', left: '7%', right: '7%', maskImage: 'linear-gradient(to bottom, transparent 0%, black 14%, black 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 14%, black 100%)' }}>
@@ -992,7 +951,35 @@ export default function CalaScrollSequence() {
           </div>
         </div>
 
+        {/* ZOOMABLE 3D ORB — standalone sibling so GSAP can animate it independently of .mobile-phone-container */}
+        <div
+          className="mobile-3d-orb absolute z-35 pointer-events-none rounded-full flex items-center justify-center"
+          style={{
+            top: '50%', left: '50%',
+            width: `clamp(150px, ${168 * scaleFactor}px, 190px)`,
+            height: `clamp(150px, ${168 * scaleFactor}px, 190px)`,
+          }}
+        >
+          <AdaptiveGlass
+            borderRadius={9999}
+            blur={2}
+            contrast={1.15}
+            brightness={1.05}
+            saturation={1.2}
+            shadowIntensity={0.12}
+            displacementScale={1.2}
+            elasticity={0.5}
+            zIndex={10}
+            className="w-full h-full rounded-full p-2.5 sm:p-3 pointer-events-auto border border-white/60 shadow-[0_20px_70px_rgba(36,168,184,0.35),inset_0_2px_4px_rgba(255,255,255,0.7)]"
+          >
+            <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
+              <CalaThreeCircle interactive={false} showControls={false} className="w-full h-full" />
+            </div>
+          </AdaptiveGlass>
+        </div>
+
         {/* --- PHASE 8: FINAL CONTENT OVER FULLSCREEN ORB --- */}
+
         <div className="final-content absolute inset-0 z-40 flex flex-col items-center justify-center pointer-events-none text-center opacity-0 invisible px-4 sm:px-6">
           <div className="md:max-w-[1100px] mx-auto flex flex-col items-start md:items-center w-full">
 
@@ -1022,25 +1009,25 @@ export default function CalaScrollSequence() {
                   className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group"
                 >
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">For Her</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">For Her</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Ovulation tracking</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Hormone optimization</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Egg & uterine health support</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Gynecologist consultations</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Diet & fitness plan</span>
                       </li>
@@ -1062,25 +1049,25 @@ export default function CalaScrollSequence() {
                   className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group"
                 >
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">For Him</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">For Him</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Sperm health improvement</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Testosterone & hormone support</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Lifestyle & stamina improvement</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Semen report guidance</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Diet & workout plan</span>
                       </li>
@@ -1102,29 +1089,29 @@ export default function CalaScrollSequence() {
                   className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group"
                 >
                   <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-lg font-bold mb-3 md:mb-4 drop-shadow-sm">For Both</h4>
+                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">For Both</h4>
                     <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Conception timing</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Monthly couple consultation</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Weekly follow-ups</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Daily chat support</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Emotional support</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-base leading-snug font-medium">
+                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
                         <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
                         <span>Step-by-step roadmap</span>
                       </li>
@@ -1203,7 +1190,7 @@ export default function CalaScrollSequence() {
             <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-none">
               {"Questions you shouldn't have to figure out alone."}
             </h2>
-            <span className="text-[#7EBDB9] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
+            <span className="text-[#5A856C] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
               EVE + GENESIS
             </span>
           </div>

@@ -42,7 +42,7 @@ export default function TalkWithCala() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]"
         >
-          <span className="text-[#7EBDB9]">CALA</span> is a Hormone &amp; PCOS
+          <span className="text-[#008080]">CALA</span> is a Hormone &amp; PCOS
           <br className="hidden sm:inline" /> Care, Guided Over Time.
         </motion.h2>
 

@@ -15,12 +15,12 @@ const GALLERY_COLUMNS: GalleryItem[][] = [
   [
     {
       id: 1,
-      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-1.png',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-img-3%20(1).jpg',
       alt: "Women's Health, Our Priority Workshop Presentation",
     },
     {
       id: 2,
-      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-2.png?updatedAt=1790409655901',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-4.png?updatedAt=1790409657260',
       alt: 'Medical professionals collaborating in corridor',
     },
   ],
@@ -28,12 +28,12 @@ const GALLERY_COLUMNS: GalleryItem[][] = [
   [
     {
       id: 3,
-      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-3.png?updatedAt=1790409659736',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-2.png?updatedAt=1790409655901',
       alt: 'Doctor and senior patient discussing consultation on laptop',
     },
     {
       id: 4,
-      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-4.png?updatedAt=1790409657260',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-img-4%20(1).jpg',
       alt: 'Joyzen community wellness circle discussion',
     },
   ],
@@ -41,12 +41,12 @@ const GALLERY_COLUMNS: GalleryItem[][] = [
   [
     {
       id: 5,
-      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-5.png?updatedAt=1790409657498',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-7.png?updatedAt=1790409657232',
       alt: 'Doctor in lab coat having a warm conversation with patient in clinic lounge',
     },
     {
       id: 6,
-      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-6.png?updatedAt=1790409660132',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-img-1%20(1).jpg',
       alt: 'Patient in waiting area during checkup',
     },
   ],
@@ -54,12 +54,12 @@ const GALLERY_COLUMNS: GalleryItem[][] = [
   [
     {
       id: 7,
-      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-7.png?updatedAt=1790409657232',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-5.png?updatedAt=1790409657498',
       alt: 'Senior physician reviewing charts and prescribing care plan',
     },
     {
       id: 8,
-      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-8.png?updatedAt=1790409659108',
+      src: 'https://ik.imagekit.io/gyg6yfnd5/gallery-img-2%20(1).jpg',
       alt: 'Joyzen community meetup gathering',
     },
   ],
@@ -172,7 +172,7 @@ export default function Gallery() {
                       src={item.src}
                       alt={item.alt}
                       fill
-                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                      className={`object-cover ${item.id==6 ?'object-right': 'object-center'} transition-transform duration-700 ease-out group-hover:scale-105`}
                     />
                     {/* Subtle hover shadow overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
