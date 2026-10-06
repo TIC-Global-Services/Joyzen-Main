@@ -181,7 +181,7 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
 
   return (
     <footer
-      className={`w-full border-t border-[#EAE6DE]/60 pt-20 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 select-none overflow-hidden ${className}`}
+      className={`w-full  pt-20 sm:pt-28 pb-16 px-4 sm:px-6 lg:px-8 select-none overflow-hidden ${className}`}
     >
       <div className="max-w-7xl mx-auto flex flex-col items-center text-center">
         {/* Header Section */}
@@ -265,9 +265,16 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
                   />
                   <div className="absolute -inset-1 rounded-full pointer-events-none border-2 border-white/90 shadow-[0_0_20px_rgba(255,255,255,0.7)]" />
 
-                  {/* 3D WebGL Model */}
+                  {/* Active Image */}
                   <div className="w-full h-full relative z-10 flex items-center justify-center rounded-full overflow-hidden">
-                    <currProg.Component interactive={false} className="w-full h-full" />
+                    <Image
+                      src={currProg.image}
+                      alt={currProg.title}
+                      width={144}
+                      height={144}
+                      priority={true}
+                      className="w-full h-full object-cover select-none pointer-events-none"
+                    />
                   </div>
 
                   {/* Active Brand Name Overlay */}
@@ -439,7 +446,7 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
         <div className="mt-16 sm:mt-24 pt-8 w-full flex items-end justify-center text-center">
           <p className="text-base sm:text-lg md:text-2xl font-medium text-black tracking-tight flex items-center gap-1.5 sm:gap-2">
             <span>Powered by</span>
-            <span className="font-bold text-[#E5855E] tracking-tight text-[34px] md:text-[44px]">Joyzen</span>
+            <Image src="/joyzen-logo.png" alt="Joyzen" width={140} height={44} className="h-[34px] md:h-[44px] w-auto object-contain ml-1" />
           </p>
         </div>
       </div>

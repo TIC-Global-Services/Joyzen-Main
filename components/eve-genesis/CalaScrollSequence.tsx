@@ -435,7 +435,6 @@ export default function CalaScrollSequence() {
         '.talk-with-cala',
         '.care-team-text',
         '.mobile-phone-container',
-        '.mobile-3d-orb',
         '.outer-pills-container',
         '.final-content',
         '.benefits-sequence',
@@ -476,7 +475,7 @@ export default function CalaScrollSequence() {
     // Phase 4: 3.0 to 5.0s - EVE + GENESIS CARE TEAM text moving from right
     tl.fromTo('.care-team-text',
       { x: '100vw', autoAlpha: 0 },
-      { x: '0', autoAlpha: 1, duration: 2.0, ease: 'power1.out' },
+      { x: '-30vw', autoAlpha: 1, duration: 2.0, ease: 'power1.out' },
       "phase3+=0.5"
     );
 
@@ -487,15 +486,10 @@ export default function CalaScrollSequence() {
     // Phase 5: 5.0 to 5.5s - TalkWithCala fades out
     tl.to('.talk-with-cala', { autoAlpha: 0, pointerEvents: 'none', scale: 0.9, duration: 0.5, ease: 'power2.in' }, "phase5");
 
-    // Phase 6: 5.5 to 6.0s - Mobile Phone container + 3D orb fade in
+    // Phase 6: 5.5 to 6.0s - Mobile Phone container fades in
     tl.fromTo('.mobile-phone-container',
       { autoAlpha: 0, pointerEvents: 'none' },
       { autoAlpha: 1, pointerEvents: 'auto', duration: 0.5, ease: 'power1.out' },
-      "phase6"
-    );
-    tl.fromTo('.mobile-3d-orb',
-      { autoAlpha: 0 },
-      { autoAlpha: 1, duration: 0.5, ease: 'power1.out' },
       "phase6"
     );
 
@@ -538,12 +532,13 @@ export default function CalaScrollSequence() {
     const zoomScale = isMobileDev ? scrollControls.mobileZoomScale : scrollControls.zoomPhaseScale;
     const orbPhase11Scale = isMobileDev ? Math.min(scrollControls.phase11Scale, 7.0) : scrollControls.phase11Scale;
     const orbPhase12Scale = isMobileDev ? Math.min(scrollControls.phase12Scale, 5.5) : scrollControls.phase12Scale;
+    const orbPhase13Scale = isMobileDev ? Math.min(scrollControls.phase13Scale, 1.9) : scrollControls.phase13Scale;
     const orbFinalScale = isMobileDev ? Math.min(scrollControls.finalOrbScale, 1.9) : scrollControls.finalOrbScale;
     const phase11Top = `${scrollControls.phase11Top}%`;
     const phase12Top = `${scrollControls.phase12Top}%`;
     const finalOrbTop = `${scrollControls.finalOrbTop}%`;
 
-    tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator, .mobile-phone-container', { autoAlpha: 0, pointerEvents: 'none', duration: 0.2 }, "phase8");
+    tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator', { autoAlpha: 0, pointerEvents: 'none', duration: 0.2 }, "phase8");
     tl.to('.mobile-3d-orb', { scale: zoomScale, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
 
     // Phase 9: 9.5 to 10.5s - Final full-screen content fades in
@@ -568,12 +563,12 @@ export default function CalaScrollSequence() {
 
     // Phase 13: 14.5 to 15.5s - Text 2 out, Text 3 in, Orb shrinks to center. All pills in.
     tl.to('.benefits-text-2', { autoAlpha: 0, scale: 1.05, duration: 0.5 }, "phase13");
-    tl.to('.mobile-3d-orb', { scale: orbFinalScale, top: finalOrbTop, duration: 1.5, ease: 'power2.inOut' }, "phase13");
+    tl.to('.mobile-3d-orb', { scale: orbPhase13Scale, top: finalOrbTop, duration: 1.5, ease: 'power2.inOut' }, "phase13");
     tl.fromTo('.benefits-text-3', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase13+=0.8");
     tl.fromTo('.final-benefit-pill', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
 
     // Phase 14: 16.0 to 17.0s - Settle orb and finalize
-    tl.to('.mobile-3d-orb', { scale: orbFinalScale, duration: 1 }, "phase14");
+    tl.to('.mobile-3d-orb', { scale: orbPhase13Scale, duration: 1 }, "phase14");
 
     // Phase 15: Fade out benefits-text-3 and final pills completely
     tl.to('.benefits-text-3', { autoAlpha: 0, scale: 1.05, duration: 0.8, ease: 'power2.in' }, "phase15");
@@ -587,6 +582,7 @@ export default function CalaScrollSequence() {
       { autoAlpha: 1, pointerEvents: 'auto', duration: 0.2 },
       faqStart
     );
+    tl.to('.mobile-3d-orb', { scale: orbFinalScale, duration: 1 }, faqStart);
 
     // Header slides down from top & fades in
     tl.fromTo('.faq-header',
@@ -686,6 +682,7 @@ export default function CalaScrollSequence() {
       scrollControls.phase11Top,
       scrollControls.phase12Scale,
       scrollControls.phase12Top,
+      scrollControls.phase13Scale,
       scrollControls.finalOrbScale,
       scrollControls.finalOrbTop,
     ],
@@ -881,7 +878,53 @@ export default function CalaScrollSequence() {
                   <span className="text-2xl sm:text-[42px] font-black tracking-tight  text-[#5A856C] uppercase">EVEGenesis</span>
                 </div>
 
-                {/* 3D ORB PLACEHOLDER — actual orb is rendered as a sibling outside .mobile-phone-container */}
+                {/* ZOOMABLE 3D ORB */}
+                <div
+                  className="mobile-3d-orb absolute z-20 pointer-events-none rounded-full flex items-center justify-center will-change-transform"
+                  style={{
+                    top: '50%', left: '50%',
+                    width: `clamp(150px, ${168 * scaleFactor}px, 190px)`,
+                    height: `clamp(150px, ${168 * scaleFactor}px, 190px)`
+                  }}
+                >
+                  <AdaptiveGlass
+                    borderRadius={9999}
+                    blur={2}
+                    contrast={1.15}
+                    brightness={1.05}
+                    saturation={1.2}
+                    shadowIntensity={0.12}
+                    displacementScale={1.2}
+                    elasticity={0.5}
+                    zIndex={10}
+                    className="
+      w-full
+      h-full
+      rounded-full
+      p-2.5
+      sm:p-3
+      pointer-events-auto
+      border
+      border-white/60
+      shadow-[0_20px_70px_rgba(36,168,184,0.35),inset_0_2px_4px_rgba(255,255,255,0.7)]
+    "
+                  >
+                    <div
+                      className="
+        relative
+        w-full
+        h-full
+        rounded-full
+        overflow-hidden
+        flex
+        items-center
+        justify-center
+      "
+                    >
+                      <CalaThreeCircle interactive={false} showControls={false} className="w-full h-full" />
+                    </div>
+                  </AdaptiveGlass>
+                </div>
 
                 {/* MOBILE UI OVERLAY (Chats) - MOBILE ONLY */}
                 <div className="mobile-ui absolute z-30 overflow-hidden flex flex-col justify-end pointer-events-auto md:hidden" style={{ top: '14%', bottom: '10%', left: '7%', right: '7%', maskImage: 'linear-gradient(to bottom, transparent 0%, black 14%, black 100%)', WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 14%, black 100%)' }}>
@@ -951,32 +994,7 @@ export default function CalaScrollSequence() {
           </div>
         </div>
 
-        {/* ZOOMABLE 3D ORB — standalone sibling so GSAP can animate it independently of .mobile-phone-container */}
-        <div
-          className="mobile-3d-orb absolute z-35 pointer-events-none rounded-full flex items-center justify-center"
-          style={{
-            top: '50%', left: '50%',
-            width: `clamp(150px, ${168 * scaleFactor}px, 190px)`,
-            height: `clamp(150px, ${168 * scaleFactor}px, 190px)`,
-          }}
-        >
-          <AdaptiveGlass
-            borderRadius={9999}
-            blur={2}
-            contrast={1.15}
-            brightness={1.05}
-            saturation={1.2}
-            shadowIntensity={0.12}
-            displacementScale={1.2}
-            elasticity={0.5}
-            zIndex={10}
-            className="w-full h-full rounded-full p-2.5 sm:p-3 pointer-events-auto border border-white/60 shadow-[0_20px_70px_rgba(36,168,184,0.35),inset_0_2px_4px_rgba(255,255,255,0.7)]"
-          >
-            <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
-              <CalaThreeCircle interactive={false} showControls={false} className="w-full h-full" />
-            </div>
-          </AdaptiveGlass>
-        </div>
+
 
         {/* --- PHASE 8: FINAL CONTENT OVER FULLSCREEN ORB --- */}
 
@@ -1132,41 +1150,41 @@ export default function CalaScrollSequence() {
         <div className="benefits-sequence absolute inset-0 z-40 pointer-events-none opacity-0 invisible">
           {/* Texts */}
           <div className="benefits-text-1 absolute inset-0 flex flex-col items-center justify-center opacity-0">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-4">BENEFITS</span>
+            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-4">BENEFITS</span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-white tracking-tight drop-shadow-md">Prepare both bodies.</h2>
           </div>
           <div className="benefits-text-2 absolute inset-0 flex flex-col items-center justify-center opacity-0">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-4">BENEFITS</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Plan together.</h2>
+            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase  sm:mb-4">BENEFITS</span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md leading-none">Plan together.</h2>
           </div>
           <div className="benefits-text-3 absolute inset-0 flex flex-col items-center justify-center opacity-0">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-2">BENEFITS</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Stay connected.</h2>
+            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase  sm:mb-2">BENEFITS</span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md leading-none">Stay connected.</h2>
           </div>
 
           {/* Pills (All appear together at the end) */}
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[45%] md:top-[40%] right-[calc(60%+10px)] sm:right-[calc(50%+90px)] md:right-[calc(50%+150px)]">
+          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[45%] md:top-[40%] right-[calc(60%+10px)] sm:right-[calc(50%+90px)] md:right-[calc(60%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Ovulation tracking</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] md:top-[65%] right-[calc(70%+20px)] sm:right-[calc(50%+60px)] md:right-[calc(50%+110px)]">
+          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] md:top-[65%] right-[calc(70%+20px)] sm:right-[calc(50%+60px)] md:right-[calc(60%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Sperm health</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[40%] md:top-[42%] left-[calc(50%+30px)] sm:left-[calc(50%+90px)] md:left-[calc(50%+150px)]">
+          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[40%] md:top-[42%] left-[calc(50%+30px)] sm:left-[calc(50%+90px)] md:left-[calc(60%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Hormone support</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] left-[calc(60%+20px)] sm:left-[calc(50%+60px)] md:left-[calc(50%+110px)]">
+          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] left-[calc(60%+20px)] sm:left-[calc(50%+60px)] md:left-[calc(60%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Conception timing</span>
@@ -1188,7 +1206,7 @@ export default function CalaScrollSequence() {
           {/* Top Header */}
           <div className="faq-header text-center absolute top-6 sm:top-8 md:top-10 lg:top-12 pointer-events-auto z-30 flex flex-col items-center">
             <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-none">
-              {"Questions you shouldn't have to figure out alone."}
+              {"Let’s Figure Out Together with"}
             </h2>
             <span className="text-[#5A856C] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
               EVE + GENESIS

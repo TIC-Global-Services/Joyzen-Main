@@ -55,7 +55,8 @@ export const CALA_SEQUENCE_CONFIG: ScrollSequenceConfig = {
   phase11Top: -15,
   phase12Scale: 6.0,
   phase12Top: 10,
-  finalOrbScale: 4.2,
+  phase13Scale: 4.2,
+  finalOrbScale: 3.2,
   finalOrbTop: 50,
 
   // Glass Optics & Refraction (AdaptiveGlass)

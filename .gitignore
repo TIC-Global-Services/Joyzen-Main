@@ -40,3 +40,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# scratch/debug scripts & temp chrome profiles
+scratch_test.js
+check_styles.js
+chrome_temp/
+chrome_temp2/
+scroll_*.png
+test_screen.png
+test_low_h.png

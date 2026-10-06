@@ -16,6 +16,7 @@ export interface ScrollSequenceControls {
   phase11Top: number;
   phase12Scale: number;
   phase12Top: number;
+  phase13Scale: number;
   finalOrbScale: number;
   finalOrbTop: number;
 
@@ -43,6 +44,7 @@ export function useScrollSequenceControls(
     phase11Top: -15,
     phase12Scale: 6.5,
     phase12Top: 10,
+    phase13Scale: 3.2,
     finalOrbScale: 3.2,
     finalOrbTop: 50,
     glassBlur: 2.0,
@@ -76,7 +78,8 @@ export function useScrollSequenceControls(
               phase11Top: { value: d.phase11Top, min: -60, max: 25, step: 1, label: 'Ceiling Top % (P11)' },
               phase12Scale: { value: d.phase12Scale, min: 2.0, max: 15.0, step: 0.5, label: 'Mid Scale (P12)' },
               phase12Top: { value: d.phase12Top, min: -25, max: 40, step: 1, label: 'Mid Top % (P12)' },
-              finalOrbScale: { value: d.finalOrbScale, min: 1.0, max: 8.0, step: 0.1, label: 'Final Scale (P13+)' },
+              phase13Scale: { value: d.phase13Scale, min: 1.0, max: 10.0, step: 0.1, label: 'Pills Scale (P13)' },
+              finalOrbScale: { value: d.finalOrbScale, min: 1.0, max: 8.0, step: 0.1, label: 'Final Scale (P14+)' },
               finalOrbTop: { value: d.finalOrbTop, min: 15, max: 80, step: 1, label: 'Final Top % (P13+)' },
             },
             { collapsed: false }

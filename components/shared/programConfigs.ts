@@ -98,7 +98,8 @@ export interface ScrollSequenceConfig {
   phase11Top?: number;             // Phase 11 ceiling top % (default -15)
   phase12Scale?: number;           // Phase 12 mid scale (default 6.0)
   phase12Top?: number;             // Phase 12 mid top % (default 10)
-  finalOrbScale?: number;          // Phase 13+ settle scale (default 3.2)
+  phase13Scale?: number;           // Phase 13 pills sequence orb scale (default 3.2)
+  finalOrbScale?: number;          // Phase 14+ settle scale (default 3.2)
   finalOrbTop?: number;            // Phase 13+ settle top % (default 50)
 
   // Glass Optics & Refraction (AdaptiveGlass)

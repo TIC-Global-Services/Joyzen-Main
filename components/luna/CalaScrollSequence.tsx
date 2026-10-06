@@ -103,7 +103,7 @@ function AdaptiveGlass({
   contrast = 1.12,
   brightness = 1.04,
   saturation = 1.15,
-  shadowIntensity = 0.08,
+  shadowIntensity = 0,
   displacementScale = 0.8,
   elasticity = 0.4,
   zIndex = 10,
@@ -116,6 +116,7 @@ function AdaptiveGlass({
       borderRadius={borderRadius}
       blur={blur}
       contrast={contrast}
+      
       brightness={brightness}
       saturation={saturation}
       shadowIntensity={shadowIntensity}
@@ -211,7 +212,7 @@ function CollidingPill({
             borderRadius={9999}
             blur={1.5}
             contrast={1.12}
-            brightness={1.04}
+            brightness={1.4}
             saturation={1.15}
             shadowIntensity={0.05}
             displacementScale={0.8}
@@ -234,7 +235,7 @@ function CollidingPill({
                 />
               )}
               <span
-                className="font-semibold text-zinc-900 tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
+                className="font-semibold text-black tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
                 style={{
                   fontSize: `clamp(11px, ${25 * scaleFactor}px, 16px)`,
                   color: '#1E2822',
@@ -284,11 +285,11 @@ function OuterChatPill({ item, scaleFactor, clickedId, setClickedId, className, 
         className="relative group cursor-grab active:cursor-grabbing"
       >
         <AdaptiveGlass
-          isMobile={isMobile}
+          // isMobile={isMobile}
           borderRadius={26}
           blur={1.8}
           contrast={1.12}
-          brightness={1.04}
+          brightness={1.4}
           saturation={1.15}
           shadowIntensity={0.06}
           displacementScale={0.8}
@@ -481,6 +482,7 @@ export default function CalaScrollSequence() {
     const zoomScale = isMobileDev ? scrollControls.mobileZoomScale : scrollControls.zoomPhaseScale;
     const orbPhase11Scale = isMobileDev ? Math.min(scrollControls.phase11Scale, 8.0) : scrollControls.phase11Scale;
     const orbPhase12Scale = isMobileDev ? Math.min(scrollControls.phase12Scale, 5.5) : scrollControls.phase12Scale;
+    const orbPhase13Scale = isMobileDev ? Math.min(scrollControls.phase13Scale, 1.9) : scrollControls.phase13Scale;
     const orbFinalScale = isMobileDev ? Math.min(scrollControls.finalOrbScale, 1.9) : scrollControls.finalOrbScale;
     const phase11Top = `${scrollControls.phase11Top}%`;
     const phase12Top = `${scrollControls.phase12Top}%`;
@@ -506,12 +508,12 @@ export default function CalaScrollSequence() {
 
     // Phase 13: 14.5 to 15.5s - Text 2 out, Text 3 in, Orb shrinks to center. All pills in.
     tl.to('.benefits-text-2', { opacity: 0, scale: 1.05, duration: 0.5 }, "phase13");
-    tl.to('.mobile-3d-orb', { scale: orbFinalScale, top: finalOrbTop, duration: 1.5, ease: 'power2.inOut' }, "phase13");
+    tl.to('.mobile-3d-orb', { scale: orbPhase13Scale, top: finalOrbTop, duration: 1.5, ease: 'power2.inOut' }, "phase13");
     tl.fromTo('.benefits-text-3', { opacity: 0, scale: 0.95 }, { opacity: 1, scale: 1, duration: 0.8 }, "phase13+=0.8");
     tl.fromTo('.final-benefit-pill', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
 
     // Phase 14: 16.0 to 17.0s - Settle orb and finalize
-    tl.to('.mobile-3d-orb', { scale: orbFinalScale, duration: 1 }, "phase14");
+    tl.to('.mobile-3d-orb', { scale: orbPhase13Scale, duration: 1 }, "phase14");
 
     // Phase 15: Fade out benefits-text-3 and final pills completely
     tl.to('.benefits-text-3', { opacity: 0, scale: 1.05, duration: 0.8, ease: 'power2.in' }, "phase15");
@@ -521,6 +523,7 @@ export default function CalaScrollSequence() {
     // Phase 16: Build in FAQ section sequentially
     const faqStart = "phase15+=1.4";
     tl.to('.faq-container', { opacity: 1, duration: 0.2 }, faqStart);
+    tl.to('.mobile-3d-orb', { scale: orbFinalScale, duration: 1 }, faqStart);
 
     // Header slides down from top & fades in
     tl.fromTo('.faq-header',
@@ -620,6 +623,7 @@ export default function CalaScrollSequence() {
       scrollControls.phase11Top,
       scrollControls.phase12Scale,
       scrollControls.phase12Top,
+      scrollControls.phase13Scale,
       scrollControls.finalOrbScale,
       scrollControls.finalOrbTop,
     ],
@@ -700,8 +704,8 @@ export default function CalaScrollSequence() {
     items-center
     justify-center
     pointer-events-none
-    w-[clamp(150px,50vw,360px)]
-    h-[clamp(150px,50vw,360px)]
+    w-[clamp(130px,35vw,360px)]
+    h-[clamp(130px,35vw,360px)]
   "
             >
               <AdaptiveGlass
@@ -724,7 +728,7 @@ export default function CalaScrollSequence() {
       pointer-events-auto
       border
       border-white/60
-      shadow-[0_20px_70px_rgba(36,168,184,0.35),inset_0_2px_4px_rgba(255,255,255,0.7)]
+    
     "
               >
                 <div
@@ -1081,15 +1085,15 @@ export default function CalaScrollSequence() {
         <div className="benefits-sequence absolute inset-0 z-40 pointer-events-none">
           {/* Texts */}
           <div className="benefits-text-1 absolute inset-0 flex flex-col items-center justify-center opacity-0">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-4">BENEFITS</span>
+            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase  sm:mb-4">BENEFITS</span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-white tracking-tight drop-shadow-md">Understand your body.</h2>
           </div>
           <div className="benefits-text-2 absolute inset-0 flex flex-col items-center justify-center opacity-0">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-4">BENEFITS</span>
+            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase  sm:mb-4">BENEFITS</span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Build healthy habits.</h2>
           </div>
           <div className="benefits-text-3 absolute inset-0 flex flex-col items-center justify-center opacity-0">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-2">BENEFITS</span>
+            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase  sm:mb-2">BENEFITS</span>
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Stay supported.</h2>
           </div>
 

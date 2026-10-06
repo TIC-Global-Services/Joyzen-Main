@@ -291,14 +291,12 @@ export default function Hero() {
             style={{
               backgroundColor: '#ffffff',
             }}
-            className={`block w-full h-full bg-white pointer-events-none border-0 outline-none select-none ${
+            className={`block w-full h-full bg-white pointer-events-none border-0 outline-none select-none scale-[1.02] ${
               isShrunk ? 'object-contain' : 'object-cover'
             }`}
           />
-          {/* Seamless white bottom strip to completely eliminate any subpixel/GPU black line during scroll */}
-          {isShrunk && (
-            <div className="absolute -bottom-1 left-0 right-0 h-2 bg-white pointer-events-none z-20" />
-          )}
+          {/* Seamless white border overlay to eliminate subpixel/GPU black lines on all sides */}
+          <div className="absolute inset-0 border-[3px] border-white pointer-events-none z-20" />
         </motion.div>
       </motion.div>
     </section>

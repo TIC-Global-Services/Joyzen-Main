@@ -429,6 +429,7 @@ export default function CalaScrollSequence() {
     const zoomScale = isMobileDev ? scrollControls.mobileZoomScale : scrollControls.zoomPhaseScale;
     const orbPhase11Scale = isMobileDev ? Math.min(scrollControls.phase11Scale, 7.0) : scrollControls.phase11Scale;
     const orbPhase12Scale = isMobileDev ? Math.min(scrollControls.phase12Scale, 5.5) : scrollControls.phase12Scale;
+    const orbPhase13Scale = isMobileDev ? Math.min(scrollControls.phase13Scale, 1.9) : scrollControls.phase13Scale;
     const orbFinalScale = isMobileDev ? Math.min(scrollControls.finalOrbScale, 1.9) : scrollControls.finalOrbScale;
     const phase11Top = `${scrollControls.phase11Top}%`;
     const phase12Top = `${scrollControls.phase12Top}%`;
@@ -454,12 +455,12 @@ export default function CalaScrollSequence() {
 
     // Phase 13: 14.5 to 15.5s - Text 2 out, Text 3 in, Orb shrinks to center. All pills in.
     tl.to('.benefits-text-2', { autoAlpha: 0, scale: 1.05, duration: 0.5 }, "phase13");
-    tl.to('.mobile-3d-orb', { scale: orbFinalScale, top: finalOrbTop, duration: 1.5, ease: 'power2.inOut' }, "phase13");
+    tl.to('.mobile-3d-orb', { scale: orbPhase13Scale, top: finalOrbTop, duration: 1.5, ease: 'power2.inOut' }, "phase13");
     tl.fromTo('.benefits-text-3', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase13+=0.8");
     tl.fromTo('.final-benefit-pill', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
 
     // Phase 14: 16.0 to 17.0s - Settle orb and finalize
-    tl.to('.mobile-3d-orb', { scale: orbFinalScale, duration: 1 }, "phase14");
+    tl.to('.mobile-3d-orb', { scale: orbPhase13Scale, duration: 1 }, "phase14");
 
     // Phase 15: Fade out benefits-text-3 and final pills completely
     tl.to('.benefits-text-3', { autoAlpha: 0, scale: 1.05, duration: 0.8, ease: 'power2.in' }, "phase15");
@@ -469,6 +470,7 @@ export default function CalaScrollSequence() {
     // Phase 16: Build in FAQ section sequentially
     const faqStart = "phase15+=1.4";
     tl.to('.faq-container', { autoAlpha: 1, duration: 0.2 }, faqStart);
+    tl.to('.mobile-3d-orb', { scale: orbFinalScale, duration: 1 }, faqStart);
 
     tl.fromTo('.faq-header',
       { autoAlpha: 0, y: -35 },
@@ -569,6 +571,7 @@ export default function CalaScrollSequence() {
       scrollControls.phase11Top,
       scrollControls.phase12Scale,
       scrollControls.phase12Top,
+      scrollControls.phase13Scale,
       scrollControls.finalOrbScale,
       scrollControls.finalOrbTop,
     ],
