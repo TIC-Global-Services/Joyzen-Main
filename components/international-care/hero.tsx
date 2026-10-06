@@ -17,7 +17,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center lg:justify-start pt-28 sm:pt-36 md:pt-40 pb-16 sm:pb-24 px-4 sm:px-6 lg:px-8  overflow-hidden select-none">
+    <section className="relative w-full min-h-screen flex flex-col items-center justify-center lg:justify-start pt-28 sm:pt-36 md:pt-40 pb-16 sm:pb-24 overflow-hidden select-none bg-white">
       {/* Honeycomb Background Overlay */}
       <div 
         className="absolute inset-0 pointer-events-none opacity-50 mix-blend-multiply"
@@ -27,7 +27,7 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center text-center">
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         {/* Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
@@ -49,30 +49,28 @@ export default function Hero() {
           <br className="hidden sm:inline" />
           {' '}for patients living around the world.
         </motion.p>
-
-        {/* Tablet Image Container */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          className="w-full  flex justify-center items-start mt-10"
-        >
-          <div className="relative w-full max-w-4xl transition-transform duration-500 hover:scale-[1.01]">
-            {/* <Ipad width="100%" height="auto" className="drop-shadow-2xl text-zinc-900"> */}
-              <video
-                ref={videoRef}
-                src="/JOYZEN-MAP-FINAL-V2.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="auto"
-                className="w-full h-full object-contain pointer-events-none"
-              />
-            {/* </Ipad> */}
-          </div>
-        </motion.div>
       </div>
+
+      {/* Full Width Video Container */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 30 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+        className="relative z-10 w-full flex justify-center items-start mt-6 sm:mt-10"
+      >
+        <div className="relative w-full">
+          <video
+            ref={videoRef}
+            src="/JOYZEN-MAP-FINAL-V4.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            className="w-full h-auto object-cover pointer-events-none"
+          />
+        </div>
+      </motion.div>
     </section>
   );
 }
