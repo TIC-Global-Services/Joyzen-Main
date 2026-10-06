@@ -49,7 +49,7 @@ export function Ipad({
           ry="23.29"
         />
         <rect
-          fill="#ffffff"
+          fill="#e3e3e3"
           x="31.37"
           y="28.47"
           width="457.25"
@@ -63,7 +63,7 @@ export function Ipad({
 
       {/* Screen Container with iOS Safari hardware-acceleration clipping fixes */}
       <div
-        className="absolute overflow-hidden bg-white"
+        className="absolute overflow-hidden bg-[#e3e3e3]"
         style={{
           left: "6.033%",
           top: "7.118%",

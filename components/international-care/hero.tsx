@@ -58,10 +58,10 @@ export default function Hero() {
           className="w-full  flex justify-center items-start mt-10"
         >
           <div className="relative w-full max-w-4xl transition-transform duration-500 hover:scale-[1.01]">
-            <Ipad width="100%" height="auto" className="drop-shadow-2xl text-zinc-900">
+            {/* <Ipad width="100%" height="auto" className="drop-shadow-2xl text-zinc-900"> */}
               <video
                 ref={videoRef}
-                src="/world-map-up-2.mp4"
+                src="/JOYZEN-MAP-FINAL-V2.mp4"
                 autoPlay
                 loop
                 muted
@@ -69,7 +69,7 @@ export default function Hero() {
                 preload="auto"
                 className="w-full h-full object-contain pointer-events-none"
               />
-            </Ipad>
+            {/* </Ipad> */}
           </div>
         </motion.div>
       </div>
