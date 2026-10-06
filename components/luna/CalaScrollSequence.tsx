@@ -240,7 +240,7 @@ function CollidingPill({
               <span
                 className="font-semibold text-black tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
                 style={{
-                  fontSize: isMobile ? '11px' : `clamp(11px, ${25 * scaleFactor}px, 16px)`,
+                  fontSize: isMobile ? '10px' : `clamp(11px, ${25 * scaleFactor}px, 16px)`,
                   color: '#1E2822',
                 }}
               >
