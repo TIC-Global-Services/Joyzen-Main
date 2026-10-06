@@ -1,20 +1,27 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
-import { Ipad } from '@/reuseable/ipad';
+import { motion, useInView } from 'framer-motion';
 
 export default function Hero() {
   const videoRef = React.useRef<HTMLVideoElement>(null);
+  const isInView = useInView(videoRef, { amount: 0.15 });
 
   React.useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      videoRef.current.play().catch(() => {});
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.defaultMuted = true;
+    video.muted = true;
+
+    if (isInView) {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+      video.currentTime = 0;
     }
-  }, []);
+  }, [isInView]);
 
   return (
     <section className="relative w-full min-h-screen flex flex-col items-center justify-center lg:justify-start pt-28 sm:pt-36 md:pt-40 pb-16 sm:pb-24 overflow-hidden select-none bg-white">
