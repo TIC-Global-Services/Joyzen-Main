@@ -1173,30 +1173,43 @@ export default function CalaScrollSequence() {
 
           {/* Mobile Layout (< md) - ONLY MOUNT ON MOBILE */}
           {isMobile && (
-            <div className="flex md:hidden absolute inset-x-0 bottom-4 top-[100px] flex-col justify-start items-center px-4 pointer-events-auto z-40 overflow-y-auto pt-2 pb-6">
+            <div className="flex md:hidden absolute inset-x-0 bottom-4 top-[100px] flex-col justify-start items-center px-4 pointer-events-auto z-40 overflow-y-auto pt-2 pb-2">
 
               {/* Answer Box (TOP) */}
               <div className="faq-right-box w-full max-w-[340px] mb-auto relative z-10 shrink-0">
-                <div className="p-5 rounded-3xl border border-white/80 bg-white/95 shadow-xl backdrop-blur-xl text-left relative overflow-hidden">
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-5 h-5 rounded-full overflow-hidden border border-teal-300 shadow-[0_2px_8px_rgba(36,168,184,0.35)] shrink-0">
-                      <img src="/programs/Pregnancy-Prep.png" alt="EVE" className="w-full h-full object-cover scale-[1.1]" />
+                <AdaptiveGlass
+                  borderRadius={24}
+                  blur={2.5}
+                  contrast={1.12}
+                  brightness={1.04}
+                  saturation={1.15}
+                  shadowIntensity={0.08}
+                  displacementScale={0.8}
+                  elasticity={0.4}
+                  zIndex={20}
+                  className="w-full rounded-3xl border border-white/80 backdrop-blur-2xl transition-all"
+                >
+                  <div className="p-5 flex flex-col text-left">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <div className="w-5 h-5 rounded-full overflow-hidden border border-teal-300 shadow-[0_2px_8px_rgba(36,168,184,0.35)] shrink-0">
+                        <img src="/programs/Pregnancy-Prep.png" alt="EVE" className="w-full h-full object-cover scale-[1.1]" />
+                      </div>
+                      <span className="text-[12px] font-bold text-[#2A857D] tracking-wide">EVE Care Team</span>
                     </div>
-                    <span className="text-[12px] font-bold text-[#2A857D] tracking-wide">EVE Care Team</span>
+                    <AnimatePresence mode="wait">
+                      <motion.p
+                        key={activeFaqId}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.25 }}
+                        className="text-[14px] text-[#1E2822] leading-[1.2] font-medium"
+                      >
+                        {FAQ_SEQUENCE.find((f) => f.id === activeFaqId)?.answer}
+                      </motion.p>
+                    </AnimatePresence>
                   </div>
-                  <AnimatePresence mode="wait">
-                    <motion.p
-                      key={activeFaqId}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.25 }}
-                      className="text-[14px] text-[#1E2822] leading-[1.2] font-medium"
-                    >
-                      {FAQ_SEQUENCE.find((f) => f.id === activeFaqId)?.answer}
-                    </motion.p>
-                  </AnimatePresence>
-                </div>
+                </AdaptiveGlass>
               </div>
 
               {/* Spacer for 3D Orb to sit in the middle */}
@@ -1207,16 +1220,39 @@ export default function CalaScrollSequence() {
                 {FAQ_SEQUENCE.map((faq) => {
                   const isActive = activeFaqId === faq.id;
                   return (
-                    <button
+                    <div
                       key={`mobile-faq-pill-${faq.id}`}
                       onClick={() => setActiveFaqId(faq.id)}
-                      className={`faq-pill text-left px-5 py-3.5 rounded-[24px] border transition-all duration-300 ${isActive
-                        ? 'border-[#E5855E]/20 bg-gradient-to-r from-white/95 to-white/80 text-[#E5855E] font-bold shadow-[0_4px_15px_rgba(0,0,0,0.05)]'
-                        : 'border-white/60 bg-white/60 text-[#1E2822]/85 font-medium hover:bg-white/80'
+                      className={`faq-pill group relative cursor-pointer select-none rounded-[24px] transition-all duration-300 ${isActive ? 'scale-[1.02] z-20' : 'hover:scale-[1.01] z-10'
                         }`}
                     >
-                      <span className="text-[12px] leading-snug line-clamp-2">{faq.question}</span>
-                    </button>
+                      <AdaptiveGlass
+                        borderRadius={24}
+                        blur={2}
+                        contrast={1.12}
+                        brightness={1.04}
+                        saturation={1.15}
+                        shadowIntensity={0.06}
+                        displacementScale={0.7}
+                        elasticity={0.35}
+                        zIndex={20}
+                        className={`w-full rounded-[24px] border transition-all duration-300 ${isActive
+                          ? 'border-[#E5855E]/40 shadow-[0_8px_25px_rgba(229,133,94,0.15)] bg-white/20'
+                          : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
+                          }`}
+                      >
+                        <div className="px-5 py-3 text-left">
+                          <span
+                            className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 ${isActive
+                              ? 'font-bold text-[#E5855E]'
+                              : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
+                              }`}
+                          >
+                            {faq.question}
+                          </span>
+                        </div>
+                      </AdaptiveGlass>
+                    </div>
                   );
                 })}
               </div>

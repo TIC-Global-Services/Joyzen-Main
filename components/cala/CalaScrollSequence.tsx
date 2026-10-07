@@ -897,13 +897,13 @@ export default function CalaScrollSequence() {
             </div>
 
             {/* 2-Column Grid of 5 Cards */}
-            <div className="w-full grid grid-cols-2 gap-2 sm:gap-2.5">
+            <div className="w-full grid grid-cols-2  gap-2 sm:gap-2.5">
               {/* Card 1 - Medical Care */}
               <div className="col-span-1 rounded-[18px] border border-white/20 bg-white/[0.08] backdrop-blur-md p-2.5 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
                 <h4 className="text-white text-[12px] sm:text-[13px] font-bold mb-1.5 leading-snug">Medical Care</h4>
                 <ul className="space-y-1">
                   {['Same gynecologist', 'Monthly detailed consultations', 'Weekly care-team check-ins', 'Daily private chat support'].map((item) => (
-                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-[9px] sm:text-[10px] leading-tight font-normal">
+                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-[10px] sm:text-xs leading-tight font-normal">
                       <span className="w-1 h-1 rounded-full bg-white mt-1 shrink-0 opacity-80" />
                       <span>{item}</span>
                     </li>
@@ -918,7 +918,7 @@ export default function CalaScrollSequence() {
                 </h4>
                 <ul className="space-y-1">
                   {['Hormone tracking', 'Cycle rebuilding', 'Ovulation tracking', 'PCOS progress tracking', 'Fertility readiness tracking'].map((item) => (
-                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-xs sm:text-lg leading-tight font-normal">
+                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-[10px] sm:text-xs leading-tight font-normal">
                       <span className="w-1 h-1 rounded-full bg-white mt-1 shrink-0 opacity-80" />
                       <span>{item}</span>
                     </li>
@@ -931,7 +931,7 @@ export default function CalaScrollSequence() {
                 <h4 className="text-white text-[12px] sm:text-lg font-bold mb-1.5 leading-snug">Intimate Health Care</h4>
                 <ul className="space-y-1">
                   {['Vaginal & uterine health guidance', 'Period pain & PMS support', 'Infection prevention guidance', 'Pelvic health awareness'].map((item) => (
-                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-[9px] sm:text-[10px] leading-tight font-normal">
+                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-[10px] sm:text-[10px] leading-tight font-normal">
                       <span className="w-1 h-1 rounded-full bg-white mt-1 shrink-0 opacity-80" />
                       <span>{item}</span>
                     </li>
@@ -944,10 +944,10 @@ export default function CalaScrollSequence() {
                 <h4 className="text-white text-[12px] sm:text-[13px] font-bold mb-1.5 leading-snug">Emotional Support</h4>
                 <ul className="space-y-1">
                   {['Dedicated care companion', 'Stress & wellbeing tracking', 'Monthly emotional health review'].map((item) => (
-                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-[9px] sm:text-[10px] leading-tight font-normal">
+                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-[10px] sm:text-[10px] leading-tight font-normal">
                       <span className="w-1 h-1 rounded-full bg-white mt-1 shrink-0 opacity-80" />
                       <span>{item}</span>
-                    </li>
+                    </li> 
                   ))}
                 </ul>
               </div>
@@ -957,7 +957,7 @@ export default function CalaScrollSequence() {
                 <h4 className="text-white text-[12px] sm:text-[13px] font-bold mb-1.5 leading-snug">Lifestyle Support</h4>
                 <ul className="space-y-1">
                   {['Personalized diet', 'Home / gym workout plan', 'Monthly plan adjustments', 'Lifestyle habit coaching'].map((item) => (
-                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-[9px] sm:text-[10px] leading-tight font-normal">
+                    <li key={item} className="flex items-start gap-1.5 text-white/95 text-[10px] sm:text-xs leading-tight font-normal">
                       <span className="w-1 h-1 rounded-full bg-white mt-1 shrink-0 opacity-80" />
                       <span>{item}</span>
                     </li>
@@ -967,7 +967,7 @@ export default function CalaScrollSequence() {
             </div>
 
             {/* Footer Text */}
-            <p className="mt-2.5 sm:mt-3 text-white/95 font-medium text-[10px] sm:text-[11px] leading-snug max-w-[320px] mx-auto text-center drop-shadow-sm">
+            <p className="mt-2.5 sm:mt-3 text-white/95 font-medium text-[10px] sm:text-xs leading-snug max-w-[320px] mx-auto text-center drop-shadow-sm">
               CALA brings medical, hormonal, intimate, emotional and lifestyle support together in one ongoing care program.
             </p>
           </div>
@@ -1192,7 +1192,7 @@ export default function CalaScrollSequence() {
           {/* Top Header */}
           <div className="faq-header text-center absolute top-6 sm:top-8 md:top-10 lg:top-12 pointer-events-auto z-30 flex flex-col items-center">
             <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-tight">
-              {"Questions you shouldn't have to figure out alone."}
+              {"Let’s Figure Out Together with"}
             </h2>
             <span className="text-[#008080] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
               CALA
@@ -1300,30 +1300,43 @@ export default function CalaScrollSequence() {
 
           {/* Mobile Layout (< md) - ONLY MOUNT ON MOBILE */}
           {isMobile && (
-            <div className="flex md:hidden absolute inset-x-0 bottom-4 top-[100px] flex-col justify-start items-center px-4 pointer-events-auto z-40 overflow-y-auto pt-2 pb-6">
+            <div className="flex md:hidden absolute inset-x-0 bottom-4 top-[100px] flex-col justify-start items-center px-4 pointer-events-auto z-40 overflow-y-auto pt-2 pb-2">
 
               {/* Answer Box (TOP) */}
               <div className="faq-right-box w-full max-w-[340px] mb-auto relative z-10 shrink-0">
-                <div className="p-5 rounded-3xl border border-white/80 bg-white/95 shadow-xl backdrop-blur-xl text-left relative overflow-hidden">
-                  <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-5 h-5 rounded-full overflow-hidden border border-teal-300 shadow-[0_2px_8px_rgba(36,168,184,0.35)] shrink-0">
-                      <img src="/cala-orb.png" alt="CALA" className="w-full h-full object-cover scale-[1.1]" />
+                <AdaptiveGlass
+                  borderRadius={24}
+                  blur={2.5}
+                  contrast={1.12}
+                  brightness={1.04}
+                  saturation={1.15}
+                  shadowIntensity={0.08}
+                  displacementScale={0.8}
+                  elasticity={0.4}
+                  zIndex={20}
+                  className="w-full rounded-3xl border border-white/80 backdrop-blur-2xl transition-all"
+                >
+                  <div className="p-5 flex flex-col text-left">
+                    <div className="flex items-center gap-2.5 mb-3">
+                      <div className="w-5 h-5 rounded-full overflow-hidden border border-teal-300 shadow-[0_2px_8px_rgba(36,168,184,0.35)] shrink-0">
+                        <img src="/cala-orb.png" alt="CALA" className="w-full h-full object-cover scale-[1.1]" />
+                      </div>
+                      <span className="text-[12px] font-bold text-[#2A857D] tracking-wide">CALA Care Team</span>
                     </div>
-                    <span className="text-[12px] font-bold text-[#2A857D] tracking-wide">CALA Care Team</span>
+                    <AnimatePresence mode="wait">
+                      <motion.p
+                        key={activeFaqId}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -6 }}
+                        transition={{ duration: 0.25 }}
+                        className="text-[14px] text-[#1E2822] leading-[1.2] font-medium"
+                      >
+                        {FAQ_SEQUENCE.find((f) => f.id === activeFaqId)?.answer}
+                      </motion.p>
+                    </AnimatePresence>
                   </div>
-                  <AnimatePresence mode="wait">
-                    <motion.p
-                      key={activeFaqId}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -6 }}
-                      transition={{ duration: 0.25 }}
-                      className="text-[14px] text-[#1E2822] leading-[1.2] font-medium"
-                    >
-                      {FAQ_SEQUENCE.find((f) => f.id === activeFaqId)?.answer}
-                    </motion.p>
-                  </AnimatePresence>
-                </div>
+                </AdaptiveGlass>
               </div>
 
               {/* Spacer for 3D Orb to sit in the middle */}
@@ -1334,16 +1347,39 @@ export default function CalaScrollSequence() {
                 {FAQ_SEQUENCE.map((faq) => {
                   const isActive = activeFaqId === faq.id;
                   return (
-                    <button
+                    <div
                       key={`mobile-faq-pill-${faq.id}`}
                       onClick={() => setActiveFaqId(faq.id)}
-                      className={`faq-pill text-left px-5 py-3.5 rounded-[24px] border transition-all duration-300 ${isActive
-                        ? 'border-[#E5855E]/20 bg-gradient-to-r from-white/95 to-white/80 text-[#E5855E] font-bold shadow-[0_4px_15px_rgba(0,0,0,0.05)]'
-                        : 'border-white/60 bg-white/60 text-[#1E2822]/85 font-medium hover:bg-white/80'
+                      className={`faq-pill group relative cursor-pointer select-none rounded-[24px] transition-all duration-300 ${isActive ? 'scale-[1.02] z-20' : 'hover:scale-[1.01] z-10'
                         }`}
                     >
-                      <span className="text-[12px] leading-snug line-clamp-2">{faq.question}</span>
-                    </button>
+                      <AdaptiveGlass
+                        borderRadius={24}
+                        blur={2}
+                        contrast={1.12}
+                        brightness={1.04}
+                        saturation={1.15}
+                        shadowIntensity={0.06}
+                        displacementScale={0.7}
+                        elasticity={0.35}
+                        zIndex={20}
+                        className={`w-full rounded-[24px] border transition-all duration-300 ${isActive
+                          ? 'border-[#E5855E]/40 shadow-[0_8px_25px_rgba(229,133,94,0.15)] bg-white/20'
+                          : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
+                          }`}
+                      >
+                        <div className="px-5 py-3 text-left">
+                          <span
+                            className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 ${isActive
+                              ? 'font-bold text-[#E5855E]'
+                              : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
+                              }`}
+                          >
+                            {faq.question}
+                          </span>
+                        </div>
+                      </AdaptiveGlass>
+                    </div>
                   );
                 })}
               </div>
