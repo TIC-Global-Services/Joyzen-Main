@@ -446,7 +446,7 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
         <div className="mt-16 sm:mt-24 pt-8 w-full flex items-end justify-center text-center">
           <p className="text-base sm:text-lg md:text-2xl font-medium text-black tracking-tight flex items-center gap-1.5 sm:gap-2">
             <span>Powered by</span>
-            <Image src="/joyzen-logo.png" alt="Joyzen" width={140} height={44} className="h-[34px] md:h-[44px] w-auto object-contain ml-1" />
+            <Image src="/joyzen-orange.png" alt="Joyzen" width={140} height={44} className="h-[34px] md:h-[44px] w-auto object-contain ml-1" />
           </p>
         </div>
       </div>
