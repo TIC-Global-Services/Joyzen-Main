@@ -59,6 +59,16 @@ export const LYRA_SEQUENCE_CONFIG: ScrollSequenceConfig = {
   finalOrbScale: 3.2,
   finalOrbTop: 50,
 
+  // Tablet Specific 3D Settings (768px - 1023px)
+  tabZoomScale: 9.5,
+  tabPhase11Scale: 7.0,
+  tabPhase11Top: 5,
+  tabPhase12Scale: 5.0,
+  tabPhase12Top: 30,
+  tabPhase13Scale: 2.8,
+  tabFinalOrbScale: 2.6,
+  tabFinalOrbTop: 50,
+
   // Glass Optics & Refraction (AdaptiveGlass)
   glassBlur: 2.0,
   glassContrast: 1.15,

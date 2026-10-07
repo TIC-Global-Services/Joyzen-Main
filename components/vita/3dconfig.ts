@@ -55,9 +55,19 @@ export const VITA_SEQUENCE_CONFIG: ScrollSequenceConfig = {
   phase11Top: -15,
   phase12Scale: 6.0,
   phase12Top: 10,
- phase13Scale: 4.2,
+  phase13Scale: 4.2,
   finalOrbScale: 3.2,
   finalOrbTop: 50,
+
+  // Tablet Specific 3D Settings (768px - 1023px)
+  tabZoomScale: 9.5,
+  tabPhase11Scale: 7.0,
+  tabPhase11Top: 5,
+  tabPhase12Scale: 5.0,
+  tabPhase12Top: 30,
+  tabPhase13Scale: 2.8,
+  tabFinalOrbScale: 2.6,
+  tabFinalOrbTop: 50,
 
   // Glass Optics & Refraction (AdaptiveGlass)
   glassBlur: 2.0,

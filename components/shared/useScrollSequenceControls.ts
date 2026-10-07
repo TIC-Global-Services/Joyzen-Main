@@ -12,13 +12,21 @@ export interface ScrollSequenceControls {
   // Scroll Phase 3D Zooms (GSAP)
   zoomPhaseScale: number;
   mobileZoomScale: number;
+  tabZoomScale?: number;
   phase11Scale: number;
   phase11Top: number;
+  tabPhase11Scale?: number;
+  tabPhase11Top?: number;
   phase12Scale: number;
   phase12Top: number;
+  tabPhase12Scale?: number;
+  tabPhase12Top?: number;
   phase13Scale: number;
+  tabPhase13Scale?: number;
   finalOrbScale: number;
   finalOrbTop: number;
+  tabFinalOrbScale?: number;
+  tabFinalOrbTop?: number;
 
   // Glass Optics & Refraction
   glassBlur: number;
@@ -40,13 +48,21 @@ export function useScrollSequenceControls(
     heroOrbOffsetY: 0,
     zoomPhaseScale: 15.0,
     mobileZoomScale: 6.5,
+    tabZoomScale: 7.5,
     phase11Scale: 9.5,
     phase11Top: -15,
+    tabPhase11Scale: 7.0,
+    tabPhase11Top: 5,
     phase12Scale: 6.5,
     phase12Top: 10,
+    tabPhase12Scale: 5.0,
+    tabPhase12Top: 30,
     phase13Scale: 3.2,
+    tabPhase13Scale: 2.8,
     finalOrbScale: 3.2,
     finalOrbTop: 50,
+    tabFinalOrbScale: 2.6,
+    tabFinalOrbTop: 50,
     glassBlur: 2.0,
     glassContrast: 1.15,
     glassBrightness: 1.05,
