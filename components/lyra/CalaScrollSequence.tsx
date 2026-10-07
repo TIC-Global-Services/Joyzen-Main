@@ -489,7 +489,12 @@ export default function CalaScrollSequence() {
     const orbPhase11Scale = isMobileDev ? 6.0 : scrollControls.phase11Scale;
     const orbPhase12Scale = isMobileDev ? 4.4 : scrollControls.phase12Scale;
     const orbPhase13Scale = isMobileDev ? 2.35 : scrollControls.phase13Scale;
-    const orbFinalScale = isMobileDev ? 2.35 : scrollControls.finalOrbScale;
+    const isSmallHeight = !isMobileDev && typeof window !== 'undefined' && window.innerHeight < 850;
+    const orbFinalScale = isMobileDev
+      ? 2.35
+      : isSmallHeight
+        ? Math.min(scrollControls.finalOrbScale, Math.max(2.2, (window.innerHeight / 850) * scrollControls.finalOrbScale))
+        : scrollControls.finalOrbScale;
     const phase11Top = isMobileDev ? '15%' : `${scrollControls.phase11Top}%`;
     const phase12Top = isMobileDev ? '42%' : `${scrollControls.phase12Top}%`;
     const finalOrbTop = `${scrollControls.finalOrbTop}%`;
@@ -1163,7 +1168,7 @@ export default function CalaScrollSequence() {
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-pcos absolute opacity-0 pointer-events-auto top-[80%] md:top-[calc(65%+230px)] left-3 sm:left-10 md:left-1/2 md:-translate-x-1/2">
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-pcos absolute opacity-0 pointer-events-auto top-[80%] md:top-[calc(61%+230px)] left-3 sm:left-10 md:left-1/2 md:-translate-x-1/2">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Daily health chat</span>
@@ -1176,11 +1181,11 @@ export default function CalaScrollSequence() {
         <div className="faq-container absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none opacity-0 select-none">
 
           {/* Top Header */}
-          <div className="faq-header text-center absolute top-6 sm:top-8 md:top-10 lg:top-12 pointer-events-auto z-30 flex flex-col items-center">
-            <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-tight">
-              {"Questions you shouldn't have to figure out alone."}
+          <div className="faq-header text-center absolute top-3 sm:top-4 md:top-5 lg:top-6 [@media(min-height:920px)]:lg:top-12 [@media(max-height:820px)]:top-2.5 [@media(max-height:720px)]:top-1.5 pointer-events-auto z-30 flex flex-col items-center transform-gpu origin-top [@media(max-height:820px)]:scale-[0.88] [@media(max-height:720px)]:scale-[0.78]">
+            <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-[28px] [@media(min-height:920px)]:lg:text-[32px] font-bold text-black tracking-tight leading-none">
+              {"Let’s Figure Out Together with"}
             </h2>
-            <span className="text-[#CB6D7A] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
+            <span className="text-[#CB6D7A] font-bold uppercase tracking-tight text-lg sm:text-xl md:text-xl lg:text-2xl [@media(min-height:920px)]:text-[28px] mt-0.5">
               LYRA
             </span>
           </div>

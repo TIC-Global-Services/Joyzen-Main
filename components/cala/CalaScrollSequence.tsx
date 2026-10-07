@@ -367,6 +367,10 @@ export default function CalaScrollSequence() {
     gsap.set('.mobile-3d-orb', { xPercent: -50, yPercent: -50 });
     gsap.set('.outer-pill', { xPercent: -50, yPercent: -50 });
 
+    if (!isMobileDev) {
+      gsap.set('.benefit-pill-pcos', { y: -125 });
+    }
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
@@ -444,7 +448,12 @@ export default function CalaScrollSequence() {
     const orbPhase11Scale = isMobileDev ? 6.0 : scrollControls.phase11Scale;
     const orbPhase12Scale = isMobileDev ? 4.4 : scrollControls.phase12Scale;
     const orbPhase13Scale = isMobileDev ? 2.35 : scrollControls.phase13Scale;
-    const orbFinalScale = isMobileDev ? 2.35 : scrollControls.finalOrbScale;
+    const isSmallHeight = !isMobileDev && typeof window !== 'undefined' && window.innerHeight < 850;
+    const orbFinalScale = isMobileDev
+      ? 2.35
+      : isSmallHeight
+        ? Math.min(scrollControls.finalOrbScale, Math.max(2.2, (window.innerHeight / 850) * scrollControls.finalOrbScale))
+        : scrollControls.finalOrbScale;
     const phase11Top = isMobileDev ? '15%' : `${scrollControls.phase11Top}%`;
     const phase12Top = isMobileDev ? '42%' : `${scrollControls.phase12Top}%`;
     const finalOrbTop = `${scrollControls.finalOrbTop}%`;
@@ -480,6 +489,19 @@ export default function CalaScrollSequence() {
     tl.fromTo('.benefits-text-3', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase13+=0.8");
     if (!isMobileDev) {
       tl.fromTo('.benefit-pill-group-2', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
+
+      tl.to('.benefit-pill-fertility', {
+        x: -80,
+        y: -10,
+        duration: 1.5,
+        ease: 'power2.inOut'
+      }, "phase13");
+
+      tl.to('.benefit-pill-pcos', {
+        y: 0,
+        duration: 1.5,
+        ease: 'power2.inOut'
+      }, "phase13");
     } else {
       tl.to('.benefit-pill-track', { top: '47%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
       tl.to('.benefit-pill-ovulation', { top: '47%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
@@ -898,7 +920,7 @@ export default function CalaScrollSequence() {
 
         {/* --- PHASE 8: FINAL CONTENT OVER FULLSCREEN ORB --- */}
         <div className="final-content absolute inset-0 z-40 flex flex-col items-center justify-center pointer-events-none text-center opacity-0 px-2 sm:px-6">
-          
+
           {/* MOBILE VIEW (< md) - 100% MATCH TO REFERENCE SCREENSHOT & FITS ALL SCREENS */}
           <div className="flex md:hidden flex-col items-center justify-center w-full max-w-[380px] mx-auto px-2 py-2 pointer-events-auto">
             {/* Header */}
@@ -962,7 +984,7 @@ export default function CalaScrollSequence() {
                     <li key={item} className="flex items-start gap-1.5 text-white/95 text-[10px] sm:text-[10px] leading-tight font-normal">
                       <span className="w-1 h-1 rounded-full bg-white mt-1 shrink-0 opacity-80" />
                       <span>{item}</span>
-                    </li> 
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -988,11 +1010,11 @@ export default function CalaScrollSequence() {
           </div>
 
           {/* DESKTOP VIEW (>= md) */}
-          <div className="hidden md:flex max-w-[1100px] mx-auto flex-col items-center pointer-events-auto w-full">
+          <div className="hidden md:flex max-w-5xl mx-auto flex-col items-center pointer-events-auto w-full my-auto max-h-[96vh] justify-center transform-gpu origin-center [@media(max-height:750px)]:scale-[0.92] [@media(max-height:670px)]:scale-[0.84] [@media(max-height:590px)]:scale-[0.76] transition-transform">
 
             {/* Header Section */}
-            <div className="mb-5 sm:mb-14">
-              <h3 className="text-[#E5855E] text-[10px] sm:text-sm md:text-lg font-bold tracking-tight uppercase md:mb-2">
+            <div className="mb-3 lg:mb-6 xl:mb-8 [@media(max-height:850px)]:mb-2 [@media(max-height:750px)]:mb-1">
+              <h3 className="text-[#E5855E] text-[10px] sm:text-xs md:text-xs lg:text-lg font-bold tracking-tight uppercase md:mb-1">
                 What's Inside The Membership
               </h3>
               <h2 className="text-3xl sm:text-4xl md:text-3xl lg:text-[32px] font-bold text-white tracking-tight drop-shadow-md leading-none">
@@ -1001,28 +1023,28 @@ export default function CalaScrollSequence() {
             </div>
 
             {/* Grid of Cards – 3+2 centered desktop */}
-            <div className="w-full grid grid-cols-6 gap-3 md:gap-6">
+            <div className="w-full grid grid-cols-6 gap-2.5 mt-5 md:gap-3 lg:gap-4 [@media(max-height:800px)]:gap-2.5">
 
               {/* Card 1 - Medical Care */}
               <div className="col-span-2">
-                <AdaptiveGlass borderRadius={44} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
-                  <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Medical Care</h4>
-                    <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                  <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
+                    <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Medical Care</h4>
+                    <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-[13px] xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Same gynecologist</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-[13px] xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Monthly detailed consultations</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-[13px] xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Weekly care-team check-ins</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-[13px] xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Daily private chat support</span>
                       </li>
                     </ul>
@@ -1032,28 +1054,28 @@ export default function CalaScrollSequence() {
 
               {/* Card 2 - Hormone & Cycle Restoration */}
               <div className="col-span-2">
-                <AdaptiveGlass borderRadius={44} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
-                  <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Hormone & Cycle Restoration</h4>
-                    <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                  <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
+                    <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Hormone & Cycle Restoration</h4>
+                    <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Hormone tracking</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Cycle rebuilding</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Ovulation tracking</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>PCOS progress tracking</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Fertility readiness tracking</span>
                       </li>
                     </ul>
@@ -1063,24 +1085,24 @@ export default function CalaScrollSequence() {
 
               {/* Card 3 - Intimate Health Care */}
               <div className="col-span-2">
-                <AdaptiveGlass borderRadius={44} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
-                  <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Intimate Health Care</h4>
-                    <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                  <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
+                    <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Intimate Health Care</h4>
+                    <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Vaginal & uterine health guidance</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Period pain & PMS support</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Infection prevention guidance</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Pelvic health awareness</span>
                       </li>
                     </ul>
@@ -1090,20 +1112,20 @@ export default function CalaScrollSequence() {
 
               {/* Card 4 - Emotional Support (centered on desktop row 2) */}
               <div className="col-span-2 col-start-2">
-                <AdaptiveGlass borderRadius={44} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
-                  <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Emotional Support</h4>
-                    <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                  <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
+                    <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Emotional Support</h4>
+                    <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Dedicated care companion</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Stress & wellbeing tracking</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Monthly emotional health review</span>
                       </li>
                     </ul>
@@ -1113,24 +1135,24 @@ export default function CalaScrollSequence() {
 
               {/* Card 5 - Lifestyle Support (auto-placed on desktop) */}
               <div className="col-span-2">
-                <AdaptiveGlass borderRadius={44} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl md:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
-                  <div className="p-5 md:p-7 text-left flex flex-col h-full relative z-10">
-                    <h4 className="text-white text-sm md:text-2xl font-bold mb-3 md:mb-4 drop-shadow-sm">Lifestyle Support</h4>
-                    <ul className="md:space-y-2">
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                  <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
+                    <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Lifestyle Support</h4>
+                    <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Personalized diet</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Home / gym workout plan</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Monthly plan adjustments</span>
                       </li>
-                      <li className="flex items-start gap-1.5 md:gap-3 text-white/95 text-[11px] md:text-lg leading-snug font-medium">
-                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1.5 shrink-0 shadow-sm" />
+                      <li className="flex items-start gap-1.5 md:gap-2 text-white/95 text-[10px] md:text-xs lg:text-base xl:text-lg leading-snug font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white mt-1 shrink-0 shadow-sm" />
                         <span>Lifestyle habit coaching</span>
                       </li>
                     </ul>
@@ -1141,7 +1163,7 @@ export default function CalaScrollSequence() {
             </div>
 
             {/* Footer Text */}
-            <p className="mt-6 sm:mt-12 text-white font-medium text-sm sm:text-base md:text-lg drop-shadow max-w-2xl leading-[1.2]">
+            <p className="mt-3 md:mt-3 lg:mt-4 xl:mt-6 [@media(max-height:800px)]:mt-2 text-white font-medium text-xs md:text-sm lg:text-lg drop-shadow max-w-2xl leading-normal">
               CALA brings medical, hormonal, intimate, emotional and lifestyle support together in one ongoing care program.
             </p>
           </div>
@@ -1178,7 +1200,7 @@ export default function CalaScrollSequence() {
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-fertility absolute opacity-0 pointer-events-auto top-[80%] md:top-[42%] right-3 sm:right-10 md:right-auto md:left-[calc(58%+150px)]">
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-fertility absolute opacity-0 pointer-events-auto top-[80%] md:top-[42%] right-3 sm:right-10 md:right-auto md:left-[calc(62%+195px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Prepare for future fertility</span>
@@ -1192,7 +1214,7 @@ export default function CalaScrollSequence() {
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-pcos absolute opacity-0 pointer-events-auto top-[80%] md:top-[calc(50%+230px)] left-3 sm:left-10 md:left-1/2 md:-translate-x-1/2">
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-pcos absolute opacity-0 pointer-events-auto top-[80%] md:top-[calc(62%+230px)] left-3 sm:left-10 md:left-1/2 md:-translate-x-1/2">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Monitor PCOS progress</span>
@@ -1205,11 +1227,11 @@ export default function CalaScrollSequence() {
         <div className="faq-container absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none opacity-0 select-none">
 
           {/* Top Header */}
-          <div className="faq-header text-center absolute top-6 sm:top-8 md:top-10 lg:top-12 pointer-events-auto z-30 flex flex-col items-center">
-            <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-tight">
+          <div className="faq-header text-center absolute top-3 sm:top-4 md:top-5 lg:top-6 [@media(min-height:920px)]:lg:top-12 [@media(max-height:820px)]:top-2.5 [@media(max-height:720px)]:top-1.5 pointer-events-auto z-30 flex flex-col items-center transform-gpu origin-top [@media(max-height:820px)]:scale-[0.88] [@media(max-height:720px)]:scale-[0.78]">
+            <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-[28px] [@media(min-height:920px)]:lg:text-[32px] font-bold text-black tracking-tight leading-tight">
               {"Let’s Figure Out Together with"}
             </h2>
-            <span className="text-[#008080] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
+            <span className="text-[#008080] font-bold uppercase tracking-tight text-lg sm:text-xl md:text-xl lg:text-2xl [@media(min-height:920px)]:text-[28px] mt-0.5">
               CALA
             </span>
           </div>
@@ -1283,12 +1305,12 @@ export default function CalaScrollSequence() {
                   zIndex={20}
                   className="w-full rounded-[28px] border border-white/80 shadow-[0_20px_50px_rgba(0,0,0,0.06),_0_4px_16px_rgba(0,0,0,0.03)] backdrop-blur-2xl transition-all"
                 >
-                  <div className="p-5 sm:p-7 md:p-8 flex flex-col text-left">
+                  <div className="p-5 sm:p-6 lg:p-8 flex flex-col text-left">
                     <div className="flex items-center gap-2.5 mb-3 sm:mb-4">
                       <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-teal-300 shadow-[0_2px_8px_rgba(36,168,184,0.35)] shrink-0">
                         <img src="/cala-orb.png" alt="CALA" className="w-full h-full object-cover scale-[1.1]" />
                       </div>
-                      <span className="text-[10px] sm:text-[13px] font-bold text-[#2A857D] tracking-wide">
+                      <span className="text-[10px] sm:text-sm font-bold text-[#2A857D] tracking-wide">
                         CALA Care Team
                       </span>
                     </div>
@@ -1301,7 +1323,7 @@ export default function CalaScrollSequence() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: -8 }}
                           transition={{ duration: 0.3, ease: 'easeOut' }}
-                          className="text-[13px] sm:text-[14px] md:text-2xl text-[#1E2822] leading-[1.1] font-medium"
+                          className="text-[13px] md:text-base lg:text-2xl text-[#1E2822] leading-[1.1] font-medium"
                         >
                           {FAQ_SEQUENCE.find((f) => f.id === activeFaqId)?.answer}
                         </motion.p>

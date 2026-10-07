@@ -432,6 +432,10 @@ export default function CalaScrollSequence() {
 
     const isMobileDev = window.innerWidth < 768;
 
+    if (!isMobileDev) {
+      gsap.set('.benefit-pill-pcos', { y: -125 });
+    }
+
     // Ensure hidden phases cannot intercept pointer events before they are scrolled to
     gsap.set(
       [
@@ -536,7 +540,12 @@ export default function CalaScrollSequence() {
     const orbPhase11Scale = isMobileDev ? 6.0 : scrollControls.phase11Scale;
     const orbPhase12Scale = isMobileDev ? 4.4 : scrollControls.phase12Scale;
     const orbPhase13Scale = isMobileDev ? 2.35 : scrollControls.phase13Scale;
-    const orbFinalScale = isMobileDev ? 2.35 : scrollControls.finalOrbScale;
+    const isSmallHeight = !isMobileDev && typeof window !== 'undefined' && window.innerHeight < 850;
+    const orbFinalScale = isMobileDev
+      ? 2.35
+      : isSmallHeight
+        ? Math.min(scrollControls.finalOrbScale, Math.max(2.2, (window.innerHeight / 850) * scrollControls.finalOrbScale))
+        : scrollControls.finalOrbScale;
     const phase11Top = isMobileDev ? '15%' : `${scrollControls.phase11Top}%`;
     const phase12Top = isMobileDev ? '42%' : `${scrollControls.phase12Top}%`;
     const finalOrbTop = `${scrollControls.finalOrbTop}%`;
@@ -577,6 +586,19 @@ export default function CalaScrollSequence() {
     tl.fromTo('.benefits-text-3', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase13+=0.8");
     if (!isMobileDev) {
       tl.fromTo('.benefit-pill-group-2', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
+
+      tl.to('.benefit-pill-fertility', {
+        x: -80,
+        y: -10,
+        duration: 1.5,
+        ease: 'power2.inOut'
+      }, "phase13");
+
+      tl.to('.benefit-pill-pcos', {
+        y: 0,
+        duration: 1.5,
+        ease: 'power2.inOut'
+      }, "phase13");
     } else {
       tl.to('.benefit-pill-track', { top: '47%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
       tl.to('.benefit-pill-ovulation', { top: '47%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
@@ -1184,35 +1206,35 @@ export default function CalaScrollSequence() {
           </div>
 
           {/* Pills (Group 1 shown in Phase 12, Group 2 revealed in Phase 13) */}
-          <div className="final-benefit-pill benefit-pill-group-2 benefit-pill-track absolute opacity-0 pointer-events-auto top-[65%] md:top-[40%] right-0 sm:right-6 md:right-[calc(60%+150px)]">
+          <div className="final-benefit-pill benefit-pill-group-2 benefit-pill-track absolute opacity-0 pointer-events-auto top-[65%] md:top-[40%] right-0 sm:right-6 md:right-[calc(58%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Ovulation tracking</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill benefit-pill-group-2 benefit-pill-ovulation absolute opacity-0 pointer-events-auto top-[65%] md:top-[65%] left-0 sm:left-6 md:left-auto md:right-[calc(60%+110px)]">
+          <div className="final-benefit-pill benefit-pill-group-2 benefit-pill-ovulation absolute opacity-0 pointer-events-auto top-[65%] md:top-[65%] left-0 sm:left-6 md:left-auto md:right-[calc(58%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-10 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Sperm health</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-fertility absolute opacity-0 pointer-events-auto top-[80%] md:top-[42%] right-3 sm:right-10 md:right-auto md:left-[calc(60%+150px)]">
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-fertility absolute opacity-0 pointer-events-auto top-[80%] md:top-[42%] right-3 sm:right-10 md:right-auto md:left-[calc(62%+195px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Hormone support</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-habits absolute opacity-0 pointer-events-auto top-[90%] md:top-[60%] left-1/2 -translate-x-1/2 md:translate-x-0 md:left-[calc(60%+110px)]">
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-habits absolute opacity-0 pointer-events-auto top-[90%] md:top-[60%] left-1/2 -translate-x-1/2 md:translate-x-0 md:left-[calc(58%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Conception timing</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-pcos absolute opacity-0 pointer-events-auto top-[80%] md:top-[calc(50%+230px)] left-3 sm:left-10 md:left-1/2 md:-translate-x-1/2">
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-pcos absolute opacity-0 pointer-events-auto top-[80%] md:top-[calc(62%+230px)] left-3 sm:left-10 md:left-1/2 md:-translate-x-1/2">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Couple consultation</span>
@@ -1225,11 +1247,11 @@ export default function CalaScrollSequence() {
         <div className="faq-container absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none opacity-0 invisible select-none">
 
           {/* Top Header */}
-          <div className="faq-header text-center absolute top-6 sm:top-8 md:top-10 lg:top-12 pointer-events-auto z-30 flex flex-col items-center">
-            <h2 className="text-2xl sm:text-3xl md:text-[32px] lg:text-[32px] font-bold text-black tracking-tight leading-none">
+          <div className="faq-header text-center absolute top-3 sm:top-4 md:top-5 lg:top-6 [@media(min-height:920px)]:lg:top-12 [@media(max-height:820px)]:top-2.5 [@media(max-height:720px)]:top-1.5 pointer-events-auto z-30 flex flex-col items-center transform-gpu origin-top [@media(max-height:820px)]:scale-[0.88] [@media(max-height:720px)]:scale-[0.78]">
+            <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-[28px] [@media(min-height:920px)]:lg:text-[32px] font-bold text-black tracking-tight leading-none">
               {"Let’s Figure Out Together with"}
             </h2>
-            <span className="text-[#5A856C] font-bold uppercase tracking-tight text-xl sm:text-2xl md:text-[28px] mt-0.5">
+            <span className="text-[#5A856C] font-bold uppercase tracking-tight text-lg sm:text-xl md:text-xl lg:text-2xl [@media(min-height:920px)]:text-[28px] mt-0.5">
               EVE + GENESIS
             </span>
           </div>
