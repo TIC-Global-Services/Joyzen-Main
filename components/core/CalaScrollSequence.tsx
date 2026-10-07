@@ -443,12 +443,12 @@ export default function CalaScrollSequence() {
 
     // Phase 8: 8.0 to 9.5s - Mobile UI elements fade out, 3D orb zooms, text fades out
     const zoomScale = isMobileDev ? scrollControls.mobileZoomScale : scrollControls.zoomPhaseScale;
-    const orbPhase11Scale = isMobileDev ? Math.min(scrollControls.phase11Scale, 7.0) : scrollControls.phase11Scale;
-    const orbPhase12Scale = isMobileDev ? Math.min(scrollControls.phase12Scale, 5.5) : scrollControls.phase12Scale;
-    const orbPhase13Scale = isMobileDev ? Math.min(scrollControls.phase13Scale, 1.9) : scrollControls.phase13Scale;
-    const orbFinalScale = isMobileDev ? Math.min(scrollControls.finalOrbScale, 1.9) : scrollControls.finalOrbScale;
-    const phase11Top = `${scrollControls.phase11Top}%`;
-    const phase12Top = `${scrollControls.phase12Top}%`;
+    const orbPhase11Scale = isMobileDev ? 6.0 : scrollControls.phase11Scale;
+    const orbPhase12Scale = isMobileDev ? 4.4 : scrollControls.phase12Scale;
+    const orbPhase13Scale = isMobileDev ? 2.35 : scrollControls.phase13Scale;
+    const orbFinalScale = isMobileDev ? 2.35 : scrollControls.finalOrbScale;
+    const phase11Top = isMobileDev ? '15%' : `${scrollControls.phase11Top}%`;
+    const phase12Top = isMobileDev ? '42%' : `${scrollControls.phase12Top}%`;
     const finalOrbTop = `${scrollControls.finalOrbTop}%`;
 
     tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator', { autoAlpha: 0, duration: 0.2 }, "phase8");
@@ -463,17 +463,32 @@ export default function CalaScrollSequence() {
     // Phase 11: 11.5 to 12.5s - Orb acts as massive ceiling. Text 1 fades in.
     tl.to('.mobile-3d-orb', { scale: orbPhase11Scale, top: phase11Top, duration: 1.5, ease: 'power2.inOut' }, "phase11");
     tl.fromTo('.benefits-text-1', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase11+=0.8");
+    if (isMobileDev) {
+      // Mobile: reveal all pills right in Phase 11 with the first benefits text
+      tl.fromTo('.final-benefit-pill', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase11+=0.8");
+    }
 
-    // Phase 12: 13.0 to 14.0s - Text 1 out, Text 2 in, Orb shrinks.
+    // Phase 12: 13.0 to 14.0s - Text 1 out, Text 2 in, Orb shrinks. Group 1 pills in (desktop).
     tl.to('.benefits-text-1', { autoAlpha: 0, scale: 1.05, duration: 0.5 }, "phase12");
     tl.to('.mobile-3d-orb', { scale: orbPhase12Scale, top: phase12Top, duration: 1.5, ease: 'power2.inOut' }, "phase12");
     tl.fromTo('.benefits-text-2', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase12+=0.8");
+    if (!isMobileDev) {
+      tl.fromTo('.benefit-pill-group-1', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase12+=0.8");
+    }
 
-    // Phase 13: 14.5 to 15.5s - Text 2 out, Text 3 in, Orb shrinks to center. All pills in.
+    // Phase 13: 14.5 to 15.5s - Text 2 out, Text 3 in, Orb shrinks to center. Group 2 pills revealed (desktop).
     tl.to('.benefits-text-2', { autoAlpha: 0, scale: 1.05, duration: 0.5 }, "phase13");
     tl.to('.mobile-3d-orb', { scale: orbPhase13Scale, top: finalOrbTop, duration: 1.5, ease: 'power2.inOut' }, "phase13");
     tl.fromTo('.benefits-text-3', { autoAlpha: 0, scale: 0.95 }, { autoAlpha: 1, scale: 1, duration: 0.8 }, "phase13+=0.8");
-    tl.fromTo('.final-benefit-pill', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
+    if (!isMobileDev) {
+      tl.fromTo('.benefit-pill-group-2', { autoAlpha: 0, scale: 0.8 }, { autoAlpha: 1, scale: 1, stagger: 0.1, duration: 0.8, ease: 'back.out(1.5)' }, "phase13+=0.8");
+    } else {
+      tl.to('.benefit-pill-track', { top: '47%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
+      tl.to('.benefit-pill-ovulation', { top: '47%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
+      tl.to('.benefit-pill-fertility', { top: '62.5%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
+      tl.to('.benefit-pill-pcos', { top: '62.5%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
+      tl.to('.benefit-pill-habits', { top: '77%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
+    }
 
     // Phase 14: 16.0 to 17.0s - Settle orb and finalize
     tl.to('.mobile-3d-orb', { scale: orbPhase13Scale, duration: 1 }, "phase14");
@@ -994,52 +1009,52 @@ export default function CalaScrollSequence() {
         {/* --- PHASE 11-14: BENEFITS SEQUENCE --- */}
         <div className="benefits-sequence absolute inset-0 z-40 pointer-events-none">
           {/* Texts */}
-          <div className="benefits-text-1 absolute inset-0 flex flex-col items-center justify-center opacity-0">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-4">BENEFITS</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-white tracking-tight drop-shadow-md">Feel supported early.</h2>
+          <div className="benefits-text-1 absolute inset-x-0 top-[22%] sm:top-1/2 sm:-translate-y-1/2 flex flex-col items-center justify-center text-center px-4 opacity-0 pointer-events-none">
+            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-1.5 sm:mb-4">BENEFITS</span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-white tracking-tight drop-shadow-md max-w-[280px] sm:max-w-none">Feel supported early.</h2>
           </div>
-          <div className="benefits-text-2 absolute inset-0 flex flex-col items-center justify-center opacity-0">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-4">BENEFITS</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Build healthier routines.</h2>
+          <div className="benefits-text-2 absolute inset-x-0 top-[33%] sm:top-1/2 sm:-translate-y-1/2 flex flex-col items-center justify-center text-center px-4 opacity-0 pointer-events-none">
+            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-1.5 sm:mb-4">BENEFITS</span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md max-w-[280px] sm:max-w-none">Build healthier routines.</h2>
           </div>
-          <div className="benefits-text-3 absolute inset-0 flex flex-col items-center justify-center opacity-0">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-3 sm:mb-2">BENEFITS</span>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md">Know when to act.</h2>
+          <div className="benefits-text-3 absolute inset-x-0 top-[45%] sm:top-1/2 sm:-translate-y-1/2 flex flex-col items-center justify-center text-center px-4 opacity-0 pointer-events-none">
+            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase mb-1.5 sm:mb-2">BENEFITS</span>
+            <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md max-w-[280px] sm:max-w-none">Know when to act.</h2>
           </div>
 
-          {/* Pills (All appear together at the end) */}
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[45%] md:top-[40%] right-[calc(60%+10px)] sm:right-[calc(50%+90px)] md:right-[calc(60%+150px)]">
+          {/* Pills (Group 1 shown in Phase 12, Group 2 revealed in Phase 13) */}
+          <div className="final-benefit-pill benefit-pill-group-2 benefit-pill-track absolute opacity-0 pointer-events-auto top-[65%] md:top-[40%] right-0 sm:right-6 md:right-[calc(60%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Symptom review</span>
+              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+                <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Symptom review</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] md:top-[65%] right-[calc(65%+10px)] sm:right-[calc(50%+60px)] md:right-[calc(60%+110px)]">
+          <div className="final-benefit-pill benefit-pill-group-2 benefit-pill-ovulation absolute opacity-0 pointer-events-auto top-[65%] md:top-[65%] left-0 sm:left-6 md:left-auto md:right-[calc(60%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Personalized guidance</span>
+              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-10 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+                <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Personalized guidance</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[40%] md:top-[42%] left-[calc(50%+30px)] sm:left-[calc(50%+90px)] md:left-[calc(60%+150px)]">
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-fertility absolute opacity-0 pointer-events-auto top-[80%] md:top-[42%] right-3 sm:right-10 md:right-auto md:left-[calc(60%+150px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Sleep & recovery</span>
+              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+                <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Sleep & recovery</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[60%] left-[calc(60%+20px)] sm:left-[calc(50%+60px)] md:left-[calc(60%+110px)]">
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-habits absolute opacity-0 pointer-events-auto top-[90%] md:top-[60%] left-1/2 -translate-x-1/2 md:translate-x-0 md:left-[calc(60%+110px)]">
             <div className="-translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Hormone guidance</span>
+              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+                <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Hormone guidance</span>
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill absolute opacity-0 pointer-events-auto top-[calc(50%+130px)] md:top-[calc(50%+230px)] left-1/2">
-            <div className="-translate-x-1/2 -translate-y-1/2 flex items-center justify-center">
-              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-3 py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
-                <span className="text-[#1E2822] text-[10px] md:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Red-flag referral</span>
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-pcos absolute opacity-0 pointer-events-auto top-[80%] md:top-[calc(50%+230px)] left-3 sm:left-10 md:left-1/2 md:-translate-x-1/2">
+            <div className="-translate-y-1/2 flex items-center justify-center">
+              <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-6 md:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
+                <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] lg:text-lg font-bold whitespace-nowrap tracking-tight">Red-flag referral</span>
               </AdaptiveGlass>
             </div>
           </div>
