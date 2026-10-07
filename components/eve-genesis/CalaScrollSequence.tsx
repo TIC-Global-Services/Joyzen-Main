@@ -1247,7 +1247,7 @@ export default function CalaScrollSequence() {
         <div className="faq-container absolute inset-0 z-50 flex flex-col items-center justify-center pointer-events-none opacity-0 invisible select-none">
 
           {/* Top Header */}
-          <div className="faq-header text-center absolute top-3 sm:top-4 md:top-5 lg:top-6 [@media(min-height:920px)]:lg:top-12 [@media(max-height:820px)]:top-2.5 [@media(max-height:720px)]:top-1.5 pointer-events-auto z-30 flex flex-col items-center transform-gpu origin-top [@media(max-height:820px)]:scale-[0.88] [@media(max-height:720px)]:scale-[0.78]">
+          <div className="faq-header text-center absolute top-3 sm:top-4 md:top-5 lg:top-12 [@media(min-height:920px)]:lg:top-12 [@media(max-height:820px)]:top-2.5 [@media(max-height:720px)]:top-1.5 pointer-events-auto z-30 flex flex-col items-center transform-gpu origin-top [@media(max-height:820px)]:scale-[0.88] [@media(max-height:720px)]:scale-[0.78]">
             <h2 className="text-xl sm:text-2xl md:text-2xl lg:text-[28px] [@media(min-height:920px)]:lg:text-[32px] font-bold text-black tracking-tight leading-none">
               {"Let’s Figure Out Together with"}
             </h2>
