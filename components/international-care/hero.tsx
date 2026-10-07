@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { Ipad } from '@/reuseable/ipad';
 
 const HEADLINE_WORDS = ['Supporting', 'Patients', 'Across', 'The', 'Globe'];
 const SUBTITLE_WORDS = [
@@ -253,14 +254,14 @@ export default function Hero() {
           </motion.p>
         </div>
 
-        {/* Full Width Video Container below text */}
+        {/* iPad Container with Video inside */}
         <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 30 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
-          className="relative z-10 w-full flex justify-center items-start mt-6 sm:mt-10"
+          className="relative z-10 w-full px-4 sm:px-6 flex justify-center items-start mt-6 sm:mt-10"
         >
-          <div className="relative w-full bg-white overflow-hidden">
+          <Ipad className="w-full max-w-[480px] sm:max-w-[520px] drop-shadow-2xl">
             <video
               ref={mobileVideoRef}
               src="/JOYZEN-MAP-FINAL-V4.mp4"
@@ -272,11 +273,9 @@ export default function Hero() {
               style={{
                 backgroundColor: '#ffffff',
               }}
-              className="block w-full h-auto object-cover pointer-events-none border-0 outline-none select-none scale-[1.02]"
+              className="block w-full h-full object-cover pointer-events-none border-0 outline-none select-none scale-[1.01]"
             />
-            {/* Seamless white border overlay */}
-            <div className="absolute inset-0 border-[3px] border-white pointer-events-none z-20" />
-          </div>
+          </Ipad>
         </motion.div>
       </section>
 
