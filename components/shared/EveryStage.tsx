@@ -217,7 +217,7 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
               type="button"
               onClick={handlePrev}
               aria-label="Previous Program"
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-zinc-200/80 shadow-sm flex items-center justify-center text-zinc-600 hover:text-zinc-900 active:scale-90 transition-all shrink-0 z-20 cursor-pointer"
+              className="w-7 h-7 sm:w-8 sm:h-8 cursor-pointer rounded-full bg-white/95 border border-zinc-200/80 shadow-sm flex items-center justify-center text-zinc-600 hover:text-zinc-900 active:scale-90 transition-all shrink-0 z-20 cursor-pointer"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -318,7 +318,7 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
               type="button"
               onClick={handleNext}
               aria-label="Next Program"
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white/95 border border-zinc-200/80 shadow-sm flex items-center justify-center text-zinc-600 hover:text-zinc-900 active:scale-90 transition-all shrink-0 z-20 cursor-pointer"
+              className="w-7 h-7 sm:w-8 sm:h-8 cursor-pointer rounded-full bg-white/95 border border-zinc-200/80 shadow-sm flex items-center justify-center text-zinc-600 hover:text-zinc-900 active:scale-90 transition-all shrink-0 z-20 cursor-pointer"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -336,7 +336,7 @@ export default function EveryStage({ activeId, className = '' }: EveryStageProps
                   type="button"
                   onClick={() => setMobileIndex(i)}
                   aria-label={`Go to stage ${prog.name}`}
-                  className={`transition-all duration-300 rounded-full cursor-pointer ${
+                  className={`transition-all duration-300  cursor-pointer rounded-full cursor-pointer ${
                     isCurrent
                       ? 'w-5 h-1.5 bg-[#E5855E]'
                       : 'w-1.5 h-1.5 bg-zinc-300 hover:bg-zinc-400'

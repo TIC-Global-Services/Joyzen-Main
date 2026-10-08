@@ -139,7 +139,7 @@ export default function Consultation() {
                                 }
                             }}
                             aria-label={`Go to slide ${index + 1}`}
-                            className={`h-1 rounded-full transition-all duration-300 ${
+                            className={`h-1 rounded-full transition-all cursor-pointer duration-300 ${
                                 index === activeIndex ? 'w-10 bg-[#EF8F60]' : 'w-10 bg-[#EF8F60]/10'
                             }`}
                         />

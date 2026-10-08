@@ -46,7 +46,7 @@ export default function TalkCareButton({
         <button
           type="button"
           onClick={onClick}
-          className="talk-button relative z-10 inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/95 backdrop-blur-md cursor-pointer select-none transition-all active:scale-[0.98] overflow-hidden"
+          className="talk-button cursor-pointer relative z-10 inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/95 backdrop-blur-md cursor-pointer select-none transition-all active:scale-[0.98] overflow-hidden"
         >
           {/* Subtle moving pastel gradient tint inside pill on hover */}
           <div

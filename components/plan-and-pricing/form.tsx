@@ -117,7 +117,7 @@ export default function PricingForms() {
           <button
             type="button"
             onClick={() => setActiveTab('reproductive')}
-            className={`px-6 sm:px-8 py-1.5 md:py-2 rounded-full text-lg md:text-2xl font-semibold transition-all duration-300 ${
+            className={`px-6 sm:px-8 py-1.5 md:py-2 rounded-full cursor-pointer text-lg md:text-2xl font-semibold transition-all duration-300 ${
               activeTab === 'reproductive'
                 ? 'bg-white/90 text-[#036132] shadow-[0_4px_16px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,1)] border border-white/90'
                 : 'text-zinc-500 hover:text-zinc-900'
@@ -128,7 +128,7 @@ export default function PricingForms() {
           <button
             type="button"
             onClick={() => setActiveTab('general')}
-            className={`px-6 sm:px-8 py-2 rounded-full text-base md:text-2xl font-semibold transition-all duration-300 ${
+            className={`px-6 sm:px-8 py-2 rounded-full cursor-pointer text-base md:text-2xl font-semibold transition-all duration-300 ${
               activeTab === 'general'
                 ? 'bg-white/90 text-[#036132] shadow-[0_4px_16px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,1)] border border-white/90'
                 : 'text-zinc-500 hover:text-zinc-900'
@@ -247,7 +247,7 @@ function ReproductiveCareForm() {
           <button
             type="button"
             onClick={() => setSubmitted(false)}
-            className="mt-4 px-6 py-2 rounded-full text-xs font-semibold text-zinc-800 bg-white/80 border border-white shadow-xs"
+            className="mt-4 px-6 py-2 rounded-full cursor-pointer text-xs font-semibold text-zinc-800 bg-white/80 border border-white shadow-xs"
           >
             Submit Another Query
           </button>
@@ -286,7 +286,7 @@ function ReproductiveCareForm() {
               <button
                 type="button"
                 onClick={() => setGenderOpen(!genderOpen)}
-                className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
+                className="w-full px-6 py-4 flex  cursor-pointer items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
               >
                 <span>{selectedGender || 'Gender'}</span>
                 <span className="text-[#6E6E6E] hover:text-zinc-800 transition-colors">
@@ -361,7 +361,7 @@ function ReproductiveCareForm() {
                         onClick={() => {
                           setValue('selectedOption', isItemChosen ? '' : option, { shouldValidate: true });
                         }}
-                        className={`w-full text-center sm:text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] ${
+                        className={`w-full text-center sm:text-left px-6 py-4 cursor-pointer text-sm sm:text-base transition-colors rounded-[26px] ${
                           isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-[#6E6E6E] hover:text-zinc-900'
                         }`}
                       >
@@ -378,7 +378,7 @@ function ReproductiveCareForm() {
           <div className="flex justify-end pt-4">
             <button
               type="submit"
-              className="font-bold text-sm uppercase tracking-tight px-7 py-3.5 bg-[#AEDEE44D] border border-[#AEDEE44D] text-black rounded-[28px] shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] hover:bg-white/70 hover:border-[#AEDEE4] transition-all duration-300 cursor-pointer"
+              className="font-bold text-sm uppercase cursor-pointer tracking-tight px-7 py-3.5 bg-[#AEDEE44D] border border-[#AEDEE44D] text-black rounded-[28px] shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] hover:bg-white/70 hover:border-[#AEDEE4] transition-all duration-300 cursor-pointer"
             >
               SUBMIT FORM
             </button>
@@ -438,7 +438,7 @@ function GeneralCareForm() {
           <button
             type="button"
             onClick={() => setSubmitted(false)}
-            className="mt-4 px-6 py-2 rounded-full text-xs font-semibold text-zinc-800 bg-white/80 border border-white shadow-xs"
+            className="mt-4 px-6 py-2 rounded-full text-xs cursor-pointer font-semibold text-zinc-800 bg-white/80 border border-white shadow-xs"
           >
             Submit Another Query
           </button>
@@ -477,7 +477,7 @@ function GeneralCareForm() {
               <button
                 type="button"
                 onClick={() => setGenderOpen(!genderOpen)}
-                className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-[#6E6E6E] focus:outline-none"
+                className="w-full px-6 py-4 flex items-center cursor-pointer justify-between text-left text-sm sm:text-base font-medium text-[#6E6E6E] focus:outline-none"
               >
                 <span>{selectedGender || 'Gender'}</span>
                 <span className="text-[#6E6E6E] hover:text-zinc-800 transition-colors">
@@ -544,7 +544,7 @@ function GeneralCareForm() {
               <button
                 type="button"
                 onClick={() => setSpecialistOpen(!specialistOpen)}
-                className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
+                className="w-full px-6 py-4 flex cursor-pointer items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
               >
                 <span>{selectedSpecialist || 'Who would you like to get in touch with?'}</span>
                 <span className="text-zinc-400 hover:text-zinc-800 transition-colors">

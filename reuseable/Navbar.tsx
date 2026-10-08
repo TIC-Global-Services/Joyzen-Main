@@ -59,7 +59,7 @@ export default function Navbar() {
             href="/q-form"
 
           >
-            <button className={`hidden px-3 lg:px-6 md:flex gap-2 text-xs lg:text-base items-center justify-center py-1.5 lg:py-3 rounded-[2.625rem] border border-white/10 backdrop-blur-xs shadow-md font-satoshi font-medium transition-colors ${isHome ? 'bg-white/10 hover:bg-[#F9F9F9]' : 'bg-white/20 hover:bg-white/30'}`}>
+            <button className={`hidden px-3 lg:px-6 md:flex gap-2 text-xs lg:text-base items-center justify-center py-1.5 lg:py-3 rounded-[2.625rem] border border-white/10 backdrop-blur-xs shadow-md font-satoshi font-medium cursor-pointer transition-colors ${isHome ? 'bg-white/10 hover:bg-[#F9F9F9]' : 'bg-white/20 hover:bg-white/30'}`}>
               <span className={inactiveTextColor}>Talk to us</span>
               <span><Image src="/nav-icon.svg" alt="Icon" width={20} height={20} className={isHome ? '' : 'brightness-0'} /></span>
             </button>
@@ -69,7 +69,7 @@ export default function Navbar() {
         {/* Mobile Menu Toggle Button */}
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="lg:hidden flex items-center p-2 rounded-xl text-zinc-700 bg-white/80 backdrop-blur-md border border-zinc-200"
+          className="lg:hidden flex items-center p-2 cursor-pointer rounded-xl text-zinc-700 bg-white/80 backdrop-blur-md border border-zinc-200"
           aria-label="Toggle menu"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

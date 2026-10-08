@@ -27,7 +27,7 @@ const MonthNavigator = ({
                 type="button"
                 onClick={onPrev}
                 disabled={!canGoPrev}
-                className={`w-9 h-9 flex items-center justify-center transition-colors ${canGoPrev ? 'text-zinc-600 hover:text-zinc-900 cursor-pointer' : 'text-zinc-300 cursor-not-allowed'}`}
+                className={`w-9 h-9 flex items-center cursor-pointer justify-center transition-colors ${canGoPrev ? 'text-zinc-600 hover:text-zinc-900 cursor-pointer' : 'text-zinc-300 cursor-not-allowed'}`}
                 aria-label="Previous month"
             >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -40,7 +40,7 @@ const MonthNavigator = ({
             <button
                 type="button"
                 onClick={onNext}
-                className="w-9 h-9 rounded-full bg-linear-to-br from-[#f8fdf9] to-[#d6eade] flex items-center justify-center text-[#036132] hover:scale-105 transition-transform shadow-[0_2px_8px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,0.8)] border border-white cursor-pointer z-10"
+                className="w-9 h-9 rounded-full  bg-linear-to-br from-[#f8fdf9] to-[#d6eade] flex items-center justify-center text-[#036132] hover:scale-105 transition-transform shadow-[0_2px_8px_rgba(0,0,0,0.05),inset_0_1px_2px_rgba(255,255,255,0.8)] border border-white cursor-pointer z-10"
                 aria-label="Next month"
             >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -87,7 +87,7 @@ const DateCell = ({
             <button
                 type="button"
                 onClick={() => onClick && onClick(date)}
-                className="relative w-9 h-9 sm:w-11 sm:h-11 aspect-square flex flex-col items-center justify-center text-[#EF8F60] hover:scale-105 font-sans font-semibold text-sm sm:text-base transition-all cursor-pointer z-10"
+                className="relative w-9 h-9 sm:w-11 sm:h-11 aspect-square cursor-pointer flex flex-col items-center justify-center text-[#EF8F60] hover:scale-105 font-sans font-semibold text-sm sm:text-base transition-all cursor-pointer z-10"
             >
                 <span>{date.getDate()}</span>
                 <span className="w-1 h-1 rounded-full bg-[#EF8F60] mt-0.5" />
@@ -109,7 +109,7 @@ const DateCell = ({
         <button
             type="button"
             onClick={() => onClick && onClick(date)}
-            className="relative w-9 h-9 sm:w-11 sm:h-11 aspect-square flex items-center justify-center text-zinc-700 hover:text-[#036132] hover:bg-[#E2F0E7]/60 rounded-full font-sans font-medium text-sm sm:text-base hover:scale-105 transition-all cursor-pointer z-10"
+            className="relative w-9 h-9  cursor-pointer sm:w-11 sm:h-11 aspect-square flex items-center justify-center text-zinc-700 hover:text-[#036132] hover:bg-[#E2F0E7]/60 rounded-full font-sans font-medium text-sm sm:text-base hover:scale-105 transition-all cursor-pointer z-10"
         >
             {date.getDate()}
         </button>
@@ -300,7 +300,7 @@ export function NotSureCard({
                         <button
                             type="button"
                             onClick={onGetInTouch}
-                            className="px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider text-zinc-900 bg-[#E5F2EE] hover:bg-[#D8EDE7] border border-[#BCE1E5] shadow-xs hover:shadow-sm transition-all cursor-pointer"
+                            className="px-6 py-2.5  cursor-pointer rounded-full text-xs font-bold uppercase tracking-wider text-zinc-900 bg-[#E5F2EE] hover:bg-[#D8EDE7] border border-[#BCE1E5] shadow-xs hover:shadow-sm transition-all cursor-pointer"
                         >
                             GET IN TOUCH
                         </button>

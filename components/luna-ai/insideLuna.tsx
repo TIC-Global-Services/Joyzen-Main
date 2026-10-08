@@ -101,7 +101,7 @@ export default function InsideLuna() {
             key={index}
             onClick={() => scrollToCard(index)}
             aria-label={`Go to slide ${index + 1}`}
-            className={`h-2 rounded-full transition-all duration-300 ${
+            className={`h-2 rounded-full transition-all cursor-pointer duration-300 ${
               index === activeIndex
                 ? 'w-7 bg-[#EB7847]'
                 : 'w-2 bg-[#EB7847]/30 hover:bg-[#EB7847]/50'

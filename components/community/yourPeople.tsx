@@ -245,7 +245,7 @@ export default function YourPeople() {
               key={dotIdx}
               onClick={() => setCurrentIndex(dotIdx)}
               aria-label={`Go to slide ${dotIdx + 1}`}
-              className={`h-2 rounded-full transition-all duration-400 ${
+              className={`h-2 rounded-full cursor-pointer transition-all duration-400 ${
                 dotIdx === currentIndex
                   ? 'w-7 bg-[#135836]'
                   : 'w-2 bg-[#135836]/30 hover:bg-[#135836]/60'

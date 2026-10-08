@@ -183,7 +183,7 @@ export default function Appointment() {
           <button
             onClick={prevSlide}
             aria-label="Previous Slide"
-            className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/30 hover:bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group"
+            className="absolute left-3 cursor-pointer sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/30 hover:bg-black/60 text-white backdrop-blur-md border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group"
           >
             <svg 
               className="w-4 h-4 sm:w-6 sm:h-6 transition-transform group-hover:-translate-x-0.5" 
@@ -199,7 +199,7 @@ export default function Appointment() {
           <button
             onClick={nextSlide}
             aria-label="Next Slide"
-            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/5 hover:bg-black/60 text-white backdrop-blur-xs border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group"
+            className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/5 hover:bg-black/60 text-white backdrop-blur-xs border border-white/20 flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group cursor-pointer"
           >
             <svg 
               className="w-4 h-4 sm:w-6 sm:h-6 transition-transform group-hover:translate-x-0.5" 

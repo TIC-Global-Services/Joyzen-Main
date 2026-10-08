@@ -73,7 +73,7 @@ function GlassDropdown({
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none cursor-pointer"
+          className="w-full px-6 py-4 flex items-center cursor-pointer justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none cursor-pointer"
         >
           <span className={value ? 'font-medium text-zinc-900' : 'text-zinc-500'}>
             {value ? `${label} — ${value}` : label}
@@ -206,7 +206,7 @@ export default function QForm2() {
               <button
                 type="button"
                 onClick={handleReset}
-                className="mt-4 px-7 py-3 rounded-full text-xs font-bold tracking-wide uppercase text-zinc-800 bg-white border border-zinc-200 shadow-sm hover:bg-zinc-50 transition-all cursor-pointer"
+                className="mt-4 px-7 py-3 cursor-pointer rounded-full text-xs font-bold tracking-wide uppercase text-zinc-800 bg-white border border-zinc-200 shadow-sm hover:bg-zinc-50 transition-all cursor-pointer"
               >
                 Submit Another Response
               </button>

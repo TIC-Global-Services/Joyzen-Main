@@ -86,7 +86,7 @@ export default function FAQ() {
                 <button
                   onClick={() => toggleFAQ(item.id)}
                   aria-expanded={isOpen}
-                  className="relative w-full flex items-center justify-center px-12 sm:px-14 py-5 sm:py-6 text-center transition-colors duration-200"
+                  className="relative w-full flex items-center cursor-pointer justify-center px-12 sm:px-14 py-5 sm:py-6 text-center transition-colors duration-200"
                 >
                   <span className="text-base sm:text-xl font-bold text-[#111111] tracking-tight text-center">
                     {item.question}

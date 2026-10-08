@@ -123,7 +123,7 @@ export default function ProgramMembership({
                       aria-selected={true}
                       type="button"
                       onClick={() => setSelectedPlanId(plan.id)}
-                      className="relative px-5 sm:px-20 py-2 sm:py-2.5 rounded-full flex flex-col items-center justify-center cursor-pointer outline-none whitespace-nowrap"
+                      className="relative px-5 sm:px-20 py-2 cursor-pointer sm:py-2.5 rounded-full flex flex-col items-center justify-center cursor-pointer outline-none whitespace-nowrap"
                     >
                       <span className="text-sm sm:text-2xl font-bold leading-tight text-[#E5855E]">
                         {plan.durationTitle}
@@ -143,7 +143,7 @@ export default function ProgramMembership({
                   aria-selected={false}
                   type="button"
                   onClick={() => setSelectedPlanId(plan.id)}
-                  className="relative px-5 sm:px-20 py-2 sm:py-2.5 rounded-full transition-all duration-300 flex flex-col items-center justify-center cursor-pointer outline-none whitespace-nowrap hover:bg-white/40 opacity-80 hover:opacity-100"
+                  className="relative px-5 sm:px-20 py-2 cursor-pointer sm:py-2.5 rounded-full transition-all duration-300 flex flex-col items-center justify-center cursor-pointer outline-none whitespace-nowrap hover:bg-white/40 opacity-80 hover:opacity-100"
                 >
                   <span className="text-sm sm:text-2xl font-bold leading-tight text-zinc-800">
                     {plan.durationTitle}
