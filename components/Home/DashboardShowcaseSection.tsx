@@ -161,7 +161,7 @@ function HealthDashboardWidget() {
       className="w-full bg-[#FAFCFB] rounded-2xl border border-zinc-100/90 p-4 sm:p-2 shadow-[0_2px_12px_rgba(0,0,0,0.02)] select-none pointer-events-none"
     >
       {/* Widget Header */}
-      <div className="flex items-center justify-between pb-3.5 border-b border-zinc-100">
+      <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-[#ECF8F3] text-[#036132] flex items-center justify-center shrink-0">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -169,7 +169,7 @@ function HealthDashboardWidget() {
             </svg>
           </div>
           <div>
-            <h4 className="text-sm sm:text-[15px] font-bold text-zinc-900 leading-tight">Health Dashboard</h4>
+            <h4 className="text-sm sm:text-sm font-bold text-zinc-900 leading-tight">Health Dashboard</h4>
             <p className="text-[11px] sm:text-xs text-zinc-500">Your health, all in one place</p>
           </div>
         </div>
@@ -188,7 +188,7 @@ function HealthDashboardWidget() {
           return (
             <div
               key={m.id}
-              className={`bg-white rounded-xl border p-2.5 sm:p-3 flex flex-col justify-between shadow-xs transition-all ${isActive
+              className={`bg-white rounded-xl border p-2.5 sm:p-2 flex flex-col justify-between shadow-xs transition-all ${isActive
                   ? 'border-[#036132] ring-2 ring-[#036132]/10 shadow-sm'
                   : 'border-zinc-100'
                 }`}
@@ -198,7 +198,7 @@ function HealthDashboardWidget() {
                 {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#036132]" />}
               </div>
 
-              <div className="my-2">
+              <div className="my-1">
                 <div className="flex items-center gap-1.5">
                   {m.icon}
                   <span className={`text-base sm:text-lg font-black ${m.textColor} leading-tight`}>
@@ -264,21 +264,21 @@ export default function DashboardShowcaseSection() {
     <section className="relative w-full py-16 sm:py-20 px-[3%] overflow-hidden">
       <div className="">
         {/* Bento Grid: Left large card, Right 2 stacked cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4  items-stretch">
           {/* Left Large Card: Heading + /in-one-place.png */}
           <div className="lg:col-span-7 flex">
             <Reveal delay={0.1} className="w-full h-full flex flex-col">
               <div className="group w-full h-full bg-white rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 py-6 px-[3%]  sm:p-10 gap-16 flex flex-col overflow-hidden">
                 {/* Heading */}
-                <div className="">
-                  <h2 className="text-xl text-center md:text-left sm:text-3xl lg:text-[40px] font-bold text-black tracking-tight leading-[1.1] md:leading-[1.18]">
+                <div className="mt-5">
+                  <h2 className="text-xl text-center md:text-left sm:text-3xl lg:text-[42px] font-bold text-black tracking-tight leading-[1.1] md:leading-[1.18]">
                     Everything your health <br />
                     has been asking for Finally in one place
                   </h2>
                 </div>
 
                 {/* Dashboard Screenshot with crisp natural fit and smooth hover scale */}
-                <div className="relative w-full flex-1 min-h-[300px] sm:min-h-[380px] lg:min-h-[450px] rounded-2xl overflow-hidden flex items-end">
+                <div className="relative w-full flex-1 min-h-[300px] sm:min-h-[380px] lg:min-h-[400px] rounded-2xl overflow-hidden flex items-end mb-5">
                   <Image
                     src="https://ik.imagekit.io/gyg6yfnd5/dashboard-v2.webp"
                     alt="Everything your health has been asking for Finally in one place"
@@ -287,7 +287,7 @@ export default function DashboardShowcaseSection() {
                     className="w-full h-full object-bottom object-contain rounded-xl transition-transform duration-700 ease-out scale-[1.015]"
                   />
                   {/* Bottom Gradient Overlay */}
-                  <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-white via-white/50 to-transparent pointer-events-none z-10" />
+                  {/* <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-white via-white/50 to-transparent pointer-events-none z-10" /> */}
                 </div>
               </div>
             </Reveal>
@@ -308,8 +308,8 @@ export default function DashboardShowcaseSection() {
                 <AppointmentsWidget />
 
                 {/* Text Bottom */}
-                <div className="mt-2 text-center hidden md:block">
-                  <p className="text-xl sm:text-xl md:text-[20px] font-bold text-black tracking-tight leading-[1.2]">
+                <div className="mt-1 text-center hidden md:block">
+                  <p className="text-xl sm:text-lg md:text-lg font-bold text-black tracking-tight leading-none">
                     Stay informed . stay organised <br />
                     stay on track
                   </p>
@@ -322,7 +322,7 @@ export default function DashboardShowcaseSection() {
               <div className="w-full h-full bg-white rounded-[20px] border border-zinc-100 shadow-[0_8px_30px_rgba(0,0,0,0.03)] hover:shadow-[0_12px_36px_rgba(0,0,0,0.06)] transition-all duration-500 p-6 sm:p-7 flex flex-col justify-between overflow-hidden">
                 {/* Text Top */}
                 <div className="mb-5 text-center">
-                  <h3 className="text-lg sm:text-xl md:text-[20px] font-bold text-black tracking-tight leading-[1.2]">
+                  <h3 className="text-lg sm:text-xl md:text-lg font-bold text-black tracking-tight leading-[1.2]">
                     Insights that help <br />
                     you take better care of you
                   </h3>

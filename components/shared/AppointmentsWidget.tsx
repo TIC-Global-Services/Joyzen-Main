@@ -96,18 +96,18 @@ export default function AppointmentsWidget() {
 
   return (
     <div
-      className="w-full bg-[#FAFCFB] rounded-2xl border border-zinc-100/90 p-3.5 sm:p-5 shadow-[0_2px_16px_rgba(0,0,0,0.03)] select-none pointer-events-none"
+      className="w-full bg-[#FAFCFB] rounded-2xl border border-zinc-100/90 p-3 sm:p-3 shadow-[0_2px_16px_rgba(0,0,0,0.03)] select-none pointer-events-none"
     >
       {/* Widget Header */}
-      <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
-        <div className="flex items-center gap-2.5">
+      <div className="flex items-center justify-between pb-1 border-b border-zinc-100">
+        <div className="flex items-center gap-2">
           <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-[#ECF8F3] text-[#036132] flex items-center justify-center shrink-0">
             <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
           </div>
           <div>
-            <h4 className="text-xs sm:text-[15px] font-bold text-zinc-900 leading-tight">Your Appointments</h4>
+            <h4 className="text-xs sm:text-sm font-bold text-zinc-900 leading-tight">Your Appointments</h4>
             <p className="text-[10px] sm:text-xs text-zinc-500">Stay on track, stay healthy</p>
           </div>
         </div>
@@ -122,9 +122,9 @@ export default function AppointmentsWidget() {
       </div>
 
       {/* Widget Body Grid: 2 Columns on SM+, 1 Column on XS */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-3 items-stretch">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 items-stretch">
         {/* Left: Dynamic Appointment Info Box */}
-        <div className="bg-white rounded-xl border border-zinc-100 p-3 sm:p-3.5 flex flex-col justify-between shadow-xs">
+        <div className="bg-white rounded-xl border border-zinc-100 p-3 sm:p-3 flex flex-col justify-between shadow-xs">
           <div>
             <div className="flex items-center justify-between">
               <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] sm:text-[11px] font-semibold text-[#036132] bg-[#F2F9F5]">
