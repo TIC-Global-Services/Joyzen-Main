@@ -14,35 +14,35 @@ export interface CountryNode {
   name: string;
   lat: number;
   lng: number;
-  focusLng: number;
-  focusLat: number;
+  focusLng?: number;
+  focusLat?: number;
   isOrigin?: boolean;
 }
 
 const ORIGIN_INDIA: CountryNode = {
   id: 'india',
   name: 'India',
-  lat: 28.6139,
+  lat: 18.6139,
   lng: 77.209,
   focusLng: 77.2,
   focusLat: 22,
   isOrigin: true,
 };
 
-// Sequence order: Australia -> New Zealand -> Canada -> UAE -> Europe
+// All destination countries displayed simultaneously
 const DESTINATION_LIST: CountryNode[] = [
   {
     id: 'australia',
     name: 'Australia',
-    lat: -33.8688,
-    lng: 151.2093,
+    lat: -29.8688,
+    lng: 131.2093,
     focusLng: 135,
     focusLat: -22,
   },
   {
     id: 'newzealand',
     name: 'New Zealand',
-    lat: -36.8485,
+    lat: -41.8485,
     lng: 174.7633,
     focusLng: 155,
     focusLat: -28,
@@ -59,7 +59,7 @@ const DESTINATION_LIST: CountryNode[] = [
     id: 'uae',
     name: 'UAE',
     lat: 25.2048,
-    lng: 55.2708,
+    lng: 46.2708,
     focusLng: 62,
     focusLat: 25,
   },
@@ -105,44 +105,73 @@ function createJumpingArcCurve(
   return new THREE.CubicBezierCurve3(startVec, p1, p2, endVec);
 }
 
-function shortestAngleDiff(current: number, target: number): number {
-  let diff = (target - current) % (Math.PI * 2);
-  if (diff > Math.PI) diff -= Math.PI * 2;
-  if (diff < -Math.PI) diff += Math.PI * 2;
-  return diff;
-}
-
 // ============================================================================
-// Visible 3D Connection Arc Component (Thick Tube + Traveling Pulse)
+// Continuous 3D Connection Arc (Flowing Pulses from India to Destination)
 // ============================================================================
 
 function ConnectionArc({
   curve,
-  isActive,
   index,
 }: {
   curve: THREE.CubicBezierCurve3;
-  isActive: boolean;
   index: number;
 }) {
-  const headRef = useRef<THREE.Mesh>(null);
-  const glowRef = useRef<THREE.Mesh>(null);
-
-  // Volumetric 3D tube geometry ensures the arc is bold, clear, and visible from any angle
+  // Tube geometry for the visible arc line connecting India to destination
   const tubeGeo = useMemo(() => {
-    return new THREE.TubeGeometry(curve, 64, isActive ? 0.01 : 0.0055, 8, false);
-  }, [curve, isActive]);
+    return new THREE.TubeGeometry(curve, 64, 0.007, 8, false);
+  }, [curve]);
+
+  // Dual traveling pulses along each curve for continuous streaming movement
+  const pulse1HeadRef = useRef<THREE.Mesh>(null);
+  const pulse1GlowRef = useRef<THREE.Mesh>(null);
+  const pulse1TrailRef = useRef<THREE.Mesh>(null);
+
+  const pulse2HeadRef = useRef<THREE.Mesh>(null);
+  const pulse2GlowRef = useRef<THREE.Mesh>(null);
+  const pulse2TrailRef = useRef<THREE.Mesh>(null);
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
-    // Continuous smooth looping pulse along the curve
-    const speed = isActive ? 0.55 : 0.35;
-    const progress = (t * speed + index * 0.22) % 1.0;
-    const headPos = curve.getPointAt(progress);
+    const speed = 0.38; // Continuous smooth traveling speed
 
-    if (headRef.current && glowRef.current) {
-      headRef.current.position.copy(headPos);
-      glowRef.current.position.copy(headPos);
+    // Pulse 1: Travels from India (progress 0) towards destination country (progress 1)
+    const p1 = (t * speed + index * 0.2) % 1.0;
+    const pos1 = curve.getPointAt(p1);
+    const alpha1 = Math.sin(p1 * Math.PI);
+    const scale1 = THREE.MathUtils.lerp(0.3, 1.0, alpha1);
+
+    if (pulse1HeadRef.current) {
+      pulse1HeadRef.current.position.copy(pos1);
+      pulse1HeadRef.current.scale.setScalar(scale1);
+    }
+    if (pulse1GlowRef.current) {
+      pulse1GlowRef.current.position.copy(pos1);
+      pulse1GlowRef.current.scale.setScalar(scale1);
+    }
+    if (pulse1TrailRef.current) {
+      const trail1 = curve.getPointAt(Math.max(0, p1 - 0.04));
+      pulse1TrailRef.current.position.copy(trail1);
+      pulse1TrailRef.current.scale.setScalar(scale1 * 0.75);
+    }
+
+    // Pulse 2: Staggered by 0.5 cycle so light pulses are continuously flowing
+    const p2 = (t * speed + index * 0.2 + 0.5) % 1.0;
+    const pos2 = curve.getPointAt(p2);
+    const alpha2 = Math.sin(p2 * Math.PI);
+    const scale2 = THREE.MathUtils.lerp(0.3, 1.0, alpha2);
+
+    if (pulse2HeadRef.current) {
+      pulse2HeadRef.current.position.copy(pos2);
+      pulse2HeadRef.current.scale.setScalar(scale2);
+    }
+    if (pulse2GlowRef.current) {
+      pulse2GlowRef.current.position.copy(pos2);
+      pulse2GlowRef.current.scale.setScalar(scale2);
+    }
+    if (pulse2TrailRef.current) {
+      const trail2 = curve.getPointAt(Math.max(0, p2 - 0.04));
+      pulse2TrailRef.current.position.copy(trail2);
+      pulse2TrailRef.current.scale.setScalar(scale2 * 0.75);
     }
   });
 
@@ -151,47 +180,55 @@ function ConnectionArc({
       {/* 3D Volumetric Arc Line Tube */}
       <mesh geometry={tubeGeo}>
         <meshBasicMaterial
-          color={isActive ? '#38bdf8' : '#0284c7'}
-          transparent
-          opacity={isActive ? 0.95 : 0.45}
-        />
-      </mesh>
-
-      {/* Traveling Core Particle */}
-      <mesh ref={headRef}>
-        <sphereGeometry args={[isActive ? 0.034 : 0.02, 16, 16]} />
-        <meshBasicMaterial color={isActive ? '#ffffff' : '#7dd3fc'} />
-      </mesh>
-
-      {/* Traveling Soft Glow */}
-      <mesh ref={glowRef}>
-        <sphereGeometry args={[isActive ? 0.068 : 0.04, 16, 16]} />
-        <meshBasicMaterial
           color="#38bdf8"
           transparent
-          opacity={isActive ? 0.75 : 0.35}
+          opacity={0.45}
         />
+      </mesh>
+
+      {/* Pulse 1 Elements (Streaming towards destination) */}
+      <mesh ref={pulse1TrailRef}>
+        <sphereGeometry args={[0.016, 12, 12]} />
+        <meshBasicMaterial color="#38bdf8" transparent opacity={0.45} />
+      </mesh>
+      <mesh ref={pulse1HeadRef}>
+        <sphereGeometry args={[0.024, 16, 16]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+      <mesh ref={pulse1GlowRef}>
+        <sphereGeometry args={[0.052, 16, 16]} />
+        <meshBasicMaterial color="#38bdf8" transparent opacity={0.65} />
+      </mesh>
+
+      {/* Pulse 2 Elements (Streaming towards destination) */}
+      <mesh ref={pulse2TrailRef}>
+        <sphereGeometry args={[0.016, 12, 12]} />
+        <meshBasicMaterial color="#38bdf8" transparent opacity={0.45} />
+      </mesh>
+      <mesh ref={pulse2HeadRef}>
+        <sphereGeometry args={[0.024, 16, 16]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+      <mesh ref={pulse2GlowRef}>
+        <sphereGeometry args={[0.052, 16, 16]} />
+        <meshBasicMaterial color="#38bdf8" transparent opacity={0.65} />
       </mesh>
     </group>
   );
 }
 
 // ============================================================================
-// Clean Marker Component (Accurate World Position Camera Check)
+// Clean Marker Component (Displays Country Name cleanly without active tags)
 // ============================================================================
 
 function NodeMarker({
   node,
   radius,
   isOrigin = false,
-  isActive = false,
-  onClick,
 }: {
   node: CountryNode;
   radius: number;
   isOrigin?: boolean;
-  isActive?: boolean;
-  onClick?: () => void;
 }) {
   const groupRef = useRef<THREE.Group>(null);
   const isFacingRef = useRef<boolean>(true);
@@ -218,140 +255,38 @@ function NodeMarker({
     const toCamera = camera.position.clone().sub(worldPos).normalize();
     const dot = normal.dot(toCamera);
 
-    // Marker is facing the camera when on the front hemisphere
-    const facing = dot > 0.05;
+    // Only visible when facing towards the camera (front hemisphere)
+    const facing = dot > 0.08;
     if (facing !== isFacingRef.current) {
       isFacingRef.current = facing;
       setIsFacingCamera(facing);
     }
   });
 
-  const pinColor = isOrigin ? '#10b981' : isActive ? '#38bdf8' : '#0284c7';
+  const pinColor = isOrigin ? '#10b981' : '#38bdf8';
 
   return (
     <group ref={groupRef} position={surfacePos} quaternion={quaternion}>
-      {/* Clean Surface Pin */}
-      <mesh
-        position={[0, 0, 0]}
-        onClick={(e) => {
-          e.stopPropagation();
-          onClick?.();
-        }}
-      >
-        <circleGeometry args={[isOrigin ? 0.044 : isActive ? 0.04 : 0.03, 32]} />
+      {/* Outer soft glowing pin ring */}
+      <mesh position={[0, 0, 0]}>
+        <circleGeometry args={[isOrigin ? 0.048 : 0.04, 32]} />
+        <meshBasicMaterial color={pinColor} transparent opacity={0.35} />
+      </mesh>
+
+      {/* Surface Base Pin */}
+      <mesh position={[0, 0, 0.001]}>
+        <circleGeometry args={[isOrigin ? 0.034 : 0.026, 32]} />
         <meshBasicMaterial color={pinColor} />
       </mesh>
 
       {/* Surface Inner Dot */}
       <mesh position={[0, 0, 0.002]}>
-        <circleGeometry args={[isOrigin ? 0.022 : isActive ? 0.018 : 0.014, 32]} />
+        <circleGeometry args={[isOrigin ? 0.016 : 0.012, 32]} />
         <meshBasicMaterial color="#ffffff" />
       </mesh>
 
-      {/* Prominent Country/Region Name Badge */}
-      <group position={[0, 0, 0.08]}>
-        <Html
-          center
-          distanceFactor={11}
-          style={{
-            pointerEvents: 'auto',
-            display: isFacingCamera ? 'block' : 'none',
-            opacity: isFacingCamera ? 1 : 0,
-            transition: 'opacity 0.2s ease',
-          }}
-        >
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onClick?.();
-            }}
-            className={`flex items-center gap-[2px] px-1 py-[1px] rounded-full backdrop-blur-md shadow-2xl select-none whitespace-nowrap text-[10px] font-semibold cursor-pointer transition-all duration-200 hover:scale-105 ${isOrigin
-                ? 'bg-emerald-950/95 border border-emerald-400 text-emerald-100 shadow-emerald-500/30 ring-1 ring-emerald-400/40'
-                : isActive
-                  ? 'bg-neutral-950/95 border-2 border-sky-400 text-white shadow-sky-500/50 ring-2 ring-sky-400/30 scale-105'
-                  : 'bg-neutral-950/85 border border-white/30 text-neutral-200 shadow-black/50 hover:border-sky-400/60'
-              }`}
-          >
-            <span
-              className={`w-[2px] h-[2px] rounded-full ${isOrigin
-                ? 'bg-emerald-400 animate-pulse'
-                : isActive
-                  ? 'bg-sky-400 animate-ping'
-                  : 'bg-sky-400'
-                }`}
-            />
-            <span className="font-bold tracking-tight text-white text-[5px]">
-              {node.name}
-            </span>
-            {isOrigin ? (
-              <span className="text-[3px] font-bold text-emerald-300 tracking-wider ml-0.5 px-1.5  rounded bg-emerald-500/25 border border-emerald-400/30">
-                CARE HUB
-              </span>
-            ) : isActive ? (
-              <span className="text-[3px] font-bold text-sky-300 tracking-wider ml-0.5 px-1  rounded bg-sky-500/25 border border-sky-400/30">
-                ACTIVE
-              </span>
-            ) : null}
-          </button>
-        </Html>
-      </group>
-    </group>
-  );
-}
-
-// ============================================================================
-// India Plain Text Marker (Always at Origin Hub, hides when not visible)
-// ============================================================================
-
-function IndiaPlainMarker({ radius }: { radius: number }) {
-  const groupRef = useRef<THREE.Group>(null);
-  const isFacingRef = useRef<boolean>(true);
-  const [isFacingCamera, setIsFacingCamera] = useState<boolean>(true);
-
-  const surfacePos = useMemo(() => {
-    return latLngToVector3(ORIGIN_INDIA.lat, ORIGIN_INDIA.lng, radius * 1.002);
-  }, [radius]);
-
-  const quaternion = useMemo(() => {
-    const normal = surfacePos.clone().normalize();
-    return new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
-  }, [surfacePos]);
-
-  // Accurate visibility test: hide when India is rotated to the back side
-  useFrame(({ camera }) => {
-    if (!groupRef.current) return;
-    const worldPos = new THREE.Vector3();
-    groupRef.current.getWorldPosition(worldPos);
-
-    // Outward surface normal in world coordinates
-    const normal = worldPos.clone().normalize();
-    // Direction from India to camera
-    const toCamera = camera.position.clone().sub(worldPos).normalize();
-    const dot = normal.dot(toCamera);
-
-    // Front hemisphere check: visible when facing camera, hidden when rotated away
-    const facing = dot > 0.05;
-    if (facing !== isFacingRef.current) {
-      isFacingRef.current = facing;
-      setIsFacingCamera(facing);
-    }
-  });
-
-  return (
-    <group ref={groupRef} position={surfacePos} quaternion={quaternion}>
-      {/* India Surface Dot */}
-      <mesh position={[0, 0, 0]}>
-        <circleGeometry args={[0.042, 32]} />
-        <meshBasicMaterial color="#10b981" />
-      </mesh>
-      <mesh position={[0, 0, 0.002]}>
-        <circleGeometry args={[0.02, 32]} />
-        <meshBasicMaterial color="#ffffff" />
-      </mesh>
-
-      {/* Plain Text on Top of India */}
-      <group position={[0, 0, 0.07]}>
+      {/* Country Name Badge (No active state, just clean country name) */}
+      <group position={[0, 0, 0.06]}>
         <Html
           center
           distanceFactor={11}
@@ -359,17 +294,19 @@ function IndiaPlainMarker({ radius }: { radius: number }) {
             pointerEvents: 'none',
             display: isFacingCamera ? 'block' : 'none',
             opacity: isFacingCamera ? 1 : 0,
-            transition: 'opacity 0.2s ease',
+            transition: 'opacity 0.25s ease',
           }}
         >
-          <div className="flex flex-col items-center select-none pointer-events-none -translate-y-1">
-            <span
-              className="text-[8px] font-bold text-white tracking-wide whitespace-nowrap drop-shadow-[0_1px_3px_rgba(0,0,0,0.95)]"
-              style={{
-                textShadow: '0 1px 3px #000, 0 2px 6px rgba(0,0,0,0.9)',
-              }}
-            >
-              India
+          <div
+            className={`flex items-center gap-1.5 px-1 py-[1px] rounded-full backdrop-blur-md shadow-xl select-none whitespace-nowrap pointer-events-none transition-transform duration-200 border ${
+              isOrigin
+                ? 'bg-emerald-950/90 border-emerald-400/50 text-emerald-100 shadow-emerald-500/20'
+                : 'bg-neutral-950/90 border-sky-400/40 text-white shadow-black/60'
+            }`}
+          >
+
+            <span className="font-bold tracking-tight text-white text-[5px] drop-shadow-sm">
+              {node.name}
             </span>
           </div>
         </Html>
@@ -382,21 +319,11 @@ function IndiaPlainMarker({ radius }: { radius: number }) {
 // Rotating Globe Scene
 // ============================================================================
 
-function RotatingGlobe({
-  radius,
-  stepIndex,
-  onSelectCountry,
-}: {
-  radius: number;
-  stepIndex: number;
-  onSelectCountry: (idx: number) => void;
-}) {
+function RotatingGlobe({ radius }: { radius: number }) {
   const globeGroupRef = useRef<THREE.Group>(null);
-  const currentRotY = useRef(0);
-  const currentRotX = useRef(0);
 
   // Local textures from public/
-  const [earthTexture, bumpTexture] = useTexture(['/earth-texture.jpg', '/earth-bump.png']);
+  const [earthTexture, bumpTexture] = useTexture(['/earth-texture-v2.png', '/earth-bump.png']);
 
   useMemo(() => {
     if (earthTexture) {
@@ -416,7 +343,7 @@ function RotatingGlobe({
     [radius]
   );
 
-  // Precompute jumping curves from India to each destination
+  // Precompute jumping curves from India to all destination countries
   const curvesList = useMemo(() => {
     return DESTINATION_LIST.map((dest) => {
       const destPos = latLngToVector3(dest.lat, dest.lng, radius);
@@ -427,35 +354,23 @@ function RotatingGlobe({
     });
   }, [originPos, radius]);
 
-  // Determine current active destination
-  const activeCountry = stepIndex >= 0 ? DESTINATION_LIST[stepIndex] : null;
+  // Initial tilt and orientation with India nicely framed in front
+  useEffect(() => {
+    if (globeGroupRef.current) {
+      globeGroupRef.current.rotation.x = 0.18;
+      globeGroupRef.current.rotation.y = -Math.PI / 2 - ((ORIGIN_INDIA.focusLng ?? 77.2) * Math.PI) / 180;
+    }
+  }, []);
 
-  // Calculate target rotation based on active destination or India
-  const { targetRotY, targetRotX } = useMemo(() => {
-    const targetNode = activeCountry || ORIGIN_INDIA;
-    const targetY = -Math.PI / 2 - (targetNode.focusLng * Math.PI) / 180;
-    const targetX = (targetNode.focusLat * Math.PI) / 180 * 0.45;
-    return { targetRotY: targetY, targetRotX: targetX };
-  }, [activeCountry]);
-
-  // Smoothly rotate the Earth to face the active country
+  // Smooth continuous rotation so all destination countries glide gracefully into view
   useFrame((_, delta) => {
     if (!globeGroupRef.current) return;
-
-    // Smooth shortest-path rotation interpolation
-    const diffY = shortestAngleDiff(currentRotY.current, targetRotY);
-    currentRotY.current += diffY * Math.min(1, delta * 2.2);
-
-    const diffX = targetRotX - currentRotX.current;
-    currentRotX.current += diffX * Math.min(1, delta * 2.2);
-
-    globeGroupRef.current.rotation.y = currentRotY.current;
-    globeGroupRef.current.rotation.x = currentRotX.current;
+    globeGroupRef.current.rotation.y += delta * 0.12;
   });
 
   return (
     <group ref={globeGroupRef}>
-      {/* Clean Earth Surface Mesh (without any outer wireframe shell or outer circle) */}
+      {/* Clean Earth Surface Mesh */}
       <mesh geometry={globeGeometry}>
         <meshStandardMaterial
           map={earthTexture}
@@ -466,29 +381,30 @@ function RotatingGlobe({
         />
       </mesh>
 
-      {/* India Plain Text Marker (Always on Care Hub, hides when rotated to back) */}
-      <IndiaPlainMarker radius={radius} />
+      {/* Origin Country Marker (India) */}
+      <NodeMarker
+        node={ORIGIN_INDIA}
+        radius={radius}
+        isOrigin={true}
+      />
 
-      {/* Active Destination Node Marker (Only ONE destination marker at a time) */}
-      {stepIndex >= 0 && activeCountry && (
+      {/* All Destination Country Markers shown simultaneously */}
+      {DESTINATION_LIST.map((country) => (
         <NodeMarker
-          key={`active-node-${activeCountry.id}`}
-          node={activeCountry}
+          key={`node-${country.id}`}
+          node={country}
           radius={radius}
-          isActive
-          onClick={() => onSelectCountry(stepIndex)}
         />
-      )}
+      ))}
 
-      {/* 3D Connection Arc for the active destination */}
-      {stepIndex >= 0 && curvesList[stepIndex] && (
+      {/* All Connection Lines from India moving continuously towards all countries */}
+      {curvesList.map((item, idx) => (
         <ConnectionArc
-          key={`arc-${curvesList[stepIndex].id}`}
-          curve={curvesList[stepIndex].curve}
-          isActive={true}
-          index={stepIndex}
+          key={`arc-${item.id}`}
+          curve={item.curve}
+          index={idx}
         />
-      )}
+      ))}
     </group>
   );
 }
@@ -497,15 +413,7 @@ function RotatingGlobe({
 // Scene Component
 // ============================================================================
 
-function Scene({
-  radius,
-  stepIndex,
-  onSelectCountry,
-}: {
-  radius: number;
-  stepIndex: number;
-  onSelectCountry: (idx: number) => void;
-}) {
+function Scene({ radius }: { radius: number }) {
   const { camera } = useThree();
 
   useEffect(() => {
@@ -515,18 +423,14 @@ function Scene({
 
   return (
     <>
-      <ambientLight intensity={0.85} />
-      <directionalLight position={[radius * 5, radius * 2.5, radius * 5]} intensity={1.9} color="#ffffff" />
+      <ambientLight intensity={0.9} />
+      <directionalLight position={[radius * 10, radius * 2.5, radius * 5]} intensity={1.9} color="#ffffff" />
       <directionalLight position={[-radius * 4, -radius, -radius * 3]} intensity={0.4} color="#60a5fa" />
 
-      {/* Clean Rotating Globe with Visible 3D Arcs */}
-      <RotatingGlobe
-        radius={radius}
-        stepIndex={stepIndex}
-        onSelectCountry={onSelectCountry}
-      />
+      {/* Rotating Globe with All Destination Arcs */}
+      <RotatingGlobe radius={radius} />
 
-      {/* Orbit Controls (Manual dragging to inspect, returns to focus smoothly) */}
+      {/* Orbit Controls (Manual dragging to inspect from any angle) */}
       <OrbitControls
         makeDefault
         enablePan={false}
@@ -557,7 +461,7 @@ function LoadingFallback() {
 }
 
 // ============================================================================
-// Default Export Component with Automatic Sequence Controller
+// Default Export Component
 // ============================================================================
 
 export default function Globe3DDemo({
@@ -567,34 +471,6 @@ export default function Globe3DDemo({
   className?: string;
   radius?: number;
 }) {
-  // -1 = India Care Hub; 0 = Australia; 1 = New Zealand; 2 = Canada; 3 = UAE; 4 = Europe
-  const [stepIndex, setStepIndex] = useState<number>(-1);
-
-  // Automatic sequential tour: India -> Australia -> New Zealand -> Canada -> UAE -> Europe -> loop
-  useEffect(() => {
-    // Start at India for 2.6 seconds, then tour destinations
-    const initialTimer = setTimeout(() => {
-      setStepIndex(0);
-    }, 2600);
-
-    return () => clearTimeout(initialTimer);
-  }, []);
-
-  useEffect(() => {
-    if (stepIndex === -1) return;
-
-    // Each country stays active for ~4.5 seconds while globe rotates to focus
-    const interval = setInterval(() => {
-      setStepIndex((prev) => (prev + 1) % DESTINATION_LIST.length);
-    }, 4500);
-
-    return () => clearInterval(interval);
-  }, [stepIndex]);
-
-  const handleSelectCountry = (idx: number) => {
-    setStepIndex(idx);
-  };
-
   return (
     <div className={`relative ${className}`}>
       <Canvas
@@ -615,57 +491,9 @@ export default function Globe3DDemo({
         }}
       >
         <Suspense fallback={<LoadingFallback />}>
-          <Scene
-            radius={radius}
-            stepIndex={stepIndex}
-            onSelectCountry={handleSelectCountry}
-          />
+          <Scene radius={radius} />
         </Suspense>
       </Canvas>
-
-      {/* Prominent Active Country/Region Header HUD */}
-      {/* <div className="absolute top-2 sm:top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-2.5 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full bg-neutral-950/85 backdrop-blur-xl border border-white/15 shadow-2xl pointer-events-none">
-        <span
-          className={`w-2 h-2 rounded-full ${stepIndex === -1 ? 'bg-emerald-400 animate-pulse' : 'bg-sky-400 animate-ping'
-            }`}
-        />
-        <span className="text-[11px] sm:text-xs font-medium text-neutral-400">Active Region:</span>
-        <span className="text-xs sm:text-sm font-bold text-white tracking-wide">
-          {stepIndex === -1 ? 'India (Care Hub)' : DESTINATION_LIST[stepIndex]?.name}
-        </span>
-        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 border border-sky-500/30">
-          {stepIndex === -1 ? 'Care Hub Origin' : 'Virtual Care Active'}
-        </span>
-      </div> */}
-
-      {/* Clean, Neat UI Navigation Stepper Pill Bar */}
-      {/* <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 max-w-[94%] overflow-x-auto no-scrollbar flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full bg-neutral-950/85 backdrop-blur-xl border border-white/10 shadow-2xl z-20">
-        <button
-          onClick={() => handleSelectCountry(-1)}
-          className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300 ${stepIndex === -1
-              ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/30 scale-105'
-              : 'text-neutral-400 hover:text-neutral-200'
-            }`}
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-          <span>India (Care Hub)</span>
-        </button>
-
-        <div className="w-[1px] h-4 bg-white/15 mx-0.5" />
-
-        {DESTINATION_LIST.map((country, idx) => (
-          <button
-            key={country.id}
-            onClick={() => handleSelectCountry(idx)}
-            className={`px-3 py-1 rounded-full text-xs font-semibold transition-all duration-300 whitespace-nowrap ${stepIndex === idx
-                ? 'bg-sky-500 text-white shadow-md shadow-sky-500/30 scale-105'
-                : 'text-neutral-400 hover:text-neutral-200'
-              }`}
-          >
-            {country.name}
-          </button>
-        ))}
-      </div> */}
     </div>
   );
 }

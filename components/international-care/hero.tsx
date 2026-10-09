@@ -21,7 +21,7 @@ const SUBTITLE_WORDS = [
 
 export default function Hero() {
   return (
-    <section className="relative w-full flex flex-col items-center justify-start pt-28 sm:pt-36 md:pt-40 pb-12 sm:pb-16 overflow-hidden select-none">
+    <section className="relative w-full flex flex-col items-center justify-start pt-28 sm:pt-36 md:pt-35 pb-12 sm:pb-10 overflow-hidden select-none">
       {/* Headline & Subtitle Content */}
       <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
         {/* Animated Headline with Staggered Word Reveal */}
@@ -45,7 +45,7 @@ export default function Hero() {
         </h1>
 
         {/* Animated Subtitle with Staggered Word Reveal */}
-        <p className="mt-4 sm:mt-6 text-base sm:text-lg md:text-2xl text-black font-bold leading-tight max-w-2xl flex flex-wrap justify-center items-center">
+        <p className="mt-4 sm:mt-4 text-base sm:text-lg md:text-2xl text-black font-bold leading-tight max-w-2xl flex flex-wrap justify-center items-center">
           {SUBTITLE_WORDS.map((word, i) => (
             <span key={i} className="inline-block overflow-hidden mr-[0.24em] last:mr-0 py-0.5">
               <motion.span
