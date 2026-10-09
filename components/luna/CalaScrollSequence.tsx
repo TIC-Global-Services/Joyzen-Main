@@ -73,7 +73,7 @@ const FAQ_SEQUENCE: FaqItem[] = [
   },
   {
     id: 3,
-    question: 'Can LUNA help me understand my first periods and body changes?',
+    question: 'Can LUNA help me understand my first periods \nand body changes?',
     answer: 'Yes. LUNA includes period and cycle education, puberty and hygiene guidance, and support for understanding body, mood, skin, and hair changes.',
   },
   {
@@ -1344,7 +1344,7 @@ export default function CalaScrollSequence() {
               </AdaptiveGlass>
             </div>
           </div>
-          <div className="final-benefit-pill benefit-pill-pcos absolute opacity-0 pointer-events-auto top-[80%] md:top-[80%] lg:top-[calc(62%+230px)] left-3 sm:left-10 md:left-16 lg:left-1/2 lg:-translate-x-1/2">
+          <div className="final-benefit-pill benefit-pill-group-1 benefit-pill-pcos absolute opacity-0 pointer-events-auto top-[80%] md:top-[80%] lg:top-[calc(62%+230px)] left-3 sm:left-10 md:left-16 lg:left-1/2 lg:-translate-x-1/2">
             <div className="-translate-y-1/2 flex items-center justify-center">
               <AdaptiveGlass isMobile={isMobile} borderRadius={999} blur={2} contrast={1.1} className="px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-5 md:py-2 lg:px-6 lg:py-2 border border-white/10 transition-transform hover:scale-105 cursor-default backdrop-blur-xl">
                 <span className="text-[#1E2822] text-[9.5px] sm:text-[11px] md:text-sm lg:text-lg font-bold whitespace-nowrap tracking-tight">Doctor consultations</span>
@@ -1402,7 +1402,7 @@ export default function CalaScrollSequence() {
                     >
                       <div className="relative flex items-center justify-start rounded-full px-4 py-2.5 sm:py-3.5 text-left w-full">
                         <span
-                          className={`text-lg tracking-tight leading-[1.2] transition-colors duration-200 text-left block w-full ${isActive
+                          className={`text-lg whitespace-pre-line tracking-tight leading-[1.2] transition-colors duration-200 text-left block w-full ${isActive
                             ? 'font-bold text-[#E5855E]'
                             : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
                             }`}

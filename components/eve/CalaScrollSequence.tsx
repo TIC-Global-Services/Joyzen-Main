@@ -1251,15 +1251,15 @@ export default function CalaScrollSequence() {
         <div className="benefits-sequence absolute inset-0 z-40 pointer-events-none">
           {/* Texts */}
           <div className="benefits-text-1 absolute inset-x-0 top-[22%] md:top-[22%] lg:top-1/2 lg:-translate-y-1/2 flex flex-col items-center justify-center text-center px-4 opacity-0 pointer-events-none">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase  sm:mb-4">BENEFITS</span>
+            <span className="text-black  text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase  sm:mb-4">BENEFITS</span>
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-white tracking-tight drop-shadow-md max-w-[280px] sm:max-w-none">Prepare with clarity.</h2>
           </div>
           <div className="benefits-text-2 absolute inset-x-0 top-[33%] md:top-[33%] lg:top-1/2 lg:-translate-y-1/2 flex flex-col items-center justify-center text-center px-4 opacity-0 pointer-events-none">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-4">BENEFITS</span>
+            <span className="text-black  text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-4">BENEFITS</span>
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md max-w-[280px] sm:max-w-none">Time with confidence.</h2>
           </div>
           <div className="benefits-text-3 absolute inset-x-0 top-[45%] md:top-[45%] lg:top-1/2 lg:-translate-y-1/2 flex flex-col items-center justify-center text-center px-4 opacity-0 pointer-events-none">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-2">BENEFITS</span>
+            <span className="text-black text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-2">BENEFITS</span>
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md max-w-[280px] sm:max-w-none">Stay guided.</h2>
           </div>
 

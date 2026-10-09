@@ -378,55 +378,38 @@ export default function Hero() {
           />
         </div>
 
-        {/* Hotspots Layer (Fades out & set to display:none as soon as scrolling/scattering starts) */}
+        {/* Hotspots List (Top Right) */}
         <motion.div
           style={{
             opacity: initialContentOpacity,
             display: initialDisplay,
             pointerEvents: initialPointerEvents,
           }}
-          className="absolute inset-0 z-20"
+          className="absolute top-16 sm:top-24 md:top-28 right-[5%] z-20 flex flex-col gap-4 sm:gap-5 items-start pointer-events-auto"
         >
           {HOTSPOTS.map((hotspot) => (
             <div
               key={hotspot.id}
-              style={{ top: hotspot.top, left: hotspot.left }}
-              className="absolute -translate-x-1/2 top-[80%] group cursor-pointer"
+              className="flex items-center gap-3 sm:gap-3.5 group cursor-pointer"
               onMouseEnter={() => setHoveredHotspot(hotspot.id)}
               onMouseLeave={() => setHoveredHotspot(null)}
               onClick={() => setHoveredHotspot((prev) => (prev === hotspot.id ? null : hotspot.id))}
             >
               {/* Hotspot Target Marker Ring */}
-              <div className="relative flex items-center justify-center w-8 h-8">
+              <div className="relative flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 shrink-0">
                 {/* Outer Pulsing Aura */}
-                <span className="absolute w-8 h-8 rounded-full border border-zinc-800/40 animate-ping opacity-30" />
+                <span className="absolute w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-zinc-800/40 animate-ping opacity-30" />
 
                 {/* Concentric Target Ring */}
-                <div className="w-6 h-6 rounded-full border-2 border-zinc-900/80 backdrop-blur-xs flex items-center justify-center shadow-xs transition-transform duration-300 group-hover:scale-110">
+                <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 border-zinc-900/80 backdrop-blur-xs flex items-center justify-center shadow-xs transition-transform duration-300 group-hover:scale-110">
                   <div className="w-2 h-2 rounded-full bg-[#036132]" />
                 </div>
               </div>
 
-              {/* Tooltip Content (Visible on Hover / Tap) */}
-              <motion.div
-                initial={false}
-                animate={{
-                  opacity: hoveredHotspot === hotspot.id ? 1 : 0,
-                  scale: hoveredHotspot === hotspot.id ? 1 : 0.9,
-                  x: isMobile ? -8 : (hotspot.alignRight ? 12 : -12),
-                }}
-                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className={`absolute top-1/2 -translate-y-1/2 whitespace-nowrap pointer-events-none right-full mr-2 text-right ${hotspot.alignRight
-                  ? 'md:left-full md:right-auto md:ml-2 md:mr-0 md:text-left'
-                  : 'md:right-full md:mr-2 md:text-right'
-                  }`}
-              >
-                <div className="py-0 sm:py-1.5"> 
-                  <span className="block text-sm md:text-xl font-bold tracking-tight text-[#EB7847] leading-[0.95] md:leading-[1.2] whitespace-pre">
-                    {hotspot.text}
-                  </span>
-                </div>
-              </motion.div>
+              {/* Hotspot Text */}
+              <span className="block text-xs sm:text-sm md:text-base lg:text-lg font-bold tracking-tight text-[#EB7847] leading-snug whitespace-pre transition-transform duration-200 group-hover:scale-[1.02]">
+                {hotspot.text}
+              </span>
             </div>
           ))}
         </motion.div>

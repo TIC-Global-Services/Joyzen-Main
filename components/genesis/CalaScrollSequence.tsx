@@ -360,6 +360,7 @@ export default function CalaScrollSequence() {
 
   const [isMobile, setIsMobile] = useState(false);
   const [scaleFactor, setScaleFactor] = useState(1);
+  const [isMounted, setIsMounted] = useState(false);
   const [isPillHovered, setIsPillHovered] = useState(false);
   const [clickedChatId, setClickedChatId] = useState<string | null>(null);
   const [activeFaqId, setActiveFaqId] = useState<number>(1);
@@ -379,6 +380,23 @@ export default function CalaScrollSequence() {
   const orbitRadius = isMobile ? 135 : (scaleFactor < 0.85 ? 210 : 270);
   const restingOrbSize = isMobile ? 140 : (scaleFactor < 0.85 ? 270 : 360);
   const restingScale = restingOrbSize / (orbitRadius * 2);
+
+  useEffect(() => {
+    setIsMounted(true);
+    const updateScale = () => {
+      const w = window.innerWidth;
+      setIsMobile(w < 1024);
+      if (w < 480) setScaleFactor(0.52);
+      else if (w < 640) setScaleFactor(0.64);
+      else if (w < 768) setScaleFactor(0.74);
+      else if (w < 1024) setScaleFactor(0.85);
+      else if (w < 1280) setScaleFactor(0.94);
+      else setScaleFactor(1);
+    };
+    updateScale();
+    window.addEventListener('resize', updateScale);
+    return () => window.removeEventListener('resize', updateScale);
+  }, []);
 
   // Initial entrance animation: Hero GENESIS text expands outward framing the orb and shrinks back to normal
   useEffect(() => {
