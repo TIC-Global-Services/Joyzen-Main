@@ -42,7 +42,7 @@ export default function TalkWithCala() {
           transition={{ duration: 0.6, ease: 'easeOut' }}
           className="text-3xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]"
         >
-          <span className="text-[#8F9B6F]">ATLAS</span> is Male Fertility & Hormone Restoration Program.
+          <span className="text-[#5A856C]">ATLAS</span> is Male Fertility & Hormone Restoration Program.
         </motion.h2>
 
         {/* Subtitle Paragraph */}

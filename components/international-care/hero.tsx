@@ -74,7 +74,7 @@ export default function Hero() {
           ease: [0.16, 1, 0.3, 1],
           delay: 0.5,
         }}
-        className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 flex justify-center items-center mt-0 sm:mt-0 md:mt-0 h-[460px] sm:h-[560px] md:h-[650px] lg:h-[72dvh]"
+        className="relative z-10 w-full px-4 sm:px-6 flex justify-center items-center mt-0 sm:mt-0 md:mt-0 h-[460px] sm:h-[560px] md:h-[650px] lg:h-[100dvh]"
       >
         <Globe3DDemo className="w-full h-full" />
       </motion.div>

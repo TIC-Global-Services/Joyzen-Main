@@ -50,8 +50,8 @@ const DESTINATION_LIST: CountryNode[] = [
   {
     id: 'canada',
     name: 'Canada',
-    lat: 45.4215,
-    lng: -75.6972,
+    lat: 50.4215,
+    lng: -105.6972,
     focusLng: -85,
     focusLat: 38,
   },
@@ -66,8 +66,8 @@ const DESTINATION_LIST: CountryNode[] = [
   {
     id: 'europe',
     name: 'Europe',
-    lat: 51.5074,
-    lng: -0.1278,
+    lat: 61.5074,
+    lng: 10.1278,
     focusLng: 15,
     focusLat: 46,
   },
@@ -180,7 +180,7 @@ function ConnectionArc({
       {/* 3D Volumetric Arc Line Tube */}
       <mesh geometry={tubeGeo}>
         <meshBasicMaterial
-          color="#38bdf8"
+          color="#EF8F60"
           transparent
           opacity={0.45}
         />
@@ -189,7 +189,7 @@ function ConnectionArc({
       {/* Pulse 1 Elements (Streaming towards destination) */}
       <mesh ref={pulse1TrailRef}>
         <sphereGeometry args={[0.016, 12, 12]} />
-        <meshBasicMaterial color="#38bdf8" transparent opacity={0.45} />
+        <meshBasicMaterial color="#EF8F60" transparent opacity={0.45} />
       </mesh>
       <mesh ref={pulse1HeadRef}>
         <sphereGeometry args={[0.024, 16, 16]} />
@@ -197,13 +197,13 @@ function ConnectionArc({
       </mesh>
       <mesh ref={pulse1GlowRef}>
         <sphereGeometry args={[0.052, 16, 16]} />
-        <meshBasicMaterial color="#38bdf8" transparent opacity={0.65} />
+        <meshBasicMaterial color="#EF8F60" transparent opacity={0.65} />
       </mesh>
 
       {/* Pulse 2 Elements (Streaming towards destination) */}
       <mesh ref={pulse2TrailRef}>
         <sphereGeometry args={[0.016, 12, 12]} />
-        <meshBasicMaterial color="#38bdf8" transparent opacity={0.45} />
+        <meshBasicMaterial color="#EF8F60" transparent opacity={0.45} />
       </mesh>
       <mesh ref={pulse2HeadRef}>
         <sphereGeometry args={[0.024, 16, 16]} />
@@ -211,7 +211,7 @@ function ConnectionArc({
       </mesh>
       <mesh ref={pulse2GlowRef}>
         <sphereGeometry args={[0.052, 16, 16]} />
-        <meshBasicMaterial color="#38bdf8" transparent opacity={0.65} />
+        <meshBasicMaterial color="#EF8F60" transparent opacity={0.65} />
       </mesh>
     </group>
   );
@@ -305,7 +305,7 @@ function NodeMarker({
             }`}
           >
 
-            <span className="font-bold tracking-tight text-white text-[5px] drop-shadow-sm">
+            <span className="font-bold tracking-tight text-white text-[9px] drop-shadow-sm">
               {node.name}
             </span>
           </div>
@@ -323,7 +323,7 @@ function RotatingGlobe({ radius }: { radius: number }) {
   const globeGroupRef = useRef<THREE.Group>(null);
 
   // Local textures from public/
-  const [earthTexture, bumpTexture] = useTexture(['/earth-texture-v2.png', '/earth-bump.png']);
+  const [earthTexture, bumpTexture] = useTexture(['/earth-texture-v4.png', '/earth-bump.png']);
 
   useMemo(() => {
     if (earthTexture) {
@@ -466,7 +466,7 @@ function LoadingFallback() {
 
 export default function Globe3DDemo({
   className = 'h-full w-full',
-  radius = 2.0,
+  radius = 2.8,
 }: {
   className?: string;
   radius?: number;

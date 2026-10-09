@@ -114,7 +114,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         ctaButtonText: 'CHOOSE 6 MONTHS',
       },
     ],
-    includedTitle: 'Every LUNA membership includes',
+    includedTitle: 'Every LUNA membership \nincludes',
     includedFeatures: [
       '3 doctor consultations every month',
       'Cycle education',
@@ -181,7 +181,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         ctaButtonText: 'CHOOSE 6 MONTHS',
       },
     ],
-    includedTitle: 'Every LYRA membership includes',
+    includedTitle: 'Every LYRA membership \nincludes',
     includedFeatures: [
       '3 monthly 1-to-1 consultations',
       'Personalized cycle + hormone optimization plan',
@@ -255,7 +255,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         ctaButtonText: 'CHOOSE 6 MONTHS',
       },
     ],
-    includedTitle: 'Every CALA membership includes',
+    includedTitle: 'Every CALA membership \nincludes',
     includedFeatures: [
       'Same gynecologist for long-term care',
       'Monthly detailed consultations',
@@ -335,7 +335,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         ctaButtonText: 'CHOOSE 6 MONTHS',
       },
     ],
-    includedTitle: 'Every EVE membership includes',
+    includedTitle: 'Every EVE membership \nincludes',
     includedFeatures: [
       'Dedicated gynecologist for full journey',
       'Monthly deep fertility consultations',
@@ -414,7 +414,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         ctaButtonText: 'CHOOSE 6 MONTHS',
       },
     ],
-    includedTitle: 'Every CORE membership includes',
+    includedTitle: 'Every CORE membership \nincludes',
     includedFeatures: [
       '3 one-to-one doctor consultations per month',
       'Daily private men’s health chat',
@@ -442,7 +442,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
   atlas: {
     programKey: 'atlas',
     programName: 'ATLAS',
-    programHighlightColor: '#8F9B6F',
+    programHighlightColor: '#5A856C',
     tagline: 'Start small. Continue with guidance. Build health early.',
     subtitle: 'For men who want to improve sperm health, testosterone, stamina, and reproductive health with structured medical and lifestyle guidance.',
     defaultPlanId: '6-months',
@@ -486,7 +486,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         ctaButtonText: 'CHOOSE 6 MONTHS',
       },
     ],
-    includedTitle: 'Every ATLAS membership includes',
+    includedTitle: 'Every ATLAS membership \nincludes',
     includedFeatures: [
       'Dedicated Andrologist / Men’s Health Doctor',
       '3 personal consultations per month',
@@ -517,7 +517,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
   genesis: {
     programKey: 'genesis',
     programName: 'GENESIS',
-    programHighlightColor: '#916CAD',
+    programHighlightColor: '#7D7CCD',
     tagline: 'Start small. Continue with guidance. Build health early.',
     subtitle: 'For men preparing for fatherhood, with guided fertility, hormone, sexual health and lifestyle support.',
     defaultPlanId: '6-months',
@@ -561,7 +561,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         ctaButtonText: 'CHOOSE 6 MONTHS',
       },
     ],
-    includedTitle: 'Every GENESIS membership includes',
+    includedTitle: 'Every GENESIS membership \nincludes',
     includedFeatures: [
       'Dedicated andrologist for entire journey',
       'Monthly deep fertility consultations',
@@ -600,7 +600,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
   vita: {
     programKey: 'vita',
     programName: 'VITA',
-    programHighlightColor: '#CB7869',
+    programHighlightColor: '#DB623F',
     tagline: 'Natural Conception Program',
     subtitle: 'Joyzen Clinic’s fertility program for couples trying to conceive, with complete fertility evaluation, personalized conception planning and continuous medical support.',
     defaultPlanId: '6-months',
@@ -644,7 +644,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         ctaButtonText: 'CHOOSE 6 MONTHS',
       },
     ],
-    includedTitle: 'Every VITA membership includes',
+    includedTitle: 'Every VITA membership \nincludes',
     includedFeatures: [
       'Male + female fertility assessment',
       'Hormone & cycle assessment',
@@ -691,7 +691,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
   'eve-genesis': {
     programKey: 'eve-genesis',
     programName: 'EVE + GENESIS',
-    programHighlightColor: '#5A856C',
+    programHighlightColor: '#8F9B6F',
     tagline: 'Couple Conception Program',
     subtitle: 'For couples who want to prepare and conceive naturally with guided support for both partners.',
     defaultPlanId: '6-months',
@@ -735,7 +735,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         ctaButtonText: 'CHOOSE 6 MONTHS',
       },
     ],
-    includedTitle: 'Every EVE + GENESIS membership includes',
+    includedTitle: 'Every EVE + GENESIS membership \nincludes',
     includedFeatures: [
       'FOR HER — Ovulation tracking',
       'FOR HER — Hormone optimization',

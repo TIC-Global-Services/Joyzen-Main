@@ -185,44 +185,44 @@ export default function ProgramMembership({
                 </span>
               )}
               <div className="flex items-baseline">
-                <span className="text-4xl sm:text-5xl lg:text-[54px] font-black text-zinc-900 tracking-tight leading-none">
+                <span className="text-4xl sm:text-5xl lg:text-[70px] font-black text-[#036132] tracking-tight leading-none font-sans">
                   {selectedPlan.dailyPrice}
                 </span>
-                <span className="text-xl sm:text-2xl font-bold text-zinc-900 ml-1">
+                <span className="text-xl sm:text-[70px] font-bold text-zinc-900 ml-1">
                   {selectedPlan.priceUnit || '/Day'}
                 </span>
               </div>
             </div>
-
+              {/* Plan Commitment Summary */}
+            <p className="text-xs sm:text-lg text-[#6E6E6E] tracking-tight font-bold mt-2">
+              {selectedPlan.planSummary}
+            </p>
             {/* Savings Badge & Comparison */}
             {(selectedPlan.savingsBadge || selectedPlan.savingsComparisonText) && (
-              <div className="flex items-center gap-2.5 mt-3 sm:mt-4 flex-wrap">
+              <div className="flex items-center mt-2 sm:mt-2 flex-wrap">
                 {selectedPlan.savingsBadge && (
-                  <span className="inline-flex items-center text-sm font-semibold text-[#036132] bg-[#EAF7EE] border border-[#CDECD5] px-3.5 py-1 rounded-full shadow-xs">
+                  <span className="inline-flex items-center text-xl font-semibold text-[#036132]">
                     {selectedPlan.savingsBadge}
                   </span>
                 )}
                 {selectedPlan.savingsComparisonText && (
-                  <span className="text-sm font-semibold text-zinc-800">
+                  <span className="inline-flex items-center text-xl font-semibold text-[#036132]">
                     {selectedPlan.savingsComparisonText}
                   </span>
                 )}
               </div>
             )}
 
-            {/* Plan Commitment Summary */}
-            <p className="text-xs sm:text-sm text-zinc-500 font-medium mt-3">
-              {selectedPlan.planSummary}
-            </p>
+            
           </div>
 
           {/* Bottom Action Button */}
-          <div className="flex justify-end mt-8 sm:mt-12 relative z-10">
+          <div className="flex justify-start mt-8 sm:mt-12 relative z-10">
             <SpecularButton
               type="button"
               size="md"
               tint="#AEDEE44D"
-              tintOpacity={0.35}
+              tintOpacity={0.60}
               textColor="#000000"
               lineColor="#ffffff"
               baseColor="#AEDEE44D"
@@ -247,7 +247,7 @@ export default function ProgramMembership({
           />
 
           <div className="relative z-10">
-            <h3 className="text-lg sm:text-xl font-bold text-zinc-700 tracking-tight mb-6">
+            <h3 className="text-lg sm:text-[28px] font-bold text-[#6E6E6E] tracking-tight mb-6 whitespace-pre-line">
               {data.includedTitle}
             </h3>
 
@@ -282,73 +282,40 @@ export default function ProgramMembership({
       </div>
 
       {/* Supporting Line */}
-      <p className="text-black text-sm sm:text-2xl font-normal text-center mt-6 mb-8 tracking-tight">
+      <p className="text-black text-sm sm:text-base font-normal text-center mt-6 sm:mt-8 mb-8 sm:mb-10 tracking-tight">
         {data.supportingLine}
       </p>
 
       {/* Care Team Block with Liquid Glass */}
-      <div className="w-full max-w-4xl mx-auto hidden md:block ">
+      <div className="w-full max-w-3xl mx-auto px-2 sm:px-4">
         <LiquidGlass
-          borderRadius={9999}
-          blur={1.8}
+          borderRadius={32}
+          blur={1}
           contrast={1.12}
           brightness={1.05}
           saturation={1.15}
-          shadowIntensity={0.08}
+          shadowIntensity={0.06}
           displacementScale={0.8}
           elasticity={0.4}
           zIndex={10}
-          className="rounded-md md:rounded-full border border-white/80 shadow-[0_15px_35px_rgba(0,0,0,0.04)] w-full"
+          className="w-full rounded-[28px] sm:rounded-[34px] bg-[#EAF7F5]/75 backdrop-blur-2xl border border-white/90 shadow-[0_20px_50px_rgba(0,0,0,0.03),inset_0_1px_2px_rgba(255,255,255,0.95)] overflow-hidden"
         >
-          <div className="px-6 sm:px-8 py-3.5 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
-            <p className="text-xs sm:text-lg text-black font-bold max-w-xl text-center sm:text-left leading-[1.2]">
+          <div className="px-6 py-8 sm:px-12 sm:py-10 flex flex-col items-center justify-center text-center relative z-10">
+            <p className="text-lg sm:text-2xl md:text-[24px] font-bold text-black max-w-xl mx-auto leading-[1.2] tracking-tight mb-6 sm:mb-8 text-center">
               {data.careTeamBlock.text}
             </p>
             <SpecularButton
               type="button"
               size="sm"
-              tint="#AEDEE44D"
-              tintOpacity={0.35}
-              textColor="#000000"
+              tint="#BCE5E8"
+              tintOpacity={0.25}
+              textColor="#1E2822"
               lineColor="#ffffff"
               baseColor="#AEDEE44D"
-              radius={18}
+              radius={24}
+              
               onClick={onCareTeamClick}
-              className="font-bold text-[11px] sm:text-sm uppercase tracking-tight px-5 py-2 shadow-sm whitespace-nowrap"
-            >
-              {data.careTeamBlock.buttonText}
-            </SpecularButton>
-          </div>
-        </LiquidGlass>
-      </div>
-      <div className="w-full max-w-4xl mx-auto md:hidden">
-        <LiquidGlass
-          borderRadius={8}
-          blur={1.8}
-          contrast={1.12}
-          brightness={1.05}
-          saturation={1.15}
-          shadowIntensity={0.08}
-          displacementScale={0.8}
-          elasticity={0.4}
-          zIndex={10}
-          className="rounded-md md:rounded-full border border-white/80 shadow-[0_15px_35px_rgba(0,0,0,0.04)] w-full"
-        >
-          <div className="px-6 sm:px-8 py-3.5 sm:py-4 flex flex-col sm:flex-row items-center justify-between gap-4 w-full">
-            <p className="text-xs sm:text-lg text-black font-bold max-w-xl text-center sm:text-left leading-[1.2]">
-              {data.careTeamBlock.text}
-            </p>
-            <SpecularButton
-              type="button"
-              size="sm"
-              tint="#AEDEE44D"
-              tintOpacity={0.35}
-              textColor="#000000"
-              lineColor="#ffffff"
-              baseColor="#AEDEE44D"
-              radius={18}
-              onClick={onCareTeamClick}
-              className="font-bold text-[11px] sm:text-sm uppercase tracking-tight px-5 py-2 shadow-sm whitespace-nowrap"
+              className="font-medium text-xs sm:text-sm uppercase tracking-tight px-7 py-2.5 shadow-sm whitespace-nowrap"
             >
               {data.careTeamBlock.buttonText}
             </SpecularButton>
@@ -357,12 +324,9 @@ export default function ProgramMembership({
       </div>
 
       {/* After Enrollment & Closing Statement */}
-      <div className="w-full flex flex-col items-center justify-center mt-8 gap-1.5 text-center px-4">
-        <p className="text-xs sm:text-2xl text-zinc-600 font-normal">
-          {data.afterEnrollmentNotice}
-        </p>
-        <p className="text-sm sm:text-2xl font-bold text-zinc-900 max-w-3xl leading-[1.2]">
-          {data.closingStatement}
+      <div className="w-full max-w-xl sm:max-w-2xl mx-auto flex flex-col items-center justify-center mt-8 sm:mt-4 text-center px-4">
+        <p className="text-xs sm:text-base text-black font-normal leading-[1.4] text-center whitespace-pre-line">
+          {data.afterEnrollmentNotice} {data.closingStatement}
         </p>
       </div>
     </section>

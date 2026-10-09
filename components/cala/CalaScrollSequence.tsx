@@ -15,9 +15,7 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// ----------------------------------------------------------------------
-// DATA
-// ----------------------------------------------------------------------
+
 interface PillData {
   id: string; label: string; baseX: number; baseY: number; mobileX?: number; mobileY?: number; angle: number; driftX: number[]; driftY: number[]; rotateRange: number[]; duration: number;
 }
@@ -29,7 +27,21 @@ const PILLS: PillData[] = [
   { id: 'ovulation', label: 'Ovulation Tracking', baseX: 0, baseY: 255, mobileX: 0, mobileY: -128, angle: 90, driftX: [0, -5, 6, -2, 0], driftY: [0, -9, 7, -3, 0], rotateRange: [0, 1.2, -1.5, 0.8, 0], duration: 5.4 },
   { id: 'care-team', label: 'Real Care Team', baseX: 225, baseY: 190, mobileX: 105, mobileY: 78, angle: 40, driftX: [0, -7, 8, -3, 0], driftY: [0, -7, 8, -2, 0], rotateRange: [0, 2, -2, 1, 0], duration: 5.0 },
   { id: 'cycle', label: 'Cycle Health', baseX: 490, baseY: 15, mobileX: 145, mobileY: 0, angle: 0, driftX: [0, -9, 7, -3, 0], driftY: [0, 6, -7, 2, 0], rotateRange: [0, -2, 1.5, -0.8, 0], duration: 5.5 },
-  { id: 'hormone', label: 'Hormone Health', baseX: 265, baseY: -185, mobileX: 0, mobileY: 130, angle: -40, driftX: [0, -7, 5, -2, 0], driftY: [0, 7, -6, 2, 0], rotateRange: [0, 1.8, -1.2, 0.6, 0], duration: 5.1 },
+];
+
+interface OrbitPillData {
+  id: string;
+  label: string;
+  angle: number;
+}
+const ORBIT_PILLS: OrbitPillData[] = [
+  { id: 'pcos', label: 'PCOS Care', angle: -90 },
+  { id: 'care-team', label: 'Real Care Team', angle: -38.6 },
+  { id: 'cycle', label: 'Cycle Health', angle: 12.8 },
+  { id: 'ovulation', label: 'Ovulation Tracking', angle: 64.3 },
+  { id: 'pms', label: 'PMS Support', angle: 115.7 },
+  { id: 'ongoing', label: 'Ongoing Care', angle: 167.1 },
+  { id: 'fertility', label: 'Fertility Readiness', angle: 218.6 },
 ];
 
 interface ChatItem {
@@ -52,28 +64,28 @@ interface FaqItem {
 const FAQ_SEQUENCE: FaqItem[] = [
   {
     id: 1,
-    question: '1. Why are my periods so irregular?',
-    answer: 'Your cycle, symptoms and progress can be followed over time, with ongoing guidance from your doctor and care team.',
+    question: 'Who is CALA intended for?',
+    answer: 'CALA is intended for women experiencing PCOS, hormonal imbalance, irregular periods, severe PMS, or longer-term cycle concerns.',
   },
   {
     id: 2,
-    question: '2. How do I know if my PCOS is improving?',
-    answer: 'We track your hormonal markers, symptom patterns and ovulation cues over time so your personalized care plan continuously adapts to your progress.',
+    question: 'What medical support does CALA include?',
+    answer: 'It includes the same gynecologist for long-term care, monthly detailed consultations, weekly care-team check-ins, and daily private chat support.',
   },
   {
     id: 3,
-    question: '3. Why do my symptoms keep changing?',
-    answer: 'Hormonal fluctuations across follicular and luteal phases naturally shift symptoms. CALA maps your unique patterns to provide clear, targeted insights.',
+    question: 'How can I track my progress?',
+    answer: 'CALA includes a hormone-tracking dashboard, cycle and ovulation tracking, PCOS improvement tracking, and fertility-readiness tracking.',
   },
   {
     id: 4,
-    question: '4. Can I get help between consultations?',
-    answer: 'Yes! Your dedicated care team is available daily via private chat for guidance, symptom logging, questions, and ongoing emotional support.',
+    question: 'Does CALA include lifestyle and emotional support?',
+    answer: 'Yes. It includes diet and workout plans, lifestyle coaching, a dedicated care companion, stress and emotional-wellbeing tracking, and monthly emotional-health reviews.',
   },
   {
     id: 5,
-    question: '5. What can I do to support my hormones every day?',
-    answer: 'CALA provides daily personalized nutrition protocols, cycle-synced workouts, restorative sleep guidelines, and lifestyle coaching built around your biology.',
+    question: 'How long is CALA intended to continue?',
+    answer: 'The source says most members stay for 3–6 months for ongoing hormone and cycle support. Individual needs may vary.',
   },
 ];
 
@@ -306,11 +318,23 @@ export default function CalaScrollSequence() {
   const [isMobile, setIsMobile] = useState(false);
   const [scaleFactor, setScaleFactor] = useState(1);
   const [isMounted, setIsMounted] = useState(false);
-  const [shockwaves, setShockwaves] = useState<number[]>([]);
-  const [activeShockId, setActiveShockId] = useState<number | null>(null);
   const [clickedPill, setClickedPill] = useState<string | null>(null);
   const [clickedChatId, setClickedChatId] = useState<string | null>(null);
   const [activeFaqId, setActiveFaqId] = useState<number>(1);
+  const [isPillHovered, setIsPillHovered] = useState(false);
+
+  const handlePillClick = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({
+        top: window.innerHeight * 1.8,
+        behavior: 'smooth',
+      });
+    }
+  }, []);
+
+  const orbitRadius = isMobile ? 135 : (scaleFactor < 0.85 ? 210 : 270);
+  const restingOrbSize = isMobile ? 140 : (scaleFactor < 0.85 ? 270 : 360);
+  const restingScale = restingOrbSize / (orbitRadius * 2);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -332,17 +356,50 @@ export default function CalaScrollSequence() {
     return () => window.removeEventListener('resize', updateScale);
   }, []);
 
+
+
+  // Initial entrance animation: Hero CALA text expands outward framing the orb and shrinks back to normal
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (typeof window !== 'undefined' && window.scrollY > window.innerHeight * 1.5) {
-        return;
-      }
-      const newId = Date.now();
-      setShockwaves((prev) => [...prev.slice(-2), newId]);
-      setActiveShockId(newId);
-      setTimeout(() => setActiveShockId(null), 900);
-    }, 4800);
-    return () => clearInterval(interval);
+    if (typeof window === 'undefined') return;
+    const isMobileDev = window.innerWidth < 1024;
+    const isTabletDev = window.innerWidth >= 768 && window.innerWidth < 1024;
+    const expandedSpacing = isMobileDev ? '0.30em' : isTabletDev ? '0.40em' : '0.50em';
+    const normalSpacing = '-0.035em';
+
+    if (window.scrollY > 150) {
+      gsap.set('.hero-cala-text', { letterSpacing: normalSpacing, paddingLeft: '0em' });
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      const heroEntranceTl = gsap.timeline({ delay: 0.25 });
+      heroEntranceTl
+        .fromTo(
+          '.hero-cala-text',
+          {
+            letterSpacing: normalSpacing,
+            paddingLeft: '0em',
+          },
+          {
+            letterSpacing: expandedSpacing,
+            paddingLeft: expandedSpacing,
+            duration: 1.1,
+            ease: 'power2.out',
+          }
+        )
+        .to(
+          '.hero-cala-text',
+          {
+            letterSpacing: normalSpacing,
+            paddingLeft: '0em',
+            duration: 1.15,
+            ease: 'power2.inOut',
+          },
+          '+=0.25'
+        );
+    }, containerRef);
+
+    return () => ctx.revert();
   }, []);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
@@ -372,6 +429,11 @@ export default function CalaScrollSequence() {
       gsap.set('.benefit-pill-pcos', { y: -125 });
     }
 
+    gsap.set('.hero-orbit-stroke', { scale: restingScale });
+    gsap.set('.hero-orbit-pills', { autoAlpha: 0, scale: restingScale });
+    gsap.set('.hero-orbit-scroll-rotator', { rotation: 0 });
+    gsap.set('.hero-orbit-pill-counter', { rotation: 0 });
+
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: containerRef.current,
@@ -382,16 +444,51 @@ export default function CalaScrollSequence() {
       }
     });
 
-    // Phase 1: 0 to 1.0s - Hero stays visible
-    tl.to({}, { duration: 1.0 });
+    // Phase 1: Hero Orbital Pills expand & rotate on scroll
+    tl.to({}, { duration: 0.3 });
 
-    // Phase 2: 1.0 to 2.5s - Hero fades out sequentially
-    tl.to('.hero-pills', { autoAlpha: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit")
+    // Orbital stroke expands outward to frame the pills
+    tl.fromTo('.hero-orbit-stroke',
+      { scale: restingScale },
+      { scale: 0.90, duration: 1.2, ease: 'power2.out' },
+      0.3
+    );
+
+    // Orbital pills expand outward and fade in
+    tl.fromTo('.hero-orbit-pills',
+      { autoAlpha: 0, scale: restingScale },
+      { autoAlpha: 1, scale: 0.90, duration: 1.2, ease: 'power2.out' },
+      0.3
+    );
+
+    // Scroll drives rotation of orbital pills around the orb
+    tl.fromTo('.hero-orbit-scroll-rotator',
+      { rotation: 0 },
+      { rotation: 120, duration: 1.8, ease: 'power1.out' },
+      0.3
+    );
+
+    // Counter-rotate each pill so the text remains perfectly upright
+    tl.fromTo('.hero-orbit-pill-counter',
+      { rotation: 0 },
+      { rotation: -120, duration: 1.8, ease: 'power1.out' },
+      0.3
+    );
+
+    // Settled dwell so the user can easily read and interact with the pills before next scroll
+    tl.to({}, { duration: 0.5 }, 2.1);
+
+    // Phase 2: Hero exit - "then next scroll it should disappear like now"
+    tl.addLabel("hero-exit", 2.6);
+    tl.to(['.hero-orbit-pills', '.hero-orbit-stroke'],
+      { autoAlpha: 0, scale: 0.85, duration: 0.5, ease: 'power1.inOut' },
+      "hero-exit"
+    )
       .to(['.hero-cala-text', '.hero-orb-container'], { y: -60, duration: 1.5, ease: 'power1.inOut' }, "hero-exit")
       .to('.hero-cala-text', { autoAlpha: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=0.5")
       .to('.hero-orb-container', { autoAlpha: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=1.0");
 
-    // Phase 3: 2.5 to 3.5s - TalkWithCala fades in from bottom
+    // Phase 3: TalkWithCala fades in from bottom
     tl.fromTo('.talk-with-cala', { autoAlpha: 0, y: 80, scale: 1 }, { autoAlpha: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' }, "phase3");
 
     // Phase 4: 3.0 to 5.0s - CALA CARE TEAM text moving from right
@@ -461,7 +558,7 @@ export default function CalaScrollSequence() {
     const phase12Top = isTabletDev ? `${scrollControls.tabPhase12Top ?? 30}%` : isMobileDev ? '42%' : `${scrollControls.phase12Top}%`;
     const finalOrbTop = isTabletDev ? `${scrollControls.tabFinalOrbTop ?? 50}%` : `${scrollControls.finalOrbTop}%`;
 
-    tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .chat-message, .typing-indicator', { autoAlpha: 0, duration: 0.2 }, "phase8");
+    tl.to('.mobile-ui, .outer-pills-container, .care-team-text, .hero-cala-text, .hero-orbit-pills, .hero-orbit-stroke, .chat-message, .typing-indicator', { autoAlpha: 0, duration: 0.2 }, "phase8");
     tl.to('.mobile-3d-orb', { scale: zoomScale, top: '50%', duration: 1.5, ease: 'power2.inOut' }, "phase8");
 
     // Phase 9: 9.5 to 10.5s - Final full-screen content fades in
@@ -625,6 +722,7 @@ export default function CalaScrollSequence() {
   }, {
     scope: containerRef,
     dependencies: [
+      restingScale,
       scrollControls.zoomPhaseScale,
       scrollControls.mobileZoomScale,
       scrollControls.phase11Scale,
@@ -704,28 +802,14 @@ export default function CalaScrollSequence() {
               transform: `translate(${scrollControls.heroOrbOffsetX}px, ${scrollControls.heroOrbOffsetY}px) scale(${scrollControls.heroOrbScale})`,
             }}
           >
-            {shockwaves.map((id) => (
-              <motion.div
-                key={`shock-${id}`}
-                initial={{ scale: 0.8, opacity: 0.85, borderWidth: '3px' }}
-                animate={{ scale: 2.8, opacity: 0, borderWidth: '1px' }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.6, ease: [0.16, 1, 0.3, 1] }}
-                className="absolute inset-0 rounded-full border border-cyan-400 pointer-events-none"
-              />
-            ))}
+            {/* The Stroke Liquid Glass - Expands outward on scroll to frame the pills */}
             <div
-              className="
-    absolute
-    flex
-    items-center
-    justify-center
-    pointer-events-none
-    w-[clamp(120px,32vw,145px)]
-    h-[clamp(120px,32vw,145px)]
-    md:w-[clamp(130px,35vw,360px)]
-    md:h-[clamp(130px,35vw,360px)]
-  "
+              className="hero-orbit-stroke absolute z-10 flex items-center justify-center will-change-transform pointer-events-none"
+              style={{
+                width: `${orbitRadius * 2}px`,
+                height: `${orbitRadius * 2}px`,
+                transform: `scale(${restingScale})`,
+              }}
             >
               <AdaptiveGlass
                 isMobile={isMobile}
@@ -738,67 +822,142 @@ export default function CalaScrollSequence() {
                 displacementScale={scrollControls.glassDisplacement}
                 elasticity={scrollControls.glassElasticity}
                 zIndex={10}
-                className="
-      w-full
-      h-full
-      rounded-full
-      p-2.5
-      sm:p-3
-      pointer-events-auto
-      border
-      border-white/60
-    
-    "
+                className="w-full h-full rounded-full border border-white/60 pointer-events-none"
               >
-                <div
-                  className="
-        relative
-        w-full
-        h-full
-        rounded-full
-        overflow-hidden
-        flex
-        items-center
-        justify-center
-      "
-                >
-                  <CalaThreeCircle
-                    mouseX={mouseX}
-                    mouseY={mouseY}
-                    isShocked={activeShockId !== null}
-                    className="w-full h-full"
-                  />
-                </div>
+                <div className="w-full h-full rounded-full" />
               </AdaptiveGlass>
             </div>
-          </div>
 
-          <div className="hero-pills absolute inset-0 flex items-center justify-center z-20">
-            {PILLS.map((pill) => {
-              const targetX = isMobile && pill.mobileX !== undefined ? pill.mobileX : pill.baseX;
-              const targetY = isMobile && pill.mobileY !== undefined ? pill.mobileY : pill.baseY;
-              const rad = Math.atan2(targetY, targetX);
-              return (
-                <CollidingPill
-                  key={pill.id}
-                  pill={pill}
-                  targetX={targetX}
-                  targetY={targetY}
-                  scaleFactor={scaleFactor}
-                  isMounted={isMounted}
-                  isShocked={activeShockId !== null}
-                  shockJoltX={Math.cos(rad) * 14 * scaleFactor}
-                  shockJoltY={Math.sin(rad) * 14 * scaleFactor}
-                  clickedPill={clickedPill}
-                  setClickedPill={setClickedPill}
+            {/* Orbital Pills Container - Expands & rotates on scroll, fades on next scroll */}
+            <div
+              className="hero-orbit-pills absolute z-30 flex items-center justify-center will-change-transform pointer-events-none"
+              style={{
+                width: `${orbitRadius * 2}px`,
+                height: `${orbitRadius * 2}px`,
+                transform: `scale(${restingScale})`,
+                opacity: 0,
+              }}
+            >
+              {/* GSAP Scroll-driven Rotator */}
+              <div className="hero-orbit-scroll-rotator absolute inset-0 flex items-center justify-center will-change-transform">
+                {/* Continuous Ambient Orbit */}
+                <div
+                  className="absolute inset-0 flex items-center justify-center will-change-transform"
+                  style={{
+                    animation: 'circularOrbit 26s linear infinite',
+                    animationPlayState: isPillHovered ? 'paused' : 'running',
+                  }}
+                >
+                  {ORBIT_PILLS.map((p) => {
+                    const rad = (p.angle * Math.PI) / 180;
+                    const x = Math.round(orbitRadius * Math.cos(rad));
+                    const y = Math.round(orbitRadius * Math.sin(rad));
+
+                    return (
+                      <div
+                        key={p.id}
+                        className="absolute pointer-events-auto"
+                        style={{
+                          left: '50%',
+                          top: '50%',
+                          transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
+                        }}
+                      >
+                        {/* Continuous Ambient Counter-Orbit */}
+                        <div
+                          style={{
+                            animation: 'circularCounterOrbit 26s linear infinite',
+                            animationPlayState: isPillHovered ? 'paused' : 'running',
+                          }}
+                        >
+                          {/* GSAP Scroll-driven Counter-Rotator (Keeps pill level and upright) */}
+                          <div className="hero-orbit-pill-counter will-change-transform">
+                            <button
+                              type="button"
+                              onMouseEnter={() => setIsPillHovered(true)}
+                              onMouseLeave={() => setIsPillHovered(false)}
+                              onClick={handlePillClick}
+                              className="group/pill block cursor-pointer select-none transition-transform duration-200 hover:scale-105 active:scale-95 touch-none"
+                            >
+                              <AdaptiveGlass
+                                isMobile={isMobile}
+                                borderRadius={9999}
+                                blur={1.2}
+                                contrast={1.08}
+                                brightness={1.08}
+                                saturation={1.4}
+                                shadowIntensity={0.03}
+                                displacementScale={0.8}
+                                elasticity={0.4}
+                                zIndex={20}
+                                className="transition-all duration-300 select-none border border-white/70 hover:border-white/95 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_4px_16px_rgba(0,0,0,0.06)] hover:shadow-[0_8px_24px_rgba(0,128,128,0.22)] bg-[#FFFFFF0A]"
+                              >
+                                <div
+                                  className="relative flex items-center justify-center gap-2 sm:gap-2.5 rounded-full"
+                                  style={{
+                                    /* Pill Padding */
+                                    padding: isMobile
+                                      ? '5px 10px 5px 12px'
+                                      : `${Math.max(6, 9 * scaleFactor)}px ${Math.max(10, 16 * scaleFactor)}px ${Math.max(6, 9 * scaleFactor)}px ${Math.max(12, 20 * scaleFactor)}px`,
+                                  }}
+                                >
+                                  <span
+                                    className="font-semibold text-[#1E2822] tracking-tight whitespace-nowrap leading-none transition-colors duration-200"
+                                    style={{
+                                      fontSize: isMobile ? '9.5px' : `clamp(16px, ${14 * scaleFactor}px, 16px)`,
+                                    }}
+                                  >
+                                    {p.label}
+                                  </span>
+                                  {/* Brand Teal Dot */}
+                                  <span
+                                    className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-[#008080] shrink-0 transition-transform duration-200 group-hover/pill:scale-110"
+                                    aria-hidden="true"
+                                  />
+                                </div>
+                              </AdaptiveGlass>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Central 3D Canvas Sphere (Stays fixed in the center while stroke liquid glass expands around it on scroll) */}
+            <div
+              className="relative z-20 flex items-center justify-center rounded-full pointer-events-auto"
+              style={{
+                width: `${restingOrbSize - (isMobile ? 20 : 24)}px`,
+                height: `${restingOrbSize - (isMobile ? 20 : 24)}px`,
+              }}
+            >
+              <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
+                <CalaThreeCircle
                   mouseX={mouseX}
                   mouseY={mouseY}
-                  isMobile={isMobile}
+                  isShocked={false}
+                  className="w-full h-full"
                 />
-              );
-            })}
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Orbit animation keyframes */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+          @keyframes circularOrbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+          }
+          @keyframes circularCounterOrbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+          }
+        ` }} />
 
         {/* --- PHASE 3/4: CALA CARE TEAM TEXT --- */}
         <div className="care-team-text absolute inset-x-0 bottom-4 sm:bottom-8 lg:bottom-12 flex items-center justify-center pointer-events-none select-none z-10 opacity-0">
@@ -951,7 +1110,7 @@ export default function CalaScrollSequence() {
             {/* 2-Column Grid of 5 Cards */}
             <div className="w-full grid grid-cols-2  gap-2 sm:gap-2.5">
               {/* Card 1 - Medical Care */}
-              <div className="col-span-1 rounded-[18px] border border-white/20 bg-white/[0.08] backdrop-blur-md p-2.5 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
+              <div className="col-span-1 rounded-[18px] border border-white/20 bg-black/20 backdrop-blur-md p-2.5 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
                 <h4 className="text-white text-[12px] sm:text-[13px] font-bold mb-1.5 leading-snug">Medical Care</h4>
                 <ul className="space-y-1">
                   {['Same gynecologist', 'Monthly detailed consultations', 'Weekly care-team check-ins', 'Daily private chat support'].map((item) => (
@@ -964,7 +1123,7 @@ export default function CalaScrollSequence() {
               </div>
 
               {/* Card 2 - Hormone & Cycle Restoration */}
-              <div className="col-span-1 rounded-[18px] border border-white/20 bg-white/[0.08] backdrop-blur-md p-3 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
+              <div className="col-span-1 rounded-[18px] border border-white/20 bg-black/20 backdrop-blur-md p-3 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
                 <h4 className="text-white text-[12px] sm:text-lg font-bold mb-1.5 leading-tight">
                   Hormone & Cycle<br />Restoration
                 </h4>
@@ -979,7 +1138,7 @@ export default function CalaScrollSequence() {
               </div>
 
               {/* Card 3 - Intimate Health Care */}
-              <div className="col-span-1 rounded-[18px] border border-white/20 bg-white/[0.08] backdrop-blur-md p-2.5 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
+              <div className="col-span-1 rounded-[18px] border border-white/20 bg-black/20 backdrop-blur-md p-2.5 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
                 <h4 className="text-white text-[12px] sm:text-lg font-bold mb-1.5 leading-snug">Intimate Health Care</h4>
                 <ul className="space-y-1">
                   {['Vaginal & uterine health guidance', 'Period pain & PMS support', 'Infection prevention guidance', 'Pelvic health awareness'].map((item) => (
@@ -992,7 +1151,7 @@ export default function CalaScrollSequence() {
               </div>
 
               {/* Card 4 - Emotional Support */}
-              <div className="col-span-1 rounded-[18px] border border-white/20 bg-white/[0.08] backdrop-blur-md p-2.5 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
+              <div className="col-span-1 rounded-[18px] border border-white/20 bg-black/20 backdrop-blur-md p-2.5 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
                 <h4 className="text-white text-[12px] sm:text-[13px] font-bold mb-1.5 leading-snug">Emotional Support</h4>
                 <ul className="space-y-1">
                   {['Dedicated care companion', 'Stress & wellbeing tracking', 'Monthly emotional health review'].map((item) => (
@@ -1005,7 +1164,7 @@ export default function CalaScrollSequence() {
               </div>
 
               {/* Card 5 - Lifestyle Support (Full Width Across Both Columns) */}
-              <div className="col-span-2 rounded-[18px] border border-white/20 bg-white/[0.08] backdrop-blur-md p-2.5 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
+              <div className="col-span-2 rounded-[18px] border border-white/20 bg-black/20 backdrop-blur-md p-2.5 sm:p-3 shadow-[inset_0_1px_1px_rgba(255,255,255,0.25),0_8px_20px_rgba(0,0,0,0.12)] text-left flex flex-col">
                 <h4 className="text-white text-[12px] sm:text-[13px] font-bold mb-1.5 leading-snug">Lifestyle Support</h4>
                 <ul className="space-y-1">
                   {['Personalized diet', 'Home / gym workout plan', 'Monthly plan adjustments', 'Lifestyle habit coaching'].map((item) => (
@@ -1042,7 +1201,7 @@ export default function CalaScrollSequence() {
 
               {/* Card 1 - Medical Care */}
               <div className="col-span-2">
-                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="bg-black/20 rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
                     <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Medical Care</h4>
                     <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
@@ -1069,7 +1228,7 @@ export default function CalaScrollSequence() {
 
               {/* Card 2 - Hormone & Cycle Restoration */}
               <div className="col-span-2">
-                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl bg-black/20 lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
                     <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Hormone & Cycle Restoration</h4>
                     <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
@@ -1100,7 +1259,7 @@ export default function CalaScrollSequence() {
 
               {/* Card 3 - Intimate Health Care */}
               <div className="col-span-2">
-                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl bg-black/20 lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
                     <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Intimate Health Care</h4>
                     <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
@@ -1127,7 +1286,7 @@ export default function CalaScrollSequence() {
 
               {/* Card 4 - Emotional Support (centered on desktop row 2) */}
               <div className="col-span-2 col-start-2">
-                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl bg-black/20 lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
                     <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Emotional Support</h4>
                     <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
@@ -1150,7 +1309,7 @@ export default function CalaScrollSequence() {
 
               {/* Card 5 - Lifestyle Support (auto-placed on desktop) */}
               <div className="col-span-2">
-                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
+                <AdaptiveGlass borderRadius={24} blur={1.8} contrast={1.12} brightness={1.05} saturation={1.15} shadowIntensity={0.1} displacementScale={0.8} elasticity={0.4} zIndex={10} className="bg-black/20 rounded-2xl lg:rounded-3xl border border-white/20 transition-all duration-300 hover:border-white/40 shadow-2xl h-full w-full group">
                   <div className="p-3.5 md:p-3.5 lg:p-4 xl:p-5 [@media(max-height:800px)]:p-3 text-left flex flex-col h-full relative z-10">
                     <h4 className="text-white text-xs md:text-sm lg:text-base xl:text-lg font-bold mb-1.5 md:mb-2 lg:mb-2.5 drop-shadow-sm leading-tight">Lifestyle Support</h4>
                     <ul className="space-y-1 md:space-y-1 lg:space-y-1.5 xl:space-y-2 [@media(max-height:800px)]:space-y-0.5">
@@ -1283,9 +1442,9 @@ export default function CalaScrollSequence() {
                       zIndex={10}
                       className={`w-full rounded-full transition-all duration-300 border ${isActive ? 'border-white/95' : 'border-white/60 hover:border-white/90'}`}
                     >
-                      <div className="relative flex items-center justify-between rounded-full px-4 py-2.5 sm:py-3.5">
+                      <div className="relative flex items-center justify-start rounded-full px-4 py-2.5 sm:py-3.5 text-left w-full">
                         <span
-                          className={`text-[10px] sm:text-[13px] md:text-[13.5px] lg:text-lg tracking-tight leading-[1.2] transition-colors duration-200 text-left ${isActive ? 'font-bold text-[#E5855E]' : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'}`}
+                          className={`text-[10px] sm:text-[13px] md:text-[13.5px] lg:text-lg tracking-tight leading-[1.2] transition-colors duration-200 text-left block w-full ${isActive ? 'font-bold text-[#E5855E]' : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'}`}
                         >
                           {faq.question}
                         </span>
@@ -1382,9 +1541,9 @@ export default function CalaScrollSequence() {
                         : 'border-white/60 hover:border-white/90'
                         }`}
                     >
-                      <div className="relative flex items-center justify-between rounded-full px-4 py-2.5">
+                      <div className="relative flex items-center justify-start rounded-full px-4 py-2.5 text-left w-full">
                         <span
-                          className={`text-xs md:text-sm tracking-tight leading-[1.2] transition-colors duration-200 text-left ${isActive
+                          className={`text-xs md:text-sm tracking-tight leading-[1.2] transition-colors duration-200 text-left block w-full ${isActive
                             ? 'font-bold text-[#E5855E]'
                             : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
                             }`}
@@ -1518,9 +1677,9 @@ export default function CalaScrollSequence() {
                         : 'border-white/70 hover:border-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.03)]'
                         }`}
                     >
-                      <div className="px-5 py-3 text-left">
+                      <div className="px-5 py-3 text-left w-full">
                         <span
-                          className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 ${isActive
+                          className={`text-[12px] leading-snug line-clamp-2 transition-colors duration-200 text-left block w-full ${isActive
                             ? 'font-bold text-[#E5855E]'
                             : 'font-semibold text-[#1E2822]/85 group-hover:text-[#1E2822]'
                             }`}

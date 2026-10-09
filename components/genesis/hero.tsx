@@ -382,7 +382,7 @@ export default function CalaHero() {
         {/* Giant "CALA" Typography (Positioned across the center) */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none z-0">
           <h1
-            className="text-[#916CAD] font-black tracking-[-0.035em] uppercase text-center flex items-center justify-center leading-none"
+            className="text-[#7D7CCD] font-black tracking-[-0.035em] uppercase text-center flex items-center justify-center leading-none"
             style={{
               fontSize: 'clamp(60px, 18vw, 240px)',
               letterSpacing: '-0.02em',
