@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LiquidGlass } from '@liquidglass/react';
 import SpecularButton from '@/reuseable/specularButton';
 import type { MembershipProgramData, MembershipPlanTier } from '@/reuseable/programMembershipData';
@@ -37,6 +37,16 @@ export default function ProgramMembership({
   // Default to the designated plan tier (usually '6-months') or the first plan
   const defaultTierId = data.defaultPlanId || data.plans[data.plans.length - 1]?.id || data.plans[0]?.id;
   const [selectedPlanId, setSelectedPlanId] = useState<string>(defaultTierId);
+  const [isFeaturesExpanded, setIsFeaturesExpanded] = useState<boolean>(false);
+
+  useEffect(() => {
+    setIsFeaturesExpanded(false);
+  }, [data.programKey]);
+
+  const hasMoreFeatures = data.includedFeatures.length > 10;
+  const displayedFeatures = hasMoreFeatures && !isFeaturesExpanded
+    ? data.includedFeatures.slice(0, 10)
+    : data.includedFeatures;
 
   const selectedPlan =
     data.plans.find((p) => p.id === selectedPlanId) || data.plans[0];
@@ -253,7 +263,7 @@ export default function ProgramMembership({
 
             {/* 2-Column Checklist */}
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3.5">
-              {data.includedFeatures.map((feature, idx) => (
+              {displayedFeatures.map((feature, idx) => (
                 <li
                   key={idx}
                   className="flex items-center gap-2.5 text-xs sm:text-[13px] font-medium text-zinc-700 leading-snug"
@@ -277,6 +287,36 @@ export default function ProgramMembership({
                 </li>
               ))}
             </ul>
+
+            {hasMoreFeatures && (
+              <div className="mt-5 pt-1 flex justify-start">
+                <button
+                  type="button"
+                  onClick={() => setIsFeaturesExpanded((prev) => !prev)}
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-[13px] font-semibold text-zinc-800 hover:text-black transition-colors duration-200 cursor-pointer group"
+                >
+                  <span className="underline underline-offset-4 decoration-zinc-300 group-hover:decoration-black transition-colors">
+                    {isFeaturesExpanded ? 'Read less' : 'Read more'}
+                  </span>
+                  <svg
+                    className={`w-3.5 h-3.5 text-zinc-500 group-hover:text-black transition-transform duration-200 ${
+                      isFeaturesExpanded ? 'rotate-180' : ''
+                    }`}
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M3.5 6L8 10.5L12.5 6"
+                      stroke="currentColor"
+                      strokeWidth="1.75"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -407,7 +407,7 @@ export default function Hero() {
               </div>
 
               {/* Hotspot Text */}
-              <span className="block text-xs sm:text-sm md:text-base lg:text-lg font-bold tracking-tight text-[#EB7847] leading-snug whitespace-pre transition-transform duration-200 group-hover:scale-[1.02]">
+              <span className="block text-xs sm:text-sm md:text-base font-bold tracking-tight text-[#EB7847] leading-snug whitespace-pre transition-transform duration-200 group-hover:scale-[1.02]">
                 {hotspot.text}
               </span>
             </div>
