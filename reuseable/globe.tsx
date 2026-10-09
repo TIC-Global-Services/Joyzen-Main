@@ -5,6 +5,11 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, Html, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
+// Preload earth textures for immediate rendering without asset delays
+if (typeof window !== 'undefined') {
+  useTexture.preload(['/earth-texture-v4.png', '/earth-bump.png']);
+}
+
 // ============================================================================
 // Geographic Data & Types
 // ============================================================================
@@ -95,8 +100,8 @@ function createJumpingArcCurve(
   const mid = new THREE.Vector3().addVectors(startVec, endVec).multiplyScalar(0.5);
   const mNorm = mid.clone().normalize();
 
-  // Apex height: leaps high into space above the sphere surface without clipping
-  const h = radius * (1 + Math.sin(theta / 2) * 0.52 + 0.18);
+  // Apex height: leaps smoothly above the sphere surface without clipping viewport
+  const h = radius * (1 + Math.sin(theta / 2) * 0.30 + 0.12);
   const apex = mNorm.clone().multiplyScalar(h);
 
   const p1 = startVec.clone().lerp(apex, 0.55).normalize().multiplyScalar(radius + (h - radius) * 0.85);
@@ -289,7 +294,7 @@ function NodeMarker({
       <group position={[0, 0, 0.06]}>
         <Html
           center
-          distanceFactor={11}
+          distanceFactor={8.8}
           style={{
             pointerEvents: 'none',
             display: isFacingCamera ? 'block' : 'none',
@@ -354,14 +359,6 @@ function RotatingGlobe({ radius }: { radius: number }) {
     });
   }, [originPos, radius]);
 
-  // Initial tilt and orientation with India nicely framed in front
-  useEffect(() => {
-    if (globeGroupRef.current) {
-      globeGroupRef.current.rotation.x = 0.18;
-      globeGroupRef.current.rotation.y = -Math.PI / 2 - ((ORIGIN_INDIA.focusLng ?? 77.2) * Math.PI) / 180;
-    }
-  }, []);
-
   // Smooth continuous rotation so all destination countries glide gracefully into view
   useFrame((_, delta) => {
     if (!globeGroupRef.current) return;
@@ -369,7 +366,10 @@ function RotatingGlobe({ radius }: { radius: number }) {
   });
 
   return (
-    <group ref={globeGroupRef}>
+    <group
+      ref={globeGroupRef}
+      rotation={[0.18, -Math.PI / 2 - ((ORIGIN_INDIA.focusLng ?? 77.2) * Math.PI) / 180, 0]}
+    >
       {/* Clean Earth Surface Mesh */}
       <mesh geometry={globeGeometry}>
         <meshStandardMaterial
@@ -410,19 +410,46 @@ function RotatingGlobe({ radius }: { radius: number }) {
 }
 
 // ============================================================================
+// Camera Controller Component
+// ============================================================================
+
+function CameraController({
+  radius,
+  distanceMultiplier = 3.15,
+}: {
+  radius: number;
+  distanceMultiplier?: number;
+}) {
+  const { camera, size } = useThree();
+
+  useEffect(() => {
+    const aspect = size.width / Math.max(1, size.height);
+    // Adjust distance for landscape vs portrait mobile to prevent any edge clipping
+    const distanceFactor = aspect < 1
+      ? radius * Math.min(distanceMultiplier * 1.25, distanceMultiplier / Math.max(0.68, aspect))
+      : radius * distanceMultiplier;
+
+    camera.position.set(0, 0, distanceFactor);
+    camera.lookAt(0, 0, 0);
+  }, [camera, size.width, size.height, radius, distanceMultiplier]);
+
+  return null;
+}
+
+// ============================================================================
 // Scene Component
 // ============================================================================
 
-function Scene({ radius }: { radius: number }) {
-  const { camera } = useThree();
-
-  useEffect(() => {
-    camera.position.set(0, 0, radius * 3.6);
-    camera.lookAt(0, 0, 0);
-  }, [camera, radius]);
-
+function Scene({
+  radius,
+  distanceMultiplier,
+}: {
+  radius: number;
+  distanceMultiplier?: number;
+}) {
   return (
     <>
+      <CameraController radius={radius} distanceMultiplier={distanceMultiplier} />
       <ambientLight intensity={0.9} />
       <directionalLight position={[radius * 10, radius * 2.5, radius * 5]} intensity={1.9} color="#ffffff" />
       <directionalLight position={[-radius * 4, -radius, -radius * 3]} intensity={0.4} color="#60a5fa" />
@@ -435,11 +462,11 @@ function Scene({ radius }: { radius: number }) {
         makeDefault
         enablePan={false}
         enableZoom={false}
-        minDistance={radius * 2}
-        maxDistance={radius * 6}
+        minDistance={radius * 1.8}
+        maxDistance={radius * 5}
         rotateSpeed={0.5}
         enableDamping
-        dampingFactor={0.1}
+        dampingFactor={0.08}
       />
     </>
   );
@@ -467,9 +494,17 @@ function LoadingFallback() {
 export default function Globe3DDemo({
   className = 'h-full w-full',
   radius = 2.8,
+  distanceMultiplier = 3.15,
 }: {
   className?: string;
   radius?: number;
+  /**
+   * Distance multiplier controls globe size:
+   * - 2.6 = Extra large (fills ~85% of screen, can touch edges)
+   * - 3.15 = Perfectly framed (fills ~76% of screen, arcs & labels never cut off)
+   * - 3.5 = Compact/small
+   */
+  distanceMultiplier?: number;
 }) {
   return (
     <div className={`relative ${className}`}>
@@ -484,14 +519,16 @@ export default function Globe3DDemo({
           fov: 45,
           near: 0.1,
           far: 1000,
-          position: [0, 0, radius * 3.6],
+          position: [0, 0, radius * distanceMultiplier],
         }}
         style={{
           background: 'transparent',
+          width: '100%',
+          height: '100%',
         }}
       >
         <Suspense fallback={<LoadingFallback />}>
-          <Scene radius={radius} />
+          <Scene radius={radius} distanceMultiplier={distanceMultiplier} />
         </Suspense>
       </Canvas>
     </div>

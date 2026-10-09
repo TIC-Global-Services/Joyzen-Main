@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 const Globe3DDemo = dynamic(() => import('@/reuseable/globe'), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full min-h-[460px] flex items-center justify-center">
+    <div className="w-full h-full flex items-center justify-center">
       <div className="w-8 h-8 rounded-full border-2 border-[#111111]/20 border-t-[#111111] animate-spin" />
     </div>
   ),
@@ -65,16 +65,16 @@ export default function Hero() {
         </p>
       </div>
 
-      {/* 3D Interactive Globe Container */}
+      {/* 3D Interactive Globe Container - Rendered big initially without scale jumps */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.92, y: 20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{
-          duration: 1.1,
+          duration: 0.8,
           ease: [0.16, 1, 0.3, 1],
-          delay: 0.5,
+          delay: 0.25,
         }}
-        className="relative z-10 w-full px-4 sm:px-6 flex justify-center items-center mt-0 sm:mt-0 md:mt-0 h-[460px] sm:h-[560px] md:h-[650px] lg:h-[100dvh]"
+        className="relative z-10 w-full px-2 sm:px-4 md:px-6 flex justify-center items-center mt-0 sm:mt-0 md:mt-2 h-[500px] sm:h-[600px] md:h-[700px] lg:h-[100dvh]"
       >
         <Globe3DDemo className="w-full h-full" />
       </motion.div>
