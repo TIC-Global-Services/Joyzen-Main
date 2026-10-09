@@ -121,6 +121,20 @@ function AdaptiveGlass({
   style,
   children,
 }: AdaptiveGlassProps) {
+  if (isMobile) {
+    return (
+      <div
+        className={`backdrop-blur-md bg-white/15 border border-white/60 shadow-[inset_0_1px_2px_rgba(255,255,255,0.7),0_4px_16px_rgba(0,0,0,0.06)] ${className}`}
+        style={{
+          borderRadius: typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius,
+          ...style,
+        }}
+      >
+        {children}
+      </div>
+    );
+  }
+
   return (
     <LiquidGlass
       borderRadius={borderRadius}
@@ -337,6 +351,46 @@ export default function CalaScrollSequence() {
   const restingOrbSize = isMobile ? 140 : (scaleFactor < 0.85 ? 270 : 360);
   const restingScale = restingOrbSize / (orbitRadius * 2);
 
+  // Dynamically calculate char spread based on screen width so hero text spreads across full screen without overflowing
+  const getCharSpread = useCallback((): number => {
+    if (typeof window === 'undefined') return 60;
+    const w = window.innerWidth;
+    // Edge margin so characters don't clip against screen edges or scrollbar
+    const edgeMargin = w < 640 ? 10 : w < 1024 ? 18 : 28;
+
+    const chars = document.querySelectorAll('.hero-char');
+    if (chars.length > 1) {
+      const firstChar = chars[0] as HTMLElement;
+      const lastChar = chars[chars.length - 1] as HTMLElement;
+      const firstX = (gsap.getProperty(firstChar, 'x') as number) || 0;
+      const lastX = (gsap.getProperty(lastChar, 'x') as number) || 0;
+
+      const firstRect = firstChar.getBoundingClientRect();
+      const lastRect = lastChar.getBoundingClientRect();
+
+      // Measure un-transformed visual positions relative to viewport
+      const naturalLeft = firstRect.left - firstX;
+      const naturalRight = lastRect.right - lastX;
+
+      const leftDist = naturalLeft - edgeMargin;
+      const rightDist = (w - edgeMargin) - naturalRight;
+
+      const spread = Math.min(leftDist, rightDist);
+      if (!isNaN(spread) && spread > 0) {
+        return Math.floor(spread);
+      }
+    }
+
+    // Fallback based on viewport width & container dimensions
+    const textEl = document.querySelector('.hero-cala-text') as HTMLElement | null;
+    const isMobileDev = w < 1024;
+    const fontSize = isMobileDev ? w * 0.35 : Math.min(420, Math.max(130, w * 0.28));
+    const textWidth = textEl && textEl.offsetWidth > 0 ? textEl.offsetWidth : fontSize * 2.7;
+    const availableSpacePerSide = (w - textWidth) / 2;
+
+    return Math.max(0, Math.floor(availableSpacePerSide - edgeMargin));
+  }, []);
+
   useEffect(() => {
     setIsMounted(true);
     const updateScale = () => {
@@ -348,55 +402,50 @@ export default function CalaScrollSequence() {
       else if (w < 1024) setScaleFactor(0.85);
       else if (w < 1280) setScaleFactor(0.94);
       else setScaleFactor(1);
+
+      // On resize at the top of the page, re-adjust character spread dynamically
+      if (typeof window !== 'undefined' && window.scrollY <= 100) {
+        const spread = getCharSpread();
+        const chars = document.querySelectorAll('.hero-char');
+        const center = (chars.length - 1) / 2;
+        gsap.set('.hero-char', {
+          x: (i: number) => center > 0 ? ((i - center) / center) * spread : 0,
+        });
+      }
     };
     updateScale();
     window.addEventListener('resize', updateScale);
     return () => window.removeEventListener('resize', updateScale);
-  }, []);
+  }, [getCharSpread]);
 
-  // Initial entrance animation: Hero ATLAS text expands outward framing the orb and shrinks back to normal
+  // Initial entrance animation: Hero ATLAS text expands outward framing the orb (GPU-accelerated)
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const isMobileDev = window.innerWidth < 1024;
-    const isTabletDev = window.innerWidth >= 768 && window.innerWidth < 1024;
-    const expandedSpacing = isMobileDev ? '0.30em' : isTabletDev ? '0.40em' : '0.50em';
-    const normalSpacing = '-0.035em';
 
     if (window.scrollY > 150) {
-      gsap.set('.hero-cala-text', { letterSpacing: normalSpacing, paddingLeft: '0em' });
+      gsap.set('.hero-char', { x: 0 });
       return;
     }
 
     const ctx = gsap.context(() => {
-      const heroEntranceTl = gsap.timeline({ delay: 0.25 });
-      heroEntranceTl
-        .fromTo(
-          '.hero-cala-text',
-          {
-            letterSpacing: normalSpacing,
-            paddingLeft: '0em',
+      gsap.fromTo(
+        '.hero-char',
+        { x: 0 },
+        {
+          x: (i: number, el: HTMLElement, targets: HTMLElement[]) => {
+            const center = (targets.length - 1) / 2;
+            return center > 0 ? ((i - center) / center) * getCharSpread() : 0;
           },
-          {
-            letterSpacing: expandedSpacing,
-            paddingLeft: expandedSpacing,
-            duration: 1.1,
-            ease: 'power2.out',
-          }
-        )
-        .to(
-          '.hero-cala-text',
-          {
-            letterSpacing: normalSpacing,
-            paddingLeft: '0em',
-            duration: 1.15,
-            ease: 'power2.inOut',
-          },
-          '+=0.25'
-        );
+          duration: 1.0,
+          ease: 'power2.out',
+          delay: 0.15,
+          overwrite: 'auto',
+        }
+      );
     }, containerRef);
 
     return () => ctx.revert();
-  }, []);
+  }, [getCharSpread]);
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
@@ -443,6 +492,22 @@ export default function CalaScrollSequence() {
 
     // Phase 1: Hero Orbital Pills expand & rotate on scroll
     tl.to({}, { duration: 0.3 });
+
+    // Background text shrinks from expanded spacing back to normal as user scrolls (GPU-accelerated, 0 layout reflow)
+    tl.fromTo('.hero-char',
+      {
+        x: (i: number, el: HTMLElement, targets: HTMLElement[]) => {
+          const center = (targets.length - 1) / 2;
+          return center > 0 ? ((i - center) / center) * getCharSpread() : 0;
+        },
+      },
+      {
+        x: 0,
+        duration: 1.5,
+        ease: 'power1.out',
+      },
+      0.3
+    );
 
     // Orbital stroke expands outward to frame the pills
     tl.fromTo('.hero-orbit-stroke',
@@ -741,6 +806,7 @@ export default function CalaScrollSequence() {
       scrollControls.tabFinalOrbScale,
       scrollControls.finalOrbTop,
       scrollControls.tabFinalOrbTop,
+      getCharSpread,
     ],
   });
 
@@ -795,7 +861,11 @@ export default function CalaScrollSequence() {
     [text-shadow:0_4px_30px_rgba(114,178,170,0.08)]
   "
           >
-            ATLAS
+            <span className="hero-char inline-block will-change-transform">A</span>
+            <span className="hero-char inline-block will-change-transform">T</span>
+            <span className="hero-char inline-block will-change-transform">L</span>
+            <span className="hero-char inline-block will-change-transform">A</span>
+            <span className="hero-char inline-block will-change-transform">S</span>
           </h1>
 
           <div
@@ -899,7 +969,7 @@ export default function CalaScrollSequence() {
                                   style={{
                                     padding: isMobile
                                       ? '5px 10px 5px 12px'
-                                      : `${Math.max(6, 9 * scaleFactor)}px ${Math.max(10, 16 * scaleFactor)}px ${Math.max(6, 9 * scaleFactor)}px ${Math.max(12, 20 * scaleFactor)}px`,
+                                      : `${Math.max(6, 12 * scaleFactor)}px ${Math.max(10, 16 * scaleFactor)}px ${Math.max(6, 12 * scaleFactor)}px ${Math.max(12, 20 * scaleFactor)}px`,
                                   }}
                                 >
                                   <span

@@ -108,7 +108,7 @@ export function loadTextureCached(url: string): Promise<THREE.Texture> {
 // 4. Background idle preload so primary texture is already in memory when needed
 if (typeof window !== 'undefined') {
   const triggerPreload = () => {
-    loadTextureCached('/cala-planet-texture.png').catch(() => {});
+    loadTextureCached('/cala-planet-texture.webp').catch(() => {});
   };
   if ('requestIdleCallback' in window) {
     (window as any).requestIdleCallback(triggerPreload);
@@ -728,7 +728,11 @@ export default function CalaThreeGlobe({
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
-      if (!isVisible || container.offsetParent === null) {
+      if (
+        !isVisible ||
+        container.offsetParent === null ||
+        (container.checkVisibility && !container.checkVisibility({ opacityProperty: true }))
+      ) {
         return;
       }
 
