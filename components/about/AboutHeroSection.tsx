@@ -15,7 +15,7 @@ export default function AboutHeroSection() {
         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         className="absolute -top-15 sm:-top-12 md:-top-[10%] lg:top-6 -right-[90%] sm:right-2 md:-right-[30%] lg:-right-80 -rotate-50  pointer-events-none select-none z-10"
       >
-        <div className="relative w-[450px] sm:w-[480px] md:w-[480px] lg:w-[560px] xl:w-[950px] h-[900px] md:aspect-[466/1084]">
+        <div className="relative w-[550px] sm:w-[480px] md:w-[480px] lg:w-[560px] xl:w-[950px] h-[900px] md:aspect-[466/1084]">
           <Image
             src="/ROBOT VINES TEST-new.original.gif"
             alt="Joyzen Robot Hand with Wild Flowers"

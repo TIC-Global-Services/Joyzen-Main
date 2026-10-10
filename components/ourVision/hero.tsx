@@ -385,7 +385,7 @@ export default function Hero() {
             display: initialDisplay,
             pointerEvents: initialPointerEvents,
           }}
-          className="absolute top-16 sm:top-24 md:top-28 right-[5%] z-20 flex flex-col gap-4 sm:gap-5 items-start pointer-events-auto"
+          className="absolute top-28 md:top-28 right-[5%] z-20 flex flex-col gap-4 sm:gap-5 items-start pointer-events-auto"
         >
           {HOTSPOTS.map((hotspot) => (
             <div
