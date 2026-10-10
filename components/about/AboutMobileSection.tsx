@@ -182,13 +182,13 @@ export default function AboutMobileSection() {
         {/* Mobile Mockup (Shown Half with Smooth Fade Bottom) */}
         <div
           ref={phoneRef}
-          className="relative w-full flex justify-center mb-6 sm:mb-8 md:mb-10"
+          className="relative w-full flex justify-center mb-6 sm:mb-8 md:mb-8"
         >
           <div className="relative w-full">
             {/* Half-Phone crop with bottom mask fade */}
-            <div className="relative max-w-[50dvh] mx-auto h-[40dvh] [mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)] [-webkit-mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)]">
+            <div className="relative max-w-[50dvh] mx-auto h-[50dvh] [mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)] [-webkit-mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)]">
               <Image
-                src="https://ik.imagekit.io/gyg6yfnd5/mobile-mockup-new.png"
+                src="https://ik.imagekit.io/gyg6yfnd5/about-mobile-mockup.png"
                 alt="Joyzen Mobile App Interface"
                 fill
                 priority
