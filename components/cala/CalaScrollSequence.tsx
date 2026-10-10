@@ -1160,7 +1160,7 @@ export default function CalaScrollSequence() {
           <div className="flex md:hidden flex-col items-center justify-center w-full max-w-[380px] mx-auto px-2 py-2 pointer-events-auto">
             {/* Header */}
             <div className="mb-2.5 sm:mb-3 text-center">
-              <h3 className="text-[#E5855E] text-xs sm:text-lg font-bold tracking-wider uppercase mb-1">
+              <h3 className="text-black text-xs sm:text-lg font-bold tracking-wider uppercase mb-1">
                 What's Inside The Membership
               </h3>
               <h2 className="text-2xl font-bold text-white tracking-tight leading-[1.1]">
@@ -1249,7 +1249,7 @@ export default function CalaScrollSequence() {
 
             {/* Header Section */}
             <div className="mb-3 lg:mb-6 xl:mb-8 [@media(max-height:850px)]:mb-2 [@media(max-height:750px)]:mb-1">
-              <h3 className="text-[#E5855E] text-[10px] sm:text-xs md:text-xs lg:text-lg font-bold tracking-tight uppercase md:mb-1">
+              <h3 className="text-black text-[10px] sm:text-xs md:text-xs lg:text-lg font-bold tracking-tight uppercase md:mb-1">
                 What's Inside The Membership
               </h3>
               <h2 className="text-3xl sm:text-4xl md:text-3xl lg:text-[32px] font-bold text-white tracking-tight drop-shadow-md leading-none">
@@ -1408,15 +1408,15 @@ export default function CalaScrollSequence() {
         <div className="benefits-sequence absolute inset-0 z-40 pointer-events-none">
           {/* Texts */}
           <div className="benefits-text-1 absolute inset-x-0 top-[22%] md:top-[22%] lg:top-1/2 lg:-translate-y-1/2 flex flex-col items-center justify-center text-center px-4 opacity-0 pointer-events-none">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-4">BENEFITS</span>
+            <span className="text-black text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-4">BENEFITS</span>
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[56px] font-bold text-white tracking-tight drop-shadow-md max-w-[280px] sm:max-w-none">Understand your cycles.</h2>
           </div>
           <div className="benefits-text-2 absolute inset-x-0 top-[33%] md:top-[33%] lg:top-1/2 lg:-translate-y-1/2 flex flex-col items-center justify-center text-center px-4 opacity-0 pointer-events-none">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-4">BENEFITS</span>
+            <span className="text-black text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-4">BENEFITS</span>
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md max-w-[280px] sm:max-w-none">Track your progress.</h2>
           </div>
           <div className="benefits-text-3 absolute inset-x-0 top-[45%] md:top-[45%] lg:top-1/2 lg:-translate-y-1/2 flex flex-col items-center justify-center text-center px-4 opacity-0 pointer-events-none">
-            <span className="text-[#E5855E] text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-2">BENEFITS</span>
+            <span className="text-black text-[10px] sm:text-sm md:text-base font-bold tracking-widest uppercase sm:mb-2">BENEFITS</span>
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-white tracking-tight drop-shadow-md max-w-[280px] sm:max-w-none">Stay supported.</h2>
           </div>
 
