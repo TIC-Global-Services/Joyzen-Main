@@ -341,7 +341,7 @@ export default function ProgramMembership({
           className="w-full rounded-[28px] sm:rounded-[34px] bg-[#EAF7F5]/75 backdrop-blur-2xl border border-white/90 shadow-[0_20px_50px_rgba(0,0,0,0.03),inset_0_1px_2px_rgba(255,255,255,0.95)] overflow-hidden"
         >
           <div className="px-6 py-8 sm:px-12 sm:py-10 flex flex-col items-center justify-center text-center relative z-10">
-            <p className="text-lg sm:text-2xl md:text-[24px] font-bold text-black max-w-xl mx-auto leading-[1.2] tracking-tight mb-6 sm:mb-8 text-center">
+            <p className="text-lg sm:text-2xl md:text-[24px] font-bold text-[#EF8F60] max-w-xl mx-auto leading-[1.2] tracking-tight mb-6 sm:mb-8 text-center">
               {data.careTeamBlock.text}
             </p>
             <SpecularButton
