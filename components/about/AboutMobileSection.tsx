@@ -188,7 +188,7 @@ export default function AboutMobileSection() {
             {/* Half-Phone crop with bottom mask fade */}
             <div className="relative max-w-[50dvh] mx-auto h-[50dvh] [mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)] [-webkit-mask-image:linear-gradient(to_bottom,black_45%,transparent_94%)]">
               <Image
-                src="https://ik.imagekit.io/gyg6yfnd5/about-mobile-mockup-v2.png"
+                src="https://ik.imagekit.io/gyg6yfnd5/Joyzen-Health%20Dashboard%20Mockup.png"
                 alt="Joyzen Mobile App Interface"
                 fill
                 priority

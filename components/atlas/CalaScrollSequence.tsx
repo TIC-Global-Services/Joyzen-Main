@@ -675,7 +675,7 @@ export default function CalaScrollSequence() {
       tl.to('.benefit-pill-ovulation', { top: '47%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
       tl.to('.benefit-pill-fertility', { top: '62.5%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
       tl.to('.benefit-pill-pcos', { top: '62.5%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
-      tl.to('.benefit-pill-habits', { top: '74%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
+      tl.to('.benefit-pill-habits', { top: '72%', duration: 1.5, ease: 'power2.inOut' }, "phase13");
     }
 
     // Phase 14: 16.0 to 17.0s - Settle orb and finalize
