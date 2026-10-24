@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 const PROGRAM_ROUTES = [
@@ -74,10 +75,11 @@ export default function Footer() {
       </div>
 
       {/* Top Header Contact & Social Links */}
-      <div className="flex flex-wrap justify-center pl-6 sm:pl-0  gap-4 sm:gap-12 text-sm lg:text-base font-medium relative z-120 tracking-tight md:mb-10">
+      <div className="flex flex-wrap justify-center pl-6 sm:pl-0 gap-4 sm:gap-8 lg:gap-12 text-sm lg:text-base font-medium relative z-120 tracking-tight md:mb-10">
         <a href="mailto:info@joyzen.in" className="hover:opacity-60 transition-opacity">Email: info@joyzen.in</a>
         <a href="tel:+911244962743" className="hover:opacity-60 transition-opacity">Phone: <span className="whitespace-nowrap">+91 124-4962743</span></a>
         <a href="https://www.instagram.com/joyzen.in" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity">Instagram: @joyzen.in</a>
+        <Link href="/grievance-redressal" className="hover:opacity-60 transition-opacity underline-offset-4 hover:underline font-semibold">Grievance Redressal</Link>
       </div>
 
       {/* Top fade overlap for smooth background transition */}
@@ -98,9 +100,19 @@ export default function Footer() {
       />
 
       {/* Bottom Tagline & Credits Bar */}
-      <div className="flex px-[0%] md:px-[5%] text-sm text-black flex-col sm:flex-row justify-center sm:justify-between items-center font-semibold gap-4 md:gap-2 relative z-50 w-full tracking-tight">
-        <span className="text-center sm:text-left">2026 Joyzen. Built for life. Designed for longevity.</span>
-        <span className="text-center sm:text-right">Designed and Developed by TIC Global Services</span>
+      <div className="flex px-[0%] md:px-[5%] text-xs sm:text-sm text-black flex-col sm:flex-row justify-center sm:justify-between items-center font-medium gap-3 md:gap-2 relative z-50 w-full tracking-tight">
+        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1">
+          <span className="font-semibold">2026 Joyzen. Built for life. Designed for longevity.</span>
+        </div>
+        <div className='flex md:gap-4 gap-1'>
+          <span className="hidden sm:inline text-zinc-500">•</span>
+          <Link href="/grievance-redressal" className="font-semibold text-zinc-900 hover:text-[#EF8F60] transition-colors underline-offset-2 hover:underline">Grievance Redressal</Link>
+          <span className="text-zinc-500">•</span>
+          <Link href="/privacy-policy" className="text-zinc-800 hover:text-[#EF8F60] transition-colors underline-offset-2 hover:underline">Privacy Policy</Link>
+          <span className="text-zinc-500">•</span>
+          <Link href="/terms" className="text-zinc-800 hover:text-[#EF8F60] transition-colors underline-offset-2 hover:underline">Terms &amp; Conditions</Link>
+        </div>
+        <span className="text-center sm:text-right text-xs opacity-75">Designed and Developed by TIC Global Services</span>
       </div>
     </footer>
   );

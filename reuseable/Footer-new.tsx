@@ -38,10 +38,11 @@ const Footer = () => {
       </div>
 
       {/* Top row (Shifted slightly to the right on mobile using pl-6) */}
-      <div className="flex justify-center pl-6 sm:pl-0 sm:justify-end gap-6 sm:gap-12 text-xs sm:text-sm lg:text-base font-sans font-medium  relative z-10 tracking-tight md:mb-10  ">
+      <div className="flex flex-wrap justify-center pl-6 sm:pl-0 sm:justify-end gap-4 sm:gap-8 lg:gap-12 text-xs sm:text-sm lg:text-base font-sans font-medium relative z-10 tracking-tight md:mb-10">
         <a href="mailto:info@joyzen.in" className="hover:opacity-60 transition-opacity">Email: info@joyzen.in</a>
         <a href="tel:+911244962743" className="hover:opacity-60 transition-opacity">Phone: <span className="whitespace-nowrap">+91 124-4962743</span></a>
         <a href="https://www.instagram.com/joyzen.in" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity">Instagram: @joyzen.in</a>
+        <Link href="/grievance-redressal" className="hover:opacity-60 transition-opacity underline-offset-4 hover:underline font-semibold">Grievance Redressal</Link>
       </div>
 
       {/* Top fade (Fixed: top-[-2px] overlap and native CSS rgba() gradient to ensure full compatibility) */}
@@ -61,10 +62,15 @@ const Footer = () => {
         }}
       />
 
-
-
-      <div className='flex px-[10%] md:px-[5%] text-xs md:text-sm text-black flex-col absolute bottom-[8%] md:bottom-[5%] z-40 left-0 w-full sm:flex-row justify-center items-center md:justify-between'>
-        <span className="text-center sm:text-left">2026 Joyzen. Built for life. Designed for longevity.</span>
+      <div className='flex px-[10%] md:px-[5%] text-xs md:text-sm text-black flex-col absolute bottom-[8%] md:bottom-[5%] z-40 left-0 w-full sm:flex-row justify-center items-center md:justify-between gap-2'>
+        <span className="text-center sm:text-left font-semibold">2026 Joyzen. Built for life. Designed for longevity.</span>
+        <div className="flex items-center gap-3 text-xs">
+          <Link href="/grievance-redressal" className="font-semibold text-zinc-900 hover:text-[#EF8F60] hover:underline">Grievance Redressal</Link>
+          <span className="text-zinc-500">•</span>
+          <Link href="/privacy-policy" className="text-zinc-800 hover:text-[#EF8F60] hover:underline">Privacy</Link>
+          <span className="text-zinc-500">•</span>
+          <Link href="/terms" className="text-zinc-800 hover:text-[#EF8F60] hover:underline">Terms</Link>
+        </div>
       </div>
     </footer>
   );
