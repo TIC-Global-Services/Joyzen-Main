@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -15,7 +16,11 @@ export const reproductiveCareSchema = z.object({
     .min(1, 'Age is required')
     .refine((val) => !isNaN(Number(val)) && Number(val) > 0 && Number(val) < 120, 'Please enter a valid age'),
   gender: z.string().min(1, 'Please select your gender'),
+  careChoice: z.string().optional(),
   selectedOption: z.string().optional(),
+  temp_lead_source: z.string().optional(),
+  unclear_health_description: z.string().optional(),
+  extra_notes: z.string().optional(),
 });
 
 export type ReproductiveCareFormData = z.infer<typeof reproductiveCareSchema>;
@@ -29,11 +34,14 @@ export const generalCareSchema = z.object({
   gender: z.string().min(1, 'Please select your gender'),
   concern: z.string().min(3, 'Please describe your health concern'),
   specialist: z.string().min(1, 'Please select a specialist'),
+  temp_lead_source: z.string().optional(),
+  unclear_health_description: z.string().optional(),
+  extra_notes: z.string().optional(),
 });
 
 export type GeneralCareFormData = z.infer<typeof generalCareSchema>;
 
-const femaleOptions = [
+export const femaleOptions = [
   'I am a teenager and want to understand my body and periods',
   'I want to improve my overall health, lifestyle, and cycle',
   'I just want a doctor and guidance for my health',
@@ -45,16 +53,64 @@ const femaleOptions = [
   'We are planning pregnancy and want to prepare together',
 ];
 
-const maleOptions = [
-  'I want to improve my overall health, lifestyle, and vitality',
-  'I just want a doctor and guidance for my health',
-  'I have hormone issues, low energy, or fertility concerns',
-  'I am married and want to prepare my health before pregnancy',
-  'I am getting married soon and want to prepare for a healthy pregnancy',
+export const maleOptions = [
+  'I want to improve my overall health, energy, and lifestyle',
+  'I feel low energy, stressed, or not physically at my best',
+  'I just want a personal doctor for guidance',
+  'I have sexual health or testosterone concerns',
+  'I have fertility issues or poor sperm reports',
+  'I am getting married soon and want to prepare my health for good performance and future fatherhood',
+  'We are planning for a baby',
   'We are trying to conceive',
   'We have been trying for a while but no success',
   'We are planning pregnancy and want to prepare together',
 ];
+
+export const coupleOptions = [
+  'We are planning pregnancy and want to prepare together',
+  'We are trying to conceive',
+  'We have been trying for a while but no success',
+];
+
+export const leadSourceOptions = [
+  'Instagram',
+  'Facebook',
+  'Google Search',
+  'Friend / Family Referral',
+  'Doctor / Healthcare Professional',
+  'LinkedIn',
+  'YouTube',
+  'Other',
+];
+
+export const OPTION_PLAN_MAP: Record<string, { plan: string; route: string }> = {
+  // Female options
+  'I am a teenager and want to understand my body and periods': { plan: 'LUNA', route: '/luna' },
+  'I want to improve my overall health, lifestyle, and cycle': { plan: 'LYRA', route: '/lyra' },
+  'I just want a doctor and guidance for my health': { plan: 'LYRA', route: '/lyra' },
+  'I have PCOS, irregular periods, or hormone issues': { plan: 'CALA', route: '/cala' },
+  'I am married and want to prepare my body before pregnancy': { plan: 'EVE', route: '/eve' },
+  'I am getting married soon and want to prepare my body for a healthy pregnancy': { plan: 'EVE', route: '/eve' },
+  'We are trying to conceive': { plan: 'VITA', route: '/vita' },
+  'We have been trying for a while but no success': { plan: 'VITA', route: '/vita' },
+  'We are planning pregnancy and want to prepare together': { plan: 'EVE + GENESIS', route: '/eve-genesis' },
+
+  // Male options
+  'I want to improve my overall health, energy, and lifestyle': { plan: 'CORE', route: '/core' },
+  'I feel low energy, stressed, or not physically at my best': { plan: 'CORE', route: '/core' },
+  'I just want a personal doctor for guidance': { plan: 'CORE', route: '/core' },
+  'I have sexual health or testosterone concerns': { plan: 'ATLAS', route: '/atlas' },
+  'I have fertility issues or poor sperm reports': { plan: 'ATLAS', route: '/atlas' },
+  'I am getting married soon and want to prepare my health for good performance and future fatherhood': { plan: 'GENESIS', route: '/genesis' },
+  'We are planning for a baby': { plan: 'VITA', route: '/vita' },
+  'We are trying for a baby': { plan: 'VITA', route: '/vita' },
+
+  // Legacy mappings for robustness
+  'I want to improve my overall health, lifestyle, and vitality': { plan: 'CORE', route: '/core' },
+  'I have hormone issues, low energy, or fertility concerns': { plan: 'ATLAS', route: '/atlas' },
+  'I am married and want to prepare my health before pregnancy': { plan: 'GENESIS', route: '/genesis' },
+  'I am getting married soon and want to prepare for a healthy pregnancy': { plan: 'GENESIS', route: '/genesis' },
+};
 
 /**
  * GradientInputWrapper renders a crisp multi-color pastel gradient stroke on the border
@@ -192,7 +248,10 @@ export default function PricingForms() {
 }
 
 function ReproductiveCareForm() {
+  const router = useRouter();
   const [genderOpen, setGenderOpen] = useState(false);
+  const [leadSourceOpen, setLeadSourceOpen] = useState(false);
+  const [careChoice, setCareChoice] = useState<string>('');
   const [submitted, setSubmitted] = useState(false);
 
   const {
@@ -207,25 +266,59 @@ function ReproductiveCareForm() {
       fullName: '',
       age: '',
       gender: '',
+      careChoice: '',
       selectedOption: '',
+      temp_lead_source: '',
+      unclear_health_description: '',
+      extra_notes: '',
     },
   });
 
   const selectedGender = watch('gender');
   const selectedOption = watch('selectedOption');
+  const selectedLeadSource = watch('temp_lead_source');
 
-  // Options are hidden by default and when 'Prefer not to say' is selected.
-  // Only show options when Female or Male is selected.
-  const currentOptions =
-    selectedGender === 'Female'
-      ? femaleOptions
-      : selectedGender === 'Male'
-      ? maleOptions
-      : null;
+  // Determine which options to display based on gender & careChoice for 'Prefer not to say'
+  let currentOptions: string[] | null = null;
+  let optionsHeading = '';
+
+  if (selectedGender === 'Female') {
+    currentOptions = femaleOptions;
+    optionsHeading = 'Female Health Options';
+  } else if (selectedGender === 'Male') {
+    currentOptions = maleOptions;
+    optionsHeading = 'Male Health Options';
+  } else if (selectedGender === 'Prefer not to say') {
+    if (careChoice === "Women's health") {
+      currentOptions = femaleOptions;
+      optionsHeading = "Women's Health Options";
+    } else if (careChoice === "Men's health") {
+      currentOptions = maleOptions;
+      optionsHeading = "Men's Health Options";
+    } else if (careChoice === 'Care for us as a couple') {
+      currentOptions = coupleOptions;
+      optionsHeading = 'Couple Care Options';
+    }
+  }
 
   const onSubmit = (data: ReproductiveCareFormData) => {
-    console.log('Reproductive Care Form Submitted:', data);
-    setSubmitted(true);
+    console.log('Reproductive Care Form Submitted (API Payload):', {
+      fullName: data.fullName,
+      age: data.age,
+      gender: data.gender,
+      careChoice: data.careChoice || '',
+      selectedOption: data.selectedOption || '',
+      temp_lead_source: data.temp_lead_source || '',
+      unclear_health_description: data.unclear_health_description || '',
+      extra_notes: data.extra_notes || '',
+    });
+
+    const targetRoute = data.selectedOption ? OPTION_PLAN_MAP[data.selectedOption]?.route : null;
+    if (targetRoute) {
+      router.push(targetRoute);
+    } else {
+      setSubmitted(true);
+    }
   };
 
   return (
@@ -285,10 +378,15 @@ function ReproductiveCareForm() {
             <div className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
               <button
                 type="button"
-                onClick={() => setGenderOpen(!genderOpen)}
-                className="w-full px-6 py-4 flex  cursor-pointer items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
+                onClick={() => {
+                  setGenderOpen(!genderOpen);
+                  setLeadSourceOpen(false);
+                }}
+                className="w-full px-6 py-4 flex cursor-pointer items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
               >
-                <span>{selectedGender || 'Gender'}</span>
+                <span className={selectedGender ? 'text-zinc-900 font-medium' : 'text-zinc-400'}>
+                  {selectedGender || 'Gender'}
+                </span>
                 <span className="text-[#6E6E6E] hover:text-zinc-800 transition-colors">
                   {genderOpen ? (
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -318,6 +416,8 @@ function ReproductiveCareForm() {
                         onClick={() => {
                           setValue('gender', option, { shouldValidate: true });
                           setValue('selectedOption', ''); // Reset selected option when gender changes
+                          setValue('careChoice', '');
+                          setCareChoice('');
                           setGenderOpen(false);
                         }}
                         className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
@@ -336,11 +436,58 @@ function ReproductiveCareForm() {
             {errors.gender && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.gender.message}</p>}
           </div>
 
-          {/* Dynamic Reproductive Options List - Only shown when Female or Male is selected */}
+          {/* Sub-choice when 'Prefer not to say' is selected */}
+          <AnimatePresence>
+            {selectedGender === 'Prefer not to say' && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25 }}
+                className="pt-1 pb-1 space-y-2 overflow-hidden"
+              >
+                <div className="px-2">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                    What care are you looking for?
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {[
+                    { id: "Women's health", label: "Women's health" },
+                    { id: "Men's health", label: "Men's health" },
+                    { id: 'Care for us as a couple', label: 'Care for us as a couple' },
+                  ].map((choice) => {
+                    const isChosen = careChoice === choice.id;
+                    return (
+                      <button
+                        key={choice.id}
+                        type="button"
+                        onClick={() => {
+                          const next = isChosen ? '' : choice.id;
+                          setCareChoice(next);
+                          setValue('careChoice', next);
+                          setValue('selectedOption', ''); // Reset option when careChoice changes
+                        }}
+                        className={`py-3 px-4 rounded-[20px] text-xs sm:text-sm font-semibold transition-all cursor-pointer border text-center ${
+                          isChosen
+                            ? 'bg-[#036132] text-white border-[#036132] shadow-sm'
+                            : 'bg-white/40 text-zinc-700 border-white/80 hover:bg-white/70'
+                        }`}
+                      >
+                        {choice.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Dynamic Reproductive Options List */}
           <AnimatePresence mode="wait">
             {currentOptions && currentOptions.length > 0 && (
               <motion.div
-                key={selectedGender}
+                key={`${selectedGender}-${careChoice}`}
                 initial={{ opacity: 0, height: 0, y: 10 }}
                 animate={{ opacity: 1, height: 'auto', y: 0 }}
                 exit={{ opacity: 0, height: 0, y: -10 }}
@@ -349,11 +496,12 @@ function ReproductiveCareForm() {
               >
                 <div className="flex items-center justify-between px-2 mb-1">
                   <span className="text-xs font-semibold uppercase tracking-wider text-zinc-400">
-                    {selectedGender} Health Options
+                    {optionsHeading}
                   </span>
                 </div>
                 {currentOptions.map((option) => {
                   const isItemChosen = selectedOption === option;
+                  const planMeta = OPTION_PLAN_MAP[option];
                   return (
                     <GradientInputWrapper key={option} isSelected={isItemChosen}>
                       <button
@@ -361,11 +509,22 @@ function ReproductiveCareForm() {
                         onClick={() => {
                           setValue('selectedOption', isItemChosen ? '' : option, { shouldValidate: true });
                         }}
-                        className={`w-full text-center sm:text-left px-6 py-4 cursor-pointer text-sm sm:text-base transition-colors rounded-[26px] ${
+                        className={`w-full flex items-center justify-between text-left px-6 py-4 cursor-pointer text-sm sm:text-base transition-colors rounded-[26px] gap-3 ${
                           isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-[#6E6E6E] hover:text-zinc-900'
                         }`}
                       >
-                        {option}
+                        <span className="flex-1">{option}</span>
+                        {planMeta && (
+                          <span
+                            className={`shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider transition-colors ${
+                              isItemChosen
+                                ? 'bg-[#036132] text-white shadow-xs'
+                                : 'bg-zinc-200/70 text-zinc-600 group-hover:bg-[#AEDEE4]/40 group-hover:text-[#036132]'
+                            }`}
+                          >
+                            {planMeta.plan}
+                          </span>
+                        )}
                       </button>
                     </GradientInputWrapper>
                   );
@@ -373,6 +532,88 @@ function ReproductiveCareForm() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* How did you hear about us? (temp_lead_source) Dropdown */}
+          <div>
+            <div className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
+              <button
+                type="button"
+                onClick={() => {
+                  setLeadSourceOpen(!leadSourceOpen);
+                  setGenderOpen(false);
+                }}
+                className="w-full px-6 py-4 flex cursor-pointer items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
+              >
+                <span className={selectedLeadSource ? 'text-zinc-900 font-medium' : 'text-zinc-400'}>
+                  {selectedLeadSource || 'How did you hear about us?'}
+                </span>
+                <span className="text-[#6E6E6E] hover:text-zinc-800 transition-colors">
+                  {leadSourceOpen ? (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                </span>
+              </button>
+
+              <AnimatePresence>
+                {leadSourceOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="px-6 pb-5 pt-2 space-y-2 border-t border-white/60 bg-white/60 backdrop-blur-2xl max-h-56 overflow-y-auto"
+                  >
+                    {leadSourceOptions.map((option) => (
+                      <div
+                        key={option}
+                        onClick={() => {
+                          setValue('temp_lead_source', option, { shouldValidate: true });
+                          setLeadSourceOpen(false);
+                        }}
+                        className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
+                          selectedLeadSource === option
+                            ? 'font-bold text-zinc-900'
+                            : 'font-medium text-zinc-500 hover:text-zinc-900'
+                        }`}
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Unclear about concern (unclear_health_description) */}
+          <div>
+            <div className="relative rounded-[24px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:bg-white/5 focus-within:border-[#95C1E2] transition-all p-2">
+              <textarea
+                {...register('unclear_health_description')}
+                rows={3}
+                placeholder="Unclear about concern"
+                className="w-full px-4 py-2 text-sm sm:text-base font-medium text-[#6E6E6E] placeholder:text-zinc-400 bg-transparent outline-none resize-none"
+              />
+            </div>
+          </div>
+
+          {/* Message (extra_notes) */}
+          <div>
+            <div className="relative rounded-[24px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:bg-white/5 focus-within:border-[#95C1E2] transition-all p-2">
+              <textarea
+                {...register('extra_notes')}
+                rows={3}
+                placeholder="Message"
+                className="w-full px-4 py-2 text-sm sm:text-base font-medium text-[#6E6E6E] placeholder:text-zinc-400 bg-transparent outline-none resize-none"
+              />
+            </div>
+          </div>
 
           {/* Submit Specular / Glass Button */}
           <div className="flex justify-end pt-4">
@@ -392,6 +633,7 @@ function ReproductiveCareForm() {
 function GeneralCareForm() {
   const [genderOpen, setGenderOpen] = useState(false);
   const [specialistOpen, setSpecialistOpen] = useState(false);
+  const [leadSourceOpen, setLeadSourceOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const {
@@ -408,14 +650,27 @@ function GeneralCareForm() {
       gender: '',
       concern: '',
       specialist: '',
+      temp_lead_source: '',
+      unclear_health_description: '',
+      extra_notes: '',
     },
   });
 
   const selectedGender = watch('gender');
   const selectedSpecialist = watch('specialist');
+  const selectedLeadSource = watch('temp_lead_source');
 
   const onSubmit = (data: GeneralCareFormData) => {
-    console.log('General Care Form Submitted:', data);
+    console.log('General Care Form Submitted (API Payload):', {
+      fullName: data.fullName,
+      age: data.age,
+      gender: data.gender,
+      concern: data.concern,
+      specialist: data.specialist,
+      temp_lead_source: data.temp_lead_source || '',
+      unclear_health_description: data.unclear_health_description || '',
+      extra_notes: data.extra_notes || '',
+    });
     setSubmitted(true);
   };
 
@@ -476,10 +731,16 @@ function GeneralCareForm() {
             <div className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
               <button
                 type="button"
-                onClick={() => setGenderOpen(!genderOpen)}
+                onClick={() => {
+                  setGenderOpen(!genderOpen);
+                  setSpecialistOpen(false);
+                  setLeadSourceOpen(false);
+                }}
                 className="w-full px-6 py-4 flex items-center cursor-pointer justify-between text-left text-sm sm:text-base font-medium text-[#6E6E6E] focus:outline-none"
               >
-                <span>{selectedGender || 'Gender'}</span>
+                <span className={selectedGender ? 'text-zinc-900 font-medium' : 'text-zinc-400'}>
+                  {selectedGender || 'Gender'}
+                </span>
                 <span className="text-[#6E6E6E] hover:text-zinc-800 transition-colors">
                   {genderOpen ? (
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -511,7 +772,7 @@ function GeneralCareForm() {
                         }}
                         className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
                           selectedGender === option
-                            ? 'font-bold text-[#6E6E6E]'
+                            ? 'font-bold text-zinc-900'
                             : 'font-medium text-[#6E6E6E] hover:text-zinc-900'
                         }`}
                       >
@@ -543,10 +804,16 @@ function GeneralCareForm() {
             <div className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
               <button
                 type="button"
-                onClick={() => setSpecialistOpen(!specialistOpen)}
+                onClick={() => {
+                  setSpecialistOpen(!specialistOpen);
+                  setGenderOpen(false);
+                  setLeadSourceOpen(false);
+                }}
                 className="w-full px-6 py-4 flex cursor-pointer items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
               >
-                <span>{selectedSpecialist || 'Who would you like to get in touch with?'}</span>
+                <span className={selectedSpecialist ? 'text-zinc-900 font-medium' : 'text-zinc-400'}>
+                  {selectedSpecialist || 'Who would you like to get in touch with?'}
+                </span>
                 <span className="text-zinc-400 hover:text-zinc-800 transition-colors">
                   {specialistOpen ? (
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -590,6 +857,89 @@ function GeneralCareForm() {
               </AnimatePresence>
             </div>
             {errors.specialist && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.specialist.message}</p>}
+          </div>
+
+          {/* How did you hear about us? (temp_lead_source) Dropdown */}
+          <div>
+            <div className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
+              <button
+                type="button"
+                onClick={() => {
+                  setLeadSourceOpen(!leadSourceOpen);
+                  setGenderOpen(false);
+                  setSpecialistOpen(false);
+                }}
+                className="w-full px-6 py-4 flex cursor-pointer items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none"
+              >
+                <span className={selectedLeadSource ? 'text-zinc-900 font-medium' : 'text-zinc-400'}>
+                  {selectedLeadSource || 'How did you hear about us?'}
+                </span>
+                <span className="text-[#6E6E6E] hover:text-zinc-800 transition-colors">
+                  {leadSourceOpen ? (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  ) : (
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  )}
+                </span>
+              </button>
+
+              <AnimatePresence>
+                {leadSourceOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="px-6 pb-5 pt-2 space-y-2 border-t border-white/60 bg-white/60 backdrop-blur-2xl max-h-56 overflow-y-auto"
+                  >
+                    {leadSourceOptions.map((option) => (
+                      <div
+                        key={option}
+                        onClick={() => {
+                          setValue('temp_lead_source', option, { shouldValidate: true });
+                          setLeadSourceOpen(false);
+                        }}
+                        className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
+                          selectedLeadSource === option
+                            ? 'font-bold text-zinc-900'
+                            : 'font-medium text-zinc-500 hover:text-zinc-900'
+                        }`}
+                      >
+                        {option}
+                      </div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Unclear about concern (unclear_health_description) */}
+          <div>
+            <div className="relative rounded-[24px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:bg-white/5 focus-within:border-[#95C1E2] transition-all p-2">
+              <textarea
+                {...register('unclear_health_description')}
+                rows={3}
+                placeholder="Unclear about concern"
+                className="w-full px-4 py-2 text-sm sm:text-base font-medium text-[#6E6E6E] placeholder:text-zinc-400 bg-transparent outline-none resize-none"
+              />
+            </div>
+          </div>
+
+          {/* Message (extra_notes) */}
+          <div>
+            <div className="relative rounded-[24px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] focus-within:bg-white/5 focus-within:border-[#95C1E2] transition-all p-2">
+              <textarea
+                {...register('extra_notes')}
+                rows={3}
+                placeholder="Message"
+                className="w-full px-4 py-2 text-sm sm:text-base font-medium text-[#6E6E6E] placeholder:text-zinc-400 bg-transparent outline-none resize-none"
+              />
+            </div>
           </div>
 
           {/* Connect Specular Button */}

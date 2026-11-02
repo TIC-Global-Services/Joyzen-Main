@@ -6,6 +6,12 @@
 export interface MembershipPlanTier {
   /** Unique tier identifier */
   id: string;
+  /** Backend variant UUID from Joyzen API */
+  backendVariantId?: string;
+  /** Actual total price in INR */
+  totalPrice?: number;
+  /** Duration in days */
+  durationInDays?: number;
   /** Label for the duration selector tab (e.g. 'Monthly', '3 Months', '6 Months') */
   durationTitle: string;
   /** Subtitle for the duration selector tab (e.g. 'Flexible', 'Save ₹357', 'Save ₹1,074') */
@@ -82,7 +88,7 @@ export const PROGRAM_MEMBERSHIP_DATA: Record<ProgramKey, MembershipProgramData> 
         badge: 'Flexible',
         dailyPrice: '₹50',
         priceUnit: '/Day',
-        planSummary: 'Monthly Care Plan · Flexible billing',
+        planSummary: 'Monthly Care Plan · ₹1,499/month · Flexible billing',
         ctaButtonText: 'START MONTHLY',
       },
       {

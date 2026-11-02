@@ -1,70 +1,80 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { motion, AnimatePresence } from 'framer-motion';
 import SpecularButton from '@/reuseable/specularButton';
-import Consultant, { NotSureCard } from '@/components/q-form-2/conseltent';
 import { LiquidGlass } from '@liquidglass/react';
+import {
+  COUNTRIES,
+  getStatesByCountry,
+  getCitiesByState,
+} from '@/lib/utils';
+import {
+  createLead,
+  formatApiError,
+  type CreateLeadPayload,
+  type GenderType,
+} from '@/lib/joyzenApi';
 
-export const exploreFormSchema = z
-  .object({
-    // Step 1
-    fullName: z
-      .string()
-      .min(3, 'Full name must be at least 3 characters')
-      .max(50, 'Full name must not exceed 50 characters')
-      .regex(/^[a-zA-Z\s.'-]+$/, 'Name cannot contain numbers'),
-    age: z
-      .string()
-      .min(1, 'Age is required')
-      .max(3, 'Age cannot exceed 3 digits')
-      .refine((val) => {
-        const num = Number(val);
-        return !isNaN(num) && num > 0 && num < 120;
-      }, 'Please enter a valid age (1-119)'),
-    gender: z.string().min(1, 'Please select your gender'),
+// ----------------------------------------------------------------------
+// Schema Definition
+// ----------------------------------------------------------------------
+export const exploreFormSchema = z.object({
+  // Step 1: Basic & Location Info
+  fullName: z
+    .string()
+    .min(2, 'Full name must be at least 2 characters')
+    .max(50, 'Full name must not exceed 50 characters')
+    .regex(/^[a-zA-Z\s.'-]+$/, 'Name cannot contain numbers'),
+  countryCode: z.string().min(1, 'Country code is required'),
+  phone: z
+    .string()
+    .min(1, 'Phone number is required')
+    .refine((val) => {
+      const trimmed = val.trim();
+      if (!trimmed) return false;
+      // Allow digits, spaces, hyphens, parentheses, and leading plus
+      if (!/^[\d\s\-\(\)\+]+$/.test(trimmed)) {
+        return false;
+      }
+      const digits = trimmed.replace(/\D/g, '');
+      return digits.length >= 7 && digits.length <= 15;
+    }, 'Please enter a valid phone number (7-15 digits)'),
+  gender: z.string().min(1, 'Please select your gender'),
+  email: z
+    .string()
+    .email('Please enter a valid email address')
+    .optional()
+    .or(z.literal('')),
+  dob: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/, 'Please select a valid date of birth (YYYY-MM-DD)')
+    .optional()
+    .or(z.literal('')),
+  raw_country: z.string().max(50).optional().or(z.literal('')),
+  raw_state: z.string().max(50).optional().or(z.literal('')),
+  raw_city: z.string().max(50).optional().or(z.literal('')),
+  temp_lead_source: z.string().optional().or(z.literal('')),
 
-    // Step 2
-    selectedOption: z.string().optional(),
-    concern: z.string().optional(),
-
-    // Step 3 (from q-form-2)
-    phoneNumber: z
-      .string()
-      .length(10, 'Phone number must be exactly 10 digits')
-      .regex(/^[0-9]+$/, 'Phone number must contain only digits'),
-    email: z
-      .string()
-      .min(1, 'Email is required')
-      .email('Please enter a valid email address'),
-    city: z
-      .string()
-      .min(2, 'City must be at least 2 characters')
-      .max(50, 'City must not exceed 50 characters'),
-    country: z
-      .string()
-      .min(2, 'Country must be at least 2 characters')
-      .max(50, 'Country must not exceed 50 characters'),
-    occupation: z.string().optional().or(z.literal('')),
-    periodCycleRegular: z.string().optional().or(z.literal('')),
-    pcos: z.string().optional().or(z.literal('')),
-    hormonal: z.string().optional().or(z.literal('')),
-    thyroid: z.string().optional().or(z.literal('')),
-    tryingToConceive: z
-      .string()
-      .max(500, 'Answer must not exceed 500 characters')
-      .optional()
-      .or(z.literal('')),
-  });
+  // Step 2: Tailored Health Needs
+  careChoice: z.string().optional().or(z.literal('')),
+  selectedOption: z.string().optional().or(z.literal('')),
+  unclear_health_description: z.string().optional().or(z.literal('')),
+  extra_notes: z.string().optional().or(z.literal('')),
+});
 
 export type ExploreFormData = z.infer<typeof exploreFormSchema>;
 
-const femaleOptions = [
+// ----------------------------------------------------------------------
+// Option Lists & Plan Mappings (from spec files)
+// ----------------------------------------------------------------------
+export const femaleOptions = [
   'I am a teenager and want to understand my body and periods',
   'I want to improve my overall health, lifestyle, and cycle',
   'I just want a doctor and guidance for my health',
@@ -76,21 +86,145 @@ const femaleOptions = [
   'We are planning pregnancy and want to prepare together',
 ];
 
-const maleOptions = [
+export const maleOptions = [
   'I want to improve my overall health, energy, and lifestyle',
   'I feel low energy, stressed, or not physically at my best',
   'I just want a personal doctor for guidance',
   'I have sexual health or testosterone concerns',
   'I have fertility issues or poor sperm reports',
-  'I am getting married soon and want to prepare my health for good Performance and future fatherhood',
-  'We are trying for a baby',
+  'I am getting married soon and want to prepare my health for good performance and future fatherhood',
+  'We are planning for a baby',
   'We are trying to conceive',
   'We have been trying for a while but no success',
   'We are planning pregnancy and want to prepare together',
 ];
 
+export const coupleOptions = [
+  'We are planning pregnancy and want to prepare together',
+  'We are trying to conceive',
+  'We have been trying for a while but no success',
+];
+
+export const leadSourceOptions = [
+  'Instagram',
+  'Facebook',
+  'Google Search',
+  'Friend / Family Referral',
+  'Doctor / Healthcare Professional',
+  'LinkedIn',
+  'YouTube',
+  'Other',
+];
+
+export const countryCodeOptions = [
+  { code: '+91', country: 'IN', label: '+91 (India)' },
+  { code: '+1', country: 'US', label: '+1 (US/CA)' },
+  { code: '+44', country: 'UK', label: '+44 (UK)' },
+  { code: '+971', country: 'AE', label: '+971 (UAE)' },
+  { code: '+65', country: 'SG', label: '+65 (Singapore)' },
+  { code: '+61', country: 'AU', label: '+61 (Australia)' },
+  { code: '+49', country: 'DE', label: '+49 (Germany)' },
+];
+
+export interface PlanMeta {
+  planName: string;
+  planCode: string;
+  route: string;
+}
+
+export const HEALTH_OPTION_PLAN_MAP: Record<string, PlanMeta> = {
+  // Female options
+  'I am a teenager and want to understand my body and periods': {
+    planName: 'LUNA',
+    planCode: 'LUNA',
+    route: '/luna',
+  },
+  'I want to improve my overall health, lifestyle, and cycle': {
+    planName: 'LYRA',
+    planCode: 'LYRA',
+    route: '/lyra',
+  },
+  'I just want a doctor and guidance for my health': {
+    planName: 'LYRA',
+    planCode: 'LYRA',
+    route: '/lyra',
+  },
+  'I have PCOS, irregular periods, or hormone issues': {
+    planName: 'CALA',
+    planCode: 'CALA',
+    route: '/cala',
+  },
+  'I am married and want to prepare my body before pregnancy': {
+    planName: 'EVE',
+    planCode: 'EVE',
+    route: '/eve',
+  },
+  'I am getting married soon and want to prepare my body for a healthy pregnancy': {
+    planName: 'EVE',
+    planCode: 'EVE',
+    route: '/eve',
+  },
+  'We are trying to conceive': {
+    planName: 'VITA',
+    planCode: 'VITA',
+    route: '/vita',
+  },
+  'We have been trying for a while but no success': {
+    planName: 'VITA',
+    planCode: 'VITA',
+    route: '/vita',
+  },
+  'We are planning pregnancy and want to prepare together': {
+    planName: 'EVE + GENESIS',
+    planCode: 'EVE-GENESIS',
+    route: '/eve-genesis',
+  },
+
+  // Male options
+  'I want to improve my overall health, energy, and lifestyle': {
+    planName: 'CORE',
+    planCode: 'CORE',
+    route: '/core',
+  },
+  'I feel low energy, stressed, or not physically at my best': {
+    planName: 'CORE',
+    planCode: 'CORE',
+    route: '/core',
+  },
+  'I just want a personal doctor for guidance': {
+    planName: 'CORE',
+    planCode: 'CORE',
+    route: '/core',
+  },
+  'I have sexual health or testosterone concerns': {
+    planName: 'ATLAS',
+    planCode: 'ATLAS',
+    route: '/atlas',
+  },
+  'I have fertility issues or poor sperm reports': {
+    planName: 'ATLAS',
+    planCode: 'ATLAS',
+    route: '/atlas',
+  },
+  'I am getting married soon and want to prepare my health for good performance and future fatherhood': {
+    planName: 'GENESIS',
+    planCode: 'GENESIS',
+    route: '/genesis',
+  },
+  'We are planning for a baby': {
+    planName: 'VITA',
+    planCode: 'VITA',
+    route: '/vita',
+  },
+  'We are trying for a baby': {
+    planName: 'VITA',
+    planCode: 'VITA',
+    route: '/vita',
+  },
+};
+
 // ----------------------------------------------------------------------
-// Gradient Border & Ambient Glow Pill Wrapper with Moving Gradient
+// Moving Pastel Gradient Wrapper for Option Pills
 // ----------------------------------------------------------------------
 function GradientOptionWrapper({
   children,
@@ -114,12 +248,12 @@ function GradientOptionWrapper({
 
   return (
     <div className={`relative group w-full ${className}`}>
-      {/* Outer Frame with moving gradient border */}
       <div
-        className={`relative p-[2px] rounded-[28px] transition-all duration-300 ${isSelected
-          ? 'shadow-[0_4px_22px_rgba(239,143,96,0.35),0_0_12px_rgba(174,222,228,0.25)]'
-          : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)] group-hover:shadow-[0_4px_20px_rgba(239,143,96,0.22)]'
-          }`}
+        className={`relative p-[2px] rounded-[28px] transition-all duration-300 ${
+          isSelected
+            ? 'shadow-[0_4px_22px_rgba(239,143,96,0.35),0_0_12px_rgba(174,222,243,0.25)]'
+            : 'shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)] group-hover:shadow-[0_4px_20px_rgba(239,143,96,0.22)]'
+        }`}
         style={{
           backgroundImage: gradientString,
           backgroundSize: '200% 100%',
@@ -128,37 +262,32 @@ function GradientOptionWrapper({
           isolation: 'isolate',
         }}
       >
-        {/* Soft default border overlay when not selected or hovered */}
         <div
-          className={`absolute inset-0 rounded-[28px] bg-white/80 border border-white/90 transition-opacity duration-300 pointer-events-none ${isSelected ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
-            }`}
+          className={`absolute inset-0 rounded-[28px] bg-white/80 border border-white/90 transition-opacity duration-300 pointer-events-none ${
+            isSelected ? 'opacity-0' : 'opacity-100 group-hover:opacity-0'
+          }`}
         />
-
-        {/* Inner Pill */}
         <div
-          className={`relative z-10 w-full h-full rounded-[26px] overflow-hidden transition-all duration-300 ${isSelected
-            ? 'bg-[#FCFAF7]/95 text-zinc-900 font-bold'
-            : 'bg-white/90 group-hover:bg-[#FCFAF7]/95 text-zinc-700'
-            }`}
+          className={`relative z-10 w-full h-full rounded-[26px] overflow-hidden transition-all duration-300 ${
+            isSelected
+              ? 'bg-[#FCFAF7]/95 text-zinc-900 font-bold'
+              : 'bg-white/90 group-hover:bg-[#FCFAF7]/95 text-zinc-700'
+          }`}
           style={{
             WebkitMaskImage: '-webkit-radial-gradient(white, black)',
           }}
         >
-          {/* Subtle moving pastel gradient tint inside pill */}
           <div
-            className={`absolute inset-0 transition-opacity duration-300 pointer-events-none ${isSelected ? 'opacity-25' : 'opacity-0 group-hover:opacity-15'
-              }`}
+            className={`absolute inset-0 transition-opacity duration-300 pointer-events-none ${
+              isSelected ? 'opacity-25' : 'opacity-0 group-hover:opacity-15'
+            }`}
             style={{
               backgroundImage: gradientString,
               backgroundSize: '200% 100%',
               animation: `${animName} ${duration}s ease-in-out -${delaySec}s infinite`,
             }}
           />
-
-          {/* Top highlight reflection */}
           <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-t-[26px]" />
-
-          {/* Pill content */}
           <div className="relative z-10 w-full h-full">{children}</div>
         </div>
       </div>
@@ -166,81 +295,26 @@ function GradientOptionWrapper({
   );
 }
 
-
-function GlassDropdown({
-  label,
-  value,
-  onChange,
-  error,
-}: {
-  label: string;
-  value: string;
-  onChange: (val: string) => void;
-  error?: string;
-}) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div>
-      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
-        <button
-          type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none cursor-pointer"
-        >
-          <span className={value ? 'font-medium text-zinc-900' : 'text-zinc-500'}>
-            {value ? `${label} — ${value}` : label}
-          </span>
-          <span className="text-zinc-500 hover:text-zinc-800 transition-colors">
-            {isOpen ? (
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            ) : (
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-              </svg>
-            )}
-          </span>
-        </button>
-
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="px-6 pb-4 pt-1 space-y-1 border-t border-white/60 bg-white/80 backdrop-blur-md"
-            >
-              {['Yes', 'No'].map((option) => (
-                <div
-                  key={option}
-                  onClick={() => {
-                    onChange(option);
-                    setIsOpen(false);
-                  }}
-                  className={`text-sm sm:text-base cursor-pointer py-2 px-3 rounded-xl transition-colors ${value === option
-                    ? 'font-bold text-zinc-900 bg-white/60'
-                    : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-white/30'
-                    }`}
-                >
-                  {option}
-                </div>
-              ))}
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-      {error && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{error}</p>}
-    </div>
-  );
-}
-
+// ----------------------------------------------------------------------
+// Main Explore Form Component
+// ----------------------------------------------------------------------
 export default function ExploreForm() {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [genderOpen, setGenderOpen] = useState(false);
+  const [countryCodeOpen, setCountryCodeOpen] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
+  const [stateOpen, setStateOpen] = useState(false);
+  const [cityOpen, setCityOpen] = useState(false);
+  const [leadSourceOpen, setLeadSourceOpen] = useState(false);
+  const [careChoice, setCareChoice] = useState<string>('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
+
+  // Filter search states for location dropdowns
+  const [stateSearch, setStateSearch] = useState('');
+  const [citySearch, setCitySearch] = useState('');
 
   const {
     register,
@@ -248,71 +322,189 @@ export default function ExploreForm() {
     setValue,
     watch,
     trigger,
-    reset,
     formState: { errors },
   } = useForm<ExploreFormData>({
     resolver: zodResolver(exploreFormSchema),
     defaultValues: {
       fullName: '',
-      age: '',
+      countryCode: '+91',
+      phone: '',
       gender: '',
-      selectedOption: '',
-      concern: '',
-      phoneNumber: '',
       email: '',
-      city: '',
-      country: '',
-      occupation: '',
-      periodCycleRegular: '',
-      pcos: '',
-      hormonal: '',
-      thyroid: '',
-      tryingToConceive: '',
+      dob: '',
+      raw_country: 'India',
+      raw_state: '',
+      raw_city: '',
+      temp_lead_source: '',
+      careChoice: '',
+      selectedOption: '',
+      unclear_health_description: '',
+      extra_notes: '',
     },
   });
 
   const selectedGender = watch('gender');
+  const selectedCountryCode = watch('countryCode');
+  const selectedCountry = watch('raw_country') || 'India';
+  const selectedState = watch('raw_state') || '';
+  const selectedCity = watch('raw_city') || '';
+  const selectedLeadSource = watch('temp_lead_source');
   const selectedOption = watch('selectedOption');
-  const periodCycleValue = watch('periodCycleRegular');
-  const pcosValue = watch('pcos');
-  const hormonalValue = watch('hormonal');
-  const thyroidValue = watch('thyroid');
+  const selectedDob = watch('dob');
 
-  // Options are shown based on gender selection
-  const currentOptions =
-    selectedGender === 'Male'
-      ? maleOptions
-      : selectedGender === 'Female'
-        ? femaleOptions
-        : null;
+  // Dynamically derive available States & Cities from @/lib/utils
+  const availableStates = useMemo(() => {
+    return getStatesByCountry(selectedCountry);
+  }, [selectedCountry]);
 
-  const handleNextStep1 = async () => {
-    const isStep1Valid = await trigger(['fullName', 'age', 'gender']);
-    if (isStep1Valid) {
-      setCurrentStep(2);
+  const availableCities = useMemo(() => {
+    return getCitiesByState(selectedCountry, selectedState);
+  }, [selectedCountry, selectedState]);
+
+  const filteredStates = useMemo(() => {
+    if (!stateSearch.trim()) return availableStates;
+    return availableStates.filter((s) =>
+      s.toLowerCase().includes(stateSearch.toLowerCase().trim())
+    );
+  }, [availableStates, stateSearch]);
+
+  const filteredCities = useMemo(() => {
+    if (!citySearch.trim()) return availableCities;
+    return availableCities.filter((c) =>
+      c.toLowerCase().includes(citySearch.toLowerCase().trim())
+    );
+  }, [availableCities, citySearch]);
+
+  // Determine current options based on gender and careChoice
+  let currentOptions: string[] | null = null;
+  let optionsHeading = '';
+
+  if (selectedGender === 'Female') {
+    currentOptions = femaleOptions;
+    optionsHeading = 'Female Health Options';
+  } else if (selectedGender === 'Male') {
+    currentOptions = maleOptions;
+    optionsHeading = 'Male Health Options';
+  } else if (selectedGender === 'Prefer not to say') {
+    if (careChoice === "Women's health") {
+      currentOptions = femaleOptions;
+      optionsHeading = "Women's Health Options";
+    } else if (careChoice === "Men's health") {
+      currentOptions = maleOptions;
+      optionsHeading = "Men's Health Options";
+    } else if (careChoice === 'Care for us as a couple') {
+      currentOptions = coupleOptions;
+      optionsHeading = 'Couple Care Options';
     }
+  }
+
+  const closeAllDropdowns = () => {
+    setGenderOpen(false);
+    setCountryCodeOpen(false);
+    setCountryOpen(false);
+    setStateOpen(false);
+    setCityOpen(false);
+    setLeadSourceOpen(false);
   };
 
-  const handleNextStep2 = () => {
-    setCurrentStep(3);
+  const handleNextStep1 = async () => {
+    setApiError(null);
+    closeAllDropdowns();
+    const isStep1Valid = await trigger([
+      'fullName',
+      'countryCode',
+      'phone',
+      'gender',
+      'email',
+      'dob',
+      'raw_country',
+      'raw_state',
+      'raw_city',
+      'temp_lead_source',
+    ]);
+    if (isStep1Valid) {
+      setCurrentStep(2);
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 120, behavior: 'smooth' });
+      }
+    }
   };
 
   const handlePrevStep = () => {
+    setApiError(null);
+    closeAllDropdowns();
     setCurrentStep((prev) => Math.max(1, prev - 1));
-  };
-
-  const onSubmit = (data: ExploreFormData) => {
-    console.log('Explore Form Submitted (Step 3 Save):', data);
-    setSubmitted(true);
     if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 120, behavior: 'smooth' });
     }
   };
 
-  const resetForm = () => {
-    reset();
-    setSubmitted(false);
-    setCurrentStep(1);
+  // Submit via Axios
+  const onSubmit = async (data: ExploreFormData) => {
+    setIsSubmitting(true);
+    setApiError(null);
+
+    try {
+      const selectedPlanMeta = data.selectedOption
+        ? HEALTH_OPTION_PLAN_MAP[data.selectedOption]
+        : null;
+
+      // Sanitize phone number: strip spaces, hyphens, parentheses, dots
+      const rawDigits = data.phone.replace(/[\s\-\(\)\.]/g, '');
+      let cleanDigits = rawDigits;
+      const dialCode = data.countryCode.replace('+', '');
+      // Strip duplicated country code prefix if typed in phone field
+      if (cleanDigits.startsWith(`+${dialCode}`)) {
+        cleanDigits = cleanDigits.slice(dialCode.length + 1);
+      } else if (cleanDigits.startsWith(dialCode) && cleanDigits.length > 10) {
+        cleanDigits = cleanDigits.slice(dialCode.length);
+      } else if (cleanDigits.startsWith('0')) {
+        cleanDigits = cleanDigits.slice(1);
+      }
+      cleanDigits = cleanDigits.replace(/^\+/, '');
+
+      const fullPhone = `${data.countryCode}${cleanDigits}`;
+      const mappedGender: GenderType =
+        data.gender === 'Female' ? 'FEMALE' : data.gender === 'Male' ? 'MALE' : 'OTHER';
+
+      const payload: CreateLeadPayload = {
+        name: data.fullName.trim(),
+        phone: fullPhone,
+        gender: mappedGender,
+        email: data.email?.trim() || undefined,
+        dob: data.dob?.trim() || undefined,
+        plan_code: selectedPlanMeta?.planCode || undefined,
+        temp_lead_source: data.temp_lead_source || undefined,
+        raw_country: data.raw_country?.trim() || undefined,
+        raw_state: data.raw_state?.trim() || undefined,
+        raw_city: data.raw_city?.trim() || undefined,
+        clear_health_description: data.selectedOption || undefined,
+        unclear_health_description: data.unclear_health_description?.trim() || undefined,
+        extra_notes: data.extra_notes?.trim() || undefined,
+      };
+
+      const leadResponse = await createLead(payload);
+
+      // SECURITY: Strictly save only the lead_id in sessionStorage (no PII in browser storage)
+      if (leadResponse?.id) {
+        sessionStorage.setItem('joyzen_lead_id', leadResponse.id);
+      }
+
+      // If mapped to a program route, navigate directly to it
+      if (selectedPlanMeta?.route) {
+        router.push(selectedPlanMeta.route);
+      } else {
+        setSubmitted(true);
+        if (typeof window !== 'undefined') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+    } catch (err) {
+      const errMsg = formatApiError(err);
+      setApiError(errMsg);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const stepVariants = {
@@ -330,9 +522,14 @@ export default function ExploreForm() {
     }),
   };
 
+  // Today's date string YYYY-MM-DD for max dob restriction
+  const maxDobDate = useMemo(() => {
+    return new Date().toISOString().split('T')[0];
+  }, []);
+
   return (
     <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden bg-[#FAF8F5]">
-      {/* iOS-Safe Gradient Flow Keyframes */}
+      {/* iOS-Safe Moving Gradient Flow Keyframes */}
       <style>{`
         @keyframes exploreGradientFlow {
           0% { background-position: 0% 50%; }
@@ -368,7 +565,7 @@ export default function ExploreForm() {
         </svg>
       </div>
 
-      <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center mt-10 transition-all duration-300">
+      <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center mt-6 transition-all duration-300">
         {/* Dynamic Heading & Subtitle */}
         {!submitted && (
           <div className="text-center max-w-2xl mx-auto mb-8 space-y-3">
@@ -381,12 +578,12 @@ export default function ExploreForm() {
                   exit={{ opacity: 0, y: 10 }}
                   className="space-y-3"
                 >
-                  <h1 className="text-[40px] sm:text-4xl lg:text-[46px] font-bold tracking-tight text-black leading-[1.18]">
+                  <h1 className="text-[38px] sm:text-4xl lg:text-[44px] font-bold tracking-tight text-black leading-[1.18]">
                     Explore <br className="sm:hidden" />
-                    <span className="text-[#EF8F60]">Joyzen</span> models
+                    <span className="text-[#EF8F60]">Joyzen</span> care
                   </h1>
-                  <p className="text-sm sm:text-base lg:text-lg text-zinc-600 font-normal leading-[1.4] max-w-xl mx-auto">
-                    Discover personalized care programs designed around your journey, with structured guidance, continuous support, and plans that adapt as you progress.
+                  <p className="text-sm sm:text-base text-zinc-600 font-normal leading-[1.4] max-w-lg mx-auto">
+                    Personalized reproductive and holistic health programs guided by your own dedicated doctor.
                   </p>
                 </motion.div>
               )}
@@ -399,31 +596,11 @@ export default function ExploreForm() {
                   exit={{ opacity: 0, y: 10 }}
                   className="space-y-2"
                 >
-                  <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-black leading-[1.18]">
-                    What best describes you right now?
+                  <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-black leading-[1.18]">
+                    What best describes your goal?
                   </h2>
                   <p className="text-sm sm:text-base text-zinc-600 font-medium">
-                    {selectedGender === 'Prefer not to say'
-                      ? 'Help us understand your health concerns so we can guide you effectively.'
-                      : 'Select the option that matches your current health goals & needs.'}
-                  </p>
-                </motion.div>
-              )}
-
-              {currentStep === 3 && (
-                <motion.div
-                  key="heading-step3"
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="space-y-2"
-                >
-                  <h2 className="text-3xl sm:text-4xl lg:text-[44px] font-bold tracking-tight text-black leading-[1.18]">
-                    Let's take the next step
-                  </h2>
-                  <p className="text-sm sm:text-base text-zinc-600 font-medium">
-                    You've told us a little about what you're looking for.<br className='hidden md:block' />
-                    Now, share your contact details so our team can guide you from here.
+                    Select your focus to view your tailored care program and connect with our care team.
                   </p>
                 </motion.div>
               )}
@@ -431,36 +608,34 @@ export default function ExploreForm() {
           </div>
         )}
 
-        {/* Stepper Progress Bar Header */}
+        {/* 2-Step Progress Indicator Header */}
         {!submitted && (
           <div className="w-full mb-6 p-4 rounded-3xl bg-white/50 backdrop-blur-xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.02)] space-y-3">
-            <div className="flex items-center justify-between px-2">
-              {/* Step 1 */}
+            <div className="flex items-center justify-between px-4">
               <div className="flex items-center space-x-2">
                 <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 1
-                    ? 'bg-[#EF8F60] text-white shadow-sm'
-                    : 'bg-[#AEDEE4] text-[#036132]'
-                    }`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                    currentStep === 1
+                      ? 'bg-[#EF8F60] text-white shadow-sm'
+                      : 'bg-[#AEDEE4] text-[#036132]'
+                  }`}
                 >
                   1
                 </span>
                 <span className={`text-xs sm:text-sm font-semibold ${currentStep === 1 ? 'text-zinc-900' : 'text-zinc-500'}`}>
-                  Basic Info
+                  Basic &amp; Contact Info
                 </span>
               </div>
 
-              <div className="w-4 sm:w-8 h-[1px] bg-zinc-300 mx-1 sm:mx-2" />
+              <div className="flex-1 h-[1px] bg-zinc-300 mx-4" />
 
-              {/* Step 2 */}
               <div className="flex items-center space-x-2">
                 <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 2
-                    ? 'bg-[#EF8F60] text-white shadow-sm'
-                    : currentStep > 2
-                      ? 'bg-[#AEDEE4] text-[#036132]'
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
+                    currentStep === 2
+                      ? 'bg-[#EF8F60] text-white shadow-sm'
                       : 'bg-zinc-200 text-zinc-500'
-                    }`}
+                  }`}
                 >
                   2
                 </span>
@@ -468,33 +643,14 @@ export default function ExploreForm() {
                   Tailored Needs
                 </span>
               </div>
-
-              <div className="w-4 sm:w-8 h-[1px] bg-zinc-300 mx-1 sm:mx-2" />
-
-              {/* Step 3 */}
-              <div className="flex items-center space-x-2">
-                <span
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${currentStep === 3
-                    ? 'bg-[#EF8F60] text-white shadow-sm'
-                    : 'bg-zinc-200 text-zinc-500'
-                    }`}
-                >
-                  3
-                </span>
-                <span className={`text-xs sm:text-sm font-semibold ${currentStep === 3 ? 'text-zinc-900' : 'text-zinc-500'}`}>
-                  Health Profile
-                </span>
-              </div>
             </div>
 
-            {/* Smooth Fill Progress Bar with active moving gradient */}
+            {/* Smooth Fill Progress Bar */}
             <div className="w-full h-1.5 bg-zinc-200/80 rounded-full overflow-hidden relative">
               <motion.div
                 className="h-full rounded-full"
-                initial={{ width: '33.33%' }}
-                animate={{
-                  width: currentStep === 1 ? '33.33%' : currentStep === 2 ? '66.66%' : '100%',
-                }}
+                initial={{ width: '50%' }}
+                animate={{ width: currentStep === 1 ? '50%' : '100%' }}
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
                 style={{
                   backgroundImage:
@@ -507,22 +663,28 @@ export default function ExploreForm() {
           </div>
         )}
 
+        {/* Global Error Banner */}
+        {apiError && (
+          <div className="w-full mb-4 p-4 rounded-2xl bg-red-50/90 border border-red-200 text-red-700 text-sm flex items-start gap-3 backdrop-blur-sm">
+            <svg className="w-5 h-5 shrink-0 mt-0.5 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <div className="flex-1">
+              <p className="font-semibold">Submission Notice</p>
+              <p className="text-xs sm:text-sm mt-0.5">{apiError}</p>
+            </div>
+          </div>
+        )}
+
         {/* Interactive Form Card */}
         <form onSubmit={handleSubmit(onSubmit)} className="relative w-full">
-
           {submitted ? (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.45 }}
               className="relative z-10 w-full flex flex-col items-center justify-center py-4"
             >
-              {/* Heading from Image 2 */}
-              <h1 className="text-2xl sm:text-3xl lg:text-[34px] font-bold tracking-tight text-center text-zinc-950 mb-8 sm:mb-10">
-                Confirmation. Your call is booked.
-              </h1>
-
-              {/* Confirmation Card with Liquid Glass Effect */}
               <div className="w-full max-w-xl mx-auto">
                 <LiquidGlass
                   borderRadius={38}
@@ -534,36 +696,30 @@ export default function ExploreForm() {
                   displacementScale={0.8}
                   elasticity={0.4}
                   zIndex={10}
-                  className="w-full rounded-[36px] sm:rounded-[44px] bg-white/40 backdrop-blur-2xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_12px_36px_rgba(0,0,0,0.04)] overflow-hidden"
+                  className="w-full rounded-[36px] bg-white/40 backdrop-blur-2xl border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.9),0_12px_36px_rgba(0,0,0,0.04)] overflow-hidden"
                 >
                   <div className="p-10 sm:p-14 text-center relative z-10">
-                    <h2 className="text-3xl sm:text-4xl lg:text-[42px] font-bold text-[#EF8F60] tracking-tight mb-5 relative z-10">
-                      You&apos;re all set
+                    <h2 className="text-3xl sm:text-4xl font-bold text-[#EF8F60] tracking-tight mb-4">
+                      Thank You!
                     </h2>
-
-                    <p className="text-base sm:text-lg text-zinc-800 font-medium leading-relaxed max-w-sm mx-auto mb-8 relative z-10">
-                      Thank you for reaching out.
-                      <br />
-                      Our Clarity team will review your
-                      <br />
-                      information and get in touch with you.
+                    <p className="text-base text-zinc-800 font-medium leading-relaxed max-w-sm mx-auto mb-8">
+                      Your details have been registered successfully. Our care team will review your information and guide you on the best program.
                     </p>
-
-                    <div className="relative z-10">
-                      <Link
-                        href="/"
-                        className="inline-block px-7 py-3 rounded-full text-xs font-bold tracking-wider uppercase text-zinc-900 bg-[#E8F4F5]/80 hover:bg-[#DCEEEF] border border-white shadow-xs hover:shadow-sm transition-all cursor-pointer"
-                      >
-                        BACK TO HOME
-                      </Link>
-                    </div>
+                    <Link
+                      href="/"
+                      className="inline-block px-7 py-3 rounded-full text-xs font-bold tracking-wider uppercase text-zinc-900 bg-[#E8F4F5]/80 hover:bg-[#DCEEEF] border border-white shadow-xs transition-all"
+                    >
+                      BACK TO HOME
+                    </Link>
                   </div>
                 </LiquidGlass>
               </div>
             </motion.div>
           ) : (
             <AnimatePresence mode="wait" custom={currentStep}>
-              {/* STEP 1: Basic Information */}
+              {/* ------------------------------------------------------------- */}
+              {/* STEP 1: Basic & Location Information                          */}
+              {/* ------------------------------------------------------------- */}
               {currentStep === 1 && (
                 <motion.div
                   key="step1"
@@ -575,52 +731,103 @@ export default function ExploreForm() {
                   transition={{ duration: 0.35 }}
                   className="relative z-10 space-y-4"
                 >
-                  {/* Full Name Input */}
+                  {/* Full Name Input (required) */}
                   <div>
                     <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
                       <input
-                        {...register('fullName', {
-                          onChange: (e) => {
-                            e.target.value = e.target.value.replace(/[0-9]/g, '');
-                          },
-                        })}
+                        {...register('fullName')}
                         type="text"
-                        placeholder="Full Name"
+                        placeholder="Full Name *"
                         className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
                       />
                     </div>
                     {errors.fullName && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.fullName.message}</p>}
                   </div>
 
-                  {/* Age Input */}
-                  <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                      <input
-                        {...register('age', {
-                          onChange: (e) => {
-                            e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 3);
-                          },
-                        })}
-                        type="text"
-                        inputMode="numeric"
-                        pattern="[0-9]*"
-                        maxLength={3}
-                        placeholder="Age"
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                      />
+                  {/* Phone with Country Code (required) */}
+                  <div className={`relative ${countryCodeOpen ? 'z-50' : 'z-20'}`}>
+                    <div className="flex gap-2">
+                      {/* Country Code Dropdown */}
+                      <div className={`relative w-36 shrink-0 rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all ${countryCodeOpen ? 'z-50' : 'z-10'}`}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCountryCodeOpen(!countryCodeOpen);
+                            setGenderOpen(false);
+                            setCountryOpen(false);
+                            setStateOpen(false);
+                            setCityOpen(false);
+                            setLeadSourceOpen(false);
+                          }}
+                          className="w-full px-4 py-4 flex items-center justify-between text-left text-sm font-semibold text-zinc-800 focus:outline-none cursor-pointer"
+                        >
+                          <span>{selectedCountryCode}</span>
+                          <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        <AnimatePresence>
+                          {countryCodeOpen && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute left-0 right-0 top-full mt-1.5 z-[100] p-2 space-y-1 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-48 overflow-y-auto"
+                            >
+                              {countryCodeOptions.map((opt) => (
+                                <div
+                                  key={opt.code}
+                                  onClick={() => {
+                                    setValue('countryCode', opt.code, { shouldValidate: true });
+                                    setCountryCodeOpen(false);
+                                  }}
+                                  className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors ${
+                                    selectedCountryCode === opt.code
+                                      ? 'font-bold text-zinc-900 bg-zinc-100'
+                                      : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
+                                  }`}
+                                >
+                                  {opt.label}
+                                </div>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+
+                      {/* Phone Number Input */}
+                      <div className="relative flex-1 rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                        <input
+                          {...register('phone')}
+                          type="tel"
+                          inputMode="numeric"
+                          placeholder="Phone Number (e.g. 9876543210) *"
+                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                        />
+                      </div>
                     </div>
-                    {errors.age && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.age.message}</p>}
+                    {errors.phone && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.phone.message}</p>}
                   </div>
 
-                  {/* Gender Custom Dropdown */}
-                  <div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
+                  {/* Gender Custom Dropdown (required) */}
+                  <div className={`relative ${genderOpen ? 'z-40' : 'z-20'}`}>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
                       <button
                         type="button"
-                        onClick={() => setGenderOpen(!genderOpen)}
+                        onClick={() => {
+                          setGenderOpen(!genderOpen);
+                          setCountryCodeOpen(false);
+                          setCountryOpen(false);
+                          setStateOpen(false);
+                          setCityOpen(false);
+                          setLeadSourceOpen(false);
+                        }}
                         className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none cursor-pointer"
                       >
-                        <span>{selectedGender || 'Gender'}</span>
+                        <span className={selectedGender ? 'text-zinc-900 font-medium' : 'text-zinc-400'}>
+                          {selectedGender ? `Gender: ${selectedGender}` : 'Gender *'}
+                        </span>
                         <span className="text-zinc-500 hover:text-zinc-800 transition-colors">
                           {genderOpen ? (
                             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
@@ -634,7 +841,6 @@ export default function ExploreForm() {
                         </span>
                       </button>
 
-                      {/* Dropdown Options */}
                       <AnimatePresence>
                         {genderOpen && (
                           <motion.div
@@ -642,7 +848,7 @@ export default function ExploreForm() {
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.25 }}
-                            className="px-6 pb-5 pt-2 space-y-2 border-t border-white/60 bg-white/80 backdrop-blur-md"
+                            className="px-6 pb-5 pt-2 space-y-2 border-t border-white/60 bg-white/80 backdrop-blur-md rounded-b-[28px]"
                           >
                             {['Female', 'Male', 'Prefer not to say'].map((option) => (
                               <div
@@ -650,13 +856,15 @@ export default function ExploreForm() {
                                 onClick={() => {
                                   setValue('gender', option, { shouldValidate: true });
                                   setValue('selectedOption', '');
-                                  setValue('concern', '');
+                                  setValue('careChoice', '');
+                                  setCareChoice('');
                                   setGenderOpen(false);
                                 }}
-                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${selectedGender === option
-                                  ? 'font-bold text-zinc-900'
-                                  : 'font-medium text-zinc-500 hover:text-zinc-900'
-                                  }`}
+                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
+                                  selectedGender === option
+                                    ? 'font-bold text-zinc-900'
+                                    : 'font-medium text-zinc-500 hover:text-zinc-900'
+                                }`}
                               >
                                 {option}
                               </div>
@@ -668,14 +876,334 @@ export default function ExploreForm() {
                     {errors.gender && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.gender.message}</p>}
                   </div>
 
-                  {/* Step 1 Action Button */}
+                  {/* Email & Date of Birth (Date Picker) Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 relative z-10">
+                    {/* Email Input */}
+                    <div>
+                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                        <input
+                          {...register('email')}
+                          type="email"
+                          placeholder="Email (optional)"
+                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
+                        />
+                      </div>
+                      {errors.email && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.email.message}</p>}
+                    </div>
+
+                    {/* Date of Birth Date Picker */}
+                    <div>
+                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                        <div className="relative flex items-center">
+                          <input
+                            {...register('dob')}
+                            type="date"
+                            max={maxDobDate}
+                            min="1920-01-01"
+                            onClick={(e) => {
+                              try {
+                                (e.target as HTMLInputElement).showPicker?.();
+                              } catch {}
+                            }}
+                            className={`w-full px-6 py-4 text-sm sm:text-base font-medium bg-transparent outline-none rounded-[28px] cursor-pointer transition-colors scheme-light [&::-webkit-calendar-picker-indicator]:opacity-70 [&::-webkit-calendar-picker-indicator]:cursor-pointer hover:[&::-webkit-calendar-picker-indicator]:opacity-100 ${
+                              selectedDob ? 'text-zinc-900 font-semibold' : 'text-zinc-400'
+                            }`}
+                          />
+                        </div>
+                      </div>
+                      {errors.dob && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.dob.message}</p>}
+                    </div>
+                  </div>
+
+                  {/* Location Selectors: Country, State, City (from @/lib/utils) */}
+                  <div className={`grid grid-cols-1 sm:grid-cols-3 gap-3 relative ${
+                    countryOpen || stateOpen || cityOpen ? 'z-50' : 'z-20'
+                  }`}>
+                    {/* Country Selector */}
+                    <div className={`relative ${countryOpen ? 'z-50' : 'z-10'}`}>
+                      <div className="rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCountryOpen(!countryOpen);
+                            setStateOpen(false);
+                            setCityOpen(false);
+                            setGenderOpen(false);
+                            setCountryCodeOpen(false);
+                            setLeadSourceOpen(false);
+                          }}
+                          className="w-full px-5 py-4 flex items-center justify-between text-left text-sm font-medium text-zinc-700 focus:outline-none cursor-pointer"
+                        >
+                          <span className={selectedCountry ? 'text-zinc-900 font-semibold truncate' : 'text-zinc-400'}>
+                            {selectedCountry || 'Country'}
+                          </span>
+                          <svg className="w-3.5 h-3.5 text-zinc-400 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+
+                        <AnimatePresence>
+                          {countryOpen && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute left-0 right-0 top-full mt-1.5 z-[100] p-2 space-y-1 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-56 overflow-y-auto"
+                            >
+                              {COUNTRIES.map((country) => (
+                                <div
+                                  key={country}
+                                  onClick={() => {
+                                    setValue('raw_country', country);
+                                    setValue('raw_state', '');
+                                    setValue('raw_city', '');
+                                    setCountryOpen(false);
+                                  }}
+                                  className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors ${
+                                    selectedCountry === country
+                                      ? 'font-bold text-zinc-900 bg-zinc-100'
+                                      : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
+                                  }`}
+                                >
+                                  {country}
+                                </div>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+
+                    {/* State Selector */}
+                    <div className={`relative ${stateOpen ? 'z-50' : 'z-10'}`}>
+                      <div className="rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setStateOpen(!stateOpen);
+                            setCountryOpen(false);
+                            setCityOpen(false);
+                            setGenderOpen(false);
+                            setCountryCodeOpen(false);
+                            setLeadSourceOpen(false);
+                            setStateSearch('');
+                          }}
+                          className="w-full px-5 py-4 flex items-center justify-between text-left text-sm font-medium text-zinc-700 focus:outline-none cursor-pointer"
+                        >
+                          <span className={selectedState ? 'text-zinc-900 font-semibold truncate' : 'text-zinc-400'}>
+                            {selectedState || 'State'}
+                          </span>
+                          <svg className="w-3.5 h-3.5 text-zinc-400 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+
+                        <AnimatePresence>
+                          {stateOpen && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute left-0 right-0 top-full mt-1.5 z-[100] p-2 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-60 overflow-hidden flex flex-col"
+                            >
+                              <div className="p-1 pb-2 border-b border-zinc-100">
+                                <input
+                                  type="text"
+                                  value={stateSearch}
+                                  onChange={(e) => setStateSearch(e.target.value)}
+                                  placeholder="Search state..."
+                                  className="w-full px-3 py-1.5 text-xs bg-zinc-50 border border-zinc-200 rounded-lg outline-none text-zinc-800 placeholder:text-zinc-400"
+                                  autoFocus
+                                />
+                              </div>
+
+                              <div className="overflow-y-auto space-y-1 pt-1 max-h-44">
+                                {filteredStates.length > 0 ? (
+                                  filteredStates.map((state) => (
+                                    <div
+                                      key={state}
+                                      onClick={() => {
+                                        setValue('raw_state', state);
+                                        setValue('raw_city', '');
+                                        setStateOpen(false);
+                                      }}
+                                      className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors ${
+                                        selectedState === state
+                                          ? 'font-bold text-zinc-900 bg-zinc-100'
+                                          : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
+                                      }`}
+                                    >
+                                      {state}
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div
+                                    onClick={() => {
+                                      if (stateSearch.trim()) {
+                                        setValue('raw_state', stateSearch.trim());
+                                        setValue('raw_city', '');
+                                        setStateOpen(false);
+                                      }
+                                    }}
+                                    className="p-2 text-xs text-zinc-600 hover:bg-zinc-50 cursor-pointer rounded-lg text-center"
+                                  >
+                                    Use custom: &quot;{stateSearch}&quot;
+                                  </div>
+                                )}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+
+                    {/* City Selector */}
+                    <div className={`relative ${cityOpen ? 'z-50' : 'z-10'}`}>
+                      <div className="rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCityOpen(!cityOpen);
+                            setCountryOpen(false);
+                            setStateOpen(false);
+                            setGenderOpen(false);
+                            setCountryCodeOpen(false);
+                            setLeadSourceOpen(false);
+                            setCitySearch('');
+                          }}
+                          className="w-full px-5 py-4 flex items-center justify-between text-left text-sm font-medium text-zinc-700 focus:outline-none cursor-pointer"
+                        >
+                          <span className={selectedCity ? 'text-zinc-900 font-semibold truncate' : 'text-zinc-400'}>
+                            {selectedCity || 'City'}
+                          </span>
+                          <svg className="w-3.5 h-3.5 text-zinc-400 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+
+                        <AnimatePresence>
+                          {cityOpen && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: 'auto', opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute left-0 right-0 top-full mt-1.5 z-[100] p-2 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-60 overflow-hidden flex flex-col"
+                            >
+                              <div className="p-1 pb-2 border-b border-zinc-100">
+                                <input
+                                  type="text"
+                                  value={citySearch}
+                                  onChange={(e) => setCitySearch(e.target.value)}
+                                  placeholder="Search or enter city..."
+                                  className="w-full px-3 py-1.5 text-xs bg-zinc-50 border border-zinc-200 rounded-lg outline-none text-zinc-800 placeholder:text-zinc-400"
+                                  autoFocus
+                                />
+                              </div>
+
+                              <div className="overflow-y-auto space-y-1 pt-1 max-h-44">
+                                {filteredCities.length > 0 ? (
+                                  filteredCities.map((city) => (
+                                    <div
+                                      key={city}
+                                      onClick={() => {
+                                        setValue('raw_city', city);
+                                        setCityOpen(false);
+                                      }}
+                                      className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors ${
+                                        selectedCity === city
+                                          ? 'font-bold text-zinc-900 bg-zinc-100'
+                                          : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
+                                      }`}
+                                    >
+                                      {city}
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div
+                                    onClick={() => {
+                                      if (citySearch.trim()) {
+                                        setValue('raw_city', citySearch.trim());
+                                        setCityOpen(false);
+                                      }
+                                    }}
+                                    className="p-2 text-xs text-zinc-600 hover:bg-zinc-50 cursor-pointer rounded-lg text-center"
+                                  >
+                                    Use custom: &quot;{citySearch}&quot;
+                                  </div>
+                                )}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* How did you hear about us? Dropdown */}
+                  <div className={`relative ${leadSourceOpen ? 'z-50' : 'z-10'}`}>
+                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setLeadSourceOpen(!leadSourceOpen);
+                          setGenderOpen(false);
+                          setCountryCodeOpen(false);
+                          setCountryOpen(false);
+                          setStateOpen(false);
+                          setCityOpen(false);
+                        }}
+                        className="w-full px-6 py-4 flex items-center justify-between text-left text-sm sm:text-base font-medium text-zinc-700 focus:outline-none cursor-pointer"
+                      >
+                        <span className={selectedLeadSource ? 'text-zinc-900 font-medium' : 'text-zinc-400'}>
+                          {selectedLeadSource || 'How did you hear about us?'}
+                        </span>
+                        <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+
+                      <AnimatePresence>
+                        {leadSourceOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.25 }}
+                            className="absolute left-0 right-0 top-full mt-1.5 z-[100] px-6 pb-5 pt-2 space-y-1.5 border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl rounded-2xl max-h-56 overflow-y-auto"
+                          >
+                            {leadSourceOptions.map((opt) => (
+                              <div
+                                key={opt}
+                                onClick={() => {
+                                  setValue('temp_lead_source', opt);
+                                  setLeadSourceOpen(false);
+                                }}
+                                className={`text-sm cursor-pointer py-1.5 transition-colors ${
+                                  selectedLeadSource === opt
+                                    ? 'font-bold text-zinc-900'
+                                    : 'font-medium text-zinc-500 hover:text-zinc-900'
+                                }`}
+                              >
+                                {opt}
+                              </div>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  </div>
+
+                  {/* Step 1 Continue Button */}
                   <div className="flex justify-end pt-4">
                     <button
                       type="button"
                       onClick={handleNextStep1}
                       className="inline-flex items-center gap-2 px-8 py-3.5 rounded-[24px] text-sm font-bold uppercase tracking-tight text-black bg-[#AEDEE44D] border border-[#AEDEE4] backdrop-blur-sm shadow-md hover:bg-[#AEDEE4]/60 transition-all cursor-pointer"
                     >
-                      <span>Continue</span>
+                      <span>Continue to Health Goals</span>
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                       </svg>
@@ -684,7 +1212,9 @@ export default function ExploreForm() {
                 </motion.div>
               )}
 
-              {/* STEP 2: Tailored Needs */}
+              {/* ------------------------------------------------------------- */}
+              {/* STEP 2: Tailored Health Goals & Program Matching              */}
+              {/* ------------------------------------------------------------- */}
               {currentStep === 2 && (
                 <motion.div
                   key="step2"
@@ -694,18 +1224,56 @@ export default function ExploreForm() {
                   animate="visible"
                   exit="exit"
                   transition={{ duration: 0.35 }}
-                  className="relative z-10 space-y-4"
+                  className="relative z-10 space-y-5"
                 >
-                  {/* Dynamic Options List (for Female and Male) */}
+                  {/* Category choices if "Prefer not to say" selected */}
+                  {selectedGender === 'Prefer not to say' && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 px-2">
+                        Select Care Focus
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        {[
+                          { id: "Women's health", label: "Women's health" },
+                          { id: "Men's health", label: "Men's health" },
+                          { id: 'Care for us as a couple', label: 'Care for us as a couple' },
+                        ].map((choice) => {
+                          const isChosen = careChoice === choice.id;
+                          return (
+                            <button
+                              key={choice.id}
+                              type="button"
+                              onClick={() => {
+                                const next = isChosen ? '' : choice.id;
+                                setCareChoice(next);
+                                setValue('careChoice', next);
+                                setValue('selectedOption', '');
+                              }}
+                              className={`py-3 px-3 rounded-[20px] text-xs sm:text-sm font-semibold transition-all cursor-pointer border text-center ${
+                                isChosen
+                                  ? 'bg-[#036132] text-white border-[#036132] shadow-sm'
+                                  : 'bg-white/40 text-zinc-700 border-white/80 hover:bg-white/70'
+                              }`}
+                            >
+                              {choice.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Dynamic Options List */}
                   {currentOptions && currentOptions.length > 0 && (
                     <div className="space-y-3">
                       <div className="flex items-center justify-between px-2 mb-1">
                         <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                          {selectedGender} Health Description Options
+                          {optionsHeading}
                         </span>
                       </div>
                       {currentOptions.map((option, idx) => {
                         const isItemChosen = selectedOption === option;
+                        const planMeta = HEALTH_OPTION_PLAN_MAP[option];
                         return (
                           <GradientOptionWrapper key={option} isSelected={isItemChosen} index={idx}>
                             <button
@@ -713,10 +1281,22 @@ export default function ExploreForm() {
                               onClick={() => {
                                 setValue('selectedOption', isItemChosen ? '' : option, { shouldValidate: true });
                               }}
-                              className={`w-full text-center sm:text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] ${isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-zinc-700 hover:text-zinc-900'
-                                }`}
+                              className={`w-full flex items-center justify-between text-left px-6 py-4 text-sm sm:text-base transition-colors rounded-[26px] gap-3 cursor-pointer ${
+                                isItemChosen ? 'font-bold text-zinc-900' : 'font-medium text-zinc-700 hover:text-zinc-900'
+                              }`}
                             >
-                              {option}
+                              <span className="flex-1">{option}</span>
+                              {/* {planMeta && (
+                                <span
+                                  className={`shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider transition-colors ${
+                                    isItemChosen
+                                      ? 'bg-[#036132] text-white shadow-xs'
+                                      : 'bg-zinc-200/80 text-zinc-600 group-hover:bg-[#AEDEE4]/50 group-hover:text-[#036132]'
+                                  }`}
+                                >
+                                  {planMeta.planName}
+                                </span>
+                              )} */}
                             </button>
                           </GradientOptionWrapper>
                         );
@@ -724,22 +1304,39 @@ export default function ExploreForm() {
                     </div>
                   )}
 
-                  {/* "Don't know what happening?" extra input text area for BOTH men and female (and prefer not to say) */}
-                  <div className="space-y-3 pt-2">
-                    <div className="px-2 mb-1">
-                      <h3 className="text-base sm:text-lg font-bold text-zinc-900">
-                        Don&apos;t know what happening?
+                  {/* "Unclear about concern" Textarea */}
+                  <div className="space-y-2 pt-2">
+                    <div className="px-2">
+                      <h3 className="text-sm sm:text-base font-bold text-zinc-900">
+                        Unclear about your concern?
                       </h3>
-                      <p className="text-xs sm:text-sm text-zinc-500 font-medium mt-0.5">
-                        Tell us in your own words what you are experiencing.
+                      <p className="text-xs text-zinc-500">
+                        Describe what you are experiencing in your own words.
                       </p>
                     </div>
-                    <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                    <div className="relative rounded-[24px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all p-2">
                       <textarea
-                        {...register('concern')}
-                        rows={4}
-                        placeholder="tell us what happening"
-                        className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px] resize-none"
+                        {...register('unclear_health_description')}
+                        rows={3}
+                        placeholder="Tell us about any specific symptoms or health details..."
+                        className="w-full px-4 py-2 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none resize-none"
+                      />
+                    </div>
+                  </div>
+
+                  {/* "Message / Any other notes" Textarea */}
+                  <div className="space-y-2">
+                    <div className="px-2">
+                      <span className="text-xs font-semibold text-zinc-600 uppercase tracking-wider">
+                        Message / Extra Notes
+                      </span>
+                    </div>
+                    <div className="relative rounded-[24px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all p-2">
+                      <textarea
+                        {...register('extra_notes')}
+                        rows={2}
+                        placeholder="Any additional preferences, questions, or notes..."
+                        className="w-full px-4 py-2 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none resize-none"
                       />
                     </div>
                   </div>
@@ -749,127 +1346,8 @@ export default function ExploreForm() {
                     <button
                       type="button"
                       onClick={handlePrevStep}
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-[24px] text-sm font-semibold text-zinc-700 bg-white/60 border border-white hover:bg-white transition-all cursor-pointer shadow-xs"
-                    >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
-                      </svg>
-                      <span>Back</span>
-                    </button>
-
-                    <SpecularButton
-                      type="button"
-                      onClick={handleNextStep2}
-                      size="md"
-                      tint="#AEDEE44D"
-                      tintOpacity={0.35}
-                      textColor="#000000"
-                      lineColor="#ffffff"
-                      baseColor="#AEDEE44D"
-                      radius={24}
-                      className="font-bold text-sm uppercase tracking-tight px-8 py-3.5 shadow-md"
-                    >
-                      CONTINUE
-                    </SpecularButton>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* STEP 3: Complete Health Profile Questionnaire (from q-form-2/form.tsx) */}
-              {currentStep === 3 && (
-                <motion.div
-                  key="step3"
-                  custom={3}
-                  variants={stepVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  transition={{ duration: 0.35 }}
-                  className="relative z-10 space-y-8 w-full flex flex-col items-center"
-                >
-                  <div className="w-full max-w-xl mx-auto space-y-4">
-                    {/* Phone Number Input */}
-                    <div>
-                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                        <input
-                          {...register('phoneNumber')}
-                          type="tel"
-                          placeholder="Phone number"
-                          maxLength={10}
-                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                        />
-                      </div>
-                      {errors.phoneNumber && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.phoneNumber.message}</p>}
-                    </div>
-
-                    {/* Email Input */}
-                    <div>
-                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                        <input
-                          {...register('email')}
-                          type="email"
-                          placeholder="Email"
-                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                        />
-                      </div>
-                      {errors.email && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.email.message}</p>}
-                    </div>
-
-                    {/* City Input */}
-                    <div>
-                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                        <input
-                          {...register('city')}
-                          type="text"
-                          placeholder="city"
-                          maxLength={50}
-                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                        />
-                      </div>
-                      {errors.city && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.city.message}</p>}
-                    </div>
-
-                    {/* Country Input */}
-                    <div>
-                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                        <input
-                          {...register('country')}
-                          type="text"
-                          placeholder="Country"
-                          maxLength={50}
-                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px]"
-                        />
-                      </div>
-                      {errors.country && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.country.message}</p>}
-                    </div>
-
-                    {/* Section 2: Anything you'd like us to know? */}
-                    <div className="pt-4 space-y-3 w-full">
-                      <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-950 text-center">
-                        Anything you&apos;d like us to know?
-                      </h2>
-                      <div className="relative rounded-[28px] bg-white/40 backdrop-blur-md border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                        <textarea
-                          {...register('tryingToConceive')}
-                          id="concern-textarea"
-                          rows={4}
-                          placeholder="Tell us anything you'd like to share before we get in touch..."
-                          maxLength={500}
-                          className="w-full px-6 py-4 text-sm sm:text-base font-medium text-zinc-700 placeholder:text-zinc-400 bg-transparent outline-none rounded-[28px] resize-none"
-                        />
-                      </div>
-                      {errors.tryingToConceive && (
-                        <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.tryingToConceive.message}</p>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Step 3 Form Action Buttons */}
-                  <div className="flex items-center justify-between pt-6 w-full max-w-xl mx-auto">
-                    <button
-                      type="button"
-                      onClick={handlePrevStep}
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-[24px] text-sm font-semibold text-zinc-700 bg-white/60 border border-white hover:bg-white transition-all cursor-pointer shadow-xs"
+                      disabled={isSubmitting}
+                      className="inline-flex items-center gap-2 px-6 py-3 rounded-[24px] text-sm font-semibold text-zinc-700 bg-white/60 border border-white hover:bg-white transition-all cursor-pointer shadow-xs disabled:opacity-50"
                     >
                       <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
@@ -879,6 +1357,7 @@ export default function ExploreForm() {
 
                     <SpecularButton
                       type="submit"
+                      disabled={isSubmitting}
                       size="md"
                       tint="#AEDEE44D"
                       tintOpacity={0.35}
@@ -886,9 +1365,9 @@ export default function ExploreForm() {
                       lineColor="#ffffff"
                       baseColor="#AEDEE44D"
                       radius={24}
-                      className="font-bold text-sm uppercase tracking-tight px-8 py-3.5 shadow-md cursor-pointer"
+                      className="font-bold text-sm uppercase tracking-tight px-8 py-3.5 shadow-md cursor-pointer disabled:opacity-50"
                     >
-                      SUBMIT FORM
+                      {isSubmitting ? 'PROCESSING...' : 'SUBMIT & VIEW PLAN'}
                     </SpecularButton>
                   </div>
                 </motion.div>
@@ -898,65 +1377,18 @@ export default function ExploreForm() {
         </form>
       </div>
 
-      {/* Single Background Joyzen Logo Watermark bridging top and bottom sections */}
-      {(currentStep === 3 || submitted) && (
-        <div className="relative w-full flex items-center justify-center -my-20 sm:-my-28 pointer-events-none z-0 select-none">
-          <div className="relative w-72 sm:w-96 h-72 sm:h-96 opacity-40">
-            <Image
-              src="/joyzen-orange.png"
-              alt="Joyzen Logo Watermark"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
+      {/* Background Watermark */}
+      <div className="relative w-full flex items-center justify-center -my-16 sm:-my-24 pointer-events-none z-0 select-none">
+        <div className="relative w-72 sm:w-96 h-72 sm:h-96 opacity-40">
+          <Image
+            src="/joyzen-orange.png"
+            alt="Joyzen Logo Watermark"
+            fill
+            className="object-contain"
+            priority
+          />
         </div>
-      )}
-
-      {/* When submitted: NotSureCard remains below the confirmation card with liquid glass effect */}
-      {submitted && (
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="relative z-10 w-full max-w-4xl mx-auto mt-4 sm:mt-6 mb-12"
-        >
-          <NotSureCard
-            useLiquidGlass={true}
-            onGetInTouch={() => {
-              if (typeof window !== 'undefined') {
-                window.location.href = 'mailto:care@joyzen.in';
-              }
-            }}
-          />
-        </motion.div>
-      )}
-
-      {/* When in Step 3 and not submitted: Calendar & NotSureCard (independent from form submission) */}
-      {!submitted && currentStep === 3 && (
-        <motion.div
-          initial={{ opacity: 0, y: 35 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 w-full max-w-4xl mx-auto mt-4 sm:mt-6"
-        >
-          <Consultant
-            showSaveButton={true}
-            showBackButton={false}
-            saveButtonText="CONTINUE & SAVE"
-            onContinueAndSave={() => {
-              console.log('Calendar slot confirmed');
-            }}
-            onGetInTouch={() => {
-              const el = document.getElementById('concern-textarea');
-              if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                el.focus();
-              }
-            }}
-          />
-        </motion.div>
-      )}
+      </div>
     </section>
   );
 }

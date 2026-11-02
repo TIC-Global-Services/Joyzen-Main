@@ -1,0 +1,24 @@
+# Option on screen Plan shown
+1 I want to improve my overall health, energy, and
+lifestyle
+CORE
+2 I feel low energy, stressed, or not physically at
+my best
+CORE
+3 I just want a personal doctor for guidance CORE
+4 I have sexual health or testosterone concerns ATLAS
+5 I have fertility issues or poor sperm reports ATLAS
+6 I am getting married soon and want to prepare
+my health for good performance and future
+fatherhood
+GENESIS
+7 We are planning for a baby (update Figma —
+screen currently says "We are trying for a
+baby")
+VITA
+8 We are trying to conceive VITA
+9 We have been trying for a while but no success VITA
+10 We are planning pregnancy and want to
+prepare together
+EVE + GENESIS (Couple
+Preparation)
