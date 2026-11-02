@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -315,6 +315,39 @@ export default function ExploreForm() {
   // Filter search states for location dropdowns
   const [stateSearch, setStateSearch] = useState('');
   const [citySearch, setCitySearch] = useState('');
+  const formRef = useRef<HTMLDivElement>(null);
+
+  // Guard against Chromium date picker crashes and double-invocation loops
+  const lastPickerTimeRef = useRef(0);
+  const isPickingDateRef = useRef(false);
+
+  const handleDateInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
+    const now = Date.now();
+    if (isPickingDateRef.current || now - lastPickerTimeRef.current < 800) {
+      return;
+    }
+    lastPickerTimeRef.current = now;
+    try {
+      e.currentTarget.showPicker?.();
+    } catch {}
+  };
+
+  useEffect(() => {
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (formRef.current && !formRef.current.contains(event.target as Node)) {
+        setGenderOpen(false);
+        setCountryCodeOpen(false);
+        setCountryOpen(false);
+        setStateOpen(false);
+        setCityOpen(false);
+        setLeadSourceOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+    };
+  }, []);
 
   const {
     register,
@@ -528,7 +561,7 @@ export default function ExploreForm() {
   }, []);
 
   return (
-    <section className="relative w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-hidden bg-[#FAF8F5]">
+    <section className="relative w-full min-h-screen pt-16 pb-36 sm:pb-48 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-x-clip overflow-y-visible bg-[#FAF8F5]">
       {/* iOS-Safe Moving Gradient Flow Keyframes */}
       <style>{`
         @keyframes exploreGradientFlow {
@@ -565,7 +598,7 @@ export default function ExploreForm() {
         </svg>
       </div>
 
-      <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center mt-6 transition-all duration-300">
+      <div ref={formRef} className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center mt-6 transition-all duration-300">
         {/* Dynamic Heading & Subtitle */}
         {!submitted && (
           <div className="text-center max-w-2xl mx-auto mb-8 space-y-3">
@@ -745,10 +778,10 @@ export default function ExploreForm() {
                   </div>
 
                   {/* Phone with Country Code (required) */}
-                  <div className={`relative ${countryCodeOpen ? 'z-50' : 'z-20'}`}>
+                  <div className={`relative ${countryCodeOpen ? 'z-[100]' : 'z-20'}`}>
                     <div className="flex gap-2">
                       {/* Country Code Dropdown */}
-                      <div className={`relative w-36 shrink-0 rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all ${countryCodeOpen ? 'z-50' : 'z-10'}`}>
+                      <div className={`relative w-36 shrink-0 rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all ${countryCodeOpen ? 'z-[100]' : 'z-10'}`}>
                         <button
                           type="button"
                           onClick={() => {
@@ -773,7 +806,10 @@ export default function ExploreForm() {
                               animate={{ height: 'auto', opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.2 }}
-                              className="absolute left-0 right-0 top-full mt-1.5 z-[100] p-2 space-y-1 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-48 overflow-y-auto"
+                              data-lenis-prevent
+                              onWheel={(e) => e.stopPropagation()}
+                              onTouchMove={(e) => e.stopPropagation()}
+                              className="absolute left-0 right-0 top-full mt-1.5 z-[999] p-2 space-y-1 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-48 overflow-y-auto overscroll-contain"
                             >
                               {countryCodeOptions.map((opt) => (
                                 <div
@@ -811,7 +847,7 @@ export default function ExploreForm() {
                   </div>
 
                   {/* Gender Custom Dropdown (required) */}
-                  <div className={`relative ${genderOpen ? 'z-40' : 'z-20'}`}>
+                  <div className={`relative ${genderOpen ? 'z-[100]' : 'z-20'}`}>
                     <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
                       <button
                         type="button"
@@ -828,17 +864,37 @@ export default function ExploreForm() {
                         <span className={selectedGender ? 'text-zinc-900 font-medium' : 'text-zinc-400'}>
                           {selectedGender ? `Gender: ${selectedGender}` : 'Gender *'}
                         </span>
-                        <span className="text-zinc-500 hover:text-zinc-800 transition-colors">
-                          {genderOpen ? (
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                          ) : (
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                            </svg>
+                        <div className="flex items-center gap-1 shrink-0 ml-1">
+                          {selectedGender && (
+                            <span
+                              role="button"
+                              title="Clear gender"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setValue('gender', '', { shouldValidate: true });
+                                setValue('selectedOption', '');
+                                setValue('careChoice', '');
+                                setCareChoice('');
+                              }}
+                              className="p-1 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </span>
                           )}
-                        </span>
+                          <span className="text-zinc-500 hover:text-zinc-800 transition-colors">
+                            {genderOpen ? (
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            ) : (
+                              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                              </svg>
+                            )}
+                          </span>
+                        </div>
                       </button>
 
                       <AnimatePresence>
@@ -854,19 +910,45 @@ export default function ExploreForm() {
                               <div
                                 key={option}
                                 onClick={() => {
-                                  setValue('gender', option, { shouldValidate: true });
-                                  setValue('selectedOption', '');
-                                  setValue('careChoice', '');
-                                  setCareChoice('');
+                                  if (selectedGender === option) {
+                                    setValue('gender', '', { shouldValidate: true });
+                                    setValue('selectedOption', '');
+                                    setValue('careChoice', '');
+                                    setCareChoice('');
+                                  } else {
+                                    setValue('gender', option, { shouldValidate: true });
+                                    setValue('selectedOption', '');
+                                    setValue('careChoice', '');
+                                    setCareChoice('');
+                                  }
                                   setGenderOpen(false);
                                 }}
-                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors ${
+                                className={`text-sm sm:text-base cursor-pointer py-1.5 transition-colors flex items-center justify-between ${
                                   selectedGender === option
                                     ? 'font-bold text-zinc-900'
                                     : 'font-medium text-zinc-500 hover:text-zinc-900'
                                 }`}
                               >
-                                {option}
+                                <span>{option}</span>
+                                {selectedGender === option && (
+                                  <span
+                                    role="button"
+                                    title="Remove selection"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setValue('gender', '', { shouldValidate: true });
+                                      setValue('selectedOption', '');
+                                      setValue('careChoice', '');
+                                      setCareChoice('');
+                                      setGenderOpen(false);
+                                    }}
+                                    className="p-0.5 rounded-full text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors"
+                                  >
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </span>
+                                )}
                               </div>
                             ))}
                           </motion.div>
@@ -894,21 +976,39 @@ export default function ExploreForm() {
                     {/* Date of Birth Date Picker */}
                     <div>
                       <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                        <div className="relative flex items-center">
+                        <div className="relative flex items-center pr-3">
                           <input
-                            {...register('dob')}
+                            {...register('dob', {
+                              onChange: () => {
+                                isPickingDateRef.current = true;
+                                setTimeout(() => {
+                                  isPickingDateRef.current = false;
+                                }, 800);
+                              },
+                            })}
                             type="date"
                             max={maxDobDate}
                             min="1920-01-01"
-                            onClick={(e) => {
-                              try {
-                                (e.target as HTMLInputElement).showPicker?.();
-                              } catch {}
-                            }}
+                            onClick={handleDateInputClick}
                             className={`w-full px-6 py-4 text-sm sm:text-base font-medium bg-transparent outline-none rounded-[28px] cursor-pointer transition-colors scheme-light [&::-webkit-calendar-picker-indicator]:opacity-70 [&::-webkit-calendar-picker-indicator]:cursor-pointer hover:[&::-webkit-calendar-picker-indicator]:opacity-100 ${
                               selectedDob ? 'text-zinc-900 font-semibold' : 'text-zinc-400'
                             }`}
                           />
+                          {selectedDob && (
+                            <button
+                              type="button"
+                              title="Clear date of birth"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setValue('dob', '');
+                              }}
+                              className="p-1 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors cursor-pointer shrink-0"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          )}
                         </div>
                       </div>
                       {errors.dob && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.dob.message}</p>}
@@ -917,10 +1017,10 @@ export default function ExploreForm() {
 
                   {/* Location Selectors: Country, State, City (from @/lib/utils) */}
                   <div className={`grid grid-cols-1 sm:grid-cols-3 gap-3 relative ${
-                    countryOpen || stateOpen || cityOpen ? 'z-50' : 'z-20'
+                    countryOpen || stateOpen || cityOpen ? 'z-[100]' : 'z-20'
                   }`}>
                     {/* Country Selector */}
-                    <div className={`relative ${countryOpen ? 'z-50' : 'z-10'}`}>
+                    <div className={`relative ${countryOpen ? 'z-[100]' : 'z-10'}`}>
                       <div className="rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
                         <button
                           type="button"
@@ -937,9 +1037,28 @@ export default function ExploreForm() {
                           <span className={selectedCountry ? 'text-zinc-900 font-semibold truncate' : 'text-zinc-400'}>
                             {selectedCountry || 'Country'}
                           </span>
-                          <svg className="w-3.5 h-3.5 text-zinc-400 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                          </svg>
+                          <div className="flex items-center gap-1 shrink-0 ml-1">
+                            {selectedCountry && (
+                              <span
+                                role="button"
+                                title="Clear country"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setValue('raw_country', '');
+                                  setValue('raw_state', '');
+                                  setValue('raw_city', '');
+                                }}
+                                className="p-1 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </span>
+                            )}
+                            <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
                         </button>
 
                         <AnimatePresence>
@@ -949,24 +1068,74 @@ export default function ExploreForm() {
                               animate={{ height: 'auto', opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.2 }}
-                              className="absolute left-0 right-0 top-full mt-1.5 z-[100] p-2 space-y-1 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-56 overflow-y-auto"
+                              data-lenis-prevent
+                              onWheel={(e) => e.stopPropagation()}
+                              onTouchMove={(e) => e.stopPropagation()}
+                              className="absolute left-0 right-0 top-full mt-1.5 z-[999] p-2 space-y-1 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-56 overflow-y-auto overscroll-contain"
                             >
+                              {selectedCountry && (
+                                <div className="px-2.5 py-1.5 mb-1 bg-[#AEDEE4]/25 border border-[#AEDEE4]/60 rounded-xl flex items-center justify-between text-xs text-zinc-800">
+                                  <span className="truncate">
+                                    Selected: <strong className="font-semibold">{selectedCountry}</strong>
+                                  </span>
+                                  <button
+                                    type="button"
+                                    title="Remove selected country"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setValue('raw_country', '');
+                                      setValue('raw_state', '');
+                                      setValue('raw_city', '');
+                                    }}
+                                    className="shrink-0 ml-2 px-1.5 py-0.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 flex items-center gap-1 cursor-pointer transition-colors"
+                                  >
+                                    <span>Remove</span>
+                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              )}
                               {COUNTRIES.map((country) => (
                                 <div
                                   key={country}
                                   onClick={() => {
-                                    setValue('raw_country', country);
-                                    setValue('raw_state', '');
-                                    setValue('raw_city', '');
+                                    if (selectedCountry === country) {
+                                      setValue('raw_country', '');
+                                      setValue('raw_state', '');
+                                      setValue('raw_city', '');
+                                    } else {
+                                      setValue('raw_country', country);
+                                      setValue('raw_state', '');
+                                      setValue('raw_city', '');
+                                    }
                                     setCountryOpen(false);
                                   }}
-                                  className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors ${
+                                  className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors flex items-center justify-between ${
                                     selectedCountry === country
                                       ? 'font-bold text-zinc-900 bg-zinc-100'
                                       : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
                                   }`}
                                 >
-                                  {country}
+                                  <span className="truncate">{country}</span>
+                                  {selectedCountry === country && (
+                                    <span
+                                      role="button"
+                                      title="Remove selection"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setValue('raw_country', '');
+                                        setValue('raw_state', '');
+                                        setValue('raw_city', '');
+                                        setCountryOpen(false);
+                                      }}
+                                      className="shrink-0 p-0.5 rounded-full text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors ml-2"
+                                    >
+                                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                      </svg>
+                                    </span>
+                                  )}
                                 </div>
                               ))}
                             </motion.div>
@@ -976,7 +1145,7 @@ export default function ExploreForm() {
                     </div>
 
                     {/* State Selector */}
-                    <div className={`relative ${stateOpen ? 'z-50' : 'z-10'}`}>
+                    <div className={`relative ${stateOpen ? 'z-[100]' : 'z-10'}`}>
                       <div className="rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
                         <button
                           type="button"
@@ -994,9 +1163,28 @@ export default function ExploreForm() {
                           <span className={selectedState ? 'text-zinc-900 font-semibold truncate' : 'text-zinc-400'}>
                             {selectedState || 'State'}
                           </span>
-                          <svg className="w-3.5 h-3.5 text-zinc-400 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                          </svg>
+                          <div className="flex items-center gap-1 shrink-0 ml-1">
+                            {selectedState && (
+                              <span
+                                role="button"
+                                title="Clear state"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setValue('raw_state', '');
+                                  setValue('raw_city', '');
+                                  setStateSearch('');
+                                }}
+                                className="p-1 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </span>
+                            )}
+                            <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
                         </button>
 
                         <AnimatePresence>
@@ -1006,36 +1194,100 @@ export default function ExploreForm() {
                               animate={{ height: 'auto', opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.2 }}
-                              className="absolute left-0 right-0 top-full mt-1.5 z-[100] p-2 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-60 overflow-hidden flex flex-col"
+                              data-lenis-prevent
+                              onWheel={(e) => e.stopPropagation()}
+                              className="absolute left-0 right-0 top-full mt-1.5 z-[999] p-2 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-64 overflow-hidden flex flex-col pointer-events-auto"
                             >
-                              <div className="p-1 pb-2 border-b border-zinc-100">
-                                <input
-                                  type="text"
-                                  value={stateSearch}
-                                  onChange={(e) => setStateSearch(e.target.value)}
-                                  placeholder="Search state..."
-                                  className="w-full px-3 py-1.5 text-xs bg-zinc-50 border border-zinc-200 rounded-lg outline-none text-zinc-800 placeholder:text-zinc-400"
-                                  autoFocus
-                                />
+                              <div className="p-1 pb-2 border-b border-zinc-100 flex items-center gap-1.5">
+                                <div className="relative flex-1">
+                                  <input
+                                    type="text"
+                                    value={stateSearch}
+                                    onChange={(e) => setStateSearch(e.target.value)}
+                                    placeholder="Search state..."
+                                    className="w-full pl-3 pr-7 py-1.5 text-xs bg-zinc-50 border border-zinc-200 rounded-lg outline-none text-zinc-800 placeholder:text-zinc-400 focus:border-[#95C1E2]"
+                                    autoFocus
+                                  />
+                                  {stateSearch && (
+                                    <button
+                                      type="button"
+                                      onClick={() => setStateSearch('')}
+                                      className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 cursor-pointer"
+                                    >
+                                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                      </svg>
+                                    </button>
+                                  )}
+                                </div>
                               </div>
 
-                              <div className="overflow-y-auto space-y-1 pt-1 max-h-44">
+                              {selectedState && (
+                                <div className="px-2.5 py-1.5 my-1 bg-[#AEDEE4]/25 border border-[#AEDEE4]/60 rounded-xl flex items-center justify-between text-xs text-zinc-800">
+                                  <span className="truncate">
+                                    Selected: <strong className="font-semibold">{selectedState}</strong>
+                                  </span>
+                                  <button
+                                    type="button"
+                                    title="Remove selected state"
+                                    onClick={() => {
+                                      setValue('raw_state', '');
+                                      setValue('raw_city', '');
+                                    }}
+                                    className="shrink-0 ml-2 px-1.5 py-0.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 flex items-center gap-1 cursor-pointer transition-colors"
+                                  >
+                                    <span>Remove</span>
+                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              )}
+
+                              <div
+                                data-lenis-prevent
+                                onWheel={(e) => e.stopPropagation()}
+                                onTouchMove={(e) => e.stopPropagation()}
+                                className="overflow-y-auto space-y-1 pt-1 max-h-48 overscroll-contain pr-1"
+                              >
                                 {filteredStates.length > 0 ? (
                                   filteredStates.map((state) => (
                                     <div
                                       key={state}
                                       onClick={() => {
-                                        setValue('raw_state', state);
-                                        setValue('raw_city', '');
+                                        if (selectedState === state) {
+                                          setValue('raw_state', '');
+                                          setValue('raw_city', '');
+                                        } else {
+                                          setValue('raw_state', state);
+                                          setValue('raw_city', '');
+                                        }
                                         setStateOpen(false);
                                       }}
-                                      className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors ${
+                                      className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors flex items-center justify-between ${
                                         selectedState === state
                                           ? 'font-bold text-zinc-900 bg-zinc-100'
                                           : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
                                       }`}
                                     >
-                                      {state}
+                                      <span className="truncate">{state}</span>
+                                      {selectedState === state && (
+                                        <span
+                                          role="button"
+                                          title="Remove selection"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setValue('raw_state', '');
+                                            setValue('raw_city', '');
+                                            setStateOpen(false);
+                                          }}
+                                          className="shrink-0 p-0.5 rounded-full text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors ml-2"
+                                        >
+                                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                          </svg>
+                                        </span>
+                                      )}
                                     </div>
                                   ))
                                 ) : (
@@ -1060,7 +1312,7 @@ export default function ExploreForm() {
                     </div>
 
                     {/* City Selector */}
-                    <div className={`relative ${cityOpen ? 'z-50' : 'z-10'}`}>
+                    <div className={`relative ${cityOpen ? 'z-[100]' : 'z-10'}`}>
                       <div className="rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
                         <button
                           type="button"
@@ -1078,9 +1330,27 @@ export default function ExploreForm() {
                           <span className={selectedCity ? 'text-zinc-900 font-semibold truncate' : 'text-zinc-400'}>
                             {selectedCity || 'City'}
                           </span>
-                          <svg className="w-3.5 h-3.5 text-zinc-400 shrink-0 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                          </svg>
+                          <div className="flex items-center gap-1 shrink-0 ml-1">
+                            {selectedCity && (
+                              <span
+                                role="button"
+                                title="Clear city"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setValue('raw_city', '');
+                                  setCitySearch('');
+                                }}
+                                className="p-1 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors"
+                              >
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </span>
+                            )}
+                            <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </div>
                         </button>
 
                         <AnimatePresence>
@@ -1090,35 +1360,96 @@ export default function ExploreForm() {
                               animate={{ height: 'auto', opacity: 1 }}
                               exit={{ height: 0, opacity: 0 }}
                               transition={{ duration: 0.2 }}
-                              className="absolute left-0 right-0 top-full mt-1.5 z-[100] p-2 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-60 overflow-hidden flex flex-col"
+                              data-lenis-prevent
+                              onWheel={(e) => e.stopPropagation()}
+                              className="absolute left-0 right-0 top-full mt-1.5 z-[999] p-2 rounded-2xl border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl max-h-64 overflow-hidden flex flex-col pointer-events-auto"
                             >
-                              <div className="p-1 pb-2 border-b border-zinc-100">
-                                <input
-                                  type="text"
-                                  value={citySearch}
-                                  onChange={(e) => setCitySearch(e.target.value)}
-                                  placeholder="Search or enter city..."
-                                  className="w-full px-3 py-1.5 text-xs bg-zinc-50 border border-zinc-200 rounded-lg outline-none text-zinc-800 placeholder:text-zinc-400"
-                                  autoFocus
-                                />
+                              <div className="p-1 pb-2 border-b border-zinc-100 flex items-center gap-1.5">
+                                <div className="relative flex-1">
+                                  <input
+                                    type="text"
+                                    value={citySearch}
+                                    onChange={(e) => setCitySearch(e.target.value)}
+                                    placeholder="Search or enter city..."
+                                    className="w-full pl-3 pr-7 py-1.5 text-xs bg-zinc-50 border border-zinc-200 rounded-lg outline-none text-zinc-800 placeholder:text-zinc-400 focus:border-[#95C1E2]"
+                                    autoFocus
+                                  />
+                                  {citySearch && (
+                                    <button
+                                      type="button"
+                                      onClick={() => setCitySearch('')}
+                                      className="absolute right-2 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700 cursor-pointer"
+                                    >
+                                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                      </svg>
+                                    </button>
+                                  )}
+                                </div>
                               </div>
 
-                              <div className="overflow-y-auto space-y-1 pt-1 max-h-44">
+                              {selectedCity && (
+                                <div className="px-2.5 py-1.5 my-1 bg-[#AEDEE4]/25 border border-[#AEDEE4]/60 rounded-xl flex items-center justify-between text-xs text-zinc-800">
+                                  <span className="truncate">
+                                    Selected: <strong className="font-semibold">{selectedCity}</strong>
+                                  </span>
+                                  <button
+                                    type="button"
+                                    title="Remove selected city"
+                                    onClick={() => {
+                                      setValue('raw_city', '');
+                                    }}
+                                    className="shrink-0 ml-2 px-1.5 py-0.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 flex items-center gap-1 cursor-pointer transition-colors"
+                                  >
+                                    <span>Remove</span>
+                                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              )}
+
+                              <div
+                                data-lenis-prevent
+                                onWheel={(e) => e.stopPropagation()}
+                                onTouchMove={(e) => e.stopPropagation()}
+                                className="overflow-y-auto space-y-1 pt-1 max-h-48 overscroll-contain pr-1"
+                              >
                                 {filteredCities.length > 0 ? (
                                   filteredCities.map((city) => (
                                     <div
                                       key={city}
                                       onClick={() => {
-                                        setValue('raw_city', city);
+                                        if (selectedCity === city) {
+                                          setValue('raw_city', '');
+                                        } else {
+                                          setValue('raw_city', city);
+                                        }
                                         setCityOpen(false);
                                       }}
-                                      className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors ${
+                                      className={`text-xs py-2 px-3 rounded-xl cursor-pointer transition-colors flex items-center justify-between ${
                                         selectedCity === city
                                           ? 'font-bold text-zinc-900 bg-zinc-100'
                                           : 'font-medium text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50'
                                       }`}
                                     >
-                                      {city}
+                                      <span className="truncate">{city}</span>
+                                      {selectedCity === city && (
+                                        <span
+                                          role="button"
+                                          title="Remove selection"
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            setValue('raw_city', '');
+                                            setCityOpen(false);
+                                          }}
+                                          className="shrink-0 p-0.5 rounded-full text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors ml-2"
+                                        >
+                                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                          </svg>
+                                        </span>
+                                      )}
                                     </div>
                                   ))
                                 ) : (
@@ -1143,7 +1474,7 @@ export default function ExploreForm() {
                   </div>
 
                   {/* How did you hear about us? Dropdown */}
-                  <div className={`relative ${leadSourceOpen ? 'z-50' : 'z-10'}`}>
+                  <div className={`relative ${leadSourceOpen ? 'z-[100]' : 'z-10'}`}>
                     <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] transition-all">
                       <button
                         type="button"
@@ -1160,9 +1491,26 @@ export default function ExploreForm() {
                         <span className={selectedLeadSource ? 'text-zinc-900 font-medium' : 'text-zinc-400'}>
                           {selectedLeadSource || 'How did you hear about us?'}
                         </span>
-                        <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                        </svg>
+                        <div className="flex items-center gap-1 shrink-0 ml-1">
+                          {selectedLeadSource && (
+                            <span
+                              role="button"
+                              title="Clear selection"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setValue('temp_lead_source', '');
+                              }}
+                              className="p-1 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors"
+                            >
+                              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </span>
+                          )}
+                          <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
                       </button>
 
                       <AnimatePresence>
@@ -1172,22 +1520,66 @@ export default function ExploreForm() {
                             animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.25 }}
-                            className="absolute left-0 right-0 top-full mt-1.5 z-[100] px-6 pb-5 pt-2 space-y-1.5 border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl rounded-2xl max-h-56 overflow-y-auto"
+                            data-lenis-prevent
+                            onWheel={(e) => e.stopPropagation()}
+                            onTouchMove={(e) => e.stopPropagation()}
+                            className="absolute left-0 right-0 top-full mt-1.5 z-[999] px-6 pb-5 pt-2 space-y-1.5 border border-zinc-200/80 bg-white/98 backdrop-blur-3xl shadow-2xl rounded-2xl max-h-56 overflow-y-auto overscroll-contain"
                           >
+                            {selectedLeadSource && (
+                              <div className="px-2.5 py-1.5 mb-1 bg-[#AEDEE4]/25 border border-[#AEDEE4]/60 rounded-xl flex items-center justify-between text-xs text-zinc-800">
+                                <span className="truncate">
+                                  Selected: <strong className="font-semibold">{selectedLeadSource}</strong>
+                                </span>
+                                <button
+                                  type="button"
+                                  title="Remove selected option"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    setValue('temp_lead_source', '');
+                                  }}
+                                  className="shrink-0 ml-2 px-1.5 py-0.5 rounded text-[11px] font-semibold text-red-600 hover:bg-red-50 flex items-center gap-1 cursor-pointer transition-colors"
+                                >
+                                  <span>Remove</span>
+                                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                  </svg>
+                                </button>
+                              </div>
+                            )}
                             {leadSourceOptions.map((opt) => (
                               <div
                                 key={opt}
                                 onClick={() => {
-                                  setValue('temp_lead_source', opt);
+                                  if (selectedLeadSource === opt) {
+                                    setValue('temp_lead_source', '');
+                                  } else {
+                                    setValue('temp_lead_source', opt);
+                                  }
                                   setLeadSourceOpen(false);
                                 }}
-                                className={`text-sm cursor-pointer py-1.5 transition-colors ${
+                                className={`text-sm cursor-pointer py-1.5 transition-colors flex items-center justify-between ${
                                   selectedLeadSource === opt
                                     ? 'font-bold text-zinc-900'
                                     : 'font-medium text-zinc-500 hover:text-zinc-900'
                                 }`}
                               >
-                                {opt}
+                                <span className="truncate">{opt}</span>
+                                {selectedLeadSource === opt && (
+                                  <span
+                                    role="button"
+                                    title="Remove selection"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setValue('temp_lead_source', '');
+                                      setLeadSourceOpen(false);
+                                    }}
+                                    className="shrink-0 p-0.5 rounded-full text-zinc-400 hover:text-red-600 hover:bg-red-50 transition-colors ml-2"
+                                  >
+                                    <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                  </span>
+                                )}
                               </div>
                             ))}
                           </motion.div>
@@ -1197,7 +1589,7 @@ export default function ExploreForm() {
                   </div>
 
                   {/* Step 1 Continue Button */}
-                  <div className="flex justify-end pt-4">
+                  <div className="flex justify-end pt-4 relative z-0">
                     <button
                       type="button"
                       onClick={handleNextStep1}
