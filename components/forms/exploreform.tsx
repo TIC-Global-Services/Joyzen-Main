@@ -317,20 +317,7 @@ export default function ExploreForm() {
   const [citySearch, setCitySearch] = useState('');
   const formRef = useRef<HTMLDivElement>(null);
 
-  // Guard against Chromium date picker crashes and double-invocation loops
-  const lastPickerTimeRef = useRef(0);
-  const isPickingDateRef = useRef(false);
 
-  const handleDateInputClick = (e: React.MouseEvent<HTMLInputElement>) => {
-    const now = Date.now();
-    if (isPickingDateRef.current || now - lastPickerTimeRef.current < 800) {
-      return;
-    }
-    lastPickerTimeRef.current = now;
-    try {
-      e.currentTarget.showPicker?.();
-    } catch {}
-  };
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
@@ -975,40 +962,50 @@ export default function ExploreForm() {
 
                     {/* Date of Birth Date Picker */}
                     <div>
-                      <div className="relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
-                        <div className="relative flex items-center pr-3">
+                      <div className="group relative rounded-[28px] bg-white/5 backdrop-blur-sm border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_4px_16px_rgba(0,0,0,0.03)] focus-within:border-[#95C1E2] transition-all">
+                        <div className="relative flex items-center">
+                          {/* Visual Placeholder when no date is picked */}
+                          {!selectedDob && (
+                            <span className="pointer-events-none absolute left-6 text-sm sm:text-base font-medium text-zinc-400 select-none">
+                              Date of birth (optional)
+                            </span>
+                          )}
+
+                          {/* Native HTML5 Date Input with stretched indicator covering the input */}
                           <input
-                            {...register('dob', {
-                              onChange: () => {
-                                isPickingDateRef.current = true;
-                                setTimeout(() => {
-                                  isPickingDateRef.current = false;
-                                }, 800);
-                              },
-                            })}
+                            {...register('dob')}
                             type="date"
                             max={maxDobDate}
                             min="1920-01-01"
-                            onClick={handleDateInputClick}
-                            className={`w-full px-6 py-4 text-sm sm:text-base font-medium bg-transparent outline-none rounded-[28px] cursor-pointer transition-colors scheme-light [&::-webkit-calendar-picker-indicator]:opacity-70 [&::-webkit-calendar-picker-indicator]:cursor-pointer hover:[&::-webkit-calendar-picker-indicator]:opacity-100 ${
-                              selectedDob ? 'text-zinc-900 font-semibold' : 'text-zinc-400'
+                            className={`w-full px-6 py-4 text-sm sm:text-base font-medium bg-transparent outline-none rounded-[28px] cursor-pointer transition-colors scheme-light [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:cursor-pointer ${
+                              selectedDob ? 'text-zinc-900 font-semibold' : 'text-transparent'
                             }`}
                           />
+
+                          {/* Clear Button (X) - positioned above indicator with relative z-10 */}
                           {selectedDob && (
                             <button
                               type="button"
                               title="Clear date of birth"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setValue('dob', '');
+                                e.preventDefault();
+                                setValue('dob', '', { shouldValidate: true });
                               }}
-                              className="p-1 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors cursor-pointer shrink-0"
+                              className="relative z-10 p-1 mr-2 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors cursor-pointer shrink-0"
                             >
                               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                               </svg>
                             </button>
                           )}
+
+                          {/* Calendar Icon on Right (pointer-events-none so click passes through to indicator) */}
+                          <div className="pointer-events-none pr-5 text-zinc-400 group-hover:text-zinc-600 transition-colors shrink-0">
+                            <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.8">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                          </div>
                         </div>
                       </div>
                       {errors.dob && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.dob.message}</p>}
