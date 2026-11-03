@@ -263,8 +263,16 @@ export default function ExploreForm() {
   return (
     <MotionConfig reducedMotion="user">
       <section className="relative w-full min-h-screen pt-26 pb-36 sm:pb-48 px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center select-none overflow-x-clip overflow-y-visible bg-transparent">
-        <div aria-hidden="true" className="absolute inset-0 pointer-events-none select-none z-0 overflow-hidden">
-          <WaveGridBackground colorBase="#ffffff" colorHigh="#F4A27E" autoAnimate={false} waveAmplitude={0.2} waveMaxHeight={0.2} />
+        {/* Fixed Viewport 3D Honeycomb Background with Moving Pastel Gradient */}
+        <div aria-hidden="true" className="fixed inset-0 pointer-events-none select-none -z-10 overflow-hidden">
+          <WaveGridBackground
+            colorBase="#ffffff"
+            colorHigh="#F4A27E"
+            autoAnimate={false}
+            waveAmplitude={0.25}
+            waveMaxHeight={0.25}
+            movingGradient={true}
+          />
         </div>
 
         <div className="relative z-10 w-full max-w-xl mx-auto flex flex-col items-center mt-6">

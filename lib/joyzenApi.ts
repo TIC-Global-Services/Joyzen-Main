@@ -7,7 +7,7 @@ export const JOYZEN_API_BASE_URL =
   process.env.NEXT_PUBLIC_JOYZEN_API_URL || 'https://api.joyzen.in/api/v1';
 
 export const JOYZEN_APP_URL =
-  process.env.NEXT_PUBLIC_JOYZEN_APP_URL || 'http://localhost:3001/';
+  process.env.NEXT_PUBLIC_JOYZEN_APP_URL ?? 'http://localhost:3000/';
 
 export const joyzenClient = axios.create({
   baseURL: JOYZEN_API_BASE_URL,
@@ -244,6 +244,22 @@ export async function openRazorpayCheckout(
     throw new Error('Razorpay SDK unavailable.');
   }
 
+  // Persist order metadata in session storage for reliable retrieval on success page
+  try {
+    sessionStorage.setItem(
+      'joyzen_last_order',
+      JSON.stringify({
+        paymentLinkId: checkout.paymentLinkId,
+        planName: checkout.planName,
+        amount: checkout.amount,
+        currency: checkout.currency || 'INR',
+        timestamp: Date.now(),
+      })
+    );
+  } catch {
+    /* storage might be restricted in private browsing mode */
+  }
+
   const razorpayInstance = new Razorpay({
     key: checkout.razorpayKeyId,
     name: 'JOYZEN',
@@ -261,10 +277,15 @@ export async function openRazorpayCheckout(
           currency: checkout.currency,
         }),
     handler: () => {
-      // Payment completed: redirect to Joyzen success page
-      const redirectUrl = `${JOYZEN_APP_URL}/payment/success?paymentLinkId=${encodeURIComponent(
-        checkout.paymentLinkId
-      )}`;
+      // Payment completed: redirect to Joyzen success page with full order details
+      const params = new URLSearchParams({
+        paymentLinkId: checkout.paymentLinkId,
+        planName: checkout.planName,
+        amount: String(checkout.amount),
+        currency: checkout.currency || 'INR',
+      });
+      const baseAppUrl = JOYZEN_APP_URL.replace(/\/+$/, '');
+      const redirectUrl = `${baseAppUrl}/payment/success?${params.toString()}`;
       window.location.assign(redirectUrl);
     },
     modal: {

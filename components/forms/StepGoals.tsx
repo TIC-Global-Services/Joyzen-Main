@@ -121,9 +121,8 @@ export default function StepGoals({ isSubmitting, onBack }: Props) {
           <span>Back</span>
         </button>
 
-        <SpecularButton
-          type="submit"
-          disabled={isSubmitting}
+        {/* <SpecularButton
+          
           size="md"
           tint="#AEDEE44D"
           tintOpacity={0.35}
@@ -131,10 +130,15 @@ export default function StepGoals({ isSubmitting, onBack }: Props) {
           lineColor="#ffffff"
           baseColor="#AEDEE44D"
           radius={24}
-          className="font-bold text-sm uppercase tracking-tight px-8 py-3.5 shadow-md cursor-pointer disabled:opacity-50"
+          className="font-bold text-sm uppercase tracking-tight px-8 py-3.5 shadow-md cursor-pointer disabled:opacity-50 bg-[#7ce8f74d] "
         >
-          {isSubmitting ? 'PROCESSING...' : 'SUBMIT & VIEW PLAN'}
-        </SpecularButton>
+          
+        </SpecularButton> */}
+        <button
+                          type="submit"
+          disabled={isSubmitting}
+                          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-[24px] text-sm font-bold uppercase tracking-tight text-black bg-[#AEDEE44D] border border-[#AEDEE4] shadow-md hover:bg-[#AEDEE4]/60 transition-all cursor-pointer"
+                        >{isSubmitting ? 'PROCESSING...' : 'SUBMIT & VIEW PLAN'}</button>
       </div>
     </div>
   );
