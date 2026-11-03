@@ -221,6 +221,23 @@ const SpecularButton = ({
     ro.observe(btn);
     resize();
 
+    let isRunning = false;
+    let angle = 2.4;
+    let idleAngle = 2.4;
+    let bright = 0;
+    let last = performance.now();
+    let raf = 0;
+
+    const lineC = new Color();
+    const baseC = new Color();
+
+    const startLoop = () => {
+      if (isRunning) return;
+      isRunning = true;
+      last = performance.now();
+      raf = requestAnimationFrame(update);
+    };
+
     // Light angle steers toward the pointer (anywhere on the page) and falls
     // back to a slow sweep when the pointer hasn't moved yet.
     let pointerAngle: number | null = null;
@@ -232,8 +249,6 @@ const SpecularButton = ({
       const dx = Math.max(rect.left - e.clientX, 0, e.clientX - rect.right);
       const dy = Math.max(rect.top - e.clientY, 0, e.clientY - rect.bottom);
       const dist = Math.hypot(dx, dy);
-      // Over the button itself the light settles on the diagonal (framing the
-      // corners) and gently sways with the cursor position within the button.
       if (dist === 0) {
         const nx = (e.clientX - cx) / (rect.width / 2 || 1);
         const ny = (cy - e.clientY) / (rect.height / 2 || 1);
@@ -243,21 +258,14 @@ const SpecularButton = ({
       }
       const t = Math.max(0, 1 - dist / Math.max(propsRef.current.proximity, 1));
       proximityT = t * t * (3 - 2 * t);
+
+      if (proximityT > 0 || propsRef.current.autoAnimate) {
+        startLoop();
+      }
     };
-    window.addEventListener('pointermove', onPointerMove);
-
-    let angle = 2.4;
-    let idleAngle = 2.4;
-    let bright = 0;
-    let last = performance.now();
-    let raf = 0;
-
-    const lineC = new Color();
-    const baseC = new Color();
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
 
     const update = (now: number) => {
-      raf = requestAnimationFrame(update);
-
       if (btn.offsetWidth !== sizeRef.w || btn.offsetHeight !== sizeRef.h) {
         resize();
       }
@@ -276,6 +284,15 @@ const SpecularButton = ({
       const brightTarget = p.autoAnimate ? 1 : proximityT;
       bright += (brightTarget - bright) * (1 - Math.exp(-dt * 8));
 
+      // Sleep loop when shine has faded out completely and user is far away
+      if (!p.autoAnimate && proximityT === 0 && bright < 0.005) {
+        bright = 0;
+        program.uniforms.uIntensity.value = 0;
+        renderer.render({ scene: mesh });
+        isRunning = false;
+        return;
+      }
+
       parseColor(p.lineColor, lineC);
       parseColor(p.baseColor, baseC);
       program.uniforms.uAngle.value = angle;
@@ -287,8 +304,11 @@ const SpecularButton = ({
       program.uniforms.uShineFade.value = (p.shineFade * Math.PI) / 180;
       program.uniforms.uThickness.value = p.thickness * dpr;
       renderer.render({ scene: mesh });
+
+      raf = requestAnimationFrame(update);
     };
-    raf = requestAnimationFrame(update);
+
+    startLoop();
 
     return () => {
       cancelAnimationFrame(raf);

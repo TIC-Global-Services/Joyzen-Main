@@ -1,0 +1,33 @@
+/* Paste into app/globals.css (replaces the inline <style> in the component). */
+
+@keyframes exploreGradientFlowTransform {
+  0%   { transform: translate3d(-33.33%, 0, 0); }
+  50%  { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-33.33%, 0, 0); }
+}
+@keyframes exploreGradientFlowTransformReverse {
+  0%   { transform: translate3d(0, 0, 0); }
+  50%  { transform: translate3d(-33.33%, 0, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+.gradient-flow {
+  animation: exploreGradientFlowTransform var(--dur, 4s) ease-in-out var(--delay, 0s) infinite;
+  animation-play-state: paused;
+}
+.gradient-flow-reverse {
+  animation-name: exploreGradientFlowTransformReverse;
+}
+/* Run only when selected, hovered, or explicitly active */
+.group:hover .gradient-flow,
+.gradient-flow[data-active='true'] {
+  animation-play-state: running;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-flow {
+    animation: none;
+    will-change: auto;
+  }
+}

@@ -96,6 +96,42 @@
     }
   }
 
+  @keyframes movingGradMeshSweep {
+    0% {
+      transform: translate3d(-6%, -4%, 0) scale(1);
+    }
+    50% {
+      transform: translate3d(6%, 4%, 0) scale(1.08);
+    }
+    100% {
+      transform: translate3d(-6%, -4%, 0) scale(1);
+    }
+  }
+
+  @keyframes movingGradOrbA {
+    0% {
+      transform: translate3d(-8vw, 0, 0);
+    }
+    50% {
+      transform: translate3d(20vw, 6vh, 0) scale(1.1);
+    }
+    100% {
+      transform: translate3d(-8vw, 0, 0);
+    }
+  }
+
+  @keyframes movingGradOrbB {
+    0% {
+      transform: translate3d(8vw, 0, 0);
+    }
+    50% {
+      transform: translate3d(-20vw, -6vh, 0) scale(1.1);
+    }
+    100% {
+      transform: translate3d(8vw, 0, 0);
+    }
+  }
+
 
   @keyframes floatMeshGlow {
 
