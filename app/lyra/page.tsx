@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import CalaScrollSequence from '@/components/lyra/CalaScrollSequence';
 import CalaMembership from '@/components/lyra/membership';
 import EveryStage from '@/components/lyra/everyStage';
+import ProgramRouteGuard from '@/components/shared/ProgramRouteGuard';
 
 export const metadata: Metadata = {
   title: 'LYRA | Women’s Health, Balanced With Guidance. | Joyzen',
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 
 export default function LyraPage() {
   return (
-    <main className="w-full flex-1 flex flex-col">
-      <CalaScrollSequence />
-      <CalaMembership />
-      <EveryStage />
-    </main>
+    <ProgramRouteGuard programName="LYRA" defaultConcern="Want to know about Women’s Health & Cycle Balance plans">
+      <main className="w-full flex-1 flex flex-col">
+        <CalaScrollSequence />
+        <CalaMembership />
+        <EveryStage />
+      </main>
+    </ProgramRouteGuard>
   );
 }

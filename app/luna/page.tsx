@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import CalaScrollSequence from '@/components/luna/CalaScrollSequence';
 import CalaMembership from '@/components/luna/membership';
 import EveryStage from '@/components/luna/everyStage';
+import ProgramRouteGuard from '@/components/shared/ProgramRouteGuard';
 
 export const metadata: Metadata = {
   title: 'LUNA | Teen Health, Guided Early. | Joyzen',
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 
 export default function LunaPage() {
   return (
-    <main className="w-full flex-1 flex flex-col">
-      <CalaScrollSequence />
-      <CalaMembership />
-      <EveryStage />
-    </main>
+    <ProgramRouteGuard programName="LUNA" defaultConcern="Want to know about Teen Health plans">
+      <main className="w-full flex-1 flex flex-col">
+        <CalaScrollSequence />
+        <CalaMembership />
+        <EveryStage />
+      </main>
+    </ProgramRouteGuard>
   );
 }

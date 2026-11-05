@@ -1076,7 +1076,7 @@ export default function CalaScrollSequence() {
         </div>
 
         {/* --- PHASE 2: TALK TO CARE TEAM SECTION --- */}
-        <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
+        <div className="talk-with-cala absolute inset-0 z-[50] flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]">
               <span className="text-[#CB6D7A]">LYRA</span> is Women’s Health, Balanced With Guidance.
@@ -1084,7 +1084,7 @@ export default function CalaScrollSequence() {
             <p className="mt-4 sm:mt-5 text-[#27272C] text-sm sm:text-base md:text-[18px] leading-[1.2] max-w-xl font-medium">
               For women who want to improve their health, hormones, cycle, and overall wellbeing with continuous medical and lifestyle guidance.
             </p>
-            <div className="mt-8 sm:mt-10">
+            <div className="mt-8 sm:mt-10 pointer-events-auto relative z-10">
               <TalkCareButton
                 programName="LYRA"
                 imageSrc="/programs/Women-Health.png"

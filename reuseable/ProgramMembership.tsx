@@ -13,6 +13,7 @@ import {
   type PlanVariant,
   type TrialOffer,
 } from '@/lib/joyzenApi';
+import { useFollowupModal, FollowupModal } from '@/components/shared/FollowupModal';
 
 export interface ProgramMembershipProps {
   /** Complete program data containing pricing, features, and text copy */
@@ -154,6 +155,20 @@ export default function ProgramMembership({
   const [isCheckingOut, setIsCheckingOut] = useState<boolean>(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const [showMissingLeadModal, setShowMissingLeadModal] = useState<boolean>(false);
+
+  // Followup Consultation Modal State & Context
+  const followupContext = useFollowupModal();
+  const [isLocalFollowupOpen, setIsLocalFollowupOpen] = useState<boolean>(false);
+
+  const handleCareTeamClick = () => {
+    if (onCareTeamClick) {
+      onCareTeamClick();
+    } else if (followupContext) {
+      followupContext.openModal({ programName: data.programName });
+    } else {
+      setIsLocalFollowupOpen(true);
+    }
+  };
 
   // Read lead_id from sessionStorage on mount (strictly transient, no PII)
   useEffect(() => {
@@ -693,8 +708,8 @@ export default function ProgramMembership({
               lineColor="#ffffff"
               baseColor="#AEDEE44D"
               radius={24}
-              onClick={onCareTeamClick}
-              className="font-medium text-xs sm:text-sm uppercase tracking-tight px-7 py-2.5 shadow-sm whitespace-nowrap"
+              onClick={handleCareTeamClick}
+              className="font-medium text-xs sm:text-sm uppercase tracking-tight px-7 py-2.5 shadow-sm whitespace-nowrap cursor-pointer"
             >
               {data.careTeamBlock.buttonText}
             </SpecularButton>
@@ -708,6 +723,15 @@ export default function ProgramMembership({
           {data.afterEnrollmentNotice} {data.closingStatement}
         </p>
       </div>
+
+      {/* Standalone Fallback Followup Modal if rendered without Provider */}
+      {!followupContext && (
+        <FollowupModal
+          isOpen={isLocalFollowupOpen}
+          onClose={() => setIsLocalFollowupOpen(false)}
+          programName={data.programName}
+        />
+      )}
     </section>
   );
 }

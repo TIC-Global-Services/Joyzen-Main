@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import CalaScrollSequence from '@/components/vita/CalaScrollSequence';
 import CalaMembership from '@/components/vita/membership';
 import EveryStage from '@/components/vita/everyStage';
+import ProgramRouteGuard from '@/components/shared/ProgramRouteGuard';
 
 export const metadata: Metadata = {
   title: 'VITA | Natural Conception Program. | Joyzen',
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 
 export default function VitaPage() {
   return (
-    <main className="w-full flex-1 flex flex-col">
-      <CalaScrollSequence />
-      <CalaMembership />
-      <EveryStage />
-    </main>
+    <ProgramRouteGuard programName="VITA" defaultConcern="Want to know about Natural Conception plans">
+      <main className="w-full flex-1 flex flex-col">
+        <CalaScrollSequence />
+        <CalaMembership />
+        <EveryStage />
+      </main>
+    </ProgramRouteGuard>
   );
 }

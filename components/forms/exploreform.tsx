@@ -234,6 +234,7 @@ export default function ExploreForm() {
         clear_health_description: data.selectedOption || undefined,
         unclear_health_description: data.unclear_health_description?.trim() || undefined,
         extra_notes: data.extra_notes?.trim() || undefined,
+        interested_for: 'reproductive_care',
       };
 
       const lead = await createLead(payload);
@@ -242,6 +243,9 @@ export default function ExploreForm() {
       if (lead?.id) {
         try {
           sessionStorage.setItem('joyzen_lead_id', lead.id);
+          if (data.selectedOption) {
+            sessionStorage.setItem('joyzen_clear_health_description', data.selectedOption);
+          }
         } catch {
           /* storage can be blocked (private mode); not fatal */
         }

@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import CalaScrollSequence from '@/components/core/CalaScrollSequence';
 import CalaMembership from '@/components/core/membership';
 import EveryStage from '@/components/core/everyStage';
+import ProgramRouteGuard from '@/components/shared/ProgramRouteGuard';
 
 export const metadata: Metadata = {
   title: 'CORE | Men’s Health & Energy Program. | Joyzen',
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 
 export default function CorePage() {
   return (
-    <main className="w-full flex-1 flex flex-col">
-      <CalaScrollSequence />
-      <CalaMembership />
-      <EveryStage />
-    </main>
+    <ProgramRouteGuard programName="CORE" defaultConcern="Want to know about Pelvic Health & Energy plans">
+      <main className="w-full flex-1 flex flex-col">
+        <CalaScrollSequence />
+        <CalaMembership />
+        <EveryStage />
+      </main>
+    </ProgramRouteGuard>
   );
 }

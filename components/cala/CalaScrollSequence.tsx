@@ -546,7 +546,7 @@ export default function CalaScrollSequence() {
       .to('.hero-orb-container', { autoAlpha: 0, duration: 0.5, ease: 'power1.inOut' }, "hero-exit+=1.0");
 
     // Phase 3: TalkWithCala fades in from bottom
-    tl.fromTo('.talk-with-cala', { autoAlpha: 0, y: 80, scale: 1 }, { autoAlpha: 1, y: 0, scale: 1, duration: 1, ease: 'power2.out' }, "phase3");
+    tl.fromTo('.talk-with-cala', { autoAlpha: 0, y: 80, scale: 1, pointerEvents: 'none' }, { autoAlpha: 1, y: 0, scale: 1, pointerEvents: 'auto', duration: 1, ease: 'power2.out' }, "phase3");
 
     // Phase 4: 3.0 to 5.0s - CALA CARE TEAM text moving from right
     tl.fromTo('.care-team-text',
@@ -560,7 +560,7 @@ export default function CalaScrollSequence() {
       .to('.talk-button-ring', { autoAlpha: 0, duration: 0.35 }, "phase3+=2.0");
 
     // Phase 5: 5.0 to 5.5s - TalkWithCala fades out
-    tl.to('.talk-with-cala', { autoAlpha: 0, scale: 0.9, duration: 0.5, ease: 'power2.in' }, "phase5");
+    tl.to('.talk-with-cala', { autoAlpha: 0, scale: 0.9, pointerEvents: 'none', duration: 0.5, ease: 'power2.in' }, "phase5");
 
     // Phase 6: 5.5 to 6.0s - Mobile Phone container fades in
     tl.fromTo('.mobile-phone-container', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.5, ease: 'power1.out' }, "phase6");
@@ -1028,7 +1028,7 @@ export default function CalaScrollSequence() {
         </div>
 
         {/* --- PHASE 2: TALK TO CARE TEAM SECTION --- */}
-        <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
+        <div className="talk-with-cala absolute inset-0 z-[50] flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]">
               <span className="text-[#008080]">CALA</span> is a Hormone & PCOS <br className='hidden md:block' />Care, Guided Over Time
@@ -1036,7 +1036,7 @@ export default function CalaScrollSequence() {
             <p className="mt-4 sm:mt-5 text-[#27272C] text-sm sm:text-base md:text-[18px] leading-[1.2] max-w-xl font-medium">
               A structured care program for women who want to understand their hormones, rebuild healthier cycles and receive ongoing support.
             </p>
-            <div className="mt-8 sm:mt-10">
+            <div className="mt-8 sm:mt-10 pointer-events-auto relative z-10">
               <TalkCareButton
                 programName="CALA"
                 imageSrc="/cala-orb.png"

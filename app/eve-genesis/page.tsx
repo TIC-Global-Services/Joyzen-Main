@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import CalaScrollSequence from '@/components/eve-genesis/CalaScrollSequence';
 import CalaMembership from '@/components/eve-genesis/membership';
 import EveryStage from '@/components/eve-genesis/everyStage';
+import ProgramRouteGuard from '@/components/shared/ProgramRouteGuard';
 
 export const metadata: Metadata = {
   title: 'EVE + GENESIS | Couple Conception Program. | Joyzen',
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 
 export default function EveGenesisPage() {
   return (
-    <main className="w-full flex-1 flex flex-col">
-      <CalaScrollSequence />
-      <CalaMembership />
-      <EveryStage />
-    </main>
+    <ProgramRouteGuard programName="EVE-GENESIS" defaultConcern="Want to know about Couple Conception plans">
+      <main className="w-full flex-1 flex flex-col">
+        <CalaScrollSequence />
+        <CalaMembership />
+        <EveryStage />
+      </main>
+    </ProgramRouteGuard>
   );
 }

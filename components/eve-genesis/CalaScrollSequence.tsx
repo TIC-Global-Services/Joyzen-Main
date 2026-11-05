@@ -1133,7 +1133,7 @@ export default function CalaScrollSequence() {
         </div>
 
         {/* --- PHASE 2: TALK TO CARE TEAM SECTION --- */}
-        <div className="talk-with-cala absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0 invisible">
+        <div className="talk-with-cala absolute inset-0 z-[50] flex flex-col items-center justify-center text-center px-4 sm:px-6 pointer-events-none opacity-0 invisible">
           <div className="max-w-4xl mx-auto flex flex-col items-center">
             <h2 className="text-2xl sm:text-4xl md:text-5xl lg:text-[48px] font-bold text-[#1E2822] tracking-[-0.03em] leading-[1.1]">
               <span className="text-[#8F9B6F]">EVE + GENESIS</span> is Couple Conception Program.
@@ -1141,7 +1141,7 @@ export default function CalaScrollSequence() {
             <p className="mt-4 sm:mt-5 text-[#27272C] text-sm sm:text-base md:text-[18px] leading-[1.2] max-w-xl font-medium">
               For couples who want to prepare and conceive naturally with guided support for both partners.
             </p>
-            <div className="mt-8 sm:mt-10">
+            <div className="mt-8 sm:mt-10 pointer-events-auto relative z-10">
               <TalkCareButton
                 programName="EVE + GENESIS"
                 imageSrc="/programs/Couple-Program.png"

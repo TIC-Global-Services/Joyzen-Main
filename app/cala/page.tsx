@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import CalaScrollSequence from '@/components/cala/CalaScrollSequence';
 import CalaMembership from '@/components/cala/membership';
 import EveryStage from '@/components/cala/everyStage';
+import ProgramRouteGuard from '@/components/shared/ProgramRouteGuard';
 
 export const metadata: Metadata = {
   title: 'CALA | Women\'s Health & Longevity | Joyzen',
@@ -12,11 +13,12 @@ export const metadata: Metadata = {
 
 export default function CalaPage() {
   return (
-    <main className="w-full flex-1 flex flex-col">
-      <CalaScrollSequence />
-      <CalaMembership />
-      <EveryStage />
-
-    </main>
+    <ProgramRouteGuard programName="CALA" defaultConcern="Want to know about PCOS plans">
+      <main className="w-full flex-1 flex flex-col">
+        <CalaScrollSequence />
+        <CalaMembership />
+        <EveryStage />
+      </main>
+    </ProgramRouteGuard>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
+import { useFollowupModal, FollowupModal } from './FollowupModal';
 
 export interface TalkCareButtonProps {
   programName: string;
@@ -20,58 +21,86 @@ export default function TalkCareButton({
   className = '',
   onClick,
 }: TalkCareButtonProps) {
+  const followup = useFollowupModal();
+  const [isLocalModalOpen, setIsLocalModalOpen] = useState(false);
+
+  const handleButtonClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (onClick) {
+      onClick();
+    } else if (followup) {
+      followup.openModal({ programName });
+    } else {
+      setIsLocalModalOpen(true);
+    }
+  };
+
   return (
-    <div className={`pointer-events-auto relative inline-flex items-center justify-center ${className}`}>
-      {/* Outer Ambient Glowing Highlight Ring for Timeline & Hover */}
-      <div
-        className="talk-button-ring absolute -inset-1 sm:-inset-1.5 rounded-full pointer-events-none opacity-0 blur-md transition-opacity duration-300"
-        style={{
-          backgroundImage: GRADIENT_STRING,
-          backgroundSize: '200% 100%',
-          animation: 'exploreGradientFlow 3.5s ease-in-out infinite',
-        }}
-      />
+    <>
+      <div className={`pointer-events-auto relative inline-flex items-center justify-center ${className}`}>
+        {/* Outer Ambient Glowing Highlight Ring for Timeline & Hover */}
+        <div
+          className="talk-button-ring absolute -inset-1 sm:-inset-1.5 rounded-full pointer-events-none opacity-0 blur-md transition-opacity duration-300"
+          style={{
+            backgroundImage: GRADIENT_STRING,
+            backgroundSize: '200% 100%',
+            animation: 'exploreGradientFlow 3.5s ease-in-out infinite',
+          }}
+        />
 
-      {/* Gradient Stroke Outer Frame (2px padding = 2px flowing gradient stroke from exploreform) */}
-      <div
-        className="talk-button-wrapper group/btn relative p-[2px] rounded-full transition-all duration-300 shadow-[0_12px_32px_rgba(0,0,0,0.06),_0_2px_8px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_24px_rgba(239,143,96,0.35),0_0_16px_rgba(174,222,228,0.28)]"
-        style={{
-          backgroundImage: GRADIENT_STRING,
-          backgroundSize: '200% 100%',
-          animation: 'exploreGradientFlow 3.5s ease-in-out infinite',
-          WebkitMaskImage: '-webkit-radial-gradient(white, black)',
-          isolation: 'isolate',
-        }}
-      >
-        <button
-          type="button"
-          onClick={onClick}
-          className="talk-button cursor-pointer relative z-10 inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/95 backdrop-blur-md cursor-pointer select-none transition-all active:scale-[0.98] overflow-hidden"
+        {/* Gradient Stroke Outer Frame */}
+        <div
+          onClick={handleButtonClick}
+          className="talk-button-wrapper group/btn relative p-[2px] rounded-full transition-all duration-300 shadow-[0_12px_32px_rgba(0,0,0,0.06),_0_2px_8px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_24px_rgba(239,143,96,0.35),0_0_16px_rgba(174,222,228,0.28)] cursor-pointer"
+          style={{
+            backgroundImage: GRADIENT_STRING,
+            backgroundSize: '200% 100%',
+            animation: 'exploreGradientFlow 3.5s ease-in-out infinite',
+            WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+            isolation: 'isolate',
+          }}
         >
-          {/* Subtle moving pastel gradient tint inside pill on hover */}
-          <div
-            className="absolute inset-0 transition-opacity duration-300 pointer-events-none opacity-0 group-hover/btn:opacity-15 rounded-full"
-            style={{
-              backgroundImage: GRADIENT_STRING,
-              backgroundSize: '200% 100%',
-              animation: 'exploreGradientFlow 3.5s ease-in-out infinite',
-            }}
-          />
+          <button
+            type="button"
+            onClick={handleButtonClick}
+            className="talk-button cursor-pointer relative z-10 inline-flex items-center gap-3 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/95 backdrop-blur-md select-none transition-all active:scale-[0.98] overflow-hidden"
+          >
+            {/* Subtle moving pastel gradient tint inside pill on hover */}
+            <div
+              className="absolute inset-0 transition-opacity duration-300 pointer-events-none opacity-0 group-hover/btn:opacity-15 rounded-full"
+              style={{
+                backgroundImage: GRADIENT_STRING,
+                backgroundSize: '200% 100%',
+                animation: 'exploreGradientFlow 3.5s ease-in-out infinite',
+              }}
+            />
 
-          {/* Top highlight reflection */}
-          <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-t-full" />
+            {/* Top highlight reflection */}
+            <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-t-full" />
 
-          {/* Program Orb / Icon */}
-          <div className="relative z-10 w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(36,168,184,0.35)] border border-white/70">
-            <img src={imageSrc} alt={programName} className="w-full h-full object-cover" />
-          </div>
+            {/* Program Orb / Icon */}
+            <div className="relative z-10 w-6 h-6 sm:w-7 sm:h-7 rounded-full overflow-hidden flex items-center justify-center shrink-0 shadow-[0_2px_8px_rgba(36,168,184,0.35)] border border-white/70">
+              <img src={imageSrc} alt={programName} className="w-full h-full object-cover" />
+            </div>
 
-          {/* Action Text */}
-          <span className="relative z-10 font-semibold text-base tracking-tight text-[#1E2822] uppercase whitespace-nowrap">
-            {text}
-          </span>
-        </button>
+            {/* Action Text */}
+            <span className="relative z-10 font-semibold text-base tracking-tight text-[#1E2822] uppercase whitespace-nowrap">
+              {text}
+            </span>
+          </button>
+        </div>
       </div>
-    </div>
+
+      {/* Standalone Fallback Modal if mounted outside FollowupModalProvider */}
+      {!followup && (
+        <FollowupModal
+          isOpen={isLocalModalOpen}
+          onClose={() => setIsLocalModalOpen(false)}
+          programName={programName}
+        />
+      )}
+    </>
   );
 }

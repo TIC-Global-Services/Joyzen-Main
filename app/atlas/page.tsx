@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import CalaScrollSequence from '@/components/atlas/CalaScrollSequence';
 import CalaMembership from '@/components/atlas/membership';
 import EveryStage from '@/components/atlas/everyStage';
+import ProgramRouteGuard from '@/components/shared/ProgramRouteGuard';
 
 export const metadata: Metadata = {
   title: 'ATLAS | Male Fertility & Hormone Restoration Program. | Joyzen',
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 
 export default function AtlasPage() {
   return (
-    <main className="w-full flex-1 flex flex-col">
-      <CalaScrollSequence />
-      <CalaMembership />
-      <EveryStage />
-    </main>
+    <ProgramRouteGuard programName="ATLAS" defaultConcern="Want to know about Male Fertility & Hormone Restoration plans">
+      <main className="w-full flex-1 flex flex-col">
+        <CalaScrollSequence />
+        <CalaMembership />
+        <EveryStage />
+      </main>
+    </ProgramRouteGuard>
   );
 }

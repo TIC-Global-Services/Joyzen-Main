@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import CalaScrollSequence from '@/components/genesis/CalaScrollSequence';
 import CalaMembership from '@/components/genesis/membership';
 import EveryStage from '@/components/genesis/everyStage';
+import ProgramRouteGuard from '@/components/shared/ProgramRouteGuard';
 
 export const metadata: Metadata = {
   title: 'GENESIS | Men’s Fatherhood Preparation Program. | Joyzen',
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 
 export default function GenesisPage() {
   return (
-    <main className="w-full flex-1 flex flex-col">
-      <CalaScrollSequence />
-      <CalaMembership />
-      <EveryStage />
-    </main>
+    <ProgramRouteGuard programName="GENESIS" defaultConcern="Want to know about Fatherhood Preparation plans">
+      <main className="w-full flex-1 flex flex-col">
+        <CalaScrollSequence />
+        <CalaMembership />
+        <EveryStage />
+      </main>
+    </ProgramRouteGuard>
   );
 }

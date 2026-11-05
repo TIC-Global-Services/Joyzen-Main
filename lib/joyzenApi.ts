@@ -36,6 +36,21 @@ export interface CreateLeadPayload {
   clear_health_description?: string;
   unclear_health_description?: string;
   extra_notes?: string;
+  interested_for?: 'reproductive_care' | 'general_care' | string;
+  interested_category?: string;
+  is_needs_clarity?: boolean;
+}
+
+export interface CreateFollowupPayload {
+  leadId: string;
+  followupAt: string;
+  concern?: string;
+}
+
+export interface FollowupResponseData {
+  id: string;
+  followupAt: string;
+  [key: string]: unknown;
 }
 
 export interface LeadResponseData {
@@ -200,6 +215,21 @@ export async function createPublicCheckout(
   const response = await joyzenClient.post<ApiResponse<CheckoutResponseData>>(
     '/payment-links/public/checkout',
     payload
+  );
+  return response.data.data;
+}
+
+/**
+ * 4. Schedule a Call-back / Follow-up Request
+ * POST /leads/public/followup
+ */
+export async function createFollowup(
+  payload: CreateFollowupPayload
+): Promise<FollowupResponseData> {
+  const cleaned = cleanPayload(payload);
+  const response = await joyzenClient.post<ApiResponse<FollowupResponseData>>(
+    '/leads/public/followup',
+    cleaned
   );
   return response.data.data;
 }

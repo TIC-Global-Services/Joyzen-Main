@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import CalaScrollSequence from '@/components/eve/CalaScrollSequence';
 import CalaMembership from '@/components/eve/membership';
 import EveryStage from '@/components/eve/everyStage';
+import ProgramRouteGuard from '@/components/shared/ProgramRouteGuard';
 
 export const metadata: Metadata = {
   title: 'EVE | Pregnancy, Prepared With a Plan. | Joyzen',
@@ -11,10 +12,12 @@ export const metadata: Metadata = {
 
 export default function EvePage() {
   return (
-    <main className="w-full flex-1 flex flex-col">
-      <CalaScrollSequence />
-      <CalaMembership />
-      <EveryStage />
-    </main>
+    <ProgramRouteGuard programName="EVE" defaultConcern="Want to know about Pregnancy Preparation plans">
+      <main className="w-full flex-1 flex flex-col">
+        <CalaScrollSequence />
+        <CalaMembership />
+        <EveryStage />
+      </main>
+    </ProgramRouteGuard>
   );
 }

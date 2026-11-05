@@ -106,7 +106,9 @@
     raw_state: z.string().max(50).optional().or(z.literal('')),
     raw_city: z.string().max(50).optional().or(z.literal('')),
     concern: z.string().min(3, 'Please describe your health concern'),
-    specialist: z.string().min(1, 'Please select a specialist'),
+    interested_category: z.string().min(1, 'Please select who you would like to get in touch with'),
+    specialist: z.string().optional().or(z.literal('')),
+    is_needs_clarity: z.boolean(),
     temp_lead_source: z.string().optional().or(z.literal('')),
     unclear_health_description: z.string().optional().or(z.literal('')),
     extra_notes: z.string().optional().or(z.literal('')),
@@ -567,6 +569,7 @@
           clear_health_description: data.selectedOption || undefined,
           unclear_health_description: data.unclear_health_description?.trim() || undefined,
           extra_notes: data.extra_notes?.trim() || undefined,
+          interested_for: 'reproductive_care',
         };
 
         const leadResponse = await createLead(payload);
@@ -574,6 +577,9 @@
         // SECURITY: Strictly save only the lead_id in sessionStorage (no PII in browser storage)
         if (leadResponse?.id) {
           sessionStorage.setItem('joyzen_lead_id', leadResponse.id);
+          if (data.selectedOption) {
+            sessionStorage.setItem('joyzen_clear_health_description', data.selectedOption);
+          }
         }
 
         // If mapped to a program route, navigate directly to it
@@ -1798,7 +1804,9 @@
         raw_state: '',
         raw_city: '',
         concern: '',
+        interested_category: '',
         specialist: '',
+        is_needs_clarity: true,
         temp_lead_source: '',
         unclear_health_description: '',
         extra_notes: '',
@@ -1807,8 +1815,9 @@
 
     const selectedGender = watch('gender');
     const selectedCountryCode = watch('countryCode');
-    const selectedSpecialist = watch('specialist');
+    const selectedSpecialist = watch('interested_category') || watch('specialist');
     const selectedLeadSource = watch('temp_lead_source');
+    const isNeedsClarity = watch('is_needs_clarity') ?? true;
 
     const onSubmit = async (data: GeneralCareFormData) => {
       setIsSubmitting(true);
@@ -1831,6 +1840,8 @@
         const mappedGender: GenderType =
           data.gender === 'Female' ? 'FEMALE' : data.gender === 'Male' ? 'MALE' : 'OTHER';
 
+        const category = (data.interested_category || data.specialist || '').trim();
+
         const payload: CreateLeadPayload = {
           name: data.fullName.trim(),
           phone: fullPhone,
@@ -1841,14 +1852,20 @@
           raw_country: data.raw_country?.trim() || undefined,
           raw_state: data.raw_state?.trim() || undefined,
           raw_city: data.raw_city?.trim() || undefined,
-          clear_health_description: `Specialist: ${data.specialist} - Concern: ${data.concern.trim()}`,
+          clear_health_description: `Category/Specialist: ${category} - Concern: ${data.concern.trim()}`,
           unclear_health_description: data.unclear_health_description?.trim() || undefined,
           extra_notes: data.extra_notes?.trim() || undefined,
+          interested_for: 'general_care',
+          interested_category: category || undefined,
+          is_needs_clarity: typeof data.is_needs_clarity === 'boolean' ? data.is_needs_clarity : true,
         };
 
         const leadResponse = await createLead(payload);
         if (leadResponse?.id) {
           sessionStorage.setItem('joyzen_lead_id', leadResponse.id);
+          if (data.concern) {
+            sessionStorage.setItem('joyzen_clear_health_description', data.concern);
+          }
         }
         setSubmitted(true);
       } catch (err) {
@@ -2070,7 +2087,7 @@
               {errors.gender && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.gender.message}</p>}
             </div>
 
-            {/* Specialist Select Dropdown */}
+            {/* Specialist / Interested Category Select Dropdown */}
             <div className={`relative ${specialistOpen ? 'z-[100]' : 'z-10'}`}>
               <div className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] transition-all overflow-hidden">
                 <button
@@ -2089,9 +2106,10 @@
                     {selectedSpecialist && (
                       <span
                         role="button"
-                        title="Clear specialist"
+                        title="Clear selection"
                         onClick={(e) => {
                           e.stopPropagation();
+                          setValue('interested_category', '', { shouldValidate: true });
                           setValue('specialist', '', { shouldValidate: true });
                         }}
                         className="p-1 rounded-full text-zinc-400 hover:text-zinc-700 hover:bg-zinc-200/60 transition-colors"
@@ -2129,8 +2147,10 @@
                           key={option}
                           onClick={() => {
                             if (selectedSpecialist === option) {
+                              setValue('interested_category', '', { shouldValidate: true });
                               setValue('specialist', '', { shouldValidate: true });
                             } else {
+                              setValue('interested_category', option, { shouldValidate: true });
                               setValue('specialist', option, { shouldValidate: true });
                             }
                             setSpecialistOpen(false);
@@ -2148,6 +2168,7 @@
                               title="Remove selection"
                               onClick={(e) => {
                                 e.stopPropagation();
+                                setValue('interested_category', '', { shouldValidate: true });
                                 setValue('specialist', '', { shouldValidate: true });
                                 setSpecialistOpen(false);
                               }}
@@ -2164,7 +2185,11 @@
                   )}
                 </AnimatePresence>
               </div>
-              {errors.specialist && <p className="text-xs font-medium text-red-500 mt-1 pl-4">{errors.specialist.message}</p>}
+              {(errors.interested_category || errors.specialist) && (
+                <p className="text-xs font-medium text-red-500 mt-1 pl-4">
+                  {errors.interested_category?.message || errors.specialist?.message}
+                </p>
+              )}
             </div>
 
             {/* Concern Input */}
@@ -2293,6 +2318,39 @@
               </div>
             </div>
 
+            {/* Clarity Consultation Toggle */}
+            <div
+              onClick={() => setValue('is_needs_clarity', !isNeedsClarity)}
+              className="relative rounded-[28px] bg-white/5 backdrop-blur-[2px] border border-white/80 shadow-[inset_0_1px_2px_rgba(255,255,255,0.8),0_8px_24px_rgba(0,0,0,0.03)] px-6 py-4 flex items-center justify-between cursor-pointer select-none transition-all hover:bg-white/10"
+            >
+              <div className="flex flex-col pr-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm sm:text-base font-semibold text-zinc-800">
+                    Need Clarity Consultation?
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#AEDEE4]/40 text-[#036132] border border-[#AEDEE4]/80">
+                    Recommended
+                  </span>
+                </div>
+                <span className="text-xs sm:text-sm text-zinc-500 mt-0.5">
+                  Connect with our clinical team for guided support, report analysis, and diagnosis clarity
+                </span>
+              </div>
+              <div
+                role="switch"
+                aria-checked={Boolean(isNeedsClarity)}
+                className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition-colors duration-200 ease-in-out cursor-pointer ${
+                  isNeedsClarity ? 'bg-[#95C1E2]' : 'bg-zinc-300'
+                }`}
+              >
+                <span
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white shadow-md transition duration-200 ease-in-out ${
+                    isNeedsClarity ? 'translate-x-5' : 'translate-x-0.5'
+                  }`}
+                />
+              </div>
+            </div>
+
             {/* Connect Specular Button */}
             <div className="flex justify-end pt-4">
               <SpecularButton
@@ -2307,7 +2365,11 @@
                 radius={24}
                 className="font-bold text-sm uppercase tracking-tight px-7 py-4 cursor-pointer disabled:opacity-50"
               >
-                {isSubmitting ? 'CONNECTING...' : 'CONNECT WITH CLARITY TEAM'}
+                {isSubmitting
+                  ? 'CONNECTING...'
+                  : isNeedsClarity
+                  ? 'CONNECT WITH CLARITY TEAM'
+                  : 'SUBMIT DETAILS'}
               </SpecularButton>
             </div>
           </div>
