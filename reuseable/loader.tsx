@@ -11,6 +11,8 @@ export interface PreloaderProps {
   onFinish?: () => void;
 }
 
+const VIDEO_SRC = '/loader_video.mp4';
+
 // Hides Safari's native play button / controls on the loader video
 const VIDEO_CONTROLS_CSS = `
 .preloader-video::-webkit-media-controls,
@@ -39,7 +41,7 @@ export default function Preloader({
   const [initialComplete] = useState(() => manual && Boolean(externalIsComplete));
   const [hasExited, setHasExited] = useState(initialComplete);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [ready, setReady] = useState(false);
 
   const [internalProgress, setInternalProgress] = useState(0);
   const progressRef = useRef(0);
@@ -94,7 +96,7 @@ export default function Preloader({
     }
   }, [manual, shouldSkip, isDone, onFinish]);
 
-  // Video playback: only reveal the video once it is genuinely playing,
+  // Video playback: the video stays invisible until it is genuinely playing,
   // so Safari's native play button (Low Power Mode) is never visible.
   useEffect(() => {
     if (shouldSkip || hasExited) return;
@@ -104,33 +106,28 @@ export default function Preloader({
 
     video.muted = true;
     video.defaultMuted = true;
-    video.controls = false;
+    video.playsInline = true;
 
-    const onPlaying = () => setIsPlaying(true);
-    const onPause = () => setIsPlaying(false);
+    const markReady = () => setReady(true);
+
     const tryPlay = () => {
-      video.play().catch(() => {});
+      // play() resolves only when playback really starts,
+      // and rejects in Low Power Mode, so the video stays hidden there
+      video.play().then(markReady).catch(() => {});
     };
 
-    video.addEventListener('playing', onPlaying);
-    video.addEventListener('pause', onPause);
-    video.addEventListener('loadedmetadata', tryPlay);
-    video.addEventListener('canplay', tryPlay);
-    window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
-    window.addEventListener('click', tryPlay, { once: true });
+    // 'playing' may have fired before React hydrated
+    video.addEventListener('playing', markReady);
+    if (!video.paused && video.readyState >= 2) markReady();
 
     tryPlay();
 
-    // Handle the case where 'playing' fired before the listener was attached
-    if (!video.paused && video.readyState >= 3) {
-      setIsPlaying(true);
-    }
+    // Low Power Mode: the first touch anywhere starts the video
+    window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+    window.addEventListener('click', tryPlay, { once: true });
 
     return () => {
-      video.removeEventListener('playing', onPlaying);
-      video.removeEventListener('pause', onPause);
-      video.removeEventListener('loadedmetadata', tryPlay);
-      video.removeEventListener('canplay', tryPlay);
+      video.removeEventListener('playing', markReady);
       window.removeEventListener('touchstart', tryPlay);
       window.removeEventListener('click', tryPlay);
     };
@@ -312,25 +309,26 @@ export default function Preloader({
         <div className="relative w-44 sm:w-56 md:w-64 aspect-square flex items-center justify-center overflow-hidden">
           <video
             ref={videoRef}
-            src="/loader_video.mp4"
-            autoPlay
-            loop
             muted
+            loop
             playsInline
+            autoPlay
             preload="auto"
             controls={false}
             disablePictureInPicture
             disableRemotePlayback
-            className={`preloader-video w-full h-full object-contain pointer-events-none select-none mix-blend-multiply transition-opacity duration-200 ${
-              isPlaying ? 'opacity-100' : 'opacity-0'
+            className={`preloader-video absolute inset-0 w-full h-full object-contain pointer-events-none transition-opacity duration-500 ${
+              ready ? 'opacity-100' : 'opacity-0'
             }`}
-          />
+          >
+            <source src={VIDEO_SRC} type="video/mp4" />
+          </video>
         </div>
 
         {/* Headline */}
-        <h2 className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-medium tracking-tight text-[#CBA4DF] select-none text-center">
+        {/* <h2 className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-medium tracking-tight text-[#CBA4DF] select-none text-center">
           Connecting your world
-        </h2>
+        </h2> */}
 
         {/* Progress Bar & Percentage */}
         <div className="mt-5 sm:mt-6 flex flex-col items-center w-full max-w-[240px] sm:max-w-[280px]">
