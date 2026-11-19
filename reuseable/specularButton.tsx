@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useEffect, type CSSProperties, type ReactNode, type MouseEventHandler } from 'react';
 import Image from 'next/image';
 import { Renderer, Program, Mesh, Triangle, Color } from 'ogl';

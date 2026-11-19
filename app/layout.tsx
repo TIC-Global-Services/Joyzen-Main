@@ -80,8 +80,8 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
+    icon: "/joyzen-orange.png",
+    shortcut: "/joyzen-orange.png",
     apple: "/joyzen-logo.png",
   },
 };
