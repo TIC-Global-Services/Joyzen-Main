@@ -87,8 +87,10 @@ export default function Footer() {
               loop
               playsInline
               autoPlay
-              controls={false}               
               preload="auto"
+              controls={false}
+              disablePictureInPicture
+              disableRemotePlayback
               className="absolute inset-0 w-full h-full object-cover"
             >
               <source src={videoSrc} type="video/mp4" />
