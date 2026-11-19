@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import SpecularButton from '@/reuseable/specularButton';
 
@@ -63,7 +63,6 @@ export default function ChoiceHero({
   isReady = true,
 }: ChoiceHeroProps) {
   const pathname = usePathname();
-  const router = useRouter();
 
   // Animation phases:
   // 'initial'   -> separated (.joy and żen), logo at divider
@@ -197,7 +196,7 @@ export default function ChoiceHero({
     window.location.href = 'https://doctors.joyzen.in/';
   }, []);
 
-  // Choose Patient site (dismiss ChoiceHero or route home)
+  // Choose Patient site (dismiss ChoiceHero and stay on the currently viewed page)
   const handlePatientClick = useCallback(() => {
     if (typeof window !== 'undefined') {
       sessionStorage.setItem('joyzen_choice_completed', 'true');
@@ -222,12 +221,8 @@ export default function ChoiceHero({
         lenis.resize();
       }
       onSelectPatient?.();
-      // If user opened any non-home page (like /about) and chose Patient, route them to home ('/')
-      if (pathname !== '/') {
-        router.push('/');
-      }
     }, 550);
-  }, [pathname, router, isStandalonePage, onSelectPatient]);
+  }, [isStandalonePage, onSelectPatient]);
 
   return (
     <AnimatePresence>
