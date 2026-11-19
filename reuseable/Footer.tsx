@@ -27,8 +27,8 @@ export default function Footer() {
 
   // Pick the correct video for the device — client-side check avoids SSR mismatch.
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
-   const videoRef = useRef<HTMLVideoElement>(null);
-    const [blocked, setBlocked] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [blocked, setBlocked] = useState(false);
 
   useEffect(() => {
     if (window.innerWidth < 640) {
@@ -81,6 +81,7 @@ export default function Footer() {
         <div className="relative w-full h-full">
           {videoSrc && (
             <video
+              ref={videoRef}
               key={videoSrc}
               muted
               loop

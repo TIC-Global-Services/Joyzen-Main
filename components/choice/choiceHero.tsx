@@ -17,28 +17,109 @@ export default function ChoiceHero({
   isReady = true,
 }: ChoiceHeroProps) {
   // Animation phases:
-  // 'initial'   -> .joy on left, żen on right, logo at center divider (Image 1)
-  // 'converged' -> .joy & żen meet in center (joyzen), logo lifts top, specular buttons appear (Image 2)
+  // 'initial'   -> separated (.joy and żen), logo at divider
+  // 'converged' -> .joy & żen meet in center (joyzen), logo lifts top, specular buttons appear
   const [phase, setPhase] = useState<'initial' | 'converged'>('initial');
   const [hoverSide, setHoverSide] = useState<'doctor' | 'patient' | null>(null);
   const [isExiting, setIsExiting] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Mouse tracking with smooth spring physics for the cursor-following badge
+  // Detect mobile viewport (< 768px) for top-and-bottom responsive layout
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Mouse tracking with smooth spring physics for the cursor-following badge (desktop only)
   const mouseX = useMotionValue(-500);
   const mouseY = useMotionValue(-500);
   const springX = useSpring(mouseX, { stiffness: 450, damping: 30 });
   const springY = useSpring(mouseY, { stiffness: 450, damping: 30 });
 
-  // Lock scroll while choice hero is active
+  // Comprehensive scroll lock while ChoiceHero is active:
+  // 1. Pauses Lenis smooth scrolling (lenis.stop()) and resets scroll position to 0
+  // 2. Locks HTML and body overflow & height
+  // 3. Captures wheel, touchmove, keydown, and scroll events with stopImmediatePropagation()
+  // 4. Continuously pins window.scrollY at 0 until portal choice is completed
   useEffect(() => {
     if (isExiting) return;
-    const prevOverflow = document.body.style.overflow;
+
+    // Save previous document styles
+    const prevHtmlOverflow = document.documentElement.style.overflow;
+    const prevHtmlHeight = document.documentElement.style.height;
+    const prevBodyOverflow = document.body.style.overflow;
+    const prevBodyHeight = document.body.style.height;
+
+    // Apply strict overflow locks
+    document.documentElement.style.overflow = 'hidden';
+    document.documentElement.style.height = '100%';
     document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = prevOverflow;
+    document.body.style.height = '100%';
+
+    // Enforce top position and stop Lenis scroller
+    const enforceScrollLock = () => {
+      window.scrollTo(0, 0);
+      const lenis = (window as any).__lenis;
+      if (lenis) {
+        if (!lenis.isStopped) {
+          lenis.stop();
+        }
+        lenis.scrollTo(0, { immediate: true });
+      }
     };
-  }, [isExiting]);
+
+    enforceScrollLock();
+
+    // Catch Lenis if it initializes after ChoiceHero mounts (due to requestAnimationFrame in SmoothScroller)
+    const lockInterval = setInterval(enforceScrollLock, 50);
+
+    // Prevent mouse wheel and touch gestures from bubbling or capturing to scrollers
+    const handleScrollBlock = (e: Event) => {
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    };
+
+    // Prevent keyboard scroll keys
+    const handleKeyBlock = (e: KeyboardEvent) => {
+      if (['Space', 'ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End'].includes(e.code)) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      }
+    };
+
+    // Capture phase listeners (capture: true) guarantee we intercept BEFORE any Lenis or page listeners
+    window.addEventListener('wheel', handleScrollBlock, { passive: false, capture: true });
+    window.addEventListener('touchmove', handleScrollBlock, { passive: false, capture: true });
+    window.addEventListener('keydown', handleKeyBlock, { passive: false, capture: true });
+    window.addEventListener('scroll', enforceScrollLock, { passive: false, capture: true });
+
+    return () => {
+      clearInterval(lockInterval);
+
+      // Restore document styles
+      document.documentElement.style.overflow = prevHtmlOverflow;
+      document.documentElement.style.height = prevHtmlHeight;
+      document.body.style.overflow = prevBodyOverflow;
+      document.body.style.height = prevBodyHeight;
+
+      window.removeEventListener('wheel', handleScrollBlock, { capture: true });
+      window.removeEventListener('touchmove', handleScrollBlock, { capture: true });
+      window.removeEventListener('keydown', handleKeyBlock, { capture: true });
+      window.removeEventListener('scroll', enforceScrollLock, { capture: true });
+
+      // Resume Lenis smooth scroller
+      const lenis = (window as any).__lenis;
+      if (lenis) {
+        lenis.start();
+        lenis.resize();
+      }
+    };
+  }, [isExiting, isReady]);
 
   // Trigger convergence animation after isReady is true and initial reveal time
   useEffect(() => {
@@ -81,8 +162,19 @@ export default function ChoiceHero({
       return;
     }
 
+    // Explicitly pin scroll to top before unmounting ChoiceHero
+    window.scrollTo(0, 0);
+    const lenis = (window as any).__lenis;
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    }
+
     setIsExiting(true);
     setTimeout(() => {
+      if (lenis) {
+        lenis.start();
+        lenis.resize();
+      }
       onSelectPatient?.();
     }, 550);
   }, [isStandalonePage, onSelectPatient]);
@@ -92,21 +184,26 @@ export default function ChoiceHero({
       {!isExiting && (
         <motion.div
           ref={containerRef}
+          data-lenis-prevent
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0, scale: 1.02 }}
           transition={{ duration: 0.5, ease: 'easeInOut' }}
-          onPointerMove={handlePointerMove}
-          onPointerLeave={handlePointerLeave}
-          className="fixed inset-0 z-[99999] w-full h-full bg-black select-none overflow-hidden flex flex-row"
+          onPointerMove={!isMobile ? handlePointerMove : undefined}
+          onPointerLeave={!isMobile ? handlePointerLeave : undefined}
+          className="fixed inset-0 z-[99999] w-full h-full bg-black select-none overflow-hidden flex flex-col md:flex-row"
         >
           {/* ======================================================== */}
-          {/* LEFT HALF: DOCTOR SECTION                                */}
+          {/* DOCTOR SECTION (TOP on mobile, LEFT on desktop)          */}
           {/* ======================================================== */}
           <div
-            onClick={handleDoctorClick}
-            onPointerEnter={() => setHoverSide('doctor')}
-            className="relative w-1/2 h-full overflow-hidden cursor-pointer group"
+            onClick={isMobile ? undefined : handleDoctorClick}
+            onPointerEnter={() => {
+              if (!isMobile) setHoverSide('doctor');
+            }}
+            className={`relative w-full h-1/2 md:w-1/2 md:h-full overflow-hidden ${
+              isMobile ? '' : 'cursor-pointer'
+            } group`}
           >
             {/* Background Image */}
             <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105">
@@ -115,31 +212,37 @@ export default function ChoiceHero({
                 alt="Joyzen for Doctors"
                 fill
                 priority
-                sizes="50vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover object-center"
               />
             </div>
 
-            {/* Gradient Overlays for High Contrast & Legibility */}
-            {/* <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/35 pointer-events-none" /> */}
+            {/* Subtle Gradient Overlays for High Contrast */}
+            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/25 transition-colors duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-black/10 pointer-events-none" />
 
-            {/* Left Glassmorphism Action Button: "For Doctors" (Image 2) */}
+            {/* Action Button: "For Doctors" (Primary navigation trigger on mobile) */}
             <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              initial={{ opacity: 0, y: 25, scale: 0.95 }}
               animate={
                 phase === 'converged'
                   ? { opacity: 1, y: 0, scale: 1 }
-                  : { opacity: 0, y: 30, scale: 0.95 }
+                  : { opacity: 0, y: 25, scale: 0.95 }
               }
               transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-1/2 -translate-x-1/2 bottom-8 sm:bottom-12 md:bottom-24 z-30"
+              className={`absolute left-1/2 -translate-x-1/2 top-1/2 sm:top-10 md:top-auto md:bottom-24 z-30 touch-manipulation ${
+                phase === 'converged' ? 'pointer-events-auto' : 'pointer-events-none'
+              }`}
               onClick={(e) => {
                 e.stopPropagation();
                 handleDoctorClick();
               }}
             >
               <SpecularButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDoctorClick();
+                }}
                 size="md"
                 radius={24}
                 tint="#ffffff"
@@ -153,7 +256,7 @@ export default function ChoiceHero({
                 shineFade={40}
                 thickness={1.2}
                 autoAnimate={true}
-                className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 transition-transform duration-200 whitespace-nowrap"
+                className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation"
               >
                 For Doctors
               </SpecularButton>
@@ -161,12 +264,16 @@ export default function ChoiceHero({
           </div>
 
           {/* ======================================================== */}
-          {/* RIGHT HALF: PATIENT SECTION                               */}
+          {/* PATIENT SECTION (BOTTOM on mobile, RIGHT on desktop)     */}
           {/* ======================================================== */}
           <div
-            onClick={handlePatientClick}
-            onPointerEnter={() => setHoverSide('patient')}
-            className="relative w-1/2 h-full overflow-hidden cursor-pointer group"
+            onClick={isMobile ? undefined : handlePatientClick}
+            onPointerEnter={() => {
+              if (!isMobile) setHoverSide('patient');
+            }}
+            className={`relative w-full h-1/2 md:w-1/2 md:h-full overflow-hidden ${
+              isMobile ? '' : 'cursor-pointer'
+            } group`}
           >
             {/* Background Image */}
             <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105">
@@ -175,31 +282,37 @@ export default function ChoiceHero({
                 alt="Joyzen for Patients"
                 fill
                 priority
-                sizes="50vw"
+                sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover object-center"
               />
             </div>
 
-            {/* Gradient Overlays */}
-            {/* <div className="absolute inset-0 bg-black/40 group-hover:bg-black/25 transition-colors duration-500" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-black/35 pointer-events-none" /> */}
+            {/* Subtle Gradient Overlays */}
+            <div className="absolute inset-0 bg-black/q0 group-hover:bg-black/25 transition-colors duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-black/10 pointer-events-none" />
 
-            {/* Right Glassmorphism Action Button: "For Patients" (Image 2) */}
+            {/* Action Button: "For Patients" (Primary navigation trigger on mobile) */}
             <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              initial={{ opacity: 0, y: 25, scale: 0.95 }}
               animate={
                 phase === 'converged'
                   ? { opacity: 1, y: 0, scale: 1 }
-                  : { opacity: 0, y: 30, scale: 0.95 }
+                  : { opacity: 0, y: 25, scale: 0.95 }
               }
               transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-1/2 -translate-x-1/2 bottom-8 sm:bottom-12 md:bottom-24 z-30"
+              className={`absolute left-1/2 -translate-x-1/2 bottom-40 sm:bottom-10 md:bottom-24 z-30 touch-manipulation ${
+                phase === 'converged' ? 'pointer-events-auto' : 'pointer-events-none'
+              }`}
               onClick={(e) => {
                 e.stopPropagation();
                 handlePatientClick();
               }}
             >
               <SpecularButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePatientClick();
+                }}
                 size="md"
                 radius={24}
                 tint="#ffffff"
@@ -213,7 +326,7 @@ export default function ChoiceHero({
                 shineFade={40}
                 thickness={1.2}
                 autoAnimate={true}
-                className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 transition-transform duration-200 whitespace-nowrap"
+                className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation"
               >
                 For Patients
               </SpecularButton>
@@ -221,19 +334,19 @@ export default function ChoiceHero({
           </div>
 
           {/* ======================================================== */}
-          {/* CENTER DIVIDER LINE                                      */}
+          {/* SEAM DIVIDER (Horizontal on mobile, Vertical on desktop) */}
           {/* ======================================================== */}
-          <div className="absolute top-0 bottom-0 left-1/2 w-[1px] -translate-x-1/2 bg-white/20 pointer-events-none z-20" />
+          <div className="absolute left-0 right-0 top-1/2 h-[1px] -translate-y-1/2 bg-white/20 md:hidden pointer-events-none z-20" />
+          <div className="hidden md:block absolute top-0 bottom-0 left-1/2 w-[1px] -translate-x-1/2 bg-white/20 pointer-events-none z-20" />
 
           {/* ======================================================== */}
           {/* ANIMATING LOGO & TYPOGRAPHY OVERLAY                      */}
-          {/* Starts separated (Image 1), then converges to joyzen     */}
           {/* ======================================================== */}
           <div className="absolute inset-0 pointer-events-none flex items-center justify-center z-20">
             <motion.div
               animate={
                 phase === 'converged'
-                  ? { y: -48 }
+                  ? { y: isMobile ? -6 : -48 }
                   : { y: 0 }
               }
               transition={{
@@ -244,24 +357,24 @@ export default function ChoiceHero({
             >
 
               {/* 1. Center Joyzen Icon Mark */}
-              {/* In Initial state: translated down to sit on divider between .joy and żen */}
-              {/* In Converged state: lifts upward to y: 0, directly on top of joined joyzen */}
+              {/* On mobile: starts right on horizontal divider, lifts slightly on convergence */}
+              {/* On desktop: starts on vertical divider at y: 56, lifts on top of joyzen */}
               <motion.div
-                initial={{ y: 56, scale: 1 }}
+                initial={{ y: isMobile ? 0 : 56, scale: 1 }}
                 animate={
                   phase === 'converged'
-                    ? { y: 0, scale: 1.05 }
-                    : { y: 56, scale: 1 }
+                    ? { y: isMobile ? -10 : 0, scale: 1.05 }
+                    : { y: isMobile ? 0 : 56, scale: 1 }
                 }
                 transition={{
                   duration: 1.1,
                   ease: [0.16, 1, 0.3, 1],
                 }}
-                className="mb-3 sm:mb-4 md:mb-5 z-20"
+                className="mb-2 sm:mb-3 md:mb-5 z-20"
               >
                 <svg
                   viewBox="0 0 35 54"
-                  className="w-7 h-11 sm:w-8 sm:h-12 md:w-9 md:h-14 overflow-visible drop-shadow-[0_6px_20px_rgba(0,0,0,0.6)]"
+                  className="w-6 h-9 sm:w-8 sm:h-12 md:w-9 md:h-14 overflow-visible drop-shadow-[0_6px_20px_rgba(0,0,0,0.6)]"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
@@ -292,15 +405,15 @@ export default function ChoiceHero({
               {/* Converges with gap-0 into the exact seamless word "joyzen" */}
               <div className="flex items-center justify-center gap-0 z-10">
 
-                {/* Left Typography: .joy */}
-                {/* Initial: positioned full left (-36vw) */}
-                {/* Converged: glides seamlessly into x: 0 to join zen */}
+                {/* .joy (starts top on mobile, full-left on desktop) */}
                 <motion.div
-                  initial={{ x: '-36vw' }}
+                  initial={isMobile ? { x: 0, y: '-20vh' } : { x: '-36vw', y: 0 }}
                   animate={
                     phase === 'converged'
-                      ? { x: 0 }
-                      : { x: '-36vw' }
+                      ? { x: 0, y: 0 }
+                      : isMobile
+                      ? { x: 0, y: '-20vh' }
+                      : { x: '-36vw', y: 0 }
                   }
                   transition={{
                     duration: 1.1,
@@ -310,7 +423,7 @@ export default function ChoiceHero({
                 >
                   <svg
                     viewBox="0 0 144 80"
-                    className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto overflow-visible translate-y-[26%]"
+                    className="h-9 sm:h-12 md:h-14 lg:h-16 w-auto overflow-visible translate-y-[26%] drop-shadow-[0_6px_20px_rgba(0,0,0,0.6)]"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
@@ -332,15 +445,15 @@ export default function ChoiceHero({
                   </svg>
                 </motion.div>
 
-                {/* Right Typography: żen */}
-                {/* Initial: positioned full right (+36vw) */}
-                {/* Converged: glides seamlessly into x: 0 flush next to .joy */}
+                {/* żen (starts bottom on mobile, full-right on desktop) */}
                 <motion.div
-                  initial={{ x: '36vw' }}
+                  initial={isMobile ? { x: 0, y: '20vh' } : { x: '36vw', y: 0 }}
                   animate={
                     phase === 'converged'
-                      ? { x: 0 }
-                      : { x: '36vw' }
+                      ? { x: 0, y: 0 }
+                      : isMobile
+                      ? { x: 0, y: '20vh' }
+                      : { x: '36vw', y: 0 }
                   }
                   transition={{
                     duration: 1.1,
@@ -350,7 +463,7 @@ export default function ChoiceHero({
                 >
                   <svg
                     viewBox="0 0 157 80"
-                    className="h-10 sm:h-12 md:h-14 lg:h-16 w-auto overflow-visible"
+                    className="h-9 sm:h-12 md:h-14 lg:h-16 w-auto overflow-visible drop-shadow-[0_6px_20px_rgba(0,0,0,0.6)]"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
@@ -377,28 +490,29 @@ export default function ChoiceHero({
           </div>
 
           {/* ======================================================== */}
-          {/* FLOATING CURSOR FOLLOWER BADGE                           */}
-          {/* Follows mouse with spring physics, displays side intent  */}
+          {/* FLOATING CURSOR FOLLOWER BADGE (Desktop only)            */}
           {/* ======================================================== */}
-          <motion.div
-            style={{ x: springX, y: springY }}
-            initial={{ opacity: 0, scale: 0.7 }}
-            animate={{
-              opacity: hoverSide ? 1 : 0,
-              scale: hoverSide ? 1 : 0.7,
-            }}
-            transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="pointer-events-none fixed top-0 left-0 z-50 -translate-x-1/2 -translate-y-1/2 hidden md:block"
-          >
-            <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/45 backdrop-blur-2xl border border-white/30 text-white shadow-[0_12px_40px_rgba(0,0,0,0.6)] whitespace-nowrap">
-              <span className="text-xs lg:text-sm font-medium tracking-wide">
-                {hoverSide === 'doctor' ? 'Go to doctor site' : 'Go to patient site'}
-              </span>
-              <span className="text-[#EF8F60] text-sm lg:text-base font-bold leading-none">
-                {hoverSide === 'doctor' ? '↗' : '→'}
-              </span>
-            </div>
-          </motion.div>
+          {!isMobile && (
+            <motion.div
+              style={{ x: springX, y: springY }}
+              initial={{ opacity: 0, scale: 0.7 }}
+              animate={{
+                opacity: hoverSide ? 1 : 0,
+                scale: hoverSide ? 1 : 0.7,
+              }}
+              transition={{ duration: 0.18, ease: 'easeOut' }}
+              className="pointer-events-none fixed top-0 left-0 z-50 -translate-x-1/2 -translate-y-1/2 hidden md:block"
+            >
+              <div className="flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/45 backdrop-blur-2xl border border-white/30 text-white shadow-[0_12px_40px_rgba(0,0,0,0.6)] whitespace-nowrap">
+                <span className="text-xs lg:text-sm font-medium tracking-wide">
+                  {hoverSide === 'doctor' ? 'Go to doctor site' : 'Go to patient site'}
+                </span>
+                <span className="text-[#EF8F60] text-sm lg:text-base font-bold leading-none">
+                  {hoverSide === 'doctor' ? '↗' : '→'}
+                </span>
+              </div>
+            </motion.div>
+          )}
         </motion.div>
       )}
     </AnimatePresence>

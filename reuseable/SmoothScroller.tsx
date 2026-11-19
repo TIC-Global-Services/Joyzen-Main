@@ -51,6 +51,16 @@ const SmoothScroller = ({ children }: LenisProviderProps) => {
       lenisRef.current = lenis;
       if (typeof window !== "undefined") {
         (window as any).__lenis = lenis;
+
+        // If portal selection has not been completed on home page, keep Lenis stopped initially
+        if (
+          pathname === "/" &&
+          sessionStorage.getItem("joyzen_choice_completed") !== "true"
+        ) {
+          lenis.stop();
+          lenis.scrollTo(0, { immediate: true });
+          window.scrollTo(0, 0);
+        }
       }
 
       lenis.on("scroll", ScrollTrigger.update);

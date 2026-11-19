@@ -24,6 +24,8 @@ export default function Preloader({
   // skip immediately so returning users see the content right away with zero flash.
   const [initialComplete] = useState(() => manual && Boolean(externalIsComplete));
   const [hasExited, setHasExited] = useState(initialComplete);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [blocked, setBlocked] = useState(false);
 
   const [internalProgress, setInternalProgress] = useState(0);
   const progressRef = useRef(0);
@@ -78,6 +80,26 @@ export default function Preloader({
     }
   }, [manual, shouldSkip, isDone, onFinish]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // React doesn't always set the muted attribute reliably
+    video.muted = true;
+    video.playsInline = true;
+
+    video.play().catch(() => {
+      setBlocked(true); // Low Power Mode / autoplay blocked
+    });
+
+    // Retry on the first real touch, which counts as a user gesture
+    const retry = () => {
+      video.play().then(() => setBlocked(false)).catch(() => { });
+    };
+    window.addEventListener("touchend", retry, { once: true });
+    return () => window.removeEventListener("touchend", retry);
+  }, []);
+
   // Lock scroll while loader is active, restore scroll once loader hides
   useEffect(() => {
     if (shouldSkip || hasExited) return;
@@ -87,17 +109,28 @@ export default function Preloader({
 
     const handleScrollBlock = (e: Event) => {
       e.preventDefault();
+      e.stopImmediatePropagation();
     };
 
-    window.addEventListener('wheel', handleScrollBlock, { passive: false });
-    window.addEventListener('touchmove', handleScrollBlock, { passive: false });
+    window.addEventListener('wheel', handleScrollBlock, { passive: false, capture: true });
+    window.addEventListener('touchmove', handleScrollBlock, { passive: false, capture: true });
 
     return () => {
-      document.body.style.overflow = originalOverflow;
-      window.removeEventListener('wheel', handleScrollBlock);
-      window.removeEventListener('touchmove', handleScrollBlock);
+      // Only restore overflow if ChoiceHero is not queued or portal choice was already made
+      const choiceCompleted =
+        typeof window !== 'undefined' &&
+        sessionStorage.getItem('joyzen_choice_completed') === 'true';
+
+      if (choiceCompleted || pathname !== '/') {
+        document.body.style.overflow = originalOverflow;
+      }
+
+      window.removeEventListener('wheel', handleScrollBlock, { capture: true });
+      window.removeEventListener('touchmove', handleScrollBlock, { capture: true });
     };
-  }, [shouldSkip, hasExited]);
+  }, [shouldSkip, hasExited, pathname]);
+
+
 
   // Automatic fallback mode (for pages without manual progress tracking)
   useEffect(() => {
@@ -232,6 +265,7 @@ export default function Preloader({
   return (
     <div
       ref={preloaderRef}
+      data-lenis-prevent
       className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-white select-none transition-all"
     >
       {/* Ambient background glow matching lilac palette */}
@@ -242,11 +276,13 @@ export default function Preloader({
         {/* 3D Robot Video from /loader_video.mp4 */}
         <div className="relative w-44 sm:w-56 md:w-64 aspect-square flex items-center justify-center overflow-hidden">
           <video
+            ref={videoRef}
             src="/loader_video.mp4"
-            autoPlay
-            loop
             muted
+            loop
             playsInline
+            autoPlay
+            preload="auto"
             className="w-full h-full object-contain pointer-events-none select-none mix-blend-multiply"
           />
         </div>
