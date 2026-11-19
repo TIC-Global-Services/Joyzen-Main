@@ -324,7 +324,7 @@ export default function ChoiceHero({
                 shineFade={40}
                 thickness={1.2}
                 autoAnimate={true}
-                className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation"
+                className="backdrop-blur-xl border md:border-white/20 border-white/30 s hadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation"
               >
                 For Patients
               </SpecularButton>

@@ -29,6 +29,7 @@ export default function Footer() {
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [blocked, setBlocked] = useState(false);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (window.innerWidth < 640) {
@@ -40,23 +41,24 @@ export default function Footer() {
 
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || !videoSrc) return;
 
-    // React doesn't always set the muted attribute reliably
     video.muted = true;
+    video.defaultMuted = true;
     video.playsInline = true;
 
-    video.play().catch(() => {
-      setBlocked(true); // Low Power Mode / autoplay blocked
-    });
+    const tryPlay = () => { video.play().catch(() => { }); };
+    tryPlay();
 
-    // Retry on the first real touch, which counts as a user gesture
-    const retry = () => {
-      video.play().then(() => setBlocked(false)).catch(() => { });
+    // Low Power Mode: the first touch anywhere starts the video
+    window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+    window.addEventListener('click', tryPlay, { once: true });
+
+    return () => {
+      window.removeEventListener('touchstart', tryPlay);
+      window.removeEventListener('click', tryPlay);
     };
-    window.addEventListener("touchend", retry, { once: true });
-    return () => window.removeEventListener("touchend", retry);
-  }, []);
+  }, [videoSrc]);
 
   // Hide footer on specific question form pages and all program pages
   const normalizedPath = pathname?.replace(/\/$/, '') || '';
@@ -88,14 +90,12 @@ export default function Footer() {
               playsInline
               autoPlay
               preload="auto"
-              controls={false}
-              disablePictureInPicture
-              disableRemotePlayback
-              className="absolute inset-0 w-full h-full object-cover"
+              onPlaying={() => setReady(true)}
+              className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-500 ${ready ? 'opacity-100' : 'opacity-0'
+                }`}
             >
               <source src={videoSrc} type="video/mp4" />
-              Your browser does not support the video tag.
-            </video>
+            </video>  
           )}
         </div>
       </div>
