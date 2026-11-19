@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -27,6 +27,8 @@ export default function Footer() {
 
   // Pick the correct video for the device — client-side check avoids SSR mismatch.
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
+   const videoRef = useRef<HTMLVideoElement>(null);
+    const [blocked, setBlocked] = useState(false);
 
   useEffect(() => {
     if (window.innerWidth < 640) {
@@ -34,6 +36,26 @@ export default function Footer() {
     } else {
       setVideoSrc('/joylogo.mp4');
     }
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // React doesn't always set the muted attribute reliably
+    video.muted = true;
+    video.playsInline = true;
+
+    video.play().catch(() => {
+      setBlocked(true); // Low Power Mode / autoplay blocked
+    });
+
+    // Retry on the first real touch, which counts as a user gesture
+    const retry = () => {
+      video.play().then(() => setBlocked(false)).catch(() => { });
+    };
+    window.addEventListener("touchend", retry, { once: true });
+    return () => window.removeEventListener("touchend", retry);
   }, []);
 
   // Hide footer on specific question form pages and all program pages
@@ -51,19 +73,19 @@ export default function Footer() {
       {/* Background Video — single stream, source chosen by device at mount */}
       <div
         className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
-        // style={{
-        //   WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 8%, black 22%, black 100%)',
-        //   maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 8%, black 22%, black 100%)',
-        // }}
+      // style={{
+      //   WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 8%, black 22%, black 100%)',
+      //   maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 8%, black 22%, black 100%)',
+      // }}
       >
         <div className="relative w-full h-full">
           {videoSrc && (
             <video
               key={videoSrc}
-              autoPlay
-              loop
               muted
+              loop
               playsInline
+              autoPlay
               preload="auto"
               className="absolute inset-0 w-full h-full object-cover"
             >

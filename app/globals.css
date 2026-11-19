@@ -100,9 +100,11 @@
     0% {
       transform: translate3d(-6%, -4%, 0) scale(1);
     }
+
     50% {
       transform: translate3d(6%, 4%, 0) scale(1.08);
     }
+
     100% {
       transform: translate3d(-6%, -4%, 0) scale(1);
     }
@@ -112,21 +114,39 @@
     0% {
       transform: translate3d(-8vw, 0, 0);
     }
+
     50% {
       transform: translate3d(20vw, 6vh, 0) scale(1.1);
     }
+
     100% {
       transform: translate3d(-8vw, 0, 0);
     }
+  }
+
+  /* globals.css */
+  video::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none;
+  }
+
+  video::-webkit-media-controls {
+    display: none !important;
+  }
+
+  video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
   }
 
   @keyframes movingGradOrbB {
     0% {
       transform: translate3d(8vw, 0, 0);
     }
+
     50% {
       transform: translate3d(-20vw, -6vh, 0) scale(1.1);
     }
+
     100% {
       transform: translate3d(8vw, 0, 0);
     }
@@ -252,9 +272,11 @@
     0% {
       background-position: 0% 50%;
     }
+
     50% {
       background-position: 100% 50%;
     }
+
     100% {
       background-position: 0% 50%;
     }
@@ -264,39 +286,41 @@
     0% {
       background-position: 100% 50%;
     }
+
     50% {
       background-position: 0% 50%;
     }
+
     100% {
       background-position: 100% 50%;
     }
   }
 
 
-/* Lenis smooth scroll styles */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
+  /* Lenis smooth scroll styles */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
 
-.lenis:not(.lenis-autoToggle).lenis-stopped {
-  overflow: clip;
-}
+  .lenis:not(.lenis-autoToggle).lenis-stopped {
+    overflow: clip;
+  }
 
-.lenis [data-lenis-prevent],
-.lenis [data-lenis-prevent-wheel],
-.lenis [data-lenis-prevent-touch],
-.lenis [data-lenis-prevent-vertical],
-.lenis [data-lenis-prevent-horizontal] {
-  overscroll-behavior: contain;
-}
+  .lenis [data-lenis-prevent],
+  .lenis [data-lenis-prevent-wheel],
+  .lenis [data-lenis-prevent-touch],
+  .lenis [data-lenis-prevent-vertical],
+  .lenis [data-lenis-prevent-horizontal] {
+    overscroll-behavior: contain;
+  }
 
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}
+  .lenis.lenis-smooth iframe {
+    pointer-events: none;
+  }
 
-.lenis.lenis-autoToggle {
-  transition-property: overflow;
-  transition-duration: 1ms;
-  transition-behavior: allow-discrete;
-}
+  .lenis.lenis-autoToggle {
+    transition-property: overflow;
+    transition-duration: 1ms;
+    transition-behavior: allow-discrete;
+  }
