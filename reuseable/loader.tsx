@@ -24,9 +24,7 @@ export default function Preloader({
   // skip immediately so returning users see the content right away with zero flash.
   const [initialComplete] = useState(() => manual && Boolean(externalIsComplete));
   const [hasExited, setHasExited] = useState(initialComplete);
-   const videoRef = useRef<HTMLVideoElement>(null);
-    const [blocked, setBlocked] = useState(false);
-    const [ready, setReady] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const [internalProgress, setInternalProgress] = useState(0);
   const progressRef = useRef(0);
@@ -81,26 +79,28 @@ export default function Preloader({
     }
   }, [manual, shouldSkip, isDone, onFinish]);
 
-      useEffect(() => {
-        const video = videoRef.current;
-        if (!video) return;
-    
-        video.muted = true;
-        video.defaultMuted = true;
-        video.playsInline = true;
-    
-        const tryPlay = () => { video.play().catch(() => { }); };
-        tryPlay();
-    
-        // Low Power Mode: the first touch anywhere starts the video
-        window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
-        window.addEventListener('click', tryPlay, { once: true });
-    
-        return () => {
-          window.removeEventListener('touchstart', tryPlay);
-          window.removeEventListener('click', tryPlay);
-        };
-      }, []);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+
+    const tryPlay = () => {
+      video.play().catch(() => {});
+    };
+    tryPlay();
+
+    // Low Power Mode: the first touch anywhere starts the video
+    window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+    window.addEventListener('click', tryPlay, { once: true });
+
+    return () => {
+      window.removeEventListener('touchstart', tryPlay);
+      window.removeEventListener('click', tryPlay);
+    };
+  }, []);
 
   // Lock scroll while loader is active on the home page ('/'), restore scroll once loader hides
   useEffect(() => {
@@ -280,11 +280,10 @@ export default function Preloader({
           <video
             ref={videoRef}
             src="/loader_video.mp4"
-            muted
-            controls={false}               
-            loop
-            playsInline
             autoPlay
+            loop
+            muted
+            playsInline
             preload="auto"
             className="w-full h-full object-contain pointer-events-none select-none mix-blend-multiply"
           />

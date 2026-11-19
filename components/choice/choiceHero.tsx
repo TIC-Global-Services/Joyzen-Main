@@ -12,6 +12,51 @@ export interface ChoiceHeroProps {
   isReady?: boolean;
 }
 
+// 3D Staggered Rotating & Stopping Text for Action Buttons
+function RotatingButtonText({ text, active = true }: { text: string; active?: boolean }) {
+  const letters = text.split('');
+
+  return (
+    <span
+      className="inline-flex items-center justify-center overflow-visible"
+      style={{ perspective: 600 }}
+    >
+      {letters.map((char, index) => (
+        <motion.span
+          key={index}
+          animate={
+            active
+              ? {
+                  rotateX: [0, 360],
+                  y: [0, -3, 0],
+                }
+              : {
+                  rotateX: 0,
+                  y: 0,
+                }
+          }
+          transition={{
+            duration: 0.75,
+            delay: active ? index * 0.035 : 0,
+            repeat: active ? Infinity : 0,
+            repeatDelay: 3.2,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+          style={{
+            display: 'inline-block',
+            transformOrigin: '50% 50%',
+            transformStyle: 'preserve-3d',
+            backfaceVisibility: 'hidden',
+          }}
+          className={char === ' ' ? 'w-1.5' : ''}
+        >
+          {char === ' ' ? '\u00A0' : char}
+        </motion.span>
+      ))}
+    </span>
+  );
+}
+
 export default function ChoiceHero({
   onSelectPatient,
   isStandalonePage = false,
@@ -254,7 +299,7 @@ export default function ChoiceHero({
                 autoAnimate={true}
                 className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation hidden lg:flex"
               >
-                For Doctors
+                <RotatingButtonText text="For Doctors" active={phase === 'converged'} />
               </SpecularButton>
 
             </motion.div>
@@ -294,7 +339,7 @@ export default function ChoiceHero({
                 stroke={false}
                 className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation lg:hidden"
               >
-                For Doctors
+                <RotatingButtonText text="For Doctors" active={phase === 'converged'} />
               </SpecularButton>
 
             </motion.div>
@@ -363,7 +408,7 @@ export default function ChoiceHero({
                 autoAnimate={true}
                 className="backdrop-blur-xl border md:border-white/20 border-white/30 s hadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation"
               >
-                For Patients
+                <RotatingButtonText text="For Patients" active={phase === 'converged'} />
               </SpecularButton>
             </motion.div>
             <motion.div
@@ -402,7 +447,7 @@ export default function ChoiceHero({
                 stroke={false}
                 className="backdrop-blur-xl border md:border-white/20 border-white/30 s hadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation"
               >
-                For Patients
+                <RotatingButtonText text="For Patients" active={phase === 'converged'} />
               </SpecularButton>
             </motion.div>
           </div>
