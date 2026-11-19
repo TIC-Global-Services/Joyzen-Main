@@ -95,7 +95,7 @@ export default function Footer() {
                 }`}
             >
               <source src={videoSrc} type="video/mp4" />
-            </video>  
+            </video>
           )}
         </div>
       </div>

@@ -24,8 +24,9 @@ export default function Preloader({
   // skip immediately so returning users see the content right away with zero flash.
   const [initialComplete] = useState(() => manual && Boolean(externalIsComplete));
   const [hasExited, setHasExited] = useState(initialComplete);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [blocked, setBlocked] = useState(false);
+   const videoRef = useRef<HTMLVideoElement>(null);
+    const [blocked, setBlocked] = useState(false);
+    const [ready, setReady] = useState(false);
 
   const [internalProgress, setInternalProgress] = useState(0);
   const progressRef = useRef(0);
@@ -80,25 +81,26 @@ export default function Preloader({
     }
   }, [manual, shouldSkip, isDone, onFinish]);
 
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-
-    // React doesn't always set the muted attribute reliably
-    video.muted = true;
-    video.playsInline = true;
-
-    video.play().catch(() => {
-      setBlocked(true); // Low Power Mode / autoplay blocked
-    });
-
-    // Retry on the first real touch, which counts as a user gesture
-    const retry = () => {
-      video.play().then(() => setBlocked(false)).catch(() => { });
-    };
-    window.addEventListener("touchend", retry, { once: true });
-    return () => window.removeEventListener("touchend", retry);
-  }, []);
+      useEffect(() => {
+        const video = videoRef.current;
+        if (!video) return;
+    
+        video.muted = true;
+        video.defaultMuted = true;
+        video.playsInline = true;
+    
+        const tryPlay = () => { video.play().catch(() => { }); };
+        tryPlay();
+    
+        // Low Power Mode: the first touch anywhere starts the video
+        window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+        window.addEventListener('click', tryPlay, { once: true });
+    
+        return () => {
+          window.removeEventListener('touchstart', tryPlay);
+          window.removeEventListener('click', tryPlay);
+        };
+      }, []);
 
   // Lock scroll while loader is active on the home page ('/'), restore scroll once loader hides
   useEffect(() => {

@@ -199,9 +199,8 @@ export default function ChoiceHero({
             onPointerEnter={() => {
               if (!isMobile) setHoverSide('doctor');
             }}
-            className={`relative w-full h-1/2 md:w-1/2 md:h-full overflow-hidden ${
-              isMobile ? '' : 'cursor-pointer'
-            } group`}
+            className={`relative w-full h-1/2 md:w-1/2 md:h-full overflow-hidden ${isMobile ? '' : 'cursor-pointer'
+              } group`}
           >
             {/* Background Image */}
             <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105">
@@ -216,7 +215,7 @@ export default function ChoiceHero({
             </div>
 
             {/* Subtle Gradient Overlays for High Contrast */}
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/25 transition-colors duration-500" />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/25 transition-colors duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-black/10 pointer-events-none" />
 
             {/* Action Button: "For Doctors" (Primary navigation trigger on mobile) */}
@@ -228,9 +227,8 @@ export default function ChoiceHero({
                   : { opacity: 0, y: 25, scale: 0.95 }
               }
               transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className={`absolute left-1/2 -translate-x-1/2 top-1/2 sm:top-10 md:top-auto md:bottom-24 z-30 touch-manipulation ${
-                phase === 'converged' ? 'pointer-events-auto' : 'pointer-events-none'
-              }`}
+              className={`absolute left-1/2 -translate-x-1/2 top-1/2 sm:top-10 md:top-auto md:bottom-24 z-30 touch-manipulation hidden lg:flex ${phase === 'converged' ? 'pointer-events-auto' : 'pointer-events-none'
+                }`}
               onClick={(e) => {
                 e.stopPropagation();
                 handleDoctorClick();
@@ -254,10 +252,51 @@ export default function ChoiceHero({
                 shineFade={40}
                 thickness={1.2}
                 autoAnimate={true}
-                className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation"
+                className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation hidden lg:flex"
               >
                 For Doctors
               </SpecularButton>
+
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 25, scale: 0.95 }}
+              animate={
+                phase === 'converged'
+                  ? { opacity: 1, y: 0, scale: 1 }
+                  : { opacity: 0, y: 25, scale: 0.95 }
+              }
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className={`absolute left-1/2 -translate-x-1/2 top-1/2 sm:top-10 md:top-auto md:bottom-24 z-30 touch-manipulation lg:hidden ${phase === 'converged' ? 'pointer-events-auto' : 'pointer-events-none'
+                }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDoctorClick();
+              }}
+            >
+              <SpecularButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDoctorClick();
+                }}
+                size="sm"
+                radius={24}
+                tint="#ffffff"
+                tintOpacity={0.12}
+                blur={16}
+                textColor="#ffffff"
+                lineColor="#EF8F60"
+                baseColor="#ffffff"
+                intensity={1.2}
+                shineSize={18}
+                shineFade={40}
+                thickness={1.2}
+                autoAnimate={true}
+                stroke={false}
+                className="backdrop-blur-xl border border-white/20 shadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation lg:hidden"
+              >
+                For Doctors
+              </SpecularButton>
+
             </motion.div>
           </div>
 
@@ -269,9 +308,8 @@ export default function ChoiceHero({
             onPointerEnter={() => {
               if (!isMobile) setHoverSide('patient');
             }}
-            className={`relative w-full h-1/2 md:w-1/2 md:h-full overflow-hidden ${
-              isMobile ? '' : 'cursor-pointer'
-            } group`}
+            className={`relative w-full h-1/2 md:w-1/2 md:h-full overflow-hidden ${isMobile ? '' : 'cursor-pointer'
+              } group`}
           >
             {/* Background Image */}
             <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105">
@@ -286,7 +324,7 @@ export default function ChoiceHero({
             </div>
 
             {/* Subtle Gradient Overlays */}
-            <div className="absolute inset-0 bg-black/q0 group-hover:bg-black/25 transition-colors duration-500" />
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/25 transition-colors duration-500" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-black/10 to-black/10 pointer-events-none" />
 
             {/* Action Button: "For Patients" (Primary navigation trigger on mobile) */}
@@ -298,9 +336,8 @@ export default function ChoiceHero({
                   : { opacity: 0, y: 25, scale: 0.95 }
               }
               transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className={`absolute left-1/2 -translate-x-1/2 bottom-40 sm:bottom-10 md:bottom-24 z-30 touch-manipulation ${
-                phase === 'converged' ? 'pointer-events-auto' : 'pointer-events-none'
-              }`}
+              className={`absolute left-1/2 -translate-x-1/2 bottom-40 sm:bottom-10 md:bottom-24 z-30 hidden lg:block touch-manipulation ${phase === 'converged' ? 'pointer-events-auto' : 'pointer-events-none'
+                }`}
               onClick={(e) => {
                 e.stopPropagation();
                 handlePatientClick();
@@ -324,6 +361,45 @@ export default function ChoiceHero({
                 shineFade={40}
                 thickness={1.2}
                 autoAnimate={true}
+                className="backdrop-blur-xl border md:border-white/20 border-white/30 s hadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation"
+              >
+                For Patients
+              </SpecularButton>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 25, scale: 0.95 }}
+              animate={
+                phase === 'converged'
+                  ? { opacity: 1, y: 0, scale: 1 }
+                  : { opacity: 0, y: 25, scale: 0.95 }
+              }
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className={`absolute left-1/2 -translate-x-1/2 bottom-40 sm:bottom-10 md:bottom-24 z-30 lg:hidden touch-manipulation ${phase === 'converged' ? 'pointer-events-auto' : 'pointer-events-none'
+                }`}
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePatientClick();
+              }}
+            >
+              <SpecularButton
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handlePatientClick();
+                }}
+                size="sm"
+                radius={24}
+                tint="#ffffff"
+                tintOpacity={0.12}
+                blur={16}
+                textColor="#ffffff"
+                lineColor="#EF8F60"
+                baseColor="#ffffff"
+                intensity={1.2}
+                shineSize={18}
+                shineFade={40}
+                thickness={1.2}
+                autoAnimate={true}
+                stroke={false}
                 className="backdrop-blur-xl border md:border-white/20 border-white/30 s hadow-[0_12px_36px_rgba(0,0,0,0.5)] font-medium text-sm sm:text-base tracking-wide px-6 sm:px-8 py-3 sm:py-3.5 hover:scale-105 active:scale-95 transition-transform duration-200 whitespace-nowrap cursor-pointer touch-manipulation"
               >
                 For Patients
@@ -410,8 +486,8 @@ export default function ChoiceHero({
                     phase === 'converged'
                       ? { x: 0, y: 0 }
                       : isMobile
-                      ? { x: 0, y: '-20vh' }
-                      : { x: '-36vw', y: 0 }
+                        ? { x: 0, y: '-20vh' }
+                        : { x: '-36vw', y: 0 }
                   }
                   transition={{
                     duration: 1.1,
@@ -450,8 +526,8 @@ export default function ChoiceHero({
                     phase === 'converged'
                       ? { x: 0, y: 0 }
                       : isMobile
-                      ? { x: 0, y: '20vh' }
-                      : { x: '36vw', y: 0 }
+                        ? { x: 0, y: '20vh' }
+                        : { x: '36vw', y: 0 }
                   }
                   transition={{
                     duration: 1.1,
