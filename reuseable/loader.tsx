@@ -80,27 +80,31 @@ export default function Preloader({
   }, [manual, shouldSkip, isDone, onFinish]);
 
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
+  const video = videoRef.current;
+  if (!video) return;
 
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
+  video.setAttribute('muted', '');
+  video.setAttribute('playsinline', '');
+  video.setAttribute('webkit-playsinline', '');
+  video.muted = true;
+  video.defaultMuted = true;
+  video.controls = false;
 
-    const tryPlay = () => {
-      video.play().catch(() => {});
-    };
-    tryPlay();
+  const tryPlay = () => video.play().catch(() => {});
 
-    // Low Power Mode: the first touch anywhere starts the video
-    window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
-    window.addEventListener('click', tryPlay, { once: true });
+  tryPlay();
+  video.addEventListener('loadedmetadata', tryPlay);
+  video.addEventListener('canplay', tryPlay);
+  window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+  window.addEventListener('click', tryPlay, { once: true });
 
-    return () => {
-      window.removeEventListener('touchstart', tryPlay);
-      window.removeEventListener('click', tryPlay);
-    };
-  }, []);
+  return () => {
+    video.removeEventListener('loadedmetadata', tryPlay);
+    video.removeEventListener('canplay', tryPlay);
+    window.removeEventListener('touchstart', tryPlay);
+    window.removeEventListener('click', tryPlay);
+  };
+}, []);
 
   // Lock scroll while loader is active on the home page ('/'), restore scroll once loader hides
   useEffect(() => {
@@ -285,7 +289,7 @@ export default function Preloader({
             muted
             playsInline
             preload="auto"
-            className="w-full h-full object-contain pointer-events-none select-none mix-blend-multiply"
+            className="w-full h-full object-contain pointer-events-none select-none mix-blend-multiply [&::-webkit-media-controls-start-playback-button]:hidden [&::-webkit-media-controls]:hidden"
           />
         </div>
 
