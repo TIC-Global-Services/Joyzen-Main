@@ -83,10 +83,10 @@ export default function AboutHeroSection() {
             className="mt-6 sm:mt-6"
           >
             <Link
-              href="#contact"
+              href="/q-form"
               className="inline-flex items-center justify-center px-6 sm:px-8 py-3 rounded-full text-xs sm:text-sm font-bold tracking-tight text-zinc-800 uppercase bg-[#AEDEE44D] hover:bg-[#bde6ed] backdrop-blur-xs border border-white/60 shadow-xs hover:shadow-md transition-all duration-300 hover:scale-105 active:scale-95"
             >
-              CARE FOR A CALL? STAY ANONYMOUS.
+              CARE FOR A CALL?
             </Link>
           </motion.div>
         </div>

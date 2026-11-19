@@ -64,7 +64,7 @@ export default function HeroSection() {
           {/* Pill CTA Button */}
           <Reveal delay={0.55} className="mt-8 sm:mt-10">
             <Link
-              href="#begin"
+              href="/q-form"
               className="inline-flex items-center justify-center px-5 sm:px-8 py-2.5 md:py-3 rounded-full text-xs sm:text-sm font-bold tracking-tight text-black uppercase bg-[#AEDEE44D] font-medium hover:bg-[#c6e8ee] backdrop-blur-md border border-[#FFFFFF03] transition-all duration-300 hover:scale-105 active:scale-95 shadow-sm"
             >
               BEGIN YOUR JOURNEY
