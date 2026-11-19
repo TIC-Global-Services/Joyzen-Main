@@ -100,9 +100,9 @@ export default function Preloader({
     return () => window.removeEventListener("touchend", retry);
   }, []);
 
-  // Lock scroll while loader is active, restore scroll once loader hides
+  // Lock scroll while loader is active on the home page ('/'), restore scroll once loader hides
   useEffect(() => {
-    if (shouldSkip || hasExited) return;
+    if (shouldSkip || hasExited || pathname !== '/') return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -122,7 +122,7 @@ export default function Preloader({
         sessionStorage.getItem('joyzen_choice_completed') === 'true';
 
       if (choiceCompleted || pathname !== '/') {
-        document.body.style.overflow = originalOverflow;
+        document.body.style.overflow = '';
       }
 
       window.removeEventListener('wheel', handleScrollBlock, { capture: true });
@@ -279,6 +279,7 @@ export default function Preloader({
             ref={videoRef}
             src="/loader_video.mp4"
             muted
+            controls={false}               
             loop
             playsInline
             autoPlay

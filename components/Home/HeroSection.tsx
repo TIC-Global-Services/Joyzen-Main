@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Reveal from '@/reuseable/Reveal';
 
@@ -32,6 +32,23 @@ export default function HeroSection() {
     }
     return false;
   });
+
+  // Guarantee that as soon as portal choice is completed (or was already completed),
+  // all scroll locks are cleared and smooth scrolling is active.
+  useEffect(() => {
+    if (hasChosenPortal) {
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+
+      const lenis = (window as any).__lenis;
+      if (lenis) {
+        lenis.start();
+        lenis.resize();
+      }
+    }
+  }, [hasChosenPortal]);
 
   return (
     <section className="relative w-full min-h-screen flex items-end pt-10 sm:pt-24 pb-20 sm:pb-28 px-6 sm:px-12 lg:px-16 overflow-hidden">

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import SpecularButton from '@/reuseable/specularButton';
 
@@ -16,6 +17,8 @@ export default function ChoiceHero({
   isStandalonePage = false,
   isReady = true,
 }: ChoiceHeroProps) {
+  const pathname = usePathname();
+
   // Animation phases:
   // 'initial'   -> separated (.joy and żen), logo at divider
   // 'converged' -> .joy & żen meet in center (joyzen), logo lifts top, specular buttons appear
@@ -41,19 +44,14 @@ export default function ChoiceHero({
   const springX = useSpring(mouseX, { stiffness: 450, damping: 30 });
   const springY = useSpring(mouseY, { stiffness: 450, damping: 30 });
 
-  // Comprehensive scroll lock while ChoiceHero is active:
+  // Scroll lock is strictly isolated to the home page ('/') while ChoiceHero is visible:
   // 1. Pauses Lenis smooth scrolling (lenis.stop()) and resets scroll position to 0
   // 2. Locks HTML and body overflow & height
   // 3. Captures wheel, touchmove, keydown, and scroll events with stopImmediatePropagation()
   // 4. Continuously pins window.scrollY at 0 until portal choice is completed
   useEffect(() => {
-    if (isExiting) return;
-
-    // Save previous document styles
-    const prevHtmlOverflow = document.documentElement.style.overflow;
-    const prevHtmlHeight = document.documentElement.style.height;
-    const prevBodyOverflow = document.body.style.overflow;
-    const prevBodyHeight = document.body.style.height;
+    // Only lock scroll on home page ('/') or standalone choice page while ChoiceHero is active
+    if (isExiting || (pathname !== '/' && !isStandalonePage)) return;
 
     // Apply strict overflow locks
     document.documentElement.style.overflow = 'hidden';
@@ -101,11 +99,11 @@ export default function ChoiceHero({
     return () => {
       clearInterval(lockInterval);
 
-      // Restore document styles
-      document.documentElement.style.overflow = prevHtmlOverflow;
-      document.documentElement.style.height = prevHtmlHeight;
-      document.body.style.overflow = prevBodyOverflow;
-      document.body.style.height = prevBodyHeight;
+      // Cleanly remove all inline overflow and height overrides so page can scroll normally
+      document.documentElement.style.overflow = '';
+      document.documentElement.style.height = '';
+      document.body.style.overflow = '';
+      document.body.style.height = '';
 
       window.removeEventListener('wheel', handleScrollBlock, { capture: true });
       window.removeEventListener('touchmove', handleScrollBlock, { capture: true });
@@ -119,7 +117,7 @@ export default function ChoiceHero({
         lenis.resize();
       }
     };
-  }, [isExiting, isReady]);
+  }, [isExiting]);
 
   // Trigger convergence animation after isReady is true and initial reveal time
   useEffect(() => {
