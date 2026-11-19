@@ -5,6 +5,7 @@ import WaveGridBackground from "@/reuseable/wave-grid-background";
 import { epilogue, satoshi } from "@/fonts/font";
 import Navbar from "@/reuseable/Navbar";
 import Footer from "@/reuseable/Footer";
+import GlobalPortalChoice from "@/components/choice/GlobalPortalChoice";
 
 
 
@@ -141,6 +142,7 @@ export default function RootLayout({
           <WaveGridBackground colorBase="#ffffff" colorHigh="#F4A27E" autoAnimate={false} waveAmplitude={0.2} waveMaxHeight={0.2} />
         </div>
         <SmoothScroller>
+          <GlobalPortalChoice />
           <Navbar />
           {children}
           <Footer />

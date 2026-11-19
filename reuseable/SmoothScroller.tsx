@@ -15,8 +15,12 @@ const SmoothScroller = ({ children }: LenisProviderProps) => {
 
   useEffect(() => {
     if (lenisRef.current) {
-      // Ensure Lenis and body styles are completely unlocked on all non-home routes
-      if (pathname !== '/') {
+      const choiceCompleted =
+        typeof window !== 'undefined' &&
+        sessionStorage.getItem('joyzen_choice_completed') === 'true';
+
+      // Ensure Lenis and body styles are unlocked once portal choice is completed
+      if (choiceCompleted) {
         lenisRef.current.start();
         document.documentElement.style.overflow = '';
         document.documentElement.style.height = '';
@@ -61,9 +65,8 @@ const SmoothScroller = ({ children }: LenisProviderProps) => {
       if (typeof window !== "undefined") {
         (window as any).__lenis = lenis;
 
-        // If portal selection has not been completed on home page, keep Lenis stopped initially
+        // If portal selection has not been completed, keep Lenis stopped initially
         if (
-          pathname === "/" &&
           sessionStorage.getItem("joyzen_choice_completed") !== "true"
         ) {
           lenis.stop();

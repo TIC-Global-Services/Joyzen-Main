@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useMotionValue, useSpring } from 'framer-motion';
 import SpecularButton from '@/reuseable/specularButton';
 
@@ -63,6 +63,7 @@ export default function ChoiceHero({
   isReady = true,
 }: ChoiceHeroProps) {
   const pathname = usePathname();
+  const router = useRouter();
 
   // Animation phases:
   // 'initial'   -> separated (.joy and żen), logo at divider
@@ -89,14 +90,13 @@ export default function ChoiceHero({
   const springX = useSpring(mouseX, { stiffness: 450, damping: 30 });
   const springY = useSpring(mouseY, { stiffness: 450, damping: 30 });
 
-  // Scroll lock is strictly isolated to the home page ('/') while ChoiceHero is visible:
+  // Scroll lock while ChoiceHero is visible:
   // 1. Pauses Lenis smooth scrolling (lenis.stop()) and resets scroll position to 0
   // 2. Locks HTML and body overflow & height
   // 3. Captures wheel, touchmove, keydown, and scroll events with stopImmediatePropagation()
   // 4. Continuously pins window.scrollY at 0 until portal choice is completed
   useEffect(() => {
-    // Only lock scroll on home page ('/') or standalone choice page while ChoiceHero is active
-    if (isExiting || (pathname !== '/' && !isStandalonePage)) return;
+    if (isExiting) return;
 
     // Apply strict overflow locks
     document.documentElement.style.overflow = 'hidden';
@@ -191,6 +191,9 @@ export default function ChoiceHero({
 
   // Navigate to Doctor domain
   const handleDoctorClick = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('joyzen_choice_completed', 'true');
+    }
     window.location.href = 'https://doctors.joyzen.in/';
   }, []);
 
@@ -219,8 +222,12 @@ export default function ChoiceHero({
         lenis.resize();
       }
       onSelectPatient?.();
+      // If user opened any non-home page (like /about) and chose Patient, route them to home ('/')
+      if (pathname !== '/') {
+        router.push('/');
+      }
     }, 550);
-  }, [isStandalonePage, onSelectPatient]);
+  }, [pathname, router, isStandalonePage, onSelectPatient]);
 
   return (
     <AnimatePresence>

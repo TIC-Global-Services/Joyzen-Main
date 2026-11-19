@@ -11,21 +11,7 @@ export interface PreloaderProps {
   onFinish?: () => void;
 }
 
-const VIDEO_SRC = '/loader_video.mp4';
-
-// Hides Safari's native play button / controls on the loader video
-const VIDEO_CONTROLS_CSS = `
-.preloader-video::-webkit-media-controls,
-.preloader-video::-webkit-media-controls-start-playback-button,
-.preloader-video::-webkit-media-controls-panel,
-.preloader-video::-webkit-media-controls-overlay-play-button,
-.preloader-video::-webkit-media-controls-enclosure {
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  -webkit-appearance: none !important;
-}
-`;
+const ANIMATION_SRC = '/loader_animation.webp';
 
 export default function Preloader({
   manual = false,
@@ -40,8 +26,6 @@ export default function Preloader({
   // skip immediately so returning users see the content right away with zero flash.
   const [initialComplete] = useState(() => manual && Boolean(externalIsComplete));
   const [hasExited, setHasExited] = useState(initialComplete);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [ready, setReady] = useState(false);
 
   const [internalProgress, setInternalProgress] = useState(0);
   const progressRef = useRef(0);
@@ -68,6 +52,9 @@ export default function Preloader({
   useEffect(() => {
     if (shouldSkip) {
       onFinish?.();
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('joyzen-preloader-finished'));
+      }
     }
   }, [shouldSkip, onFinish]);
 
@@ -78,60 +65,27 @@ export default function Preloader({
     if (isDone && !isFinishedRef.current) {
       isFinishedRef.current = true;
 
+      const triggerFinish = () => {
+        setHasExited(true);
+        onFinish?.();
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('joyzen-preloader-finished'));
+        }
+      };
+
       if (preloaderRef.current) {
         gsap.to(preloaderRef.current, {
           opacity: 0,
           scale: 1.02,
           duration: 0.35,
           ease: 'power2.out',
-          onComplete: () => {
-            setHasExited(true);
-            onFinish?.();
-          },
+          onComplete: triggerFinish,
         });
       } else {
-        setHasExited(true);
-        onFinish?.();
+        triggerFinish();
       }
     }
   }, [manual, shouldSkip, isDone, onFinish]);
-
-  // Video playback: the video stays invisible until it is genuinely playing,
-  // so Safari's native play button (Low Power Mode) is never visible.
-  useEffect(() => {
-    if (shouldSkip || hasExited) return;
-
-    const video = videoRef.current;
-    if (!video) return;
-
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
-
-    const markReady = () => setReady(true);
-
-    const tryPlay = () => {
-      // play() resolves only when playback really starts,
-      // and rejects in Low Power Mode, so the video stays hidden there
-      video.play().then(markReady).catch(() => {});
-    };
-
-    // 'playing' may have fired before React hydrated
-    video.addEventListener('playing', markReady);
-    if (!video.paused && video.readyState >= 2) markReady();
-
-    tryPlay();
-
-    // Low Power Mode: the first touch anywhere starts the video
-    window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
-    window.addEventListener('click', tryPlay, { once: true });
-
-    return () => {
-      video.removeEventListener('playing', markReady);
-      window.removeEventListener('touchstart', tryPlay);
-      window.removeEventListener('click', tryPlay);
-    };
-  }, [shouldSkip, hasExited]);
 
   // Lock scroll while loader is active on the home page ('/'), restore scroll once loader hides
   useEffect(() => {
@@ -174,20 +128,24 @@ export default function Preloader({
       isFinishedRef.current = true;
       setInternalProgress(100);
 
+      const triggerFinish = () => {
+        setHasExited(true);
+        onFinish?.();
+        if (typeof window !== 'undefined') {
+          window.dispatchEvent(new CustomEvent('joyzen-preloader-finished'));
+        }
+      };
+
       if (preloaderRef.current) {
         gsap.to(preloaderRef.current, {
           opacity: 0,
           scale: 1.02,
           duration: 0.35,
           ease: 'power2.out',
-          onComplete: () => {
-            setHasExited(true);
-            onFinish?.();
-          },
+          onComplete: triggerFinish,
         });
       } else {
-        setHasExited(true);
-        onFinish?.();
+        triggerFinish();
       }
     };
 
@@ -298,50 +256,31 @@ export default function Preloader({
       data-lenis-prevent
       className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-white select-none transition-all"
     >
-      <style>{VIDEO_CONTROLS_CSS}</style>
-
       {/* Ambient background glow matching lilac palette */}
       <div className="absolute w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] bg-white rounded-full blur-[120px] pointer-events-none" />
 
       {/* Main Loader Content */}
       <div className="relative z-10 flex flex-col items-center justify-center px-6">
-        {/* 3D Robot Video from /loader_video.mp4 */}
+        {/* Animated WebP: not media playback, so Low Power Mode does not block it */}
         <div className="relative w-44 sm:w-56 md:w-64 aspect-square flex items-center justify-center overflow-hidden">
-          <video
-            ref={videoRef}
-            muted
-            loop
-            playsInline
-            autoPlay
-            preload="auto"
-            controls={false}
-            disablePictureInPicture
-            disableRemotePlayback
-            className={`preloader-video absolute inset-0 w-full h-full object-contain pointer-events-none transition-opacity duration-500 ${
-              ready ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <source src={VIDEO_SRC} type="video/mp4" />
-          </video>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={ANIMATION_SRC}
+            alt="Loading"
+            draggable={false}
+            className="absolute inset-0 w-full h-full object-contain pointer-events-none select-none mix-blend-multiply"
+          />
         </div>
-
-        {/* Headline */}
-        {/* <h2 className="mt-3 sm:mt-4 text-base sm:text-lg md:text-xl font-medium tracking-tight text-[#CBA4DF] select-none text-center">
-          Connecting your world
-        </h2> */}
 
         {/* Progress Bar & Percentage */}
         <div className="mt-5 sm:mt-6 flex flex-col items-center w-full max-w-[240px] sm:max-w-[280px]">
-          {/* Progress Track */}
           <div className="w-full h-[5px] bg-[#EDEAE5] rounded-full overflow-hidden">
-            {/* Progress Fill */}
             <div
               className="h-full bg-[#CCA2E1] rounded-full transition-all duration-300 ease-out"
               style={{ width: `${currentProgress}%` }}
             />
           </div>
 
-          {/* Percentage text */}
           <span className="mt-2.5 text-xs sm:text-sm font-medium tracking-wider text-[#CCA2E1] tabular-nums select-none font-mono">
             {currentProgress}%
           </span>

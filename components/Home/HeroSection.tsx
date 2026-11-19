@@ -6,7 +6,6 @@ import Reveal from '@/reuseable/Reveal';
 
 import DnaSequence, { isDnaCached } from './DnaSequence';
 import Preloader from '@/reuseable/loader';
-import ChoiceHero from '@/components/choice/choiceHero';
 
 export default function HeroSection() {
   const [isLoaded, setIsLoaded] = useState(() => {
@@ -25,31 +24,6 @@ export default function HeroSection() {
     return 0;
   });
 
-  const [loaderFinished, setLoaderFinished] = useState(false);
-  const [hasChosenPortal, setHasChosenPortal] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return sessionStorage.getItem('joyzen_choice_completed') === 'true';
-    }
-    return false;
-  });
-
-  // Guarantee that as soon as portal choice is completed (or was already completed),
-  // all scroll locks are cleared and smooth scrolling is active.
-  useEffect(() => {
-    if (hasChosenPortal) {
-      document.documentElement.style.overflow = '';
-      document.documentElement.style.height = '';
-      document.body.style.overflow = '';
-      document.body.style.height = '';
-
-      const lenis = (window as any).__lenis;
-      if (lenis) {
-        lenis.start();
-        lenis.resize();
-      }
-    }
-  }, [hasChosenPortal]);
-
   return (
     <section className="relative w-full min-h-screen flex items-end pt-10 sm:pt-24 pb-20 sm:pb-28 px-6 sm:px-12 lg:px-16 overflow-hidden">
       {/* Global Preloader - active until DNA sequence frames are downloaded */}
@@ -57,16 +31,7 @@ export default function HeroSection() {
         manual
         progress={loadProgress}
         isComplete={isLoaded}
-        onFinish={() => setLoaderFinished(true)}
       />
-
-      {/* Choice Screen: shown after loader finishes before rendering home page content */}
-      {!hasChosenPortal && (
-        <ChoiceHero
-          isReady={loaderFinished}
-          onSelectPatient={() => setHasChosenPortal(true)}
-        />
-      )}
 
       {/* 3D DNA Helix positioned on the right side */}
       <div className="absolute -top-35 lg:-top-[10%] -right-[60%] md:-right-[50%] lg:-left-[3%] w-[230%] md:w-[200%] lg:w-[100%] h-full pointer-events-none select-none z-0 flex items-center justify-end ">
