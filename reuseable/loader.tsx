@@ -25,6 +25,7 @@ export default function Preloader({
   const [initialComplete] = useState(() => manual && Boolean(externalIsComplete));
   const [hasExited, setHasExited] = useState(initialComplete);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const [internalProgress, setInternalProgress] = useState(0);
   const progressRef = useRef(0);
@@ -80,32 +81,35 @@ export default function Preloader({
   }, [manual, shouldSkip, isDone, onFinish]);
 
   useEffect(() => {
-  const video = videoRef.current;
-  if (!video) return;
+    const video = videoRef.current;
+    if (!video) return;
 
-  video.setAttribute('muted', '');
-  video.setAttribute('playsinline', '');
-  video.setAttribute('webkit-playsinline', '');
-  video.muted = true;
-  video.defaultMuted = true;
-  video.controls = false;
+    video.muted = true;
+    video.defaultMuted = true;
+    video.controls = false;
 
-  const tryPlay = () => video.play().catch(() => {});
+    const onPlaying = () => setIsPlaying(true);
+    const onPause = () => setIsPlaying(false);
+    const tryPlay = () => video.play().catch(() => { });
 
-  tryPlay();
-  video.addEventListener('loadedmetadata', tryPlay);
-  video.addEventListener('canplay', tryPlay);
-  window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
-  window.addEventListener('click', tryPlay, { once: true });
+    video.addEventListener('playing', onPlaying);
+    video.addEventListener('pause', onPause);
+    video.addEventListener('loadedmetadata', tryPlay);
+    video.addEventListener('canplay', tryPlay);
+    window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+    window.addEventListener('click', tryPlay, { once: true });
 
-  return () => {
-    video.removeEventListener('loadedmetadata', tryPlay);
-    video.removeEventListener('canplay', tryPlay);
-    window.removeEventListener('touchstart', tryPlay);
-    window.removeEventListener('click', tryPlay);
-  };
-}, []);
+    tryPlay();
 
+    return () => {
+      video.removeEventListener('playing', onPlaying);
+      video.removeEventListener('pause', onPause);
+      video.removeEventListener('loadedmetadata', tryPlay);
+      video.removeEventListener('canplay', tryPlay);
+      window.removeEventListener('touchstart', tryPlay);
+      window.removeEventListener('click', tryPlay);
+    };
+  }, []);
   // Lock scroll while loader is active on the home page ('/'), restore scroll once loader hides
   useEffect(() => {
     if (shouldSkip || hasExited || pathname !== '/') return;
@@ -284,12 +288,16 @@ export default function Preloader({
           <video
             ref={videoRef}
             src="/loader_video.mp4"
+            poster="/loader_poster.png"
             autoPlay
             loop
             muted
             playsInline
             preload="auto"
-            className="w-full h-full object-contain pointer-events-none select-none mix-blend-multiply [&::-webkit-media-controls-start-playback-button]:hidden [&::-webkit-media-controls]:hidden"
+            disablePictureInPicture
+            controls={false}
+            className={`relative w-full h-full object-contain pointer-events-none select-none mix-blend-multiply transition-opacity duration-200 ${isPlaying ? 'opacity-100' : 'opacity-0'
+              }`}
           />
         </div>
 
