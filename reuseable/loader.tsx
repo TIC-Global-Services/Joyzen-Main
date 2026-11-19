@@ -11,6 +11,20 @@ export interface PreloaderProps {
   onFinish?: () => void;
 }
 
+// Hides Safari's native play button / controls on the loader video
+const VIDEO_CONTROLS_CSS = `
+.preloader-video::-webkit-media-controls,
+.preloader-video::-webkit-media-controls-start-playback-button,
+.preloader-video::-webkit-media-controls-panel,
+.preloader-video::-webkit-media-controls-overlay-play-button,
+.preloader-video::-webkit-media-controls-enclosure {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  -webkit-appearance: none !important;
+}
+`;
+
 export default function Preloader({
   manual = false,
   progress: externalProgress,
@@ -80,7 +94,11 @@ export default function Preloader({
     }
   }, [manual, shouldSkip, isDone, onFinish]);
 
+  // Video playback: only reveal the video once it is genuinely playing,
+  // so Safari's native play button (Low Power Mode) is never visible.
   useEffect(() => {
+    if (shouldSkip || hasExited) return;
+
     const video = videoRef.current;
     if (!video) return;
 
@@ -90,7 +108,9 @@ export default function Preloader({
 
     const onPlaying = () => setIsPlaying(true);
     const onPause = () => setIsPlaying(false);
-    const tryPlay = () => video.play().catch(() => { });
+    const tryPlay = () => {
+      video.play().catch(() => {});
+    };
 
     video.addEventListener('playing', onPlaying);
     video.addEventListener('pause', onPause);
@@ -101,6 +121,11 @@ export default function Preloader({
 
     tryPlay();
 
+    // Handle the case where 'playing' fired before the listener was attached
+    if (!video.paused && video.readyState >= 3) {
+      setIsPlaying(true);
+    }
+
     return () => {
       video.removeEventListener('playing', onPlaying);
       video.removeEventListener('pause', onPause);
@@ -109,12 +134,12 @@ export default function Preloader({
       window.removeEventListener('touchstart', tryPlay);
       window.removeEventListener('click', tryPlay);
     };
-  }, []);
+  }, [shouldSkip, hasExited]);
+
   // Lock scroll while loader is active on the home page ('/'), restore scroll once loader hides
   useEffect(() => {
     if (shouldSkip || hasExited || pathname !== '/') return;
 
-    const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
 
     const handleScrollBlock = (e: Event) => {
@@ -139,8 +164,6 @@ export default function Preloader({
       window.removeEventListener('touchmove', handleScrollBlock, { capture: true });
     };
   }, [shouldSkip, hasExited, pathname]);
-
-
 
   // Automatic fallback mode (for pages without manual progress tracking)
   useEffect(() => {
@@ -278,6 +301,8 @@ export default function Preloader({
       data-lenis-prevent
       className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-white select-none transition-all"
     >
+      <style>{VIDEO_CONTROLS_CSS}</style>
+
       {/* Ambient background glow matching lilac palette */}
       <div className="absolute w-[350px] sm:w-[500px] h-[350px] sm:h-[500px] bg-white rounded-full blur-[120px] pointer-events-none" />
 
@@ -288,16 +313,17 @@ export default function Preloader({
           <video
             ref={videoRef}
             src="/loader_video.mp4"
-            poster="/loader_poster.png"
             autoPlay
             loop
             muted
             playsInline
             preload="auto"
-            disablePictureInPicture
             controls={false}
-            className={`relative w-full h-full object-contain pointer-events-none select-none mix-blend-multiply transition-opacity duration-200 ${isPlaying ? 'opacity-100' : 'opacity-0'
-              }`}
+            disablePictureInPicture
+            disableRemotePlayback
+            className={`preloader-video w-full h-full object-contain pointer-events-none select-none mix-blend-multiply transition-opacity duration-200 ${
+              isPlaying ? 'opacity-100' : 'opacity-0'
+            }`}
           />
         </div>
 
