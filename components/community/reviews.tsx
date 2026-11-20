@@ -27,21 +27,21 @@ const defaultLeftReviews: ReviewCardItem[] = [
     rating: 5,
     quote:
       '"Joyzen transformed the way I approach my healthcare. The continuous support made all the difference."',
-    authorName: '-Saravana M',
+    authorName: '-Gopal M',
   },
   {
     id: 'rev-2',
     rating: 5,
     quote:
       '"Having doctors and wellness mentors in one circle changed everything for my everyday routine."',
-    authorName: '-gokul ss',
+    authorName: '-Aditya',
   },
   {
     id: 'rev-3',
     rating: 5,
     quote:
       '"The empathy, quick consultations, and warm community feel is unmatched anywhere else."',
-    authorName: '-Praveen',
+    authorName: '-Aditi',
   },
 ];
 
@@ -51,21 +51,21 @@ const defaultRightReviews: ReviewCardItem[] = [
     rating: 5,
     quote:
       '"From mindful workshops to doctor checkups, everything feels deeply personal and empowering."',
-    authorName: '-Santhosh',
+    authorName: '-Diya',
   },
   {
     id: 'rev-5',
     rating: 5,
     quote:
       '"No more guesswork or rushing through appointments. Genuine care and continuous guidance."',
-    authorName: '-Kavin',
+    authorName: '-Aryan',
   },
   {
     id: 'rev-6',
     rating: 5,
     quote:
       '"A safe space where healthcare meets human connection. Life is so much better as part of Joyzen."',
-    authorName: '-vijay kumar',
+    authorName: '-Saanvi',
   },
 ];
 
