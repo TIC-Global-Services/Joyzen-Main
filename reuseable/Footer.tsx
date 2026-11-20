@@ -31,6 +31,15 @@ export default function Footer() {
   const [blocked, setBlocked] = useState(false);
   const [ready, setReady] = useState(false);
 
+  const scrollToTop = () => {
+    const lenis = typeof window !== 'undefined' ? (window as any).__lenis : null;
+    if (lenis) {
+      lenis.scrollTo(0, { duration: 1.2 });
+    } else if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } 
+  };
+
   useEffect(() => {
     if (window.innerWidth < 640) {
       setVideoSrc('/joylogo mob.mp4');
@@ -100,12 +109,41 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Top Header Contact & Social Links */}
-      <div className="flex flex-wrap justify-center pl-6 sm:pl-0 gap-4 sm:gap-8 lg:gap-12 text-sm lg:text-base font-medium relative z-120 tracking-tight md:mb-10">
-        <a href="mailto:info@joyzen.in" className="hover:opacity-60 transition-opacity">Email: info@joyzen.in</a>
-        <a href="tel:+911244962743" className="hover:opacity-60 transition-opacity">Phone: <span className="whitespace-nowrap">+91 124-4962743</span></a>
-        <a href="https://www.instagram.com/joyzen.in" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity">Instagram: @joyzen.in</a>
-        <Link href="/grievance-redressal" className="hover:opacity-60 transition-opacity underline-offset-4 hover:underline font-semibold">Grievance Redressal</Link>
+      {/* Top Header Contact & Social Links + Go To Top Button */}
+      <div className="relative z-[120] flex flex-col md:flex-row items-center justify-between gap-4 md:gap-8 md:mb-10 w-full">
+        {/* Invisible spacer on left for desktop optical balance so links remain centered */}
+        <div className="hidden lg:block lg:w-32" aria-hidden="true" />
+
+        {/* Center Contact & Social Links */}
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-8 lg:gap-10 text-sm lg:text-base font-medium tracking-tight">
+          <a href="mailto:info@joyzen.in" className="hover:opacity-60 transition-opacity">Email: info@joyzen.in</a>
+          <a href="tel:+911244962743" className="hover:opacity-60 transition-opacity">Phone: <span className="whitespace-nowrap">+91 124-4962743</span></a>
+          <a href="https://www.instagram.com/joyzen.in" target="_blank" rel="noopener noreferrer" className="hover:opacity-60 transition-opacity">Instagram: @joyzen.in</a>
+          <Link href="/grievance-redressal" className="hover:opacity-60 transition-opacity underline-offset-4 hover:underline font-semibold">Grievance Redressal</Link>
+        </div>
+
+        {/* Go to top button */}
+        <button
+          onClick={scrollToTop}
+          type="button"
+          aria-label="Go to top"
+          className="group inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-white/70 hover:bg-white/95 active:scale-95 backdrop-blur-md border border-black/10 shadow-sm text-xs sm:text-sm font-medium text-black transition-all duration-300 hover:scale-105 cursor-pointer select-none"
+        >
+          <span>Go to top</span>
+          <span className="w-5 h-5 rounded-full bg-black/5 flex items-center justify-center transition-transform duration-300 group-hover:-translate-y-0.5">
+                <svg
+                  className="w-3 h-3 text-black"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M18 15l-6-6-6 6" />
+                </svg>
+          </span>
+        </button>
       </div>
 
       {/* Top fade overlap for smooth background transition */}
