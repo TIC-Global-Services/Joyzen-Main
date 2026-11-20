@@ -31,14 +31,14 @@ export default function Footer() {
   const [blocked, setBlocked] = useState(false);
   const [ready, setReady] = useState(false);
 
-  const scrollToTop = () => {
-    const lenis = typeof window !== 'undefined' ? (window as any).__lenis : null;
-    if (lenis) {
-      lenis.scrollTo(0, { duration: 1.2 });
-    } else if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } 
-  };
+    const scrollToTop = () => {
+      const lenis = typeof window !== 'undefined' ? (window as any).__lenis : null;
+      if (lenis) {
+        lenis.scrollTo(0, { duration: 1.2 });
+      } else if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } 
+    };
 
   useEffect(() => {
     if (window.innerWidth < 640) {
