@@ -17,14 +17,14 @@ export default function HereItFrom() {
         className="relative w-full rounded-3xl overflow-hidden shadow-2xl bg-[#3d3d3d] sm:aspect-[4/4] lg:aspect-[16/8]"
       >
         {/* Founder & CEO Image - Half in clear top area, half under blurred glass overlay */}
-        <div className="absolute -top-1 sm:-top-30 lg:top-0 lg:-right-[30%] inset-x-0 h-[350px] sm:h-full z-0 pointer-events-none">
+        <div className="absolute -top-1 sm:-top-30 lg:top-0 lg:right-[0%] inset-x-0 h-[400px] sm:h-full z-0 pointer-events-none">
           <Image
-            src="/founder_kushal.jpg"
+            src="https://ik.imagekit.io/gyg6yfnd5/founder_kushal_16-9.png"
             alt="Founder & CEO"
             fill
             priority
-            style={{ objectPosition: '30% 65%' }}
-            className="object-cover md:object-contain object-top sm:object-center"
+            // style={{ objectPosition: '30% 65%' }}
+            className="object-cover md:object-cover object-top sm:object-center"
           /> 
         </div>
 
