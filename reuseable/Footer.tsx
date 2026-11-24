@@ -176,7 +176,7 @@ export default function Footer() {
           <span className="text-zinc-500">•</span>
           <Link href="/terms" className="text-zinc-800 hover:text-[#EF8F60] transition-colors underline-offset-2 hover:underline">Terms &amp; Conditions</Link>
         </div>
-        <span className="text-center sm:text-right text-xs opacity-75">Designed and Developed by TIC Global Services</span>
+        {/* <span className="text-center sm:text-right text-xs opacity-75">Designed and Developed by TIC Global Services</span> */}
       </div>
     </footer>
   );

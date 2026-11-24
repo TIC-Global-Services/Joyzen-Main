@@ -14,12 +14,12 @@ export default function HereItFrom() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-60px' }}
         transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-        className="relative w-full rounded-3xl overflow-hidden shadow-2xl bg-[#C3C3C5] sm:aspect-[4/4] lg:aspect-[16/8]"
+        className="relative w-full rounded-3xl overflow-hidden shadow-2xl bg-[#3d3d3d] sm:aspect-[4/4] lg:aspect-[16/8]"
       >
         {/* Founder & CEO Image - Half in clear top area, half under blurred glass overlay */}
         <div className="absolute -top-1 sm:-top-30 lg:top-0 lg:-right-[30%] inset-x-0 h-[350px] sm:h-full z-0 pointer-events-none">
           <Image
-            src="https://ik.imagekit.io/gyg6yfnd5/founder-ceo-new.webp"
+            src="/founder_kushal.jpg"
             alt="Founder & CEO"
             fill
             priority
