@@ -19,7 +19,7 @@ export default function HereItFrom() {
         {/* Founder & CEO Image - Half in clear top area, half under blurred glass overlay */}
         <div className="absolute -top-1 sm:-top-30 lg:top-0 lg:right-[0%] inset-x-0 h-[400px] sm:h-full z-0 pointer-events-none">
           <Image
-            src="https://ik.imagekit.io/gyg6yfnd5/founder_kushal_16-9.png"
+            src="https://ik.imagekit.io/gyg6yfnd5/kushal_founder.png"
             alt="Founder & CEO"
             fill
             priority
