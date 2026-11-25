@@ -17,14 +17,22 @@ export default function HereItFrom() {
         className="relative w-full rounded-3xl overflow-hidden shadow-2xl bg-[#3d3d3d] sm:aspect-[4/4] lg:aspect-[16/8]"
       >
         {/* Founder & CEO Image - Half in clear top area, half under blurred glass overlay */}
-        <div className="absolute -top-1 sm:-top-30 lg:top-0 lg:right-[0%] inset-x-0 h-[400px] sm:h-full z-0 pointer-events-none">
+        <div className="absolute -top-8 sm:-top-30 lg:top-0 lg:right-[0%] inset-x-0 h-[400px] sm:h-full z-0 pointer-events-none">
           <Image
             src="https://ik.imagekit.io/gyg6yfnd5/kushal_founder.png"
             alt="Founder & CEO"
             fill
             priority
             style={{ objectPosition: '30% 65%' }}
-            className="object-cover md:object-cover object-top sm:object-center"
+            className="object-cover md:object-cover object-top sm:object-center hidden md:flex"
+          /> 
+          <Image
+            src="https://ik.imagekit.io/gyg6yfnd5/kushal_founder.png"
+            alt="Founder & CEO"
+            fill
+            priority
+            style={{ objectPosition: '50% 10%' }}
+            className="object-cover md:object-cover object-top sm:object-center  md:hidden"
           /> 
         </div>
 
@@ -34,9 +42,9 @@ export default function HereItFrom() {
           <div className="absolute inset-0 backdrop-blur-md bg-black/30 pointer-events-none" />
 
           {/* Glass Content */}
-          <div className="relative z-10 px-6 sm:px-10 md:px-12 py-7 sm:py-9 md:py-6 flex flex-col justify-between">
+          <div className="relative z-10 px-6 sm:px-10 md:px-12 py-6 sm:py-6 md:py-6 flex flex-col justify-between">
             {/* Cyan Highlighted Statement */}
-            <h2 className="text-3xl sm:text-3xl md:text-[28px] lg:text-3xl font-bold tracking-tight text-[#AEDEE4] leading-none md:leading-[1.2] drop-shadow-sm font-sans">
+            <h2 className="text-2xl sm:text-3xl md:text-[28px] lg:text-3xl font-bold tracking-tight text-[#AEDEE4] leading-none md:leading-[1.2] drop-shadow-sm font-sans">
               Healthcare should do more than treat a moment. <br className="hidden lg:inline" />
               It should understand the person behind it.
             </h2>
